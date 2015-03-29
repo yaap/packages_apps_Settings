@@ -20,4 +20,6 @@
     <!-- Device specific doze package -->
     <string name="config_customDozePackage" translatable="false"></string>
 
+    <!-- Screenshot shutter -->
+    <string name="screenshot_shutter_sound_title">Screenshot sound</string>
 </resources>
