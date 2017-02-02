@@ -438,4 +438,6 @@ public class Settings extends SettingsActivity {
     public static class OneHandedSettingsActivity extends SettingsActivity { /* empty */ }
 
     public static class YAAPSettingsActivity extends SettingsActivity { /* empty */ }
+
+    public static class DevRunningServicesActivity extends SettingsActivity { /* empty */ }
 }
