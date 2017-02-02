@@ -241,4 +241,6 @@ public class Settings extends SettingsActivity {
     public static class MediaControlsSettingsActivity extends SettingsActivity {}
 
     public static class YAAPSettingsActivity extends SettingsActivity { /* empty */ }
+
+    public static class DevRunningServicesActivity extends SettingsActivity { /* empty */ }
 }
