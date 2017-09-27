@@ -43,4 +43,10 @@
     <string name="prevent_ringing_option_cycle_summary">On (cycle through modes)</string>
     <string name="prevent_ringing_option_normal">Normal</string>
 
+    <!-- OTA App -->
+    <string name="update_settings_title">YAAP Updater</string>
+    <string name="update_settings_summary">Check for the latest version of the rom</string>
+    <string name="update_package" translatable="false">eu.chainfire.opendelta</string>
+    <string name="update_activity" translatable="false">eu.chainfire.opendelta.MainActivity</string>
+
 </resources>
