@@ -57,4 +57,10 @@
     <!-- Density options -->
     <string name="density_category">Density options</string>
 
+    <!-- OTA App -->
+    <string name="update_settings_title">YAAP Updater</string>
+    <string name="update_settings_summary">Check for the latest version of the rom</string>
+    <string name="update_package" translatable="false">eu.chainfire.opendelta</string>
+    <string name="update_activity" translatable="false">eu.chainfire.opendelta.MainActivity</string>
+
 </resources>
