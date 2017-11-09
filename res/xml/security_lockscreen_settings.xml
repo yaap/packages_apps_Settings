@@ -98,6 +98,10 @@
             android:summary="@string/doze_summary"
             settings:controller="com.android.settings.display.AmbientDisplayNotificationsPreferenceController" />
 
+        <Preference
+            android:key="ambient_display_custom"
+            android:title="@string/ambient_display_custom_title" />
+
     </PreferenceCategory>
 
     <!-- Work profile settings are at the bottom with high order value to avoid users thinking that
