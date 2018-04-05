@@ -97,4 +97,6 @@
     <string name="qstile_requires_unlocking_title">Secure QS tiles require unlocking</string>
     <string name="qstile_requires_unlocking_summary">The following QS tiles require unlocking before you can acccess them from lock screen:\nAirplane, Cellular, NFC, Hotspot, USB tethering and Location</string>
 
+    <!-- Title for connected TWS device group [CHAR LIMIT=none]-->
+    <string name="connected_tws_device_saved_title">Saved Earbuds</string>
 </resources>
