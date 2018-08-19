@@ -4487,6 +4487,24 @@
             </intent-filter>
         </activity>
 
+        <!-- YAAP Settings -->
+        <activity android:name=".Settings$YAAPSettingsActivity"
+            android:label="@string/yaap_settings_title"
+            android:icon="@drawable/ic_yaap_settings_icon"
+            android:parentActivityName="com.android.settings"
+            android:exported="true">
+            <intent-filter android:priority="69">
+                <action android:name="com.android.settings.YAAP_SETTINGS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="com.android.settings.SHORTCUT" />
+            </intent-filter>
+            <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
+                android:value="com.yasp.settings.YaapSettings" />
+        </activity>
+
         <!-- This is the longest AndroidManifest.xml ever. -->
     </application>
 </manifest>
