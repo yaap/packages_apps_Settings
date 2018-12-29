@@ -35,6 +35,8 @@ import com.android.settingslib.search.SearchIndexable;
 import java.util.Arrays;
 import java.util.List;
 
+import com.yasp.settings.Utils;
+
 @SearchIndexable
 public class SystemDashboardFragment extends DashboardFragment {
 
@@ -44,6 +46,9 @@ public class SystemDashboardFragment extends DashboardFragment {
 
     public static final String EXTRA_SHOW_AWARE_DISABLED = "show_aware_dialog_disabled";
 
+    final String KEY_DEVICE_PART = "device_part";
+    final String KEY_DEVICE_PART_PACKAGE_NAME = "com.yaap.device";
+
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
@@ -52,6 +57,10 @@ public class SystemDashboardFragment extends DashboardFragment {
         // We do not want to display an advanced button if only one setting is hidden
         if (getVisiblePreferenceCount(screen) == screen.getInitialExpandedChildrenCount() + 1) {
             screen.setInitialExpandedChildrenCount(Integer.MAX_VALUE);
+        }
+
+        if (!Utils.isPackageInstalled(getActivity(), KEY_DEVICE_PART_PACKAGE_NAME)) {
+            screen.removePreference(findPreference(KEY_DEVICE_PART));
         }
 
         showRestrictionDialog();

@@ -21,4 +21,8 @@
     <!-- Doze on charge -->
     <string name="doze_on_charge_title">Always on when charging</string>
     <string name="doze_on_charge_summary">Show doze screen all the time when charging</string>
+
+    <!-- Device Parts -->
+    <string name="device_part_title">Device features</string>
+    <string name="device_part_summary">Device specific features</string>
 </resources>

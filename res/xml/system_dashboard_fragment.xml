@@ -76,4 +76,14 @@
                 android:targetClass="@string/additional_system_update_menu"/>
     </Preference>
 
+     <!-- Device Part -->
+    <Preference
+        android:key="device_part"
+        android:title="@string/device_part_title"
+        android:icon="@drawable/ic_device_parts"
+        android:summary="@string/device_part_summary">
+        <intent android:action="com.android.settings.action.EXTRA_SETTINGS"
+        	android:targetPackage="com.yaap.device"
+        	android:targetClass="com.yaap.device.DeviceSettingsActivity" />
+    </Preference>
 </PreferenceScreen>
