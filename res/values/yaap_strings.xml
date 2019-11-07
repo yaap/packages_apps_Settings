@@ -676,4 +676,8 @@
 
     <!-- Battery info -->
     <string name="battery_info_footer">Values in this section are provided by OEM and may or may not be an accurate representation of reality and/or may or may not only update after battery recalibration or a full factory reset.\nTreat these as estimates only.</string>
+
+    <!-- Three-fingers-swipe to screenshot -->
+    <string name="three_finger_gesture">Swipe to screenshot</string>
+    <string name="three_finger_gesture_summary">Swipe down with three fingers to take a screenshot</string>
 </resources>

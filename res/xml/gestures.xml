@@ -48,6 +48,13 @@
         settings:controller="com.android.settings.gestures.SwipeToNotificationPreferenceController" />
 
     <SwitchPreferenceCompat
+        android:key="swipe_to_screenshot"
+        android:title="@string/three_finger_gesture"
+        android:summary="@string/three_finger_gesture_summary"
+        settings:keywords="@string/keywords_gesture"
+        settings:controller="com.android.settings.gestures.SwipeToScreenshotPreferenceController" />
+
+    <SwitchPreferenceCompat
         android:key="gesture_screen_off_udfps"
         android:title="@string/ambient_display_screen_off_udfps_title"
         android:summary="@string/ambient_display_screen_off_udfps_summary"
