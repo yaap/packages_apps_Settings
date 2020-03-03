@@ -118,6 +118,13 @@
         android:key="security_category"
         android:title="@string/security_header" />
 
+    <SwitchPreference
+        android:order="210"
+        android:key="security_setting_panic_enabled"
+        android:title="@string/panic_settings_title"
+        android:summary="@string/panic_settings_summary"
+        settings:controller="com.android.settings.security.PanicButtonPreferenceController" />
+
     <PreferenceCategory
         android:order="240"
         android:key="security_settings_device_admin_category"
