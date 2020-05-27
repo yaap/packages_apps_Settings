@@ -89,6 +89,8 @@
     <string name="qstile_requires_unlocking_summary">The following QS tiles require unlocking before you can acccess them from lock screen:\nAirplane, Cellular, NFC, Hotspot, USB tethering and Location</string>
 
     <!-- Per-app data restrictions -->
+    <string name="data_usage_app_restrict_all">Allow network access</string>
+    <string name="data_usage_app_restrict_all_summary">Enable network usage</string>
     <string name="data_usage_app_restrict_mobile">Mobile data</string>
     <string name="data_usage_app_restrict_mobile_summary">Enable usage of mobile data</string>
     <string name="data_usage_app_restrict_vpn">VPN data</string>
