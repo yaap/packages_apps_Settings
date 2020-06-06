@@ -49,6 +49,10 @@ public class CarrierSettingsVersionPreferenceController extends BasePreferenceCo
 
     @Override
     public int getAvailabilityStatus() {
+        final PersistableBundle config = mManager.getConfigForSubId(mSubscriptionId);
+        if (config == null || config.getString(
+                CarrierConfigManager.KEY_CARRIER_CONFIG_VERSION_STRING).equals(""))
+            return UNSUPPORTED_ON_DEVICE;
         return AVAILABLE;
     }
 }
