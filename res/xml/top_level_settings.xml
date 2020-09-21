@@ -40,6 +40,14 @@
         settings:highlightableMenuKey="@string/menu_key_connected_devices"
         settings:controller="com.android.settings.connecteddevice.TopLevelConnectedDevicesPreferenceController"/>
 
+    <Preference
+        android:key="top_level_yaap_settings"
+        android:title="@string/yaap_settings_title"
+        android:summary="@string/yaap_settings_summary"
+        android:icon="@drawable/ic_yaap_settings_icon"
+        android:order="-135"
+        android:fragment="com.yasp.settings.YaapSettings" />
+
     <com.android.settings.widget.HomepagePreference
         android:fragment="com.android.settings.applications.AppDashboardFragment"
         android:icon="@drawable/ic_apps"
