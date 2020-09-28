@@ -3407,7 +3407,7 @@
         <!-- YAAP Settings -->
         <activity android:name=".Settings$YAAPSettingsActivity"
             android:label="@string/yaap_settings_title"
-            android:icon="@drawable/ic_yaap_settings_icon"
+            android:icon="@drawable/ic_yaap_settings"
             android:parentActivityName="com.android.settings">
             <intent-filter android:priority="69">
                 <action android:name="com.android.settings.YAAP_SETTINGS" />

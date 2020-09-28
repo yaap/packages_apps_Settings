@@ -42,7 +42,7 @@
         android:key="top_level_yaap_settings"
         android:title="@string/yaap_settings_title"
         android:summary="@string/yaap_settings_summary"
-        android:icon="@drawable/ic_yaap_settings_icon"
+        android:icon="@drawable/ic_yaap_settings"
         android:order="-105"
         android:fragment="com.yasp.settings.YaapSettings" />
 
