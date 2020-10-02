@@ -61,6 +61,14 @@
             android:fragment="com.android.settings.connecteddevice.PreviouslyConnectedDeviceDashboardFragment"/>
     </PreferenceCategory>
 
+    <ListPreference
+        android:key="bluetooth_timeout"
+        android:title="@string/bluetooth_timeout"
+        android:summary="@string/summary_placeholder"
+        android:entries="@array/bluetooth_timeout_entries"
+        android:entryValues="@array/bluetooth_timeout_values"
+        settings:controller="com.android.settings.bluetooth.BluetoothTimeoutPreferenceController"/>
+
     <Preference
         android:key="connection_preferences"
         android:title="@string/connected_device_connections_title"

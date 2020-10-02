@@ -112,4 +112,27 @@
         <item>3</item>
         <item>4</item>
     </string-array>
+
+    <!-- Bluetooth timeout -->
+    <string-array name="bluetooth_timeout_entries" translatable="false">
+        <item>@string/timeout_summary_never</item>
+        <item>@string/timeout_summary_30secs</item>
+        <item>@string/timeout_summary_1min</item>
+        <item>@string/timeout_summary_2mins</item>
+        <item>@string/timeout_summary_5mins</item>
+        <item>@string/timeout_summary_10mins</item>
+        <item>@string/timeout_summary_30mins</item>
+        <item>@string/timeout_summary_1hour</item>
+    </string-array>
+
+    <string-array name="bluetooth_timeout_values" translatable="false">
+        <item>0</item>
+        <item>30000</item>
+        <item>60000</item>
+        <item>120000</item>
+        <item>300000</item>
+        <item>600000</item>
+        <item>1800000</item>
+        <item>3600000</item>
+    </string-array>
 </resources>
