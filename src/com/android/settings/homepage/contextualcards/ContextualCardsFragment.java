@@ -46,7 +46,7 @@ public class ContextualCardsFragment extends InstrumentedFragment implements
         FocusRecyclerView.FocusListener {
 
     private static final String TAG = "ContextualCardsFragment";
-    private static final boolean DEBUG = Build.IS_DEBUGGABLE;
+    private static final boolean DEBUG = Build.IS_ENG;
 
     @VisibleForTesting
     static boolean sRestartLoaderNeeded;
