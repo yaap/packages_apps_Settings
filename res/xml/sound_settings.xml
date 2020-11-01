@@ -90,6 +90,16 @@
         android:order="-140"
         settings:controller="com.android.settings.notification.NotificationVolumePreferenceController"/>
 
+    <com.yasp.settings.preferences.CustomSeekBarPreference
+        android:key="volume_dialog_timeout"
+        android:title="@string/volume_dialog_timeout_title"
+        android:summary="@string/volume_dialog_timeout_summary"
+        android:order="-135"
+        android:max="7"
+        settings:min="1"
+        settings:defaultValue="5"
+        settings:units="@string/unit_seconds" />
+
     <!-- Also vibrate for calls -->
     <Preference
         android:fragment="com.android.settings.sound.VibrateForCallsPreferenceFragment"
