@@ -57,6 +57,10 @@
     <!-- Density options -->
     <string name="density_category">Density options</string>
 
+    <!-- Advanced Reboot -->
+    <string name="power_menu_advanced_reboot_title">Advanced reboot when locked</string>
+    <string name="power_menu_advanced_reboot_summary">Show advanced reboot on lock screen</string>
+
     <!-- OTA App -->
     <string name="update_settings_title">YAAP Updater</string>
     <string name="update_settings_summary">Check for the latest version of the rom</string>

@@ -39,5 +39,11 @@
             android:key="gesture_power_menu_privacy"
             android:title="@string/power_menu_privacy"
             settings:controller="com.android.settings.gestures.PowerMenuPrivacyPreferenceController" />
+
+        <SwitchPreference
+            android:key="power_menu_advanced_reboot"
+            android:title="@string/power_menu_advanced_reboot_title"
+            android:summary="@string/power_menu_advanced_reboot_summary"
+            settings:controller="com.android.settings.gestures.KeyguardAdvancedRebootPreferenceController" />
     </PreferenceCategory>
 </PreferenceScreen>
