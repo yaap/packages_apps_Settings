@@ -63,4 +63,11 @@ public class NotificationVolumePreferenceController extends
         return R.drawable.ic_notifications_off_24dp;
     }
 
+    @Override
+    protected void updatePreferenceIcon() {
+        if (mPreference != null) {
+            mPreference.showIcon(R.drawable.ic_audio_notification);
+        }
+    }
+
 }
