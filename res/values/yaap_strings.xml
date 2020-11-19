@@ -49,4 +49,7 @@
     <string name="update_package" translatable="false">eu.chainfire.opendelta</string>
     <string name="update_activity" translatable="false">eu.chainfire.opendelta.MainActivity</string>
 
+    <!-- Radio Info -->
+    <string name="radio_info_title">Radio info</string>
+
 </resources>
