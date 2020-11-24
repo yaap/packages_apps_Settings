@@ -93,4 +93,8 @@
     <string name="data_usage_app_restrict_wifi">Wi\u2011Fi data</string>
     <string name="data_usage_app_restrict_wifi_summary">Enable usage of Wi\u2011Fi data</string>
 
+    <!-- QSTile requires unlocking before being accessible -->
+    <string name="qstile_requires_unlocking_title">Secure QS tiles require unlocking</string>
+    <string name="qstile_requires_unlocking_summary">The following QS tiles require unlocking before you can acccess them from lock screen:\nAirplane, Cellular and Locaton</string>
+
 </resources>
