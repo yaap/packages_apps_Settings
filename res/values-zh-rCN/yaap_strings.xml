@@ -72,8 +72,8 @@
     <!-- OTA App -->
     <string name="update_settings_title">YAAP 更新</string>
     <string name="update_settings_summary">检查ROM的最新版本</string>
-    <string name="update_package" translatable="false">eu.chainfire.opendelta</string>
-    <string name="update_activity" translatable="false">eu.chainfire.opendelta.MainActivity</string>
+
+
 
     <!-- Radio Info -->
     <string name="radio_info_title">电台信息</string>
