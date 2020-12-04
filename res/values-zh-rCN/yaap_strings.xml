@@ -41,6 +41,14 @@
 
     <string name="battery_temp">电池温度</string>
 
+    <!-- Volume dialog timeout -->
+    <string name="unit_seconds">第二个(s)</string>
+    <string name="volume_dialog_timeout_title">音量面板超时</string>
+    <string name="volume_dialog_timeout_summary">音量面板消失所需的时间</string>
+
+    <!-- Volume link notification -->
+    <string name="volume_link_notification_title">链接铃声和通知的音量</string>
+
     <!-- Vibration patterns -->
     <string name="vibration_pattern_title">响铃振动特色</string>
     <string name="pattern_dzzz_dzzz">dzzz-dzzz</string>
@@ -53,5 +61,40 @@
 
     <!-- Screenshot shutter -->
     <string name="screenshot_shutter_sound_title">屏幕截图的“快门声”</string>
+
+    <!-- Density options -->
+    <string name="density_category">屏幕显示密度</string>
+
+    <!-- Advanced Reboot -->
+    <string name="power_menu_advanced_reboot_title">锁定时的高级重启</string>
+    <string name="power_menu_advanced_reboot_summary">在锁定屏幕上显示高级重启</string>
+
+    <!-- OTA App -->
+    <string name="update_settings_title">YAAP 更新</string>
+    <string name="update_settings_summary">检查ROM的最新版本</string>
+    <string name="update_package" translatable="false">eu.chainfire.opendelta</string>
+    <string name="update_activity" translatable="false">eu.chainfire.opendelta.MainActivity</string>
+
+    <!-- Radio Info -->
+    <string name="radio_info_title">电台信息</string>
+
+    <!-- Cycle through ringer modes gesture -->
+    <string name="prevent_ringing_option_cycle">循环模式</string>
+    <string name="prevent_ringing_option_cycle_summary">开（循环模式）</string>
+
+    <!-- String for removal of sensitive info on about, depending on tap -->
+    <string name="device_info_protected_single_press">点按即可显示信息</string>
+
+    <!-- Per-app data restrictions -->
+    <string name="data_usage_app_restrict_data">移动数据</string>
+    <string name="data_usage_app_restrict_data_summary">启用移动数据的使用</string>
+    <string name="data_usage_app_restrict_vpn">VPN数据</string>
+    <string name="data_usage_app_restrict_vpn_summary">启用VPN数据使用</string>
+    <string name="data_usage_app_restrict_wifi">WiFi数据</string>
+    <string name="data_usage_app_restrict_wifi_summary">启用WiFi数据的使用</string>
+
+    <!-- QSTile requires unlocking before being accessible -->
+    <string name="qstile_requires_unlocking_title">需要解锁手机才能使用QS磁贴</string>
+    <string name="qstile_requires_unlocking_summary">您需要先解锁手机，然后才能从锁定屏幕访问以下QS磁贴：飞行模式，移动数据，NFC，热点，USB网络共享和位置</string>
 
 </resources>
