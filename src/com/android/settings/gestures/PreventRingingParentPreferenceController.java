@@ -16,10 +16,11 @@
 
 package com.android.settings.gestures;
 
-import static android.provider.Settings.Secure.VOLUME_HUSH_CYCLE;
 import static android.provider.Settings.Secure.VOLUME_HUSH_GESTURE;
-import static android.provider.Settings.Secure.VOLUME_HUSH_MUTE;
-import static android.provider.Settings.Secure.VOLUME_HUSH_VIBRATE;
+import static android.provider.Settings.Secure.YAAP_VOLUME_HUSH_MUTE;
+import static android.provider.Settings.Secure.YAAP_VOLUME_HUSH_NORMAL;
+import static android.provider.Settings.Secure.YAAP_VOLUME_HUSH_OFF;
+import static android.provider.Settings.Secure.YAAP_VOLUME_HUSH_VIBRATE;
 
 import android.content.Context;
 import android.provider.Settings;
@@ -44,22 +45,34 @@ public class PreventRingingParentPreferenceController extends BasePreferenceCont
 
     @Override
     public CharSequence getSummary() {
-        int value = Settings.Secure.getInt(
-                mContext.getContentResolver(), SECURE_KEY, VOLUME_HUSH_VIBRATE);
-        int summary;
-        switch (value) {
-            case VOLUME_HUSH_VIBRATE:
-                summary = R.string.prevent_ringing_option_vibrate_summary;
-                break;
-            case VOLUME_HUSH_MUTE:
-                summary = R.string.prevent_ringing_option_mute_summary;
-                break;
-            case VOLUME_HUSH_CYCLE:
-                summary = R.string.prevent_ringing_option_cycle_summary;
-                break;
-            default:
-                summary = R.string.prevent_ringing_option_none_summary;
+        String settingsValue = Settings.Secure.getString(
+                mContext.getContentResolver(), SECURE_KEY);
+        if (settingsValue == null) settingsValue = YAAP_VOLUME_HUSH_OFF;
+        String[] value = settingsValue.split(",", 0);
+
+        if (value[0].equals(YAAP_VOLUME_HUSH_OFF))
+            return mContext.getText(R.string.prevent_ringing_option_none_summary);
+
+        String summary = null;
+        for (String str : value) {
+            if (summary == null) {
+                summary = mContext.getText(R.string.switch_on_text)
+                        + " (" + getStringForMode(str);
+                continue;
+            }
+            summary += ", " + getStringForMode(str);
         }
-        return mContext.getText(summary);
+        summary += ")";
+        return summary;
+    }
+
+    private String getStringForMode(String mode) {
+        switch (mode) {
+            case YAAP_VOLUME_HUSH_VIBRATE:
+                return mContext.getText(R.string.prevent_ringing_option_vibrate).toString();
+            case YAAP_VOLUME_HUSH_MUTE:
+                return mContext.getText(R.string.prevent_ringing_option_mute).toString();
+        }
+        return mContext.getText(R.string.prevent_ringing_option_normal).toString();
     }
 }
