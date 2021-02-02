@@ -16,7 +16,7 @@
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
     <!-- Top level YASP -->
     <string name="yaap_settings_title">YASP</string>
-    <string name="yaap_settings_summary">一个额外的设置页面</string>
+    <string name="yaap_settings_summary">会当凌绝顶，一览众山小</string>
 
     <!-- Doze on charge -->
     <string name="doze_on_charge_title">充电时始终开启</string>
@@ -75,6 +75,9 @@
 
     <!-- Radio Info -->
     <string name="radio_info_title">手机信号参数</string>
+	
+	<!-- Cycle through ringer modes gesture -->
+    <string name="prevent_ringing_option_normal">正常</string>
 
     <!-- String for removal of sensitive info on about, depending on tap -->
     <string name="device_info_protected_single_press">点按即可显示信息</string>

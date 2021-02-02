@@ -4691,7 +4691,8 @@
     <string name="battery_suggestion_title" product="default" msgid="4811554469047272537">"延长手机的电池续航时间"</string>
     <string name="battery_suggestion_summary" msgid="8186720080540016197"></string>
     <string name="gesture_prevent_ringing_screen_title" msgid="8293094715267769349">"阻止响铃"</string>
-    <string name="gesture_prevent_ringing_title" msgid="5978577898997523581">"同时按电源和音量调高按钮即可"</string>
+    <!-- Title for prevent ringing setting [CHAR LIMIT=60]-->
+    <string name="gesture_prevent_ringing_title">同时按电源和音量增大键可在两者之间循环。</string>
     <string name="gesture_prevent_ringing_sound_title" msgid="4529077822282099235">"阻止响铃的快捷方式"</string>
     <string name="prevent_ringing_option_vibrate" msgid="5456962289649581737">"振动"</string>
     <string name="prevent_ringing_option_mute" msgid="7446121133560945051">"静音"</string>
