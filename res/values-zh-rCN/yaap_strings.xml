@@ -42,7 +42,7 @@
     <string name="battery_temp">电池温度</string>
 
     <!-- Volume dialog timeout -->
-    <string name="unit_seconds">第二个(s)</string>
+    <string name="unit_seconds">第二(秒)</string>
     <string name="volume_dialog_timeout_title">音量面板超时</string>
     <string name="volume_dialog_timeout_summary">音量面板消失所需的时间</string>
 
@@ -58,7 +58,8 @@
     <string name="pattern_da_dzzz_da">da-dzzz-da</string>
     <string name="pattern_custom">定制</string>
     <string name="custom_vibration_pattern_title">定制图案</string>
-
+    <string name="custom_vibration_pattern_summary">设置自定义振动模式</string>
+	
     <!-- Screenshot shutter -->
     <string name="screenshot_shutter_sound_title">屏幕截图的“快门声”</string>
 
@@ -80,18 +81,26 @@
     <string name="prevent_ringing_option_normal">正常</string>
 
     <!-- String for removal of sensitive info on about, depending on tap -->
-    <string name="device_info_protected_single_press">点按即可显示信息</string>
-
-    <!-- Per-app data restrictions -->
-    <string name="data_usage_app_restrict_data">移动数据</string>
-    <string name="data_usage_app_restrict_data_summary">启用移动数据的使用</string>
-    <string name="data_usage_app_restrict_vpn">VPN数据</string>
-    <string name="data_usage_app_restrict_vpn_summary">启用VPN数据使用</string>
-    <string name="data_usage_app_restrict_wifi">WiFi数据</string>
-    <string name="data_usage_app_restrict_wifi_summary">启用WiFi数据的使用</string>
+    <string name="device_info_protected_single_press">点击显示信息</string>
 
     <!-- QSTile requires unlocking before being accessible -->
     <string name="qstile_requires_unlocking_title">需要解锁手机才能使用QS磁贴</string>
     <string name="qstile_requires_unlocking_summary">您需要先解锁手机，然后才能从锁定屏幕访问以下QS磁贴：飞行模式，移动数据，NFC，热点，USB网络共享和位置</string>
 
+    <!-- Per-app data restrictions -->
+    <string name="data_usage_app_restrict_all">允许网络访问</string>
+    <string name="data_usage_app_restrict_all_summary">开启网络使用</string>
+    <string name="data_usage_app_restrict_mobile">移动数据</string>
+    <string name="data_usage_app_restrict_mobile_summary">开启移动数据的使用</string>
+    <string name="data_usage_app_restrict_vpn">VPN 数据</string>
+    <string name="data_usage_app_restrict_vpn_summary">开启 VPN 数据的使用</string>
+    <string name="data_usage_app_restrict_wifi">WiFi 数据</string>
+    <string name="data_usage_app_restrict_wifi_summary">开启 WiFi 数据的使用</string>
+	
+	<!-- Notch: Full screen apps -->
+    <string name="display_cutout_force_fullscreen_title">全屏应用</string>
+    <string name="display_cutout_force_fullscreen_summary">强制应用填充整个屏幕</string>
+
+    <!-- Title for connected TWS device group [CHAR LIMIT=none]-->
+    <string name="connected_tws_device_saved_title">保护耳塞</string>
 </resources>

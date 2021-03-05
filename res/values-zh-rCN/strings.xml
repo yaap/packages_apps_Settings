@@ -3310,8 +3310,19 @@
     <string name="call_volume_option_title" msgid="1461105986437268924">"通话音量"</string>
     <string name="alarm_volume_option_title" msgid="6398641749273697140">"闹钟音量"</string>
     <string name="ring_volume_option_title" msgid="1520802026403038560">"铃声和通知音量"</string>
+	<!-- Sound: Title for the option managing ring volume. When unlinked [CHAR LIMIT=30] -->
+    <string name="ring_volume_unlinked_option_title">铃声音量</string>
+	
     <string name="notification_volume_option_title" msgid="4838818791683615978">"通知音量"</string>
-    <string name="ringtone_title" msgid="3271453110387368088">"手机铃声"</string>
+    <!-- Sound: Title for the option defining the phone ringtone. [CHAR LIMIT=30] -->
+    <string name="ringtone_title">手机铃声</string>
+
+    <!-- Sound: Title for the option defining the phone ringtone for slot1 on Muilti SIM device. [CHAR LIMIT=50] -->
+    <string name="ringtone1_title">手机铃声 - SIM 1</string>
+
+    <!-- Sound: Title for the option defining the phone ringtone for slot2 on Muilti SIM device. [CHAR LIMIT=50] -->
+    <string name="ringtone2_title">手机铃声 - SIM 2</string>
+
     <string name="notification_ringtone_title" msgid="6924501621312095512">"默认通知提示音"</string>
     <string name="notification_unknown_sound_title" msgid="1319708450698738980">"应用提供的提示音"</string>
     <string name="notification_sound_default" msgid="8630353701915294299">"默认通知提示音"</string>
