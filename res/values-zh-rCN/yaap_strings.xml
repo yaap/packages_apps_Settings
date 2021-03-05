@@ -97,7 +97,7 @@
     <string name="data_usage_app_restrict_wifi">WiFi 数据</string>
     <string name="data_usage_app_restrict_wifi_summary">开启 WiFi 数据的使用</string>
 	
-	<!-- Notch: Full screen apps -->
+    <!-- Notch: Full screen apps -->
     <string name="display_cutout_force_fullscreen_title">全屏应用</string>
     <string name="display_cutout_force_fullscreen_summary">强制应用填充整个屏幕</string>
 
