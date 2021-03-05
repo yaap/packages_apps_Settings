@@ -41,6 +41,10 @@
 
     <string name="battery_temp">电池温度</string>
 
+    <!-- Volume dialog position -->
+    <string name="volume_panel_on_left_title">左侧的音量面板</string>
+    <string name="volume_panel_on_left_summary">在屏幕左侧显示音量面板</string>
+
     <!-- Volume dialog timeout -->
     <string name="unit_seconds">第二(秒)</string>
     <string name="volume_dialog_timeout_title">音量面板超时</string>
@@ -59,7 +63,7 @@
     <string name="pattern_custom">定制</string>
     <string name="custom_vibration_pattern_title">定制图案</string>
     <string name="custom_vibration_pattern_summary">设置自定义振动模式</string>
-	
+
     <!-- Screenshot shutter -->
     <string name="screenshot_shutter_sound_title">屏幕截图的“快门声”</string>
 
@@ -76,7 +80,7 @@
 
     <!-- Radio Info -->
     <string name="radio_info_title">手机信号参数</string>
-	
+
 	<!-- Cycle through ringer modes gesture -->
     <string name="prevent_ringing_option_normal">正常</string>
 
@@ -96,11 +100,25 @@
     <string name="data_usage_app_restrict_vpn_summary">开启 VPN 数据的使用</string>
     <string name="data_usage_app_restrict_wifi">WiFi 数据</string>
     <string name="data_usage_app_restrict_wifi_summary">开启 WiFi 数据的使用</string>
-	
+
     <!-- Notch: Full screen apps -->
     <string name="display_cutout_force_fullscreen_title">全屏应用</string>
     <string name="display_cutout_force_fullscreen_summary">强制应用填充整个屏幕</string>
 
     <!-- Title for connected TWS device group [CHAR LIMIT=none]-->
     <string name="connected_tws_device_saved_title">保护耳塞</string>
+
+    <!-- Format string for fingerprint location message -->
+    <string name="security_settings_fingerprint_enroll_find_sensor_message_cm" product="tablet">在你平板电脑的 <xliff:g id="sensor_location">%1$s</xliff:g> 找到指纹传感器</string>
+    <string name="security_settings_fingerprint_enroll_find_sensor_message_cm" product="device">在你设备的 <xliff:g id="sensor_location">%1$s</xliff:g> 找到指纹传感器</string>
+    <string name="security_settings_fingerprint_enroll_find_sensor_message_cm" product="default">在你手机的 <xliff:g id="sensor_location">%1$s</xliff:g> 找到指纹传感器</string>
+
+    <!-- Fingerprint sensor locations -->
+    <string name="security_settings_fingerprint_sensor_location_back">背面</string>
+    <string name="security_settings_fingerprint_sensor_location_front">正面</string>
+    <string name="security_settings_fingerprint_sensor_location_left">左侧</string>
+    <string name="security_settings_fingerprint_sensor_location_right">右侧</string>
+
+    <!-- YAAP Version -->
+    <string name="yaap_version">YAAP 构建版本</string>
 </resources>
