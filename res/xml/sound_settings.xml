@@ -134,6 +134,12 @@
         settings:controller="com.android.settings.sound.MediaControlsParentPreferenceController"
         settings:keywords="@string/keywords_media_controls"/>
 
+    <SwitchPreference
+        android:key="volume_panel_on_left"
+        android:title="@string/volume_panel_on_left_title"
+        android:summary="@string/volume_panel_on_left_summary"
+        android:order="-138" />
+
     <!-- Volume dialog timeout -->
     <com.yasp.settings.preferences.CustomSeekBarPreference
         android:key="volume_dialog_timeout"
