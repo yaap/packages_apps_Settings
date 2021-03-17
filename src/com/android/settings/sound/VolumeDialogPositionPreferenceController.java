@@ -16,6 +16,8 @@ package com.android.settings.sound;
 
 import android.app.ActivityThread;
 import android.content.Context;
+import android.content.pm.PackageManager.NameNotFoundException;
+import android.content.res.Resources;
 import android.os.UserHandle;
 import android.provider.Settings;
 
@@ -54,10 +56,22 @@ public class VolumeDialogPositionPreferenceController extends AbstractPreference
     public void displayPreference(PreferenceScreen screen) {
         super.displayPreference(screen);
         mPreference = (SwitchPreference) screen.findPreference(KEY);
-        // TODO: Find a way to get the overlay from SystemUI here,
-        // Won't correctly show default value for right volume panel devices
+
+        // Get config_audioPanelOnLeftSide from SystemUI
+        Context sysUiContext;
+        try {
+            sysUiContext = mContext.createPackageContext("com.android.systemui",
+                    Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
+        } catch (NameNotFoundException e) {
+            // Nothing to do, If SystemUI was not found you have bigger issues :)
+            sysUiContext = mContext;
+        }
+        Resources sysUiRes = sysUiContext.getResources();
+        int resId = sysUiRes.getIdentifier("config_audioPanelOnLeftSide", "bool", "com.android.systemui");
+        boolean isLeft = sysUiRes.getBoolean(resId);
+
         boolean value = Settings.System.getIntForUser(mContext.getContentResolver(),
-                KEY, 1, UserHandle.USER_CURRENT) == 1;
+                KEY, isLeft ? 1 : 0, UserHandle.USER_CURRENT) == 1;
         mPreference.setChecked(value);
         mPreference.setOnPreferenceChangeListener(this);
     }
