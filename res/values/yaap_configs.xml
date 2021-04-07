@@ -23,6 +23,4 @@
     <!-- Screenshot shutter -->
     <string name="screenshot_shutter_sound_title">Screenshot sound</string>
 
-    <!-- Whether to show or hide sensitive info (like IMEI and Phone Number) on About phone -->
-    <bool name="configShowDeviceSensitiveInfo">false</bool>
 </resources>
