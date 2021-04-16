@@ -63,6 +63,15 @@
         settings:enableCopying="true"
         settings:controller="com.android.settings.deviceinfo.firmwareversion.KernelVersionPreferenceController"/>
 
+    <!-- YAAP Version -->
+    <Preference
+        android:key="yaap_version"
+        android:title="@string/yaap_version"
+        android:summary="@string/summary_placeholder"
+        android:selectable="false"
+        settings:enableCopying="true"
+        settings:controller="com.android.settings.deviceinfo.firmwareversion.YAAPVersionPreferenceController"/>
+
     <!-- Build -->
     <Preference
         android:key="os_build_number"
