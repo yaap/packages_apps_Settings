@@ -52,4 +52,7 @@
     <!-- Radio Info -->
     <string name="radio_info_title">Radio info</string>
 
+    <!-- YAAP Version -->
+    <string name="yaap_version">YAAP Build</string>
+
 </resources>
