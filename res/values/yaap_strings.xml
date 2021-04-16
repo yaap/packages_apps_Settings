@@ -120,4 +120,7 @@
     <string name="security_settings_fingerprint_sensor_location_front">front</string>
     <string name="security_settings_fingerprint_sensor_location_left">left side</string>
     <string name="security_settings_fingerprint_sensor_location_right">right side</string>
+
+    <!-- YAAP Version -->
+    <string name="yaap_version">YAAP Build</string>
 </resources>
