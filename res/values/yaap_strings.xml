@@ -55,4 +55,7 @@
     <!-- String for removal of sensitive info on about, depending on tap -->
     <string name="device_info_protected_single_press">Tap to show info</string>
 
+    <!-- YAAP Version -->
+    <string name="yaap_version">YAAP Build</string>
+
 </resources>
