@@ -50,10 +50,6 @@ import com.android.settingslib.drawable.CircleFramedDrawable;
 
 public class SettingsHomepageActivity extends FragmentActivity {
 
-    Context context;
-    ImageView avatarView;
-    UserManager mUserManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,19 +61,15 @@ public class SettingsHomepageActivity extends FragmentActivity {
 
         setHomepageContainerPaddingTop();
 
-        Context context = getApplicationContext();
-
-        mUserManager = context.getSystemService(UserManager.class);
-
         final Toolbar toolbar = findViewById(R.id.search_action_bar);
         FeatureFactory.getFactory(this).getSearchFeatureProvider()
                 .initSearchToolbar(this /* activity */, toolbar, SettingsEnums.SETTINGS_HOMEPAGE);
 
         getLifecycle().addObserver(new HideNonSystemOverlayMixin(this));
-        
-        avatarView = root.findViewById(R.id.account_avatar);
+
+        ImageView avatarView = root.findViewById(R.id.account_avatar);
         //final AvatarViewMixin avatarViewMixin = new AvatarViewMixin(this, avatarView);
-        avatarView.setImageDrawable(getCircularUserIcon(context));
+        avatarView.setImageDrawable(getCircularUserIcon(getApplicationContext()));
         avatarView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,7 +120,8 @@ public class SettingsHomepageActivity extends FragmentActivity {
     }
 
     private Drawable getCircularUserIcon(Context context) {
-        Bitmap bitmapUserIcon = mUserManager.getUserIcon(UserHandle.myUserId());
+        UserManager userManager = context.getSystemService(UserManager.class);
+        Bitmap bitmapUserIcon = userManager.getUserIcon(UserHandle.myUserId());
 
         if (bitmapUserIcon == null) {
             // get default user icon.
@@ -145,7 +138,8 @@ public class SettingsHomepageActivity extends FragmentActivity {
     @Override
     public void onResume() {
         super.onResume();
+        final View root = findViewById(R.id.settings_homepage_container);
+        ImageView avatarView = root.findViewById(R.id.account_avatar);
         avatarView.setImageDrawable(getCircularUserIcon(getApplicationContext()));
-
     }
 }
