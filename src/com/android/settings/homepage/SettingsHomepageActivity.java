@@ -82,10 +82,6 @@ public class SettingsHomepageActivity extends FragmentActivity implements
         mHomepageView = null;
     }
 
-    Context context;
-    ImageView avatarView;
-    UserManager mUserManager;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,26 +91,12 @@ public class SettingsHomepageActivity extends FragmentActivity implements
         appBar.setMinimumHeight(getSearchBoxHeight());
         initHomepageContainer();
 
-        Context context = getApplicationContext();
-
-        mUserManager = context.getSystemService(UserManager.class);
-
         final Toolbar toolbar = findViewById(R.id.search_action_bar);
         FeatureFactory.getFactory(this).getSearchFeatureProvider()
                 .initSearchToolbar(this /* activity */, toolbar, SettingsEnums.SETTINGS_HOMEPAGE);
 
         avatarView = findViewById(R.id.account_avatar);
-        //final AvatarViewMixin avatarViewMixin = new AvatarViewMixin(this, avatarView);
-        avatarView.setImageDrawable(getCircularUserIcon(context));
-        avatarView.setVisibility(View.VISIBLE);
-        avatarView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.setComponent(new ComponentName("com.android.settings","com.android.settings.Settings$UserSettingsActivity"));
-                startActivity(intent);
-            }
-        });
+        updateAvatarView();
 
         getLifecycle().addObserver(new HideNonSystemOverlayMixin(this));
         mCategoryMixin = new CategoryMixin(this);
@@ -181,7 +163,8 @@ public class SettingsHomepageActivity extends FragmentActivity implements
     }
 
     private Drawable getCircularUserIcon(Context context) {
-        Bitmap bitmapUserIcon = mUserManager.getUserIcon(UserHandle.myUserId());
+        UserManager userManager = context.getSystemService(UserManager.class);
+        Bitmap bitmapUserIcon = userManager.getUserIcon(UserHandle.myUserId());
 
         if (bitmapUserIcon == null) {
             // get default user icon.
@@ -198,6 +181,8 @@ public class SettingsHomepageActivity extends FragmentActivity implements
     @Override
     public void onResume() {
         super.onResume();
+        final View root = findViewById(R.id.settings_homepage_container);
+        ImageView avatarView = root.findViewById(R.id.account_avatar);
         avatarView.setImageDrawable(getCircularUserIcon(getApplicationContext()));
     }
 }
