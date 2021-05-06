@@ -27,6 +27,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.UserHandle;
 import android.os.UserManager;
+import android.provider.Settings;
 import android.util.FeatureFlagUtils;
 import android.util.Log;
 import android.view.View;
@@ -82,6 +83,8 @@ public class SettingsHomepageActivity extends FragmentActivity implements
         mHomepageView = null;
     }
 
+    private ImageView mAvatarView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,7 +98,7 @@ public class SettingsHomepageActivity extends FragmentActivity implements
         FeatureFactory.getFactory(this).getSearchFeatureProvider()
                 .initSearchToolbar(this /* activity */, toolbar, SettingsEnums.SETTINGS_HOMEPAGE);
 
-        avatarView = findViewById(R.id.account_avatar);
+        mAvatarView = findViewById(R.id.account_avatar);
         updateAvatarView();
 
         getLifecycle().addObserver(new HideNonSystemOverlayMixin(this));
@@ -181,8 +184,24 @@ public class SettingsHomepageActivity extends FragmentActivity implements
     @Override
     public void onResume() {
         super.onResume();
-        final View root = findViewById(R.id.settings_homepage_container);
-        ImageView avatarView = root.findViewById(R.id.account_avatar);
-        avatarView.setImageDrawable(getCircularUserIcon(getApplicationContext()));
+        updateAvatarView();
+    }
+
+    private void updateAvatarView() {
+        boolean isMulti = Settings.Global.getInt(getApplicationContext().getContentResolver(),
+                Settings.Global.USER_SWITCHER_ENABLED, 0) == 1;
+        if (isMulti) {
+            mAvatarView.setImageDrawable(getCircularUserIcon(getApplicationContext()));
+            mAvatarView.setOnClickListener(v -> {
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.setComponent(new ComponentName("com.android.settings",
+                        "com.android.settings.Settings$UserSettingsActivity"));
+                startActivity(intent);
+            });
+        } else {
+            mAvatarView.setImageDrawable(null);
+            mAvatarView.setOnClickListener(null);
+        }
+        mAvatarView.setVisibility(isMulti ? View.VISIBLE : View.GONE);
     }
 }
