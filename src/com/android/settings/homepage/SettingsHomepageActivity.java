@@ -27,6 +27,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.UserHandle;
 import android.os.UserManager;
+import android.provider.Settings;
 import android.view.View;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
@@ -50,6 +51,8 @@ import com.android.settingslib.drawable.CircleFramedDrawable;
 
 public class SettingsHomepageActivity extends FragmentActivity {
 
+    private ImageView mAvatarView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -67,19 +70,8 @@ public class SettingsHomepageActivity extends FragmentActivity {
 
         getLifecycle().addObserver(new HideNonSystemOverlayMixin(this));
 
-        ImageView avatarView = root.findViewById(R.id.account_avatar);
-        //final AvatarViewMixin avatarViewMixin = new AvatarViewMixin(this, avatarView);
-        avatarView.setImageDrawable(getCircularUserIcon(getApplicationContext()));
-        avatarView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Intent.ACTION_MAIN);
-                intent.setComponent(new ComponentName("com.android.settings","com.android.settings.Settings$UserSettingsActivity"));
-                startActivity(intent);
-            }
-        });
-        //getLifecycle().addObserver(avatarViewMixin);
-
+        mAvatarView = root.findViewById(R.id.account_avatar);
+        updateAvatarView();
 
         if (!getSystemService(ActivityManager.class).isLowRamDevice()) {
             // Only allow contextual feature on high ram devices.
@@ -114,7 +106,7 @@ public class SettingsHomepageActivity extends FragmentActivity {
         final int paddingTop = searchBarHeight + searchBarMargin * 2;
         view.setPadding(0 /* left */, paddingTop, 0 /* right */, 0 /* bottom */);
 
-        // Prevent inner RecyclerView gets focus and invokes scrolling.
+        // Prevent inner RecyclerView gets focu s and invokes scrolling.
         view.setFocusableInTouchMode(true);
         view.requestFocus();
     }
@@ -138,8 +130,24 @@ public class SettingsHomepageActivity extends FragmentActivity {
     @Override
     public void onResume() {
         super.onResume();
-        final View root = findViewById(R.id.settings_homepage_container);
-        ImageView avatarView = root.findViewById(R.id.account_avatar);
-        avatarView.setImageDrawable(getCircularUserIcon(getApplicationContext()));
+        updateAvatarView();
+    }
+
+    private void updateAvatarView() {
+        boolean isMulti = Settings.Global.getInt(getApplicationContext().getContentResolver(),
+                Settings.Global.USER_SWITCHER_ENABLED, 0) == 1;
+        if (isMulti) {
+            mAvatarView.setImageDrawable(getCircularUserIcon(getApplicationContext()));
+            mAvatarView.setOnClickListener(v -> {
+                Intent intent = new Intent(Intent.ACTION_MAIN);
+                intent.setComponent(new ComponentName("com.android.settings",
+                        "com.android.settings.Settings$UserSettingsActivity"));
+                startActivity(intent);
+            });
+        } else {
+            mAvatarView.setImageDrawable(null);
+            mAvatarView.setOnClickListener(null);
+        }
+        mAvatarView.setVisibility(isMulti ? View.VISIBLE : View.GONE);
     }
 }
