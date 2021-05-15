@@ -160,6 +160,9 @@
             android:key="android.theme.customization.accent_color"
             android:title="@string/theme_customization_accent_color_title"/>
         <ListPreference
+            android:key="android.theme.customization.primary_color"
+            android:title="@string/theme_customization_primary_color_title"/>
+        <ListPreference
             android:key="android.theme.customization.font"
             android:title="@string/theme_customization_font_title"/>
        <ListPreference
