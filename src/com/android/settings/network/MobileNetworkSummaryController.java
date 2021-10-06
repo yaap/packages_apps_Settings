@@ -16,19 +16,13 @@
 
 package com.android.settings.network;
 
-import static androidx.lifecycle.Lifecycle.Event.ON_PAUSE;
-import static androidx.lifecycle.Lifecycle.Event.ON_RESUME;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.UserManager;
-import android.telephony.SubscriptionManager;
 import android.telephony.euicc.EuiccManager;
 
 import androidx.lifecycle.Lifecycle;
-import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.OnLifecycleEvent;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
 
@@ -49,8 +43,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class MobileNetworkSummaryController extends AbstractPreferenceController implements
-        LifecycleObserver, PreferenceControllerMixin,
-        MobileNetworkRepository.MobileNetworkCallback {
+        PreferenceControllerMixin, MobileNetworkRepository.MobileNetworkCallback {
     private static final String TAG = "MobileNetSummaryCtlr";
 
     private static final String KEY = "mobile_network_list";
@@ -59,11 +52,9 @@ public class MobileNetworkSummaryController extends AbstractPreferenceController
     private UserManager mUserManager;
     private RestrictedPreference mPreference;
 
-    private MobileNetworkRepository mMobileNetworkRepository;
     private List<SubscriptionInfoEntity> mSubInfoEntityList;
     private List<UiccInfoEntity> mUiccInfoEntityList;
     private List<MobileNetworkInfoEntity> mMobileNetworkInfoEntityList;
-    private boolean mIsAirplaneModeOn;
     private LifecycleOwner mLifecycleOwner;
 
     /**
@@ -87,23 +78,9 @@ public class MobileNetworkSummaryController extends AbstractPreferenceController
         mMetricsFeatureProvider = FeatureFactory.getFactory(mContext).getMetricsFeatureProvider();
         mUserManager = context.getSystemService(UserManager.class);
         mLifecycleOwner = lifecycleOwner;
-        mMobileNetworkRepository = MobileNetworkRepository.getInstance(context);
-        mIsAirplaneModeOn = mMobileNetworkRepository.isAirplaneModeOn();
         if (lifecycle != null) {
             lifecycle.addObserver(this);
         }
-    }
-
-    @OnLifecycleEvent(ON_RESUME)
-    public void onResume() {
-        mMobileNetworkRepository.addRegister(mLifecycleOwner, this,
-                SubscriptionManager.INVALID_SUBSCRIPTION_ID);
-        mMobileNetworkRepository.updateEntity();
-    }
-
-    @OnLifecycleEvent(ON_PAUSE)
-    public void onPause() {
-        mMobileNetworkRepository.removeRegister(this);
     }
 
     @Override
@@ -154,7 +131,7 @@ public class MobileNetworkSummaryController extends AbstractPreferenceController
         refreshSummary(mPreference);
         mPreference.setOnPreferenceClickListener(null);
         mPreference.setFragment(null);
-        mPreference.setEnabled(!mIsAirplaneModeOn);
+        mPreference.setEnabled(true);
     }
 
     private void update() {
@@ -195,10 +172,6 @@ public class MobileNetworkSummaryController extends AbstractPreferenceController
 
     @Override
     public void onAirplaneModeChanged(boolean airplaneModeEnabled) {
-        if (mIsAirplaneModeOn != airplaneModeEnabled) {
-            mIsAirplaneModeOn = airplaneModeEnabled;
-            update();
-        }
     }
 
     @Override
