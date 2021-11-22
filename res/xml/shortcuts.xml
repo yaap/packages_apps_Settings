@@ -38,7 +38,7 @@
     </shortcut>
     <shortcut
         android:shortcutId="manifest-shortcut-a-yaap"
-        android:icon="@drawable/ic_yaap_settings_icon"
+        android:icon="@drawable/ic_shortcut_yaap_settings_icon"
         android:shortcutShortLabel="@string/yaap_settings_title" >
         <intent
             android:action="android.intent.action.MAIN"
