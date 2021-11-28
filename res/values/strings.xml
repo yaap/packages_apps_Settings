@@ -564,6 +564,10 @@
     <string name="lock_after_timeout_summary_with_exception"><xliff:g id="timeout_string">%1$s</xliff:g> after timeout, except when kept unlocked by <xliff:g id="trust_agent_name">%2$s</xliff:g></string>
     <!-- Text shown for title of owner info setting [CHAR LIMIT=30]-->
     <string name="owner_info_settings_title">Add text on lock screen</string>
+    <!-- Text shown for the title of the lockdown option -->
+    <string name="lockdown_settings_title">Show lockdown option</string>
+    <!-- Text shown for the description of the lockdown option -->
+    <string name="lockdown_settings_summary">Display Power button option that turns off Smart Lock, Face Unlock, Fingerprint Unlock, and notifications on the lock screen</string>
 
     <!-- Text shown for summary of owner info setting (if none set) [CHAR LIMIT=40]-->
     <string name="owner_info_settings_summary">None</string>
