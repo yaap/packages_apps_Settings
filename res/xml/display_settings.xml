@@ -74,6 +74,16 @@
             android:fragment="com.android.settings.display.ToggleFontSizePreferenceFragment"
             settings:controller="com.android.settings.display.FontSizePreferenceController" />
 
+        <ListPreference
+            android:key="android.theme.customization.font"
+            android:title="@string/theme_customization_font_title"/>
+        <ListPreference
+            android:key="android.theme.customization.adaptive_icon_shape"
+            android:title="@string/theme_customization_icon_shape_title"/>
+       <ListPreference
+            android:key="android.theme.customization.icon_pack"
+            android:title="@string/theme_customization_icon_pack_title"/>
+
         <com.android.settings.display.ScreenZoomPreference
             android:key="display_settings_screen_zoom"
             android:title="@string/screen_zoom_title"
@@ -164,21 +174,5 @@
             android:key="vr_display_pref"
             android:title="@string/display_vr_pref_title"
             android:fragment="com.android.settings.display.VrDisplayPreferencePicker"/>
-    </PreferenceCategory>
-
-    <PreferenceCategory
-        android:key="theme_customization_category"
-        android:title="@string/theme_customization_category"
-        android:order="1200"> <!-- Incremented by 100 from last order (i.e. 1100) -->
-
-        <ListPreference
-            android:key="android.theme.customization.font"
-            android:title="@string/theme_customization_font_title"/>
-        <ListPreference
-            android:key="android.theme.customization.adaptive_icon_shape"
-            android:title="@string/theme_customization_icon_shape_title"/>
-       <ListPreference
-            android:key="android.theme.customization.icon_pack"
-            android:title="@string/theme_customization_icon_pack_title"/>
     </PreferenceCategory>
 </PreferenceScreen>
