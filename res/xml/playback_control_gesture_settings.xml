@@ -20,6 +20,11 @@
     xmlns:settings="http://schemas.android.com/apk/res/com.android.settings"
     android:title="@string/gesture_playback_control_screen_title">
 
+    <com.android.settingslib.widget.IllustrationPreference
+        android:key="gesture_playback_control_video"
+        settings:searchable="false"
+        settings:lottie_rawRes="@raw/lottie_volume_button_music_control" />
+
     <com.android.settingslib.widget.MainSwitchPreference
         android:key="gesture_playback_control_switch" />
 
