@@ -1650,4 +1650,8 @@
          [CHAR LIMIT=NONE] -->
     <string-array name="allowlist_hide_summary_in_battery_usage" translatable="false">
     </string-array>
+
+    <string-array name="allowlist_hide_background_in_battery_usage">
+        <item>com.google.android.GoogleCamera</item>
+    </string-array>
 </resources>
