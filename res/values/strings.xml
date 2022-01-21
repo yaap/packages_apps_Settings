@@ -13669,4 +13669,7 @@
     <string name="bluetooth_connect_access_dialog_positive">Connect</string>
     <string name="connectivity_check_title">Internet connectivity check</string>
     <string name="connectivity_check_summary">HTTP endpoints to use for performing internet connectivity checks.</string>
+
+    <string name="sandboxed_google_play">Sandboxed Google Play</string>
+    <string name="sandboxed_google_play_work_profile">Sandboxed Google Play (work profile)</string>
 </resources>
