@@ -16,10 +16,17 @@
 
 package com.android.settings.gestures;
 
+import static android.provider.Settings.Secure.CAMERA_DOUBLE_TAP_POWER_GESTURE_DISABLED;
+import static android.provider.Settings.System.TORCH_POWER_BUTTON_GESTURE;
+
+import android.content.ContentResolver;
 import android.content.Context;
+import android.provider.Settings;
 
 import com.android.settings.R;
 import com.android.settings.core.BasePreferenceController;
+
+import java.util.ArrayList;
 
 public class PowerMenuPreferenceController extends BasePreferenceController {
 
@@ -29,17 +36,29 @@ public class PowerMenuPreferenceController extends BasePreferenceController {
 
     @Override
     public CharSequence getSummary() {
-        if (PowerMenuSettingsUtils.isLongPressPowerForAssistantEnabled(mContext)) {
-            return mContext.getText(R.string.power_menu_summary_long_press_for_assistant);
-        } else {
-            return mContext.getText(R.string.power_menu_summary_long_press_for_power_menu);
+        final ContentResolver resolver = mContext.getContentResolver();
+        // default value for summary if nothing is enabled
+        StringBuilder summary = new StringBuilder(
+                mContext.getString(R.string.power_menu_setting_summary));
+        ArrayList<String> enabledStrings = new ArrayList<>();
+        int torch = Settings.System.getInt(resolver, TORCH_POWER_BUTTON_GESTURE, 0);
+        if (torch != 0)
+            enabledStrings.add(mContext.getString(R.string.torch_power_button_gesture_title));
+        int value = Settings.Secure.getInt(resolver, CAMERA_DOUBLE_TAP_POWER_GESTURE_DISABLED, 0);
+        if (value == 0 && torch != 1)
+            enabledStrings.add(mContext.getString(R.string.double_tap_power_for_camera_title));
+        boolean enabled = PowerMenuSettingsUtils.isLongPressPowerForAssistantEnabled(mContext);
+        if (enabled)
+            enabledStrings.add(mContext.getString(R.string.power_menu_summary_long_press_for_assistant));
+        if (!enabledStrings.isEmpty()) {
+            summary = new StringBuilder(enabledStrings.remove(0));
+            for (String str : enabledStrings) summary.append(", ").append(str);
         }
+        return summary.toString();
     }
 
     @Override
     public int getAvailabilityStatus() {
-        return PowerMenuSettingsUtils.isLongPressPowerSettingAvailable(mContext)
-                ? AVAILABLE
-                : UNSUPPORTED_ON_DEVICE;
+        return AVAILABLE;
     }
 }
