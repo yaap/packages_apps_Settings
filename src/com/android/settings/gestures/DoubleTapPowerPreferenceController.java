@@ -17,24 +17,46 @@
 package com.android.settings.gestures;
 
 import static android.provider.Settings.Secure.CAMERA_DOUBLE_TAP_POWER_GESTURE_DISABLED;
+import static android.provider.Settings.System.TORCH_POWER_BUTTON_GESTURE;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.ContentObserver;
+import android.os.Handler;
 import android.provider.Settings;
 import android.text.TextUtils;
 
 import androidx.annotation.VisibleForTesting;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceScreen;
+import androidx.preference.SwitchPreference;
 
-public class DoubleTapPowerPreferenceController extends GesturePreferenceController {
+import com.android.settings.core.TogglePreferenceController;
+import com.android.settings.R;
+import com.android.settingslib.core.lifecycle.LifecycleObserver;
+import com.android.settingslib.core.lifecycle.events.OnStart;
+import com.android.settingslib.core.lifecycle.events.OnStop;
+
+public class DoubleTapPowerPreferenceController extends TogglePreferenceController
+        implements LifecycleObserver, OnStart, OnStop {
 
     @VisibleForTesting
     static final int ON = 0;
     @VisibleForTesting
     static final int OFF = 1;
 
-    private static final String PREF_KEY_VIDEO = "gesture_double_tap_power_video";
-
+    private static final String PREF_KEY = "gesture_double_tap_power";
     private final String SECURE_KEY = CAMERA_DOUBLE_TAP_POWER_GESTURE_DISABLED;
+
+    private SwitchPreference mPreference;
+
+    private final ContentObserver mTorchObserver = new ContentObserver(Handler.getMain()) {
+        @Override
+        public void onChange(boolean selfChange) {
+            if (mPreference != null)
+                updateState(mPreference);
+        }
+    };
 
     public DoubleTapPowerPreferenceController(Context context, String key) {
         super(context, key);
@@ -42,7 +64,7 @@ public class DoubleTapPowerPreferenceController extends GesturePreferenceControl
 
     public static boolean isSuggestionComplete(Context context, SharedPreferences prefs) {
         return !isGestureAvailable(context)
-                || prefs.getBoolean(DoubleTapPowerSettings.PREF_KEY_SUGGESTION_COMPLETE, false);
+                || prefs.getBoolean(PowerMenuSettings.PREF_KEY_SUGGESTION_COMPLETE, false);
     }
 
     private static boolean isGestureAvailable(Context context) {
@@ -51,8 +73,36 @@ public class DoubleTapPowerPreferenceController extends GesturePreferenceControl
     }
 
     @Override
+    public void displayPreference(PreferenceScreen screen) {
+        super.displayPreference(screen);
+        mPreference = screen.findPreference(PREF_KEY);
+    }
+
+    @Override
+    public void onStart() {
+        mContext.getContentResolver().registerContentObserver(
+                Settings.System.getUriFor(TORCH_POWER_BUTTON_GESTURE),
+                false, mTorchObserver);
+    }
+
+    @Override
+    public void onStop() {
+        mContext.getContentResolver().unregisterContentObserver(mTorchObserver);
+    }
+
+    @Override
+    public void updateState(Preference preference) {
+        super.updateState(preference);
+        preference.setEnabled(getAvailabilityStatus() != DISABLED_DEPENDENT_SETTING);
+    }
+
+    @Override
     public int getAvailabilityStatus() {
-        return isGestureAvailable(mContext) ? AVAILABLE : UNSUPPORTED_ON_DEVICE;
+        if (!isGestureAvailable(mContext)) return UNSUPPORTED_ON_DEVICE;
+        final int value = Settings.System.getInt(
+                mContext.getContentResolver(), TORCH_POWER_BUTTON_GESTURE, 0);
+        if (value == 1) return DISABLED_DEPENDENT_SETTING;
+        return AVAILABLE;
     }
 
     @Override
@@ -63,11 +113,6 @@ public class DoubleTapPowerPreferenceController extends GesturePreferenceControl
     @Override
     public boolean isPublicSlice() {
         return true;
-    }
-
-    @Override
-    protected String getVideoPrefKey() {
-        return PREF_KEY_VIDEO;
     }
 
     @Override
