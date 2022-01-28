@@ -122,7 +122,7 @@ public class DoubleTapPowerPreferenceControllerTest {
         // No stored value in shared preferences if not visited yet.
         final SharedPreferences prefs =
                 new SuggestionFeatureProviderImpl(mContext).getSharedPrefs(mContext);
-        prefs.edit().putBoolean(DoubleTapPowerSettings.PREF_KEY_SUGGESTION_COMPLETE, true).commit();
+        prefs.edit().putBoolean(PowerMenuSettings.PREF_KEY_SUGGESTION_COMPLETE, true).commit();
 
         assertThat(isSuggestionComplete(mContext, prefs)).isTrue();
     }

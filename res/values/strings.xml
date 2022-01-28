@@ -13474,9 +13474,6 @@
     <!-- Cards and passes name lower case [CHAR LIMIT=40] -->
     <string name="cards_passes_lower">cards &amp; passes</string>
 
-    <!-- Power menu setting name [CHAR LIMIT=NONE] -->
-    <string name="power_menu_setting_name">Press and hold power button</string>
-
     <!-- Power menu setting summary to describe press and hold power button for Assistant is enabled. [CHAR LIMIT=NONE] -->
     <string name="power_menu_summary_long_press_for_assist_enabled">Press and hold for the Assistant</string>
     <!-- Power menu setting summary to describe press and hold power button for Assistant is disabled and power menu will appear. [CHAR LIMIT=NONE] -->

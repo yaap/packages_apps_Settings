@@ -73,4 +73,13 @@
     <!-- Floating rotation button -->
     <string name="enable_floating_rotation_button_title">Use floating rotate button</string>
 
+    <!-- Power button -->
+    <string name="power_menu_setting_name">Power button</string>
+    <string name="power_menu_setting_summary">Power button gestures</string>
+    <string name="torch_power_button_gesture_title">Toggle torch when screen off</string>
+    <string name="torch_power_button_gesture_none">Disabled</string>
+    <string name="torch_power_button_gesture_dt">Double tap power button (slower single tap response)</string>
+    <string name="torch_power_button_gesture_lp">Long press power button</string>
+    <string name="quickly_open_camera_disabled">Disabled for torch when screen off</string>
+
 </resources>

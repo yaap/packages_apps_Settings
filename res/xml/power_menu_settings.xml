@@ -25,6 +25,26 @@
         settings:lottie_imageAssetsFolder="power_menu"
         settings:lottie_rawRes="@raw/lottie_power_menu"/>
 
+    <!-- Torch gesture -->
+    <com.yasp.settings.preferences.SystemSettingListPreference
+        android:key="torch_power_button_gesture"
+        android:dialogTitle="@string/torch_power_button_gesture_title"
+        android:title="@string/torch_power_button_gesture_title"
+        android:summary="%s"
+        android:entries="@array/torch_power_button_gesture_entries"
+        android:entryValues="@array/torch_power_button_gesture_values"
+        android:defaultValue="0"
+        settings:controller="com.android.settings.gestures.TorchPowerPreferenceController"
+    />
+
+    <SwitchPreference
+        android:key="gesture_double_tap_power"
+        android:title="@string/double_tap_power_for_camera_title"
+        android:summary="@string/double_tap_power_for_camera_summary"
+        settings:keywords="@string/keywords_gesture"
+        settings:controller="com.android.settings.gestures.DoubleTapPowerPreferenceController"
+    />
+
     <SwitchPreference
         android:key="gesture_power_menu_long_press_for_assist"
         android:title="@string/power_menu_long_press_for_assist"

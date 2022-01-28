@@ -16,13 +16,19 @@
 
 package com.android.settings.gestures;
 
+import static android.provider.Settings.Secure.CAMERA_DOUBLE_TAP_POWER_GESTURE_DISABLED;
+import static android.provider.Settings.System.TORCH_POWER_BUTTON_GESTURE;
 import static com.android.settings.gestures.PowerMenuSettingsUtils.LONG_PRESS_POWER_ASSISTANT_VALUE;
 import static com.android.settings.gestures.PowerMenuSettingsUtils.LONG_PRESS_POWER_GLOBAL_ACTIONS;
 
+import android.content.ContentResolver;
 import android.content.Context;
+import android.provider.Settings;
 
 import com.android.settings.R;
 import com.android.settings.core.BasePreferenceController;
+
+import java.util.ArrayList;
 
 public class PowerMenuPreferenceController extends BasePreferenceController {
 
@@ -32,25 +38,26 @@ public class PowerMenuPreferenceController extends BasePreferenceController {
 
     @Override
     public CharSequence getSummary() {
-        final int powerButtonValue = PowerMenuSettingsUtils.getPowerButtonSettingValue(mContext);
-        if (powerButtonValue == LONG_PRESS_POWER_ASSISTANT_VALUE) {
-            return mContext.getText(R.string.power_menu_summary_long_press_for_assist_enabled);
-        } else if (powerButtonValue == LONG_PRESS_POWER_GLOBAL_ACTIONS) {
-            return mContext.getText(
-                    R.string.power_menu_summary_long_press_for_assist_disabled_with_power_menu);
-        } else {
-            return mContext.getText(
-                    R.string.power_menu_summary_long_press_for_assist_disabled_no_action);
+        final ContentResolver resolver = mContext.getContentResolver();
+        // default value for summary if nothing is enabled
+        String summary = mContext.getString(R.string.power_menu_setting_summary);
+        ArrayList<String> enabledStrings = new ArrayList<>();
+        int value = Settings.System.getInt(resolver, TORCH_POWER_BUTTON_GESTURE, 0);
+        if (value != 0) enabledStrings.add(mContext.getString(R.string.torch_power_button_gesture_title));
+        value = Settings.Secure.getInt(resolver, CAMERA_DOUBLE_TAP_POWER_GESTURE_DISABLED, 0);
+        if (value == 0) enabledStrings.add(mContext.getString(R.string.double_tap_power_for_camera_title));
+        value = PowerMenuSettingsUtils.getPowerButtonSettingValue(mContext);
+        if (value == LONG_PRESS_POWER_ASSISTANT_VALUE)
+            enabledStrings.add(mContext.getString(R.string.power_menu_long_press_for_assist));
+        if (!enabledStrings.isEmpty()) {
+            summary = enabledStrings.remove(0);
+            for (String str : enabledStrings) summary += (", " + str);
         }
+        return summary;
     }
 
     @Override
     public int getAvailabilityStatus() {
-        return isAssistInvocationAvailable() ? AVAILABLE : UNSUPPORTED_ON_DEVICE;
-    }
-
-    private boolean isAssistInvocationAvailable() {
-        return mContext.getResources().getBoolean(
-                com.android.internal.R.bool.config_longPressOnPowerForAssistantSettingAvailable);
+        return AVAILABLE;
     }
 }
