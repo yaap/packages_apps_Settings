@@ -20,21 +20,21 @@ import static android.provider.Settings.Secure.DOZE_PICK_UP_GESTURE;
 
 import android.annotation.UserIdInt;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.hardware.display.AmbientDisplayConfiguration;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.TextUtils;
 
-public class PickupGesturePreferenceController extends GesturePreferenceController {
+import com.android.settings.core.TogglePreferenceController;
+
+public class PickupGesturePreferenceController extends TogglePreferenceController {
 
     private static final int ON = 1;
     private static final int OFF = 0;
 
-    private static final String PREF_KEY_VIDEO = "gesture_pick_up_video";
-    private final String mPickUpPrefKey;
+    private static final String SECURE_KEY = DOZE_PICK_UP_GESTURE;
 
-    private final String SECURE_KEY = DOZE_PICK_UP_GESTURE;
+    private final String mPickUpPrefKey;
 
     private AmbientDisplayConfiguration mAmbientConfig;
     @UserIdInt
@@ -49,12 +49,6 @@ public class PickupGesturePreferenceController extends GesturePreferenceControll
     public PickupGesturePreferenceController setConfig(AmbientDisplayConfiguration config) {
         mAmbientConfig = config;
         return this;
-    }
-
-    public static boolean isSuggestionComplete(Context context, SharedPreferences prefs) {
-        AmbientDisplayConfiguration ambientConfig = new AmbientDisplayConfiguration(context);
-        return prefs.getBoolean(PickupGestureSettings.PREF_KEY_SUGGESTION_COMPLETE, false)
-                || !ambientConfig.dozePickupSensorAvailable();
     }
 
     @Override
@@ -75,11 +69,6 @@ public class PickupGesturePreferenceController extends GesturePreferenceControll
     @Override
     public boolean isPublicSlice() {
         return true;
-    }
-
-    @Override
-    protected String getVideoPrefKey() {
-        return PREF_KEY_VIDEO;
     }
 
     @Override
