@@ -109,7 +109,6 @@ import com.android.settings.gestures.DoubleTapScreenSettings;
 import com.android.settings.gestures.DoubleTwistGestureSettings;
 import com.android.settings.gestures.GestureNavigationSettingsFragment;
 import com.android.settings.gestures.OneHandedSettings;
-import com.android.settings.gestures.PickupGestureSettings;
 import com.android.settings.gestures.PowerMenuSettings;
 import com.android.settings.gestures.SwipeToNotificationSettings;
 import com.android.settings.gestures.SystemNavigationGestureSettings;
@@ -251,7 +250,6 @@ public class SettingsGateway {
             CombinedBiometricProfileSettings.class.getName(),
             SwipeToNotificationSettings.class.getName(),
             DoubleTapScreenSettings.class.getName(),
-            PickupGestureSettings.class.getName(),
             DoubleTwistGestureSettings.class.getName(),
             SystemNavigationGestureSettings.class.getName(),
             DataUsageSummary.class.getName(),

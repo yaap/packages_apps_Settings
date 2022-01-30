@@ -116,11 +116,11 @@
             settings:searchable="false"
             settings:controller="com.android.settings.gestures.DoubleTapScreenPreferenceController" />
 
-        <Preference
-            android:key="ambient_display_pick_up"
+        <SwitchPreference
+            android:key="gesture_pick_up"
             android:title="@string/ambient_display_pickup_title"
-            android:fragment="com.android.settings.gestures.PickupGestureSettings"
-            settings:searchable="false"
+            android:summary="@string/ambient_display_pickup_summary"
+            settings:keywords="@string/keywords_gesture"
             settings:controller="com.android.settings.gestures.PickupGesturePreferenceController" />
 
         <SwitchPreference

@@ -68,17 +68,17 @@
         settings:controller="com.android.settings.gestures.DoubleTapScreenPreferenceController" />
 
     <Preference
-        android:key="gesture_pick_up_input_summary"
-        android:title="@string/ambient_display_pickup_title"
-        android:fragment="com.android.settings.gestures.PickupGestureSettings"
-        settings:searchable="false"
-        settings:controller="com.android.settings.gestures.PickupGesturePreferenceController" />
-
-    <Preference
         android:key="gesture_power_menu_summary"
         android:title="@string/power_menu_setting_name"
         android:fragment="com.android.settings.gestures.PowerMenuSettings"
         settings:controller="com.android.settings.gestures.PowerMenuPreferenceController" />
+
+    <SwitchPreference
+        android:key="gesture_pick_up"
+        android:title="@string/ambient_display_pickup_title"
+        android:summary="@string/ambient_display_pickup_summary"
+        settings:keywords="@string/keywords_gesture"
+        settings:controller="com.android.settings.gestures.PickupGesturePreferenceController" />
 
     <com.android.settingslib.PrimarySwitchPreference
         android:key="playback_control_summary"

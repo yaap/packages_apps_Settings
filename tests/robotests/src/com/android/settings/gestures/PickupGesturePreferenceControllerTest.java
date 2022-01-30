@@ -80,19 +80,6 @@ public class PickupGesturePreferenceControllerTest {
     }
 
     @Test
-    public void isSuggestionCompleted_ambientDisplayPickup_trueWhenVisited() {
-        when(mContext.getResources().getBoolean(anyInt())).thenReturn(true);
-        when(mContext.getResources().getString(anyInt())).thenReturn("foo");
-        final Context context = RuntimeEnvironment.application;
-        final SharedPreferences prefs =
-                new SuggestionFeatureProviderImpl(context).getSharedPrefs(context);
-        prefs.edit().putBoolean(PickupGestureSettings.PREF_KEY_SUGGESTION_COMPLETE, true).commit();
-
-        assertThat(PickupGesturePreferenceController.isSuggestionComplete(mContext, prefs))
-                .isTrue();
-    }
-
-    @Test
     public void getAvailabilityStatus_aodNotSupported_UNSUPPORTED_ON_DEVICE() {
         when(mAmbientDisplayConfiguration.dozePickupSensorAvailable()).thenReturn(false);
         when(mAmbientDisplayConfiguration.ambientDisplayAvailable()).thenReturn(false);
