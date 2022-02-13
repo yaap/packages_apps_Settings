@@ -43,4 +43,17 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+
+    <!-- Gaming mode -->
+    <string-array name="gaming_mode_ringer_entries">
+        <item>@string/gaming_mode_ringer_disabled</item>
+        <item>@string/gaming_mode_ringer_vibrate</item>
+        <item>@string/gaming_mode_ringer_silent</item>
+    </string-array>
+
+    <string-array name="gaming_mode_ringer_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+    </string-array>
 </resources>
