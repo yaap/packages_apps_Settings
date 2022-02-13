@@ -4528,6 +4528,18 @@
                 android:value="com.yasp.settings.YaapSettings" />
         </activity>
 
+        <activity android:name=".Settings$GamingModeActivity"
+                  android:label="@string/gaming_mode_tile_title"
+                  android:icon="@drawable/ic_yaap_settings_icon"
+                  android:exported="true">
+            <intent-filter android:priority="69">
+                <action android:name="com.android.settings.GAMING_MODE_SETTINGS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+            <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
+                       android:value="com.android.settings.gaming.GamingModeFragment" />
+        </activity>
+
         <!-- This is the longest AndroidManifest.xml ever. -->
         <receiver android:name="com.google.android.settings.fuelgauge.BatteryBroadcastReceiver" android:exported="true">
             <intent-filter>
