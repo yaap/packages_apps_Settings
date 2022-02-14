@@ -26,6 +26,7 @@ import android.provider.Settings;
 import com.android.settings.R;
 import com.android.settings.core.BasePreferenceController;
 
+import java.lang.StringBuilder;
 import java.util.ArrayList;
 
 public class PowerMenuPreferenceController extends BasePreferenceController {
