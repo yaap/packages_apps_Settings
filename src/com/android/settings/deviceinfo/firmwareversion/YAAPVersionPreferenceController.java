@@ -25,7 +25,7 @@ import com.android.settings.core.BasePreferenceController;
 public class YAAPVersionPreferenceController extends BasePreferenceController {
 
     @VisibleForTesting
-    private static final String YAAP_PROP = "ro.yaap.version";
+    public static final String YAAP_PROP = "ro.yaap.version";
 
     public YAAPVersionPreferenceController(Context context, String preferenceKey) {
         super(context, preferenceKey);
