@@ -28,6 +28,7 @@ import android.provider.Settings;
 import com.android.settings.R;
 import com.android.settings.core.BasePreferenceController;
 
+import java.lang.StringBuilder;
 import java.util.ArrayList;
 
 public class PowerMenuPreferenceController extends BasePreferenceController {
@@ -40,20 +41,23 @@ public class PowerMenuPreferenceController extends BasePreferenceController {
     public CharSequence getSummary() {
         final ContentResolver resolver = mContext.getContentResolver();
         // default value for summary if nothing is enabled
-        String summary = mContext.getString(R.string.power_menu_setting_summary);
+        StringBuilder summary = new StringBuilder(
+                mContext.getString(R.string.power_menu_setting_summary));
         ArrayList<String> enabledStrings = new ArrayList<>();
-        int value = Settings.System.getInt(resolver, TORCH_POWER_BUTTON_GESTURE, 0);
-        if (value != 0) enabledStrings.add(mContext.getString(R.string.torch_power_button_gesture_title));
-        value = Settings.Secure.getInt(resolver, CAMERA_DOUBLE_TAP_POWER_GESTURE_DISABLED, 0);
-        if (value == 0) enabledStrings.add(mContext.getString(R.string.double_tap_power_for_camera_title));
+        int torch = Settings.System.getInt(resolver, TORCH_POWER_BUTTON_GESTURE, 0);
+        if (torch != 0)
+            enabledStrings.add(mContext.getString(R.string.torch_power_button_gesture_title));
+        int value = Settings.Secure.getInt(resolver, CAMERA_DOUBLE_TAP_POWER_GESTURE_DISABLED, 0);
+        if (value == 0 && torch != 1)
+            enabledStrings.add(mContext.getString(R.string.double_tap_power_for_camera_title));
         value = PowerMenuSettingsUtils.getPowerButtonSettingValue(mContext);
         if (value == LONG_PRESS_POWER_ASSISTANT_VALUE)
             enabledStrings.add(mContext.getString(R.string.power_menu_long_press_for_assist));
         if (!enabledStrings.isEmpty()) {
-            summary = enabledStrings.remove(0);
-            for (String str : enabledStrings) summary += (", " + str);
+            summary = new StringBuilder(enabledStrings.remove(0));
+            for (String str : enabledStrings) summary.append(", ").append(str);
         }
-        return summary;
+        return summary.toString();
     }
 
     @Override
