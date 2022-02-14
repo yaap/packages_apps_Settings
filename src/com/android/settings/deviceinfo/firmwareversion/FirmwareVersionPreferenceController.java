@@ -16,10 +16,15 @@
 
 package com.android.settings.deviceinfo.firmwareversion;
 
+import static com.android.settings.deviceinfo.firmwareversion.YAAPVersionPreferenceController.YAAP_PROP;
+
 import android.content.Context;
 import android.os.Build;
+import android.os.SystemProperties;
 
+import com.android.settings.R;
 import com.android.settings.core.BasePreferenceController;
+import com.android.settingslib.DeviceInfoUtils;
 
 public class FirmwareVersionPreferenceController extends BasePreferenceController {
 
@@ -34,6 +39,15 @@ public class FirmwareVersionPreferenceController extends BasePreferenceControlle
 
     @Override
     public CharSequence getSummary() {
-        return Build.VERSION.RELEASE_OR_PREVIEW_DISPLAY;
+        String summary = Build.VERSION.RELEASE_OR_PREVIEW_DISPLAY;
+        final String versionDef = mContext.getString(R.string.device_info_default);
+        final String romVersion = SystemProperties.get(YAAP_PROP, versionDef);
+        if (!romVersion.equals(versionDef)) {
+            final String[] buildDate = romVersion.split("-", 0);
+            summary += " - " + buildDate[buildDate.length - 1];
+        }
+        final String patch = DeviceInfoUtils.getSecurityPatch();
+        if (patch != null) summary += "\n" + patch;
+        return summary;
     }
 }
