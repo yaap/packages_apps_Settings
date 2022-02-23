@@ -98,6 +98,7 @@ import com.android.settings.gaming.GamingModeFragment;
 import com.android.settings.gestures.AssistGestureSettings;
 import com.android.settings.gestures.DoubleTapScreenSettings;
 import com.android.settings.gestures.DoubleTwistGestureSettings;
+import com.android.settings.gestures.ButtonNavigationSettingsFragment;
 import com.android.settings.gestures.GestureNavigationSettingsFragment;
 import com.android.settings.gestures.PowerMenuSettings;
 import com.android.settings.gestures.SwipeToNotificationSettings;
@@ -311,6 +312,7 @@ public class SettingsGateway {
             PowerMenuSettings.class.getName(),
             DarkModeSettingsFragment.class.getName(),
             BugReportHandlerPicker.class.getName(),
+            ButtonNavigationSettingsFragment.class.getName(),
             GestureNavigationSettingsFragment.class.getName(),
             InteractAcrossProfilesSettings.class.getName(),
             InteractAcrossProfilesDetails.class.getName(),

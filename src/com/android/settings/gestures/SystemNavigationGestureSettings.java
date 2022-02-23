@@ -127,6 +127,11 @@ public class SystemNavigationGestureSettings extends RadioButtonPickerFragment i
             pref.setExtraWidgetOnClickListener((v) -> startActivity(new Intent(
                     GestureNavigationSettingsFragment.GESTURE_NAVIGATION_SETTINGS)));
         }
+
+        if (info.getKey() == KEY_SYSTEM_NAV_3BUTTONS) {
+            pref.setExtraWidgetOnClickListener((v) -> startActivity(new Intent(
+                    ButtonNavigationSettingsFragment.BUTTON_NAVIGATION_SETTINGS)));
+        }
     }
 
     @Override
