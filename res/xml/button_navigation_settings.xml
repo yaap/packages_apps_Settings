@@ -36,5 +36,10 @@
         settings:controller="com.android.settings.gestures.ButtonNavigationSettingsAssistController"
     />
 
-</PreferenceScreen>
+    <com.yasp.settings.preferences.SystemSettingSwitchPreference
+        android:key="navigation_bar_inverse"
+        android:title="@string/navigation_bar_inverse_title"
+        android:summary="@string/navigation_bar_inverse_summary"
+        android:defaultValue="false" />
 
+</PreferenceScreen>
