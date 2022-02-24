@@ -119,5 +119,10 @@
     <string name="button_settings_activity_title">3-Button Navigation Settings</string>
     <string name="navigation_bar_inverse_title">Inverse Layout</string>
     <string name="navigation_bar_inverse_summary">Swipe positions between back and recents</string>
+    <string name="navbar_layout_title">Layout</string>
+    <string name="navbar_layout_normal">Normal</string>
+    <string name="navbar_layout_compact">Compact</string>
+    <string name="navbar_layout_leftleaning">Left-leaning</string>
+    <string name="navbar_layout_rightleaning">Right-leaning</string>
 
 </resources>
