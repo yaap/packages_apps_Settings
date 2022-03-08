@@ -127,4 +127,9 @@ public class DoubleTapPowerPreferenceController extends TogglePreferenceControll
         return Settings.Secure.putInt(mContext.getContentResolver(), SECURE_KEY,
                 isChecked ? ON : OFF);
     }
+
+    @Override
+    public int getSliceHighlightMenuRes() {
+        return R.string.menu_key_yasp;
+    }
 }

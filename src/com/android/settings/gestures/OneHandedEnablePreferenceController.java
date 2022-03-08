@@ -111,4 +111,9 @@ public class OneHandedEnablePreferenceController extends TogglePreferenceControl
             refreshSummary(mPreference);
         }
     }
+
+    @Override
+    public int getSliceHighlightMenuRes() {
+        return R.string.menu_key_yasp;
+    }
 }

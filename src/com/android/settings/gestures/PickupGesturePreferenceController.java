@@ -26,6 +26,7 @@ import android.provider.Settings;
 import android.text.TextUtils;
 
 import com.android.settings.core.TogglePreferenceController;
+import com.android.settings.R;
 
 public class PickupGesturePreferenceController extends TogglePreferenceController {
 
@@ -93,5 +94,10 @@ public class PickupGesturePreferenceController extends TogglePreferenceControlle
         }
 
         return mAmbientConfig;
+    }
+
+    @Override
+    public int getSliceHighlightMenuRes() {
+        return R.string.menu_key_yasp;
     }
 }

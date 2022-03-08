@@ -22,6 +22,7 @@ import android.provider.Settings;
 
 import com.android.internal.widget.LockPatternUtils;
 import com.android.settings.core.TogglePreferenceController;
+import com.android.settings.R;
 
 public class LockdownButtonPreferenceController extends TogglePreferenceController {
 
@@ -52,5 +53,10 @@ public class LockdownButtonPreferenceController extends TogglePreferenceControll
         Settings.Secure.putInt(mContext.getContentResolver(),
                 Settings.Secure.LOCKDOWN_IN_POWER_MENU, isChecked ? 1 : 0);
         return true;
+    }
+
+    @Override
+    public int getSliceHighlightMenuRes() {
+        return R.string.menu_key_security;
     }
 }

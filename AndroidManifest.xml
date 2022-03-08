@@ -4526,6 +4526,8 @@
             </intent-filter>
             <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
                 android:value="com.yasp.settings.YaapSettings" />
+            <meta-data android:name="com.android.settings.HIGHLIGHT_MENU_KEY"
+                android:value="@string/menu_key_yasp"/>
         </activity>
 
         <activity android:name=".Settings$GamingModeActivity"
