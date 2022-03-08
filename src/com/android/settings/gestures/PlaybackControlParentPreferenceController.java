@@ -104,6 +104,11 @@ public class PlaybackControlParentPreferenceController extends TogglePreferenceC
         }
     }
 
+    @Override
+    public int getSliceHighlightMenuRes() {
+        return R.string.menu_key_yasp;
+    }
+
     private class SettingObserver extends ContentObserver {
         private final Uri mUri = Settings.System.getUriFor(SYSTEM_KEY);
         private final Uri mDelayUri = Settings.System.getUriFor(DELAY_SYSTEM_KEY);
