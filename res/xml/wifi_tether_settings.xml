@@ -45,4 +45,8 @@
         android:key="wifi_tether_network_ap_band"
         android:title="@string/wifi_hotspot_ap_band_title"/>
 
+    <Preference
+        android:key="wifi_tether_client_manager"
+        android:title="@string/wifi_hotspot_client_manager_title"
+        android:fragment="ink.kscope.settings.wifi.tether.WifiTetherClientManager" />
 </PreferenceScreen>
