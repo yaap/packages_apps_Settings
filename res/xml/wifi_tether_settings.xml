@@ -59,4 +59,9 @@
         android:summary="@string/summary_placeholder"
         android:fragment="com.android.settings.wifi.tether.WifiHotspotSpeedSettings"
         settings:isPreferenceVisible="@bool/config_show_wifi_hotspot_speed"/>
+
+    <Preference
+        android:key="wifi_tether_client_manager"
+        android:title="@string/wifi_hotspot_client_manager_title"
+        android:fragment="ink.kscope.settings.wifi.tether.WifiTetherClientManager" />
 </PreferenceScreen>
