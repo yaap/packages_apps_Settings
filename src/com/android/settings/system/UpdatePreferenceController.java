@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2017 The Android Open Source Project
  * Copyright (C) 2017 The LineageOS Project
+ * Copyright (C) 2022 Yet Another AOSP Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,37 +18,29 @@
 package com.android.settings.deviceinfo;
 
 import android.content.Context;
-import androidx.preference.Preference;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 
-import com.android.settingslib.core.AbstractPreferenceController;
-import com.android.settings.core.PreferenceControllerMixin;
+import androidx.preference.Preference;
 
+import com.android.settings.core.BasePreferenceController;
 
-public class UpdatePreferenceController extends AbstractPreferenceController implements
-        PreferenceControllerMixin {
+public class UpdatePreferenceController extends BasePreferenceController {
 
     private static final String KEY_UPDATE_SETTING = "update_settings";
 
     public UpdatePreferenceController(Context context) {
-        super(context);
+        super(context, KEY_UPDATE_SETTING);
     }
 
     @Override
-    public boolean isAvailable() {
+    public int getAvailabilityStatus() {
         String packagename = mContext.getResources().getString(
                 com.android.settings.R.string.update_package);
         try {
             ApplicationInfo ai = mContext.getPackageManager().getApplicationInfo(packagename, 0);
-            return true;
-        } catch (PackageManager.NameNotFoundException e) {
-            return false;
-        }
-    }
-
-    @Override
-    public String getPreferenceKey() {
-        return KEY_UPDATE_SETTING;
+            return ai.enabled ? AVAILABLE : UNSUPPORTED_ON_DEVICE;
+        } catch (PackageManager.NameNotFoundException e) { }
+        return UNSUPPORTED_ON_DEVICE;
     }
 }
