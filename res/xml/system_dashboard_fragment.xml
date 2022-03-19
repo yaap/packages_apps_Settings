@@ -70,7 +70,8 @@
         android:title="@string/update_settings_title"
         android:summary="@string/update_settings_summary"
         android:icon="@drawable/ic_system_update"
-        android:order="-58">
+        android:order="-58"
+        settings:controller="com.android.settings.system.UpdatePreferenceController">
         <intent android:action="android.intent.action.MAIN"
                 android:targetPackage="@string/update_package"
                 android:targetClass="@string/update_activity" />
