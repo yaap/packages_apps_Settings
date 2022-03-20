@@ -42,8 +42,6 @@
     <!-- OTA App -->
     <string name="update_settings_title">系统更新</string>
     <string name="update_settings_summary">检查系统最新版本</string>
-    <string name="update_package" translatable="false">eu.chainfire.opendelta</string>
-    <string name="update_activity" translatable="false">eu.chainfire.opendelta.MainActivity</string>
 
     <!-- Radio Info -->
     <string name="radio_info_title">手机信号参数</string>
