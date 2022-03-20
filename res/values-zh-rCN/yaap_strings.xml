@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2020 YAAP
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Top level YASP -->
+    <string name="yaap_settings_summary">一起向未来</string>
+
+    <!-- Doze on charge -->
+    <string name="doze_on_charge_title">充电时始终开启</string>
+    <string name="doze_on_charge_summary">充电时显示熄屏显示</string>
+
+    <!-- Volume dialog timeout -->
+    <string name="unit_seconds">秒</string>
+    <string name="volume_dialog_timeout_title">音量面板超时时间</string>
+    <string name="volume_dialog_timeout_summary">音量面板消失所需的时间</string>
+    <!-- Volume link notification -->
+    <string name="volume_link_notification_title">关联铃声和通知的音量</string>
+
+    <!-- Vibration patterns -->
+    <string name="vibration_pattern_title">铃声振动模式</string>
+    <string name="pattern_custom">自定义</string>
+    <string name="custom_vibration_pattern_title">自定义模式</string>
+    <string name="custom_vibration_pattern_summary">设置自定义振动模式</string>
+
+    <!-- Cycle through ringer modes gesture -->
+    <string name="prevent_ringing_option_cycle">循环通过模式</string>
+    <string name="prevent_ringing_option_cycle_summary">开启 (循环通过模式)</string>
+    <string name="prevent_ringing_option_normal">普通</string>
+
+    <!-- OTA App -->
+    <string name="update_settings_title">系统更新</string>
+    <string name="update_settings_summary">检查系统最新版本</string>
+
+    <!-- Radio Info -->
+    <string name="radio_info_title">手机信号参数</string>
+
+    <!-- String for removal of sensitive info on about, depending on tap -->
+    <string name="device_info_protected_single_press">点击显示信息</string>
+
+    <!-- YAAP Version -->
+    <string name="yaap_version">YAAP 版本</string>
+
+    <!-- Custom vibration intensity -->
+    <string name="vibration_intensity_title">振动强度</string>
+    <string name="vibration_intensity_summary">调整不同情况下的振动强度</string>
+    <string name="notification_vibration_intensity_title">通知</string>
+    <string name="ring_vibration_intensity_title">响铃</string>
+    <string name="haptic_feedback_intensity_title">触摸振动</string>
+    <string name="vibration_intensity_off">禁用</string>
+    <string name="vibration_intensity_low">弱</string>
+    <string name="vibration_intensity_medium">中</string>
+    <string name="vibration_intensity_high">强</string>
+
+    <!-- QSTile requires unlocking before being accessible -->
+    <string name="qstile_requires_unlocking_title">需要解锁手机才能使用QS磁贴</string>
+    <string name="qstile_requires_unlocking_summary">您需要先解锁手机，然后才能从锁定屏幕访问以下QS磁贴：飞行模式，移动数据，NFC，热点，USB网络共享和位置</string>
+
+    <!-- Default getTimeSpentInApp string for Wellbeing to display. [CHAR LIMIT=NONE] -->
+    <string name="duration_less_than_one_minute">不到1分钟</string>
+    <!-- Summary for Wellbeing screen time usage. [CHAR LIMIT=NONE] -->
+    <string name="screen_time_summary_usage_today">%1$s 今天</string>
+
+    <!-- Floating rotation button -->
+    <string name="enable_floating_rotation_button_title">使用悬浮旋转按钮</string>
+
+    <!-- Power button -->
+    <string name="power_menu_setting_name">电源键</string>
+    <string name="power_menu_setting_summary">电源键手势</string>
+    <string name="torch_power_button_gesture_title">息屏状态按电源键开关手电筒</string>
+    <string name="torch_power_button_gesture_none">禁用</string>
+    <string name="torch_power_button_gesture_dt">双击开关</string>
+    <string name="torch_power_button_gesture_lp">长按开关</string>
+    <string name="quickly_open_camera_disabled">开启息屏双击开关手电筒时禁用</string>
+
+    <!-- Playback control -->
+    <string name="gesture_playback_control_screen_title">播放控制</string>
+    <string name="gesture_playback_control_title">屏幕关闭时，长按音量键来切换歌曲</string>
+    <string name="volume_rocker_music_controls_delay_title">播放控制激活时间</string>
+    <string name="gesture_playback_control_delay">延迟</string>
+    <string name="unit_ms">毫秒</string>
+
+    <!-- Gaming macro QS tile -->
+    <string name="gaming_mode_tile_title">游戏模式</string>
+    <string name="gaming_mode_tile_summary">游戏模式磁贴设置</string>
+    <string name="gaming_mode_heads_up_title">注意脚下</string>
+    <string name="gaming_mode_heads_up_summary">是否关闭注意脚下</string>
+    <string name="gaming_mode_zen_title">勿扰模式</string>
+    <string name="gaming_mode_zen_summary">是否开启勿扰模式</string>
+    <string name="gaming_mode_ringer_title">铃声模式</string>
+    <string name="gaming_mode_ringer_disabled">不改变</string>
+    <string name="gaming_mode_ringer_vibrate">振动</string>
+    <string name="gaming_mode_ringer_silent">静音</string>
+    <string name="gaming_mode_night_light_title">护眼模式</string>
+    <string name="gaming_mode_night_light_summary">是否关闭护眼模式</string>
+    <string name="gaming_mode_battery_schedule_title">省电模式</string>
+    <string name="gaming_mode_battery_schedule_summary">是否关闭省电模式</string>
+    <string name="gaming_mode_brightness_enabled_title">自动亮度</string>
+    <string name="gaming_mode_brightness_enabled_summary">是否关闭自动亮度</string>
+    <string name="gaming_mode_brightness_title">设置亮度为</string>
+    <string name="gaming_mode_brightness_summary">设置为0时保持不变</string>
+    <string name="gaming_mode_media_enabled_title">媒体音量</string>
+    <string name="gaming_mode_media_enabled_summary">是否设置媒体音量</string>
+    <string name="gaming_mode_media_title">设置音量为</string>
+    <string name="gaming_mode_desc">打开游戏模式将会切换为上面的设置，关闭游戏模式时会恢复原来的设置。</string>
+    <string name="gaming_mode_screen_off_title">熄屏关闭</string>
+    <string name="gaming_mode_screen_off_summary">熄屏时自动关闭游戏模式</string>
+
+    <!-- 3-Button navigation settings -->
+    <string name="button_settings_activity_title">“三按钮”导航</string>
+    <string name="navigation_bar_inverse_title">反向布局</string>
+    <string name="navigation_bar_inverse_summary">交换“返回”和“多任务”的位置</string>
+    <string name="navbar_layout_title">布局</string>
+    <string name="navbar_layout_normal">正常</string>
+    <string name="navbar_layout_compact">紧凑</string>
+    <string name="navbar_layout_leftleaning">靠左</string>
+    <string name="navbar_layout_rightleaning">靠右</string>
+
+</resources>
