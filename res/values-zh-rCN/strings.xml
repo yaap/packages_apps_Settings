@@ -1126,16 +1126,20 @@
     <string name="storage_settings" msgid="7472188817781592677">"存储"</string>
     <string name="storage_settings_for_app" msgid="229425418984637483">"存储和缓存"</string>
     <string name="storage_settings_title" msgid="486118156723194815">"存储设置"</string>
-    <string name="status_eid" msgid="7532406028683438634">"EID"</string>
-    <string name="eid_multi_sim" msgid="9087924808336397804">"EID（SIM 卡插槽 <xliff:g id="EID_SLOT_ID">%1$d</xliff:g>）"</string>
-    <string name="imei_multi_sim" msgid="9001570420423929507">"IMEI（SIM 卡插槽 <xliff:g id="IMEI_SLOT_ID">%1$d</xliff:g>）"</string>
-    <string name="imei_multi_sim_primary" msgid="7914653040843734282">"IMEI（SIM 卡插槽 <xliff:g id="IMEI_SLOT_ID_PRIMARY">%1$d</xliff:g>）（主卡）"</string>
+    <string name="storage_settings_summary" product="nosdcard" msgid="3858049818577638926">"卸载USB存储设备，查看可用存储设备"</string>
+    <string name="storage_settings_summary" product="default" msgid="267557695753980969">"卸载SD卡，查看可用存储设备"</string>
+    <string name="imei_multi_sim" msgid="71477088017585479">"IMEI（SIM 卡 %1$d）"</string>
     <string name="view_saved_network" msgid="1232387673095080910">"如需查看，请选择已保存的网络"</string>
+    <string name="status_number" product="tablet" msgid="3597945414666253183">"移动目录编号 (MDN)"</string>
+    <string name="status_number" product="default" msgid="8407999629121682207">"手机号码"</string>
+    <string name="status_number_sim_slot" product="tablet" msgid="6582203988975619529">"MDN（SIM 卡 %1$d）"</string>
+    <string name="status_number_sim_slot" product="default" msgid="5724823197745786398">"电话号码（SIM 卡 %1$d）"</string>
+    <string name="status_number_sim_status" product="tablet" msgid="4239876366511743428">"SIM 卡上的 MDN"</string>
+    <string name="status_number_sim_status" product="default" msgid="2772745542921910086">"SIM 卡上的电话号码"</string>
     <string name="status_min_number" msgid="4492899165438225714">"MIN"</string>
     <string name="status_msid_number" msgid="3871958248824595774">"MSID"</string>
     <string name="status_prl_version" msgid="9002131357502714281">"PRL 版本"</string>
-    <string name="meid_multi_sim" msgid="1460689549266621286">"MEID（SIM 卡插槽 <xliff:g id="MEID_SLOT_ID">%1$d</xliff:g>）"</string>
-    <string name="meid_multi_sim_primary" msgid="8921262417580407201">"MEID（SIM 卡插槽 <xliff:g id="MEID_SLOT_ID_PRIMARY">%1$d</xliff:g>）（主卡）"</string>
+    <string name="meid_multi_sim" msgid="7645394486193991388">"MEID（SIM 卡 %1$d）"</string>
     <string name="scanning_status_text_on" msgid="3846571210578042940">"已开启"</string>
     <string name="scanning_status_text_off" msgid="4002352668313705132">"已关闭"</string>
     <string name="status_meid_number" msgid="6040380838489162650">"MEID"</string>
@@ -2820,11 +2824,22 @@
     <string name="select_specific_sim_for_data_button" msgid="6571935548920603512">"使用“<xliff:g id="NEW_SIM">%1$s</xliff:g>”"</string>
     <string name="select_sim_for_calls" msgid="7843107015635189868">"选择用于通话的 SIM 卡"</string>
     <string name="sim_name_hint" msgid="8231524869124193119">"输入 SIM 卡名称"</string>
-    <string name="sim_editor_title" msgid="918655391915256859">"SIM 卡插槽 %1$d"</string>
+    <string name="sim_editor_title" msgid="918655391915256859">"SIM 卡 %1$d"</string>
+    <string name="sim_editor_carrier" msgid="2424593350691002557">"运营商"</string>
+    <string name="sim_editor_number" msgid="3209002966895156006">"号码"</string>
+    <string name="sim_editor_color" msgid="9067029630083892961">"SIM卡颜色"</string>
+    <string name="sim_card_select_title" msgid="8146523005929848793">"选择 SIM 卡"</string>
     <string name="color_orange" msgid="216547825489739010">"橙色"</string>
     <string name="color_purple" msgid="6603701972079904843">"紫色"</string>
     <string name="sim_status_title" msgid="6188770698037109774">"SIM 卡状态"</string>
-    <string name="sim_status_title_sim_slot" msgid="4932996839194493313">"SIM 卡状态（SIM 卡插槽 %1$d）"</string>
+    <string name="sim_status_title_sim_slot" msgid="4932996839194493313">"SIM 卡状态（SIM 卡 %1$d）"</string>
+    <string name="sim_call_back_title" msgid="4274099761123657464">"使用默认SIM卡回电"</string>
+    <string name="sim_outgoing_call_title" msgid="7759080345748128897">"用于外拨电话的 SIM 卡"</string>
+    <string name="sim_other_call_settings" msgid="5956308869284958883">"其他通话设置"</string>
+    <string name="preferred_network_offload_title" msgid="6453199586512609557">"首选分流网络"</string>
+    <string name="preferred_network_offload_header" msgid="4842188794016376899">"关闭网络名称广播"</string>
+    <string name="preferred_network_offload_footer" msgid="374984523082849648">"关闭网络名称广播可防止第三方获取您的网络信息。"</string>
+    <string name="preferred_network_offload_popup" msgid="3949937898807213370">"关闭网络名称广播可防止设备自动连接到隐藏的网络。"</string>
     <string name="sim_signal_strength" msgid="6351052821700294501">"<xliff:g id="DBM">%1$d</xliff:g> dBm <xliff:g id="ASU">%2$d</xliff:g> asu"</string>
     <string name="sim_notification_title" msgid="2819551384383504031">"已更改 SIM 卡。"</string>
     <string name="sim_notification_summary" msgid="5593339846307029991">"点按即可进行设置"</string>
@@ -3491,6 +3506,35 @@
     <string name="memtag_learn_more" msgid="1596145970669119776">"详细了解高级内存保护功能。"</string>
     <string name="opening_paragraph_delete_profile_unknown_company" msgid="2951348192319498135">"此工作资料由以下应用管理："</string>
     <string name="managing_admin" msgid="2633920317425356619">"由<xliff:g id="ADMIN_APP_LABEL">%s</xliff:g>管理"</string>
+    <string name="experimental_preference" msgid="869354050717870055">"（实验性）"</string>
+    <string name="encryption_interstitial_header" msgid="4418014339568737685">"安全启动"</string>
+    <string name="encryption_continue_button" msgid="3591796237625134622">"继续"</string>
+    <string name="encryption_interstitial_message_pin" msgid="1413575143234269985">"为了进一步保护此设备的安全，您可以将设备设为需要输入 PIN 码才能启动。在设备启动之前，无法接听电话、接收消息或通知（包括闹钟）。\n\n这样一来，即使设备丢失或被盗，其中的数据仍安全无虞。要将设备设为需要输入 PIN 码才能启动吗？"</string>
+    <string name="encryption_interstitial_message_pattern" msgid="726550613252236854">"为了进一步保护此设备的安全，您可以将设备设为需要绘制解锁图案才能启动。在设备启动之前，无法接听电话、接收消息或通知（包括闹钟）。\n\n这样一来，即使设备丢失或被盗，其中的数据仍安全无虞。要将设备设为需要绘制解锁图案才能启动吗？"</string>
+    <string name="encryption_interstitial_message_password" msgid="6051054565294909975">"为了进一步保护此设备的安全，您可以将设备设为需要输入密码才能启动。在设备启动之前，无法接听电话、接收消息或通知（包括闹钟）。\n\n这样一来，即使设备丢失或被盗，其中的数据仍安全无虞。要将设备设为需要输入密码才能启动吗？"</string>
+    <string name="encryption_interstitial_message_pin_for_fingerprint" msgid="7152770518093102916">"为了进一步保护此设备的安全，除了使用指纹解锁设备之外，您还可以将设备设为需要输入 PIN 码才能启动。在设备启动之前，无法接听电话、接收消息或通知（包括闹钟）。\n\n这样一来，即使设备丢失或被盗，其中的数据仍安全无虞。要将设备设为需要输入 PIN 码才能启动吗？"</string>
+    <string name="encryption_interstitial_message_pattern_for_fingerprint" msgid="6257856552043740490">"为了进一步保护此设备的安全，除了使用指纹解锁设备之外，您还可以将设备设为需要绘制解锁图案才能启动。在设备启动之前，无法接听电话、接收消息或通知（包括闹钟）。\n\n这样一来，即使设备丢失或被盗，其中的数据仍安全无虞。要将设备设为需要绘制解锁图案才能启动吗？"</string>
+    <string name="encryption_interstitial_message_password_for_fingerprint" msgid="7710804822643612867">"为了进一步保护此设备的安全，除了使用指纹解锁设备之外，您还可以将设备设为需要输入密码才能启动。在设备启动之前，无法接听电话、接收消息或通知（包括闹钟）。\n\n这样一来，即使设备丢失或被盗，其中的数据仍安全无虞。要将设备设为需要输入密码才能启动吗？"</string>
+    <string name="encryption_interstitial_message_pin_for_face" msgid="8577135499926738241">"为了进一步保护此设备的安全，除了使用您的面孔解锁设备之外，您还可以将设备设为需要输入 PIN 码才能启动。设备必须成功启动才能接听电话、接收消息或通知（包括闹钟）。\n\n这样一来，即使设备丢失或被盗，其中的数据仍安全无虞。要将设备设为需要输入 PIN 码才能启动吗？"</string>
+    <string name="encryption_interstitial_message_pattern_for_face" msgid="5851725964283239644">"为了进一步保护此设备的安全，除了使用您的面孔解锁设备之外，您还可以将设备设为需要绘制解锁图案才能启动。设备必须成功启动才能接听电话、接收消息或通知（包括闹钟）。\n\n这样一来，即使设备丢失或被盗，其中的数据仍安全无虞。要将设备设为需要绘制解锁图案才能启动吗？"</string>
+    <string name="encryption_interstitial_message_password_for_face" msgid="3553329272456428461">"为了进一步保护此设备的安全，除了使用您的面孔解锁设备之外，您还可以将设备设为需要输入密码才能启动。设备必须成功启动才能接听电话、接收消息或通知（包括闹钟）。\n\n这样一来，即使设备丢失或被盗，其中的数据仍安全无虞。要将设备设为需要输入密码才能启动吗？"</string>
+    <string name="encryption_interstitial_message_pin_for_biometrics" msgid="4590004045791674901">"为了进一步保护此设备的安全，除了使用生物识别解锁设备之外，您还可以将设备设为需要输入 PIN 码才能启动。在设备启动之前，您无法接听来电及接收消息或通知（包括闹钟）。\n\n这样一来，即使设备丢失或被盗，其中的数据仍安全无虞。要将设备设为需要输入 PIN 码才能启动吗？"</string>
+    <string name="encryption_interstitial_message_pattern_for_biometrics" msgid="2697768285995352576">"为了进一步保护此设备的安全，除了使用生物识别解锁设备之外，您还可以将设备设为需要绘制解锁图案才能启动。在设备启动之前，您无法接听来电及接收消息或通知（包括闹钟）。\n\n这样一来，即使设备丢失或被盗，其中的数据仍安全无虞。要将设备设为需要绘制解锁图案才能启动吗？"</string>
+    <string name="encryption_interstitial_message_password_for_biometrics" msgid="1895561539964730123">"为了进一步保护此设备的安全，除了使用生物识别解锁设备之外，您还可以将设备设为需要输入密码才能启动。在设备启动之前，您无法接听来电及接收消息或通知（包括闹钟）。\n\n这样一来，即使设备丢失或被盗，其中的数据仍安全无虞。要将设备设为需要输入密码才能启动吗？"</string>
+    <string name="encryption_interstitial_yes" msgid="1948016725089728181">"是"</string>
+    <string name="encryption_interstitial_no" msgid="3352331535473118487">"否"</string>
+    <string name="restricted_true_label" msgid="612852292488747564">"受限"</string>
+    <string name="restricted_false_label" msgid="2837053797913490628">"应用可以在后台使用电量"</string>
+    <string name="encrypt_talkback_dialog_require_pin" msgid="8974156384205924887">"要求输入 PIN 码吗？"</string>
+    <string name="encrypt_talkback_dialog_require_pattern" msgid="1587587568721873184">"要求绘制图案吗？"</string>
+    <string name="encrypt_talkback_dialog_require_password" msgid="2701793623210531836">"要求输入密码吗？"</string>
+    <string name="encrypt_talkback_dialog_message_pin" msgid="4482887117824444481">"当您输入 PIN 码以启动此设备时，<xliff:g id="SERVICE">%1$s</xliff:g>等无障碍服务还未开启。"</string>
+    <string name="encrypt_talkback_dialog_message_pattern" msgid="5156321541636018756">"当您绘制解锁图案以启动此设备时，<xliff:g id="SERVICE">%1$s</xliff:g>等无障碍服务还未开启。"</string>
+    <string name="encrypt_talkback_dialog_message_password" msgid="1917287751192953034">"当您输入密码以启动此设备时，<xliff:g id="SERVICE">%1$s</xliff:g>等无障碍服务还未开启。"</string>
+    <string name="direct_boot_unaware_dialog_message" msgid="5766006106305996844">"注意：如果您重启手机并设置了屏幕锁定，则必须将手机解锁才能运行此应用"</string>
+    <string name="imei_information_title" msgid="8703564992893669514">"IMEI 信息"</string>
+    <string name="imei_information_summary" msgid="4763358372990258786">"IMEI相关信息"</string>
+    <string name="slot_number" msgid="2663789411468530397">"（卡<xliff:g id="SLOT_NUM">%1$d</xliff:g>）"</string>
     <string name="launch_by_default" msgid="892824422067985734">"默认打开"</string>
     <string name="app_launch_open_domain_urls_title" msgid="4805388403977096285">"打开支持的链接"</string>
     <string name="app_launch_top_intro_message" msgid="137370923637482459">"允许在此应用中打开网络链接"</string>
@@ -3844,6 +3888,9 @@
     <string name="notification_log_channel" msgid="3406738695621767204">"频道"</string>
     <string name="notification_log_details_ranking_null" msgid="6607596177723101524">"缺少排名对象。"</string>
     <string name="notification_log_details_ranking_none" msgid="2484105338466675261">"排名对象不包含此键。"</string>
+    <string name="theme_customization_font_title">标题/正文字体</string>
+    <string name="theme_customization_icon_pack_title">图标包</string>
+    <string name="theme_customization_device_default" msgid="7641813022590999286">"设备默认设置"</string>
     <string name="display_cutout_emulation" msgid="1421648375408281244">"刘海屏"</string>
     <string name="display_cutout_emulation_keywords" msgid="4506580703807358127">"刘海屏, 缺口"</string>
     <string name="overlay_option_device_default" msgid="7986355499809313848">"设备默认设置"</string>
