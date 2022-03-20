@@ -1523,18 +1523,18 @@
     <string name="storage_settings_title" msgid="486118156723194815">"存储设置"</string>
     <string name="storage_settings_summary" product="nosdcard" msgid="3858049818577638926">"卸载USB存储设备，查看可用存储设备"</string>
     <string name="storage_settings_summary" product="default" msgid="267557695753980969">"卸载SD卡，查看可用存储设备"</string>
-    <string name="imei_multi_sim" msgid="71477088017585479">"IMEI（SIM 卡插槽 %1$d）"</string>
+    <string name="imei_multi_sim" msgid="71477088017585479">"IMEI（SIM 卡 %1$d）"</string>
     <string name="view_saved_network" msgid="1232387673095080910">"如需查看，请选择已保存的网络"</string>
     <string name="status_number" product="tablet" msgid="3597945414666253183">"移动目录编号 (MDN)"</string>
     <string name="status_number" product="default" msgid="8407999629121682207">"手机号码"</string>
-    <string name="status_number_sim_slot" product="tablet" msgid="6582203988975619529">"MDN（SIM 卡插槽 %1$d）"</string>
-    <string name="status_number_sim_slot" product="default" msgid="5724823197745786398">"电话号码（SIM 卡插槽 %1$d）"</string>
+    <string name="status_number_sim_slot" product="tablet" msgid="6582203988975619529">"MDN（SIM 卡 %1$d）"</string>
+    <string name="status_number_sim_slot" product="default" msgid="5724823197745786398">"电话号码（SIM 卡 %1$d）"</string>
     <string name="status_number_sim_status" product="tablet" msgid="4239876366511743428">"SIM 卡上的 MDN"</string>
     <string name="status_number_sim_status" product="default" msgid="2772745542921910086">"SIM 卡上的电话号码"</string>
     <string name="status_min_number" msgid="4492899165438225714">"MIN"</string>
     <string name="status_msid_number" msgid="3871958248824595774">"MSID"</string>
     <string name="status_prl_version" msgid="9002131357502714281">"PRL 版本"</string>
-    <string name="meid_multi_sim" msgid="7645394486193991388">"MEID（SIM 卡插槽 %1$d）"</string>
+    <string name="meid_multi_sim" msgid="7645394486193991388">"MEID（SIM 卡 %1$d）"</string>
     <string name="scanning_status_text_on" msgid="3846571210578042940">"已开启"</string>
     <string name="scanning_status_text_off" msgid="4002352668313705132">"已关闭"</string>
     <string name="scanning_status_text_wifi_on_ble_on" msgid="7644609329607744714">"WLAN 扫描和蓝牙扫描功能均已开启"</string>
@@ -3537,7 +3537,7 @@
     <string name="sim_card_number_title" msgid="4728780444646439845">"SIM 卡 <xliff:g id="CARD_NUMBER">%1$d</xliff:g>"</string>
     <string name="sim_editor_name" msgid="5900178038499314621">"SIM 卡名称"</string>
     <string name="sim_name_hint" msgid="8231524869124193119">"输入 SIM 卡名称"</string>
-    <string name="sim_editor_title" msgid="918655391915256859">"SIM 卡插槽 %1$d"</string>
+    <string name="sim_editor_title" msgid="918655391915256859">"SIM 卡 %1$d"</string>
     <string name="sim_editor_carrier" msgid="2424593350691002557">"运营商"</string>
     <string name="sim_editor_number" msgid="3209002966895156006">"号码"</string>
     <string name="sim_editor_color" msgid="9067029630083892961">"SIM卡颜色"</string>
@@ -3546,7 +3546,7 @@
     <string name="color_purple" msgid="6603701972079904843">"紫色"</string>
     <string name="sim_no_inserted_msg" msgid="7272710974813741735">"尚未插入SIM卡"</string>
     <string name="sim_status_title" msgid="6188770698037109774">"SIM 卡状态"</string>
-    <string name="sim_status_title_sim_slot" msgid="4932996839194493313">"SIM 卡状态（SIM 卡插槽 %1$d）"</string>
+    <string name="sim_status_title_sim_slot" msgid="4932996839194493313">"SIM 卡状态（SIM 卡 %1$d）"</string>
     <string name="sim_call_back_title" msgid="4274099761123657464">"使用默认SIM卡回电"</string>
     <string name="sim_outgoing_call_title" msgid="7759080345748128897">"用于外拨电话的 SIM 卡"</string>
     <string name="sim_other_call_settings" msgid="5956308869284958883">"其他通话设置"</string>
@@ -4339,7 +4339,7 @@
     <string name="direct_boot_unaware_dialog_message" msgid="5766006106305996844">"注意：如果您重启手机并设置了屏幕锁定，则必须将手机解锁才能运行此应用"</string>
     <string name="imei_information_title" msgid="8703564992893669514">"IMEI 信息"</string>
     <string name="imei_information_summary" msgid="4763358372990258786">"IMEI相关信息"</string>
-    <string name="slot_number" msgid="2663789411468530397">"（插槽<xliff:g id="SLOT_NUM">%1$d</xliff:g>）"</string>
+    <string name="slot_number" msgid="2663789411468530397">"（卡<xliff:g id="SLOT_NUM">%1$d</xliff:g>）"</string>
     <string name="launch_by_default" msgid="892824422067985734">"默认打开"</string>
     <string name="app_launch_domain_links_title" msgid="6702041169676128550">"打开链接"</string>
     <string name="app_launch_open_domain_urls_title" msgid="4805388403977096285">"打开支持的链接"</string>
@@ -4846,6 +4846,8 @@
     <string name="notification_log_details_none" msgid="1090852853755089991">"无"</string>
     <string name="notification_log_details_ranking_null" msgid="6607596177723101524">"缺少排名对象。"</string>
     <string name="notification_log_details_ranking_none" msgid="2484105338466675261">"排名对象不包含此键。"</string>
+    <string name="theme_customization_font_title">标题/正文字体</string>
+    <string name="theme_customization_icon_pack_title">图标包</string>
     <string name="theme_customization_device_default" msgid="7641813022590999286">"设备默认设置"</string>
     <string name="display_cutout_emulation" msgid="1421648375408281244">"刘海屏"</string>
     <string name="display_cutout_emulation_keywords" msgid="4506580703807358127">"刘海屏, 缺口"</string>
