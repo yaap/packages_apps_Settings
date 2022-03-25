@@ -89,6 +89,11 @@
     <string name="gesture_playback_control_delay">delay</string>
     <string name="unit_ms">ms</string>
 
+    <!-- Quick Mute -->
+    <string name="quick_mute_title">Quick mute</string>
+    <string name="volume_button_quick_mute_category_title">Long-pressing volume down key will mute active volume stream</string>
+    <string name="volume_button_quick_mute_delay_title">Playback control activation delay</string>
+
     <!-- Gaming macro QS tile -->
     <string name="gaming_mode_tile_title">Gaming macro</string>
     <string name="gaming_mode_tile_summary">Gaming macro QS tile settings</string>
