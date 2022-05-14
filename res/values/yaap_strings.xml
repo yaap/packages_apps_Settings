@@ -18,6 +18,10 @@
     <string name="yaap_settings_title">YASP</string>
     <string name="yaap_settings_summary">Yet Another Settings Page</string>
 
+    <!-- General -->
+    <string name="copied_to_clipboard">Copied to clipboard</string>
+    <string name="longpress_to_clipboard">Long-press to copy</string>
+
     <!-- Doze on charge -->
     <string name="doze_on_charge_title">Always on when charging</string>
     <string name="doze_on_charge_summary">Show doze screen all the time when charging</string>
