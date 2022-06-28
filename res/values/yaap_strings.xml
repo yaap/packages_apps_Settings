@@ -156,4 +156,9 @@
     <string name="back_height_title">Back Height</string>
     <string name="back_height_message">Amount of screen height used as a touchable region for back gesture</string>
 
+    <!-- Reset auto brightness adjustment -->
+    <string name="reset_auto_brightness_adjustment_title">Reset preference</string>
+    <string name="reset_auto_brightness_adjustment_summary">Let the system forget your brightness preference and reset it to the default one</string>
+    <string name="reset_auto_brightness_adjustment_done">Auto brightness preference has been reset</string>
+
 </resources>
