@@ -14236,4 +14236,5 @@
 
     <string name="app_info_install_time">Installed: %1$s</string>
     <string name="app_info_update_time">Updated: %1$s</string>
+    <string name="storage_scopes">Storage Scopes</string>
 </resources>
