@@ -64,13 +64,13 @@ public class LinkedVolumesPreferenceController extends AbstractPreferenceControl
         if (!isAvailable()) {
             return;
         }
-        mRingVolume = (VolumeSeekBarPreference) screen.findPreference(KEY_VOLUME_RING);
-        mNotificationVolume = (VolumeSeekBarPreference) screen.findPreference(KEY_VOLUME_NOTIFICATION);
-        mLinkedVolume = (SecureSettingSwitchPreference) screen.findPreference(KEY_VOLUME_LINK_NOTIFICATION);
+        mRingVolume = screen.findPreference(KEY_VOLUME_RING);
+        mNotificationVolume = screen.findPreference(KEY_VOLUME_NOTIFICATION);
+        mLinkedVolume = screen.findPreference(KEY_VOLUME_LINK_NOTIFICATION);
         mLinkedVolume.setOnPreferenceChangeListener(this);
-        boolean enabled = Settings.Secure.getInt(mContext.getContentResolver(),
+        final boolean enabled = Settings.Secure.getInt(mContext.getContentResolver(),
                 KEY_VOLUME_LINK_NOTIFICATION, 1) == 1;
-        mLinkedVolume.setChecked(enabled ? true : false);
+        mLinkedVolume.setChecked(enabled);
         updateNotificationVis(enabled);
     }
 
@@ -84,17 +84,11 @@ public class LinkedVolumesPreferenceController extends AbstractPreferenceControl
     }
 
     private void updateNotificationVis(boolean linked) {
-        if (mRingVolume == null || mNotificationVolume == null) {
+        if (mRingVolume == null || mNotificationVolume == null)
             return;
-        }
-        if (linked) {
-            mRingVolume.setTitle(mContext.getResources().getString(
-                    R.string.ring_volume_option_title));
-            mNotificationVolume.setVisible(false);
-        } else {
-            mRingVolume.setTitle(mContext.getResources().getString(
-                    R.string.ring_volume_unlinked_option_title));
-            mNotificationVolume.setVisible(true);
-        }
+        mRingVolume.setTitle(linked
+                ? R.string.ring_volume_option_title
+                : R.string.ring_volume_unlinked_option_title);
+        mNotificationVolume.setVisible(!linked);
     }
 }

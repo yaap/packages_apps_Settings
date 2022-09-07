@@ -27,9 +27,11 @@ import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.os.Vibrator;
+import android.provider.Settings;
 import android.text.TextUtils;
 
 import androidx.lifecycle.OnLifecycleEvent;
+import androidx.preference.PreferenceScreen;
 
 import com.android.settings.R;
 import com.android.settings.Utils;
@@ -61,6 +63,18 @@ public class RingVolumePreferenceController extends VolumeSeekBarPreferenceContr
             mVibrator = null;
         }
         updateRingerMode();
+    }
+
+    @Override
+    public void displayPreference(PreferenceScreen screen) {
+        super.displayPreference(screen);
+        if (mPreference == null) return;
+        if (!isSliceable()) return;
+        final boolean linked = Settings.Secure.getInt(mContext.getContentResolver(),
+                Settings.Secure.VOLUME_LINK_NOTIFICATION, 1) == 1;
+        mPreference.setTitle(linked
+                ? R.string.ring_volume_option_title
+                : R.string.ring_volume_unlinked_option_title);
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)

@@ -31,6 +31,7 @@ public class NotificationVolumePreferenceController extends
 
     private static final String KEY_NOTIFICATION_VOLUME = "notification_volume";
     private static final String KEY_VOLUME_LINK_NOTIFICATION = "volume_link_notification";
+    private static final String KEY_RING_VOLUME = "ring_volume";
 
     public NotificationVolumePreferenceController(Context context) {
         super(context, KEY_NOTIFICATION_VOLUME);
@@ -38,6 +39,9 @@ public class NotificationVolumePreferenceController extends
 
     @Override
     public int getAvailabilityStatus() {
+        final boolean linked = Settings.Secure.getInt(mContext.getContentResolver(),
+                KEY_VOLUME_LINK_NOTIFICATION, 1) == 1;
+        if (linked) return CONDITIONALLY_UNAVAILABLE;
         return mContext.getResources().getBoolean(R.bool.config_show_notification_volume)
                 && !mHelper.isSingleVolume() ? AVAILABLE : UNSUPPORTED_ON_DEVICE;
     }
@@ -45,19 +49,18 @@ public class NotificationVolumePreferenceController extends
     @Override
     public void displayPreference(PreferenceScreen screen) {
         super.displayPreference(screen);
-        if (getAvailabilityStatus() == UNSUPPORTED_ON_DEVICE) {
-            return;
-        }
-        VolumeSeekBarPreference notificationVolume =
-                (VolumeSeekBarPreference) screen.findPreference(KEY_NOTIFICATION_VOLUME);
-        boolean linked = Settings.Secure.getInt(mContext.getContentResolver(),
+        if (getAvailabilityStatus() == UNSUPPORTED_ON_DEVICE) return;
+        if (mPreference == null) return;
+        final boolean linked = Settings.Secure.getInt(mContext.getContentResolver(),
                 KEY_VOLUME_LINK_NOTIFICATION, 1) == 1;
-        notificationVolume.setVisible(linked ? false : true);
+        mPreference.setVisible(!linked);
+        mPreference.setTitle(R.string.notification_volume_option_title);
     }
 
     @Override
     public boolean isSliceable() {
-        return TextUtils.equals(getPreferenceKey(), KEY_NOTIFICATION_VOLUME);
+        final boolean available = getAvailabilityStatus() == AVAILABLE;
+        return available && TextUtils.equals(getPreferenceKey(), KEY_NOTIFICATION_VOLUME);
     }
 
     @Override
@@ -74,10 +77,4 @@ public class NotificationVolumePreferenceController extends
     public int getAudioStream() {
         return AudioManager.STREAM_NOTIFICATION;
     }
-
-    @Override
-    public int getMuteIcon() {
-        return R.drawable.ic_notifications_off_24dp;
-    }
-
 }
