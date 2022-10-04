@@ -17,6 +17,8 @@
 
 package ink.kscope.settings.wifi.tether;
 
+import static android.net.wifi.SoftApConfiguration.DEFAULT_TIMEOUT;
+
 import android.content.Context;
 import android.net.wifi.SoftApConfiguration;
 import android.net.wifi.WifiManager;
@@ -53,23 +55,28 @@ public class WifiTetherAutoOffPreferenceController extends BasePreferenceControl
 
     private long getAutoOffTimeout() {
         final SoftApConfiguration softApConfiguration = mWifiManager.getSoftApConfiguration();
-        final boolean settingsOn = softApConfiguration.isAutoShutdownEnabled();
-        return settingsOn ? softApConfiguration.getShutdownTimeoutMillis() / 1000 : 0;
+        boolean settingsOn = softApConfiguration.isAutoShutdownEnabled();
+        final long timeout = softApConfiguration.getShutdownTimeoutMillis();
+        if (timeout == 0 || timeout / 1000 == 0) settingsOn = false;
+        return settingsOn ? (timeout / 1000) : DEFAULT_TIMEOUT;
     }
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        final long timeout;
+        long timeout;
         try {
             timeout = Long.parseLong((String) newValue);
         } catch (NumberFormatException e) {
             return false;
         }
+        final boolean defTimeout = timeout == 0;
+        if (defTimeout) timeout = DEFAULT_TIMEOUT;
+        else timeout *= 1000;
         final SoftApConfiguration softApConfiguration = mWifiManager.getSoftApConfiguration();
         final SoftApConfiguration newSoftApConfiguration =
                 new SoftApConfiguration.Builder(softApConfiguration)
-                        .setAutoShutdownEnabled(timeout > 0)
-                        .setShutdownTimeoutMillis(timeout * 1000)
+                        .setAutoShutdownEnabled(!defTimeout)
+                        .setShutdownTimeoutMillis(timeout)
                         .build();
         return mWifiManager.setSoftApConfiguration(newSoftApConfiguration);
     }
@@ -77,13 +84,15 @@ public class WifiTetherAutoOffPreferenceController extends BasePreferenceControl
     public void updateConfig(SoftApConfiguration.Builder builder) {
         if (builder == null) return;
         final long timeout = getAutoOffTimeout();
-        builder.setAutoShutdownEnabled(timeout > 0)
-                .setShutdownTimeoutMillis(timeout * 1000);
+        builder.setAutoShutdownEnabled(timeout != DEFAULT_TIMEOUT)
+                .setShutdownTimeoutMillis(timeout);
     }
 
     public void updateDisplay() {
         if (mPreference != null) {
-            mPreference.setValue(String.valueOf(getAutoOffTimeout()));
+            final long timeout = getAutoOffTimeout();
+            mPreference.setValue(String.valueOf(
+                    timeout == DEFAULT_TIMEOUT ? 0 : timeout));
         }
     }
 }
