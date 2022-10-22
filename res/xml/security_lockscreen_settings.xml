@@ -96,7 +96,7 @@
             settings:controller="com.android.settings.display.AmbientDisplayAlwaysOnPreferenceController"
             settings:userRestriction="no_ambient_display" />
 
-        <com.yasp.settings.preferences.SystemSettingSwitchPreference
+        <com.yasp.settings.preferences.SecureSettingSwitchPreference
             android:key="doze_on_charge"
             android:defaultValue="false"
             android:title="@string/doze_on_charge_title"
