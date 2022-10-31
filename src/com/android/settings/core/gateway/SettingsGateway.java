@@ -395,8 +395,10 @@ public class SettingsGateway {
             Settings.MyDeviceInfoActivity.class.getName(),
             Settings.ModuleLicensesActivity.class.getName(),
             UserBackupSettingsActivity.class.getName(),
+            // Others (YAAP Additions)
             Settings.GamingModeActivity.class.getName(),
             Settings.DevRunningServicesActivity.class.getName(),
             Settings.YAAPSettingsActivity.class.getName(),
+            Settings.PreviouslyConnectedDeviceDashboardActivity.class.getName(),
     };
 }
