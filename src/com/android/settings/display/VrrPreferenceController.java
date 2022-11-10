@@ -35,6 +35,8 @@ public class VrrPreferenceController extends TogglePreferenceController {
             DisplayManager.DeviceConfig.KEY_FIXED_REFRESH_RATE_LOW_DISPLAY_BRIGHTNESS_THRESHOLDS;
     private static final String CONFIG_KEY_AMBIENT =
             DisplayManager.DeviceConfig.KEY_FIXED_REFRESH_RATE_LOW_AMBIENT_BRIGHTNESS_THRESHOLDS;
+    private static final String CONFIG_KEY_DENYLIST =
+            DisplayManager.DeviceConfig.KEY_HIGH_REFRESH_RATE_BLACKLIST;
 
     public VrrPreferenceController(Context context, String key) {
         super(context, key);
@@ -116,9 +118,16 @@ public class VrrPreferenceController extends TogglePreferenceController {
                 String.valueOf(DISABLE_VALUE_AMBIENT),
                 false /* make default */
             );
+            DeviceConfig.setProperty(
+                CONFIG_NAMESPACE,
+                CONFIG_KEY_DENYLIST,
+                "",
+                false /* make default */
+            );
             return;
         }
         DeviceConfig.deleteProperty(CONFIG_NAMESPACE, CONFIG_KEY);
         DeviceConfig.deleteProperty(CONFIG_NAMESPACE, CONFIG_KEY_AMBIENT);
+        DeviceConfig.deleteProperty(CONFIG_NAMESPACE, CONFIG_KEY_DENYLIST);
     }
 }
