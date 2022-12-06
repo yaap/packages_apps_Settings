@@ -50,9 +50,9 @@ public class PowerMenuPreferenceController extends BasePreferenceController {
         int value = Settings.Secure.getInt(resolver, CAMERA_DOUBLE_TAP_POWER_GESTURE_DISABLED, 0);
         if (value == 0 && torch != 1)
             enabledStrings.add(mContext.getString(R.string.double_tap_power_for_camera_title));
-        value = PowerMenuSettingsUtils.getPowerButtonSettingValue(mContext);
-        if (value == LONG_PRESS_POWER_ASSISTANT_VALUE)
-            enabledStrings.add(mContext.getString(R.string.power_menu_long_press_for_assist));
+        boolean enabled = PowerMenuSettingsUtils.isLongPressPowerForAssistantEnabled(mContext);
+        if (enabled)
+            enabledStrings.add(mContext.getString(R.string.power_menu_summary_long_press_for_assistant));
         if (!enabledStrings.isEmpty()) {
             summary = new StringBuilder(enabledStrings.remove(0));
             for (String str : enabledStrings) summary.append(", ").append(str);
