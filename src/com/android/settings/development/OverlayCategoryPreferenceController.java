@@ -263,4 +263,14 @@ public class OverlayCategoryPreferenceController extends DeveloperOptionsPrefere
             return mDeviceDefaultLabel;
         }
     }
+
+    @Override
+    protected void onDeveloperOptionsSwitchDisabled() {
+        super.onDeveloperOptionsSwitchDisabled();
+        // TODO b/133222035: remove these developer settings when the
+        // Settings.Secure.THEME_CUSTOMIZATION_OVERLAY_PACKAGES setting is used
+        setOverlay(PACKAGE_DEVICE_DEFAULT);
+        updateState(mPreference);
+    }
+
 }
