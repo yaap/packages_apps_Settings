@@ -34,12 +34,31 @@ import com.android.settingslib.core.AbstractPreferenceController;
 public class VolumeDialogPositionPreferenceController extends AbstractPreferenceController
         implements Preference.OnPreferenceChangeListener {
 
+    private static final String SYSTEMUI_PKG = "com.android.systemui";
+    private static final String CONFIG = "config_audioPanelOnLeftSide";
     private static final String KEY = "volume_panel_on_left";
+    private static final String KEY_LAND = "volume_panel_on_left_land";
+
+    private final boolean mIsDefaultLeft;
 
     private SwitchPreference mPreference;
+    private SwitchPreference mPreferenceLand;
 
     public VolumeDialogPositionPreferenceController(Context context) {
         super(context);
+
+        // Get config_audioPanelOnLeftSide from SystemUI
+        Context sysUiContext;
+        try {
+            sysUiContext = mContext.createPackageContext(SYSTEMUI_PKG,
+                    Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
+        } catch (NameNotFoundException e) {
+            // Nothing to do, If SystemUI was not found you have bigger issues :)
+            sysUiContext = mContext;
+        }
+        Resources sysUiRes = sysUiContext.getResources();
+        final int resId = sysUiRes.getIdentifier(CONFIG, "bool", SYSTEMUI_PKG);
+        mIsDefaultLeft = sysUiRes.getBoolean(resId);
     }
 
     @Override
@@ -56,30 +75,38 @@ public class VolumeDialogPositionPreferenceController extends AbstractPreference
     public void displayPreference(PreferenceScreen screen) {
         super.displayPreference(screen);
         mPreference = (SwitchPreference) screen.findPreference(KEY);
+        mPreferenceLand = (SwitchPreference) screen.findPreference(KEY_LAND);
 
-        // Get config_audioPanelOnLeftSide from SystemUI
-        Context sysUiContext;
-        try {
-            sysUiContext = mContext.createPackageContext("com.android.systemui",
-                    Context.CONTEXT_IGNORE_SECURITY | Context.CONTEXT_INCLUDE_CODE);
-        } catch (NameNotFoundException e) {
-            // Nothing to do, If SystemUI was not found you have bigger issues :)
-            sysUiContext = mContext;
-        }
-        Resources sysUiRes = sysUiContext.getResources();
-        int resId = sysUiRes.getIdentifier("config_audioPanelOnLeftSide", "bool", "com.android.systemui");
-        boolean isLeft = sysUiRes.getBoolean(resId);
-
-        boolean value = Settings.System.getIntForUser(mContext.getContentResolver(),
-                KEY, isLeft ? 1 : 0, UserHandle.USER_CURRENT) == 1;
+        final boolean value = Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                KEY, mIsDefaultLeft ? 1 : 0, UserHandle.USER_CURRENT) == 1;
         mPreference.setChecked(value);
         mPreference.setOnPreferenceChangeListener(this);
+        mPreferenceLand.setOnPreferenceChangeListener(this);
+        updateLandVisAndValue(value);
     }
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        Settings.System.putIntForUser(mContext.getContentResolver(),
-                KEY, (Boolean) newValue ? 1 : 0, UserHandle.USER_CURRENT);
+        if (preference == mPreference) {
+            final boolean value = (Boolean) newValue;
+            Settings.System.putIntForUser(mContext.getContentResolver(),
+                    KEY, value ? 1 : 0, UserHandle.USER_CURRENT);
+            updateLandVisAndValue(value);
+        } else if (preference == mPreferenceLand) {
+            final boolean value = (Boolean) newValue;
+            Settings.System.putIntForUser(mContext.getContentResolver(),
+                    KEY_LAND, value ? 1 : 0, UserHandle.USER_CURRENT);
+        }
         return true;
+    }
+
+    private void updateLandVisAndValue(boolean visible) {
+        if (mPreferenceLand == null) return;
+        final boolean value = visible && Settings.System.getIntForUser(
+                mContext.getContentResolver(),
+                KEY_LAND, mIsDefaultLeft ? 1 : 0, UserHandle.USER_CURRENT) == 1;
+        mPreferenceLand.setChecked(value);
+        mPreferenceLand.setVisible(visible);
     }
 }
