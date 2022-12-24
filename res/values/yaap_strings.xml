@@ -29,6 +29,8 @@
     <!-- Volume dialog position -->
     <string name="volume_panel_on_left_title">Left volume panel</string>
     <string name="volume_panel_on_left_summary">Show the volume panel on the left side of the screen</string>
+    <string name="volume_panel_on_left_land_title">Left landscape volume panel</string>
+    <string name="volume_panel_on_left_land_summary">Keep the volume panel on the left when on landscape</string>
 
     <!-- Volume dialog timeout -->
     <string name="unit_seconds">Second(s)</string>
