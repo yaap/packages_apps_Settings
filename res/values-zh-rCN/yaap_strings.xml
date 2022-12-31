@@ -127,4 +127,45 @@
     <string name="navbar_layout_leftleaning">靠左</string>
     <string name="navbar_layout_rightleaning">靠右</string>
 
+    <!-- Back gesture height -->
+    <string name="back_height_low_label">满</string>
+    <string name="back_height_high_label">最低</string>
+    <string name="back_options_dialog_title">选项</string>
+    <string name="back_height_title">返回手势高度</string>
+    <string name="back_height_message">返回手势可触摸区域的屏幕高度量</string>
+
+    <!-- Reset auto brightness adjustment -->
+    <string name="reset_auto_brightness_adjustment_title">重置首选项</string>
+    <string name="reset_auto_brightness_adjustment_summary">让系统忘记您的亮度偏好并将其重置为默认值</string>
+    <string name="reset_auto_brightness_adjustment_done">自动亮度首选项已重置</string>
+
+    <!-- Hotspot -->
+    <string name="wifi_hotspot_client_manager_title">连接中的设备</string>
+    <string name="wifi_hotspot_client_manager_summary">列出和管理连接到热点的设备，并设置客户端数量限制</string>
+    <string name="wifi_hotspot_client_manager_list_only_summary">列出连接到热点的设备</string>
+    <string name="wifi_hotspot_client_limit_title">连接设备数限制</string>
+    <string name="wifi_hotspot_blocked_clients_list_title">屏蔽中的设备</string>
+    <string name="wifi_hotspot_connected_clients_list_title">连接中的设备</string>
+    <string name="wifi_hotspot_block_client_dialog_title">屏蔽设备</string>
+    <string name="wifi_hotspot_unblock_client_dialog_title">取消屏蔽设备</string>
+    <string name="wifi_hotspot_client_manager_footer_text">当前没有可用的客户端。可用时，将在此处列出已连接和已阻止的设备。</string>
+
+    <!-- Black background -->
+    <string name="black_bg_title">深色背景</string>
+    <string name="black_bg_summary">开启深色模式时使用绝对黑色背景</string>
+
+    <!-- Disable VRR -->
+    <string name="disable_vrr_title">关闭 VRR</string>
+    <string name="disable_vrr_summary">不使用基于内容的刷新率切换\n将损害电池寿命</string>
+
+    <!-- Pocket mode -->
+    <string name="proximity_wake_title">防止意外唤醒</string>
+    <string name="proximity_wake_summary">在唤醒屏幕之前检查距离传感器</string>
+
+    <!-- In-call notifications -->
+    <string name="in_call_notifications_title">通话时通知</string>
+
+    <!-- NFC sounds -->
+    <string name="nfc_sounds_title">NFC 声音</string>
+
 </resources>
