@@ -99,6 +99,8 @@
     <string name="volume_rocker_music_controls_delay_title">Playback control activation delay</string>
     <string name="gesture_playback_control_delay">delay</string>
     <string name="unit_ms">ms</string>
+    <string name="unit_hz">Hz</string>
+    <string name="unit_times">Times</string>
 
     <!-- Quick Mute -->
     <string name="quick_mute_title">Quick mute</string>
@@ -197,6 +199,12 @@
     <string name="notification_custom_vibrate_summary">Replaces the default pattern only\nApp set pattern takes precedence</string>
     <string name="notification_custom_vibrate_slider1">Vibrate for</string>
     <string name="notification_custom_vibrate_slider2">Pause for</string>
+
+    <!-- Per-channel torch blinking -->
+    <string name="default_notification_torch_title">Blink Torch</string>
+    <string name="default_notification_torch_summary">Blink the camera flashlight for this notification</string>
+    <string name="default_notification_torch_slider1">Times to blink</string>
+    <string name="default_notification_torch_slider2">Rate of blink</string>
 
     <!-- Pocket mode -->
     <string name="proximity_wake_title">Prevent accidental wake-up</string>
