@@ -216,8 +216,6 @@
     <string name="skip_label" msgid="6380034601349015895">"Saltar"</string>
     <string name="next_label" msgid="1248293387735652187">"Siguiente"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"Idiomas"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"Orden de idiomas preferidos"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"Idioma del sistema"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"Quitar"</string>
     <string name="add_a_language" msgid="2126220398077503271">"Añadir un idioma"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"Idioma"</string>
@@ -232,9 +230,6 @@
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"La selección de idioma para esta aplicación no está disponible en Ajustes."</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"Puede que el idioma no coincida con los que hay disponibles en la aplicación. Algunas aplicaciones no son compatibles con este ajuste."</string>
     <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"Aquí solo se muestran las aplicaciones que admiten la selección de idioma."</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"Tu sistema, aplicaciones y sitios web usan el primer idioma compatible de tus idiomas preferidos."</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"Para seleccionar un idioma para cada aplicación, ve a los ajustes de idioma de la aplicación."</string>
-    <string name="desc_locale_helper_footer_general" msgid="6967183342596405116">"Más información sobre los idiomas"</string>
     <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
       <item quantity="other">¿Quitar idiomas seleccionados?</item>
       <item quantity="one">¿Quitar idioma seleccionado?</item>

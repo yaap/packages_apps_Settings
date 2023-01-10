@@ -216,8 +216,6 @@
     <string name="skip_label" msgid="6380034601349015895">"ዝለል"</string>
     <string name="next_label" msgid="1248293387735652187">"ቀጥል"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"ቋንቋዎች"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"የተመረጠ ቋንቋ ቅደም ተከተል"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"የስርዓት ቋንቋ"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"አስወግድ"</string>
     <string name="add_a_language" msgid="2126220398077503271">"ቋንቋ አክል"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"ቋንቋ"</string>
@@ -232,9 +230,6 @@
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"ለዚህ መተግበሪያ የቋንቋ መረጣ ከቅንብሮች አይገኝም።"</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"ቋንቋ በመተግበሪያው ውስጥ ካሉ ቋንቋዎች ሊለያይ ይችላል። አንዳንድ መተግበሪያዎች ይህን ቅንብር ላይደግፉ ይችላሉ።"</string>
     <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"እዚህ የሚታዩት የቋንቋ ምርጫን የሚደግፉ መተግበሪያዎች ብቻ ናቸው።"</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"የእርስዎ ስርዓት፣ መተግበሪያዎች እና ድር ጣቢያዎች ከእርስዎ የተመረጡ ቋንቋዎች ውስጥ የመጀመሪያውን የተደገፈ ቋንቋ ይጠቀማሉ።"</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"ለእያንዳንዱ መተግበሪያ ቋንቋ ለመምረጥ ወደ መተግበሪያ ቋንቋ ቅንብሮች ይሂዱ።"</string>
-    <string name="desc_locale_helper_footer_general" msgid="6967183342596405116">"ስለቋንቋዎች የበለጠ ይረዱ"</string>
     <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
       <item quantity="one">የተመረጡት ቋንቋዎች ይወገዱ?</item>
       <item quantity="other">የተመረጡት ቋንቋዎች ይወገዱ?</item>

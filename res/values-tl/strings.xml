@@ -216,8 +216,6 @@
     <string name="skip_label" msgid="6380034601349015895">"Laktawan"</string>
     <string name="next_label" msgid="1248293387735652187">"Susunod"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"Mga Wika"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"Pagkakasunod-sunod ng gustong wika"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"Wika ng system"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"Alisin"</string>
     <string name="add_a_language" msgid="2126220398077503271">"Magdagdag ng wika"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"Wika"</string>
@@ -232,9 +230,6 @@
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"Hindi available sa Mga Setting ang pagpili ng wika para sa app na ito."</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"Posibleng iba ang wika sa mga wikang available sa app. Posibleng hindi suportahan ng ilang app ang setting na ito."</string>
     <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"Mga app lang na sumusuporta sa pagpili ng wika ang ipinapakita dito."</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"Ginagamit ng iyong system, mga app, at mga website ang unang sinusuportahang wika mula sa mga gusto mong wika."</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"Para pumili ng wika para sa bawat app, pumunta sa mga setting ng wika ng app."</string>
-    <string name="desc_locale_helper_footer_general" msgid="6967183342596405116">"Matuto pa tungkol sa mga wika"</string>
     <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
       <item quantity="one">Alisin ang mga piniling wika?</item>
       <item quantity="other">Alisin ang mga piniling wika?</item>

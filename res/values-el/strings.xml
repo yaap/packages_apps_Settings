@@ -216,8 +216,6 @@
     <string name="skip_label" msgid="6380034601349015895">"Παραβλέψη"</string>
     <string name="next_label" msgid="1248293387735652187">"Επόμενο"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"Γλώσσες"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"Σειρά προτιμώμενων γλωσσών"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"Γλώσσα συστήματος"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"Κατάργηση"</string>
     <string name="add_a_language" msgid="2126220398077503271">"Προσθήκη γλώσσας"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"Γλώσσα"</string>
@@ -232,9 +230,6 @@
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"Η δυνατότητα επιλογής γλώσσας για αυτήν την εφαρμογή δεν είναι διαθέσιμη από τις Ρυθμίσεις."</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"Η γλώσσα μπορεί να διαφέρει από τις γλώσσες που είναι διαθέσιμες στην εφαρμογή. Ορισμένες εφαρμογές μπορεί να μην υποστηρίζουν αυτήν τη ρύθμιση."</string>
     <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"Εδώ εμφανίζονται μόνο εφαρμογές που υποστηρίζουν την επιλογή γλώσσας."</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"Το σύστημα, οι εφαρμογές και οι ιστότοποι χρησιμοποιούν την πρώτη υποστηριζόμενη γλώσσα από τις προτιμώμενες γλώσσες σας."</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"Για να επιλέξετε μια γλώσσα για κάθε εφαρμογή, μεταβείτε στις ρυθμίσεις γλώσσας εφαρμογών."</string>
-    <string name="desc_locale_helper_footer_general" msgid="6967183342596405116">"Μάθετε περισσότερα για τις γλώσσες"</string>
     <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
       <item quantity="other">Να αφαιρεθούν οι επιλεγμένες γλώσσες;</item>
       <item quantity="one">Να αφαιρεθεί η επιλεγμένη γλώσσα;</item>

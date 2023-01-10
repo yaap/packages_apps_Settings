@@ -216,8 +216,6 @@
     <string name="skip_label" msgid="6380034601349015895">"跳过"</string>
     <string name="next_label" msgid="1248293387735652187">"下一步"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"语言"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"首选语言顺序"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"系统语言"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"移除"</string>
     <string name="add_a_language" msgid="2126220398077503271">"添加语言"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"语言"</string>
@@ -232,9 +230,6 @@
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"您无法从“设置”中选择此应用的语言。"</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"语言可能与应用中可用的语言不同。部分应用可能不支持此设置。"</string>
     <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"此处只显示了支持用户选择语言的应用。"</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"系统、应用和网站会使用首选语言中的第一个受支持的语言。"</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"如需为每个应用选择语言，请进入应用语言设置页面。"</string>
-    <string name="desc_locale_helper_footer_general" msgid="6967183342596405116">"详细了解语言"</string>
     <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
       <item quantity="other">要移除所选语言吗？</item>
       <item quantity="one">要移除所选语言吗？</item>
@@ -4956,8 +4951,6 @@
     <string name="notification_log_details_none" msgid="1090852853755089991">"无"</string>
     <string name="notification_log_details_ranking_null" msgid="6607596177723101524">"缺少排名对象。"</string>
     <string name="notification_log_details_ranking_none" msgid="2484105338466675261">"排名对象不包含此键。"</string>
-    <string name="theme_customization_font_title">标题/正文字体</string>
-    <string name="theme_customization_icon_pack_title">图标包</string>
     <string name="theme_customization_device_default" msgid="7641813022590999286">"设备默认设置"</string>
     <string name="display_cutout_emulation" msgid="1421648375408281244">"刘海屏"</string>
     <string name="display_cutout_emulation_keywords" msgid="4506580703807358127">"刘海屏, 缺口"</string>

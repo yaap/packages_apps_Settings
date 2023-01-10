@@ -216,8 +216,6 @@
     <string name="skip_label" msgid="6380034601349015895">"Jäta vahele"</string>
     <string name="next_label" msgid="1248293387735652187">"Järgmine"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"Keeled"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"Eelistatud keelte järjestus"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"Süsteemi keel"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"Eemalda"</string>
     <string name="add_a_language" msgid="2126220398077503271">"Lisa keel"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"Keel"</string>
@@ -232,9 +230,6 @@
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"Selle rakenduse jaoks pole seadetes keele valimine saadaval."</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"Keel võib rakenduses saadaolevatest keeltest erineda. Mõni rakendus ei pruugi seda seadet toetada."</string>
     <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"Siin on kuvatud ainult rakendused, mis toetavad keele valimist."</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"Teie süsteem, rakendused ja veebisaidid kasutavad teie eelistatud keelte hulgast esimest toetatud keelt."</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"Iga rakenduse puhul keele valimiseks avage rakenduse keeleseaded."</string>
-    <string name="desc_locale_helper_footer_general" msgid="6967183342596405116">"Lisateave keelte kohta"</string>
     <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
       <item quantity="other">Kas eemaldada valitud keeled?</item>
       <item quantity="one">Kas eemaldada valitud keel?</item>

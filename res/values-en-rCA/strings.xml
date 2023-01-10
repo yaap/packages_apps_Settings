@@ -216,8 +216,6 @@
     <string name="skip_label" msgid="6380034601349015895">"Skip"</string>
     <string name="next_label" msgid="1248293387735652187">"Next"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"Languages"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"Preferred language order"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"System language"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"Remove"</string>
     <string name="add_a_language" msgid="2126220398077503271">"Add a language"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"Language"</string>
@@ -232,9 +230,6 @@
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"Language selection for this app isn’t available from Settings."</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"Language may differ from languages available in the app. Some apps may not support this setting."</string>
     <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"Only apps that support language selection are shown here."</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"Your system, apps and websites use the first supported language from your preferred languages."</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"To select a language for each app, go to app language settings."</string>
-    <string name="desc_locale_helper_footer_general" msgid="6967183342596405116">"Learn more about languages"</string>
     <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
       <item quantity="other">Remove selected languages?</item>
       <item quantity="one">Remove selected language?</item>

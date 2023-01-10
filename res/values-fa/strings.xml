@@ -216,8 +216,6 @@
     <string name="skip_label" msgid="6380034601349015895">"رد شدن"</string>
     <string name="next_label" msgid="1248293387735652187">"بعدی"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"زبان‌ها"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"ترتیب زبان ترجیحی"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"زبان سیستم"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"حذف کردن"</string>
     <string name="add_a_language" msgid="2126220398077503271">"افزودن زبان"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"زبان"</string>
@@ -232,9 +230,6 @@
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"انتخاب زبان از «تنظیمات» برای این برنامه دردسترس نیست."</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"زبان ممکن است با زبان‌های موجود در برنامه متفاوت باشد. ممکن است برخی‌از برنامه‌ها از این تنظیم پشتیبانی نکنند."</string>
     <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"فقط برنامه‌هایی که از انتخاب زبان پشتیبانی می‌کنند اینجا نمایش داده می‌شود."</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"سیستم، برنامه‌ها، و وب‌سایت‌های شما از اولین زبان پشتیبانی‌شده ازمیان زبان‌های ترجیحی استفاده می‌کنند."</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"برای انتخاب زبان هر برنامه، به تنظیمات زبان برنامه بروید."</string>
-    <string name="desc_locale_helper_footer_general" msgid="6967183342596405116">"درباره زبان‌ها بیشتر بدانید"</string>
     <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
       <item quantity="one">زبان‌های انتخابی حذف شوند؟</item>
       <item quantity="other">زبان‌های انتخابی حذف شوند؟</item>

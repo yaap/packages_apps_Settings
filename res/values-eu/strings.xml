@@ -216,8 +216,6 @@
     <string name="skip_label" msgid="6380034601349015895">"Saltatu"</string>
     <string name="next_label" msgid="1248293387735652187">"Hurrengoa"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"Hizkuntzak"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"Hizkuntza hobetsien ordena"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"Sistemaren hizkuntza"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"Kendu"</string>
     <string name="add_a_language" msgid="2126220398077503271">"Gehitu hizkuntza bat"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"Hizkuntza"</string>
@@ -232,9 +230,6 @@
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"Aplikazioaren hizkuntza hautatzeko aukera ez dago erabilgarri ezarpenetan."</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"Baliteke hizkuntza ez egotea aplikazioan erabilgarri, eta aplikazio batzuk ezarpenarekin bateragarriak ez izatea."</string>
     <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"Hizkuntza hautatzeko aukera duten aplikazioak soilik agertzen dira hemen."</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"Sistemak, aplikazioek eta webguneek hizkuntza hobetsien zerrendako lehen hizkuntza bateragarria erabiltzen dute."</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"Aplikazio bakoitzerako hizkuntza bat hautatzeko, joan aplikazioaren hizkuntza-ezarpenetara."</string>
-    <string name="desc_locale_helper_footer_general" msgid="6967183342596405116">"Lortu hizkuntzei buruzko informazio gehiago"</string>
     <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
       <item quantity="other">Hautatutako hizkuntzak kendu nahi dituzu?</item>
       <item quantity="one">Hautatutako hizkuntza kendu nahi duzu?</item>

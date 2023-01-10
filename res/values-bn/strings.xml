@@ -216,8 +216,6 @@
     <string name="skip_label" msgid="6380034601349015895">"এড়িয়ে যান"</string>
     <string name="next_label" msgid="1248293387735652187">"পরবর্তী"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"ভাষা"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"পছন্দের ভাষার ক্রম"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"সিস্টেমের ভাষা"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"সরান"</string>
     <string name="add_a_language" msgid="2126220398077503271">"একটি ভাষা যোগ করুন"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"ভাষা"</string>
@@ -232,9 +230,6 @@
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"এই অ্যাপের জন্য \'সেটিংস\' থেকে ভাষা বেছে নেওয়ার সুবিধা উপলভ্য নেই।"</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"অ্যাপে উপলভ্য থাকা ভাষা আলাদা হতে পারে। কিছু অ্যাপে এই সেটিং কাজ নাও করতে পারে।"</string>
     <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"শুধুমাত্র সেইসব অ্যাপ দেখানো হয়েছে যার মধ্যে ভাষা বেছে নেওয়ার বিকল্প আছে।"</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"আপনার বেছে নেওয়া পছন্দের ভাষা থেকে কাজ করবে এমন প্রথম ভাষাটি, সিস্টেম, অ্যাপ ও ওয়েবসাইট ব্যবহার করে।"</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"প্রতিটি অ্যাপের জন্য ভাষা বেছে নিতে, অ্যাপের ভাষা সংক্রান্ত সেটিংসে যান।"</string>
-    <string name="desc_locale_helper_footer_general" msgid="6967183342596405116">"ভাষা সম্পর্কে আরও জানুন"</string>
     <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
       <item quantity="one">নির্বাচিত ভাষা সরাবেন?</item>
       <item quantity="other">নির্বাচিত ভাষা সরাবেন?</item>
