@@ -146,8 +146,6 @@
     <string name="skip_label" msgid="6380034601349015895">"స్కిప్ చేయండి"</string>
     <string name="next_label" msgid="1248293387735652187">"తర్వాత"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"భాషలు"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"ప్రాధాన్య భాషా క్రమం"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"సిస్టమ్ భాష"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"తీసివేయండి"</string>
     <string name="add_a_language" msgid="2126220398077503271">"భాషను జోడించండి"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"భాష"</string>
@@ -161,35 +159,11 @@
     <string name="preference_of_system_locale_summary" msgid="5612241394431188535">"సిస్టమ్ ఆటోమేటిక్ సెట్టింగ్"</string>
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"ఈ యాప్ కోసం భాష ఎంపిక సెట్టింగ్‌లలో అందుబాటులో లేదు."</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"యాప్‌లో అందుబాటులో ఉన్న భాషలకు భాష భిన్నంగా ఉండవచ్చు. కొన్ని యాప్‌లు ఈ సెట్టింగ్‌కు సపోర్ట్ చేయకపోవచ్చు."</string>
-    <string name="desc_app_locale_selection_supported" msgid="6744909281573556379">"ఒక్కో యాప్‌నకు ఒక్కో భాషను సెట్ చేయండి."</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"మీ సిస్టమ్, యాప్‌లు, వెబ్‌సైట్‌లు మీరు ప్రాధాన్యతను ఇచ్చే భాషల నుండి మొదట సపోర్ట్ ఉన్న భాషను ఉపయోగిస్తాయి."</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"ప్రతి యాప్ కోసం భాషను ఎంచుకోవడానికి, యాప్ భాష సెట్టింగ్‌లకు వెళ్లండి."</string>
-    <string name="desc_locale_helper_footer_general" msgid="6112153921151780303">"యాప్ భాషల గురించి మరింత తెలుసుకోండి"</string>
-    <string name="title_change_system_locale" msgid="8589844586256566951">"సిస్టమ్ భాషను %s‌కు మార్చాలా?"</string>
-    <string name="desc_notice_device_locale_settings_change" msgid="8311132485850714160">"మీ పరికర సెట్టింగ్‌లు, ప్రాంతీయ ప్రాధాన్యతలు మారుతాయి."</string>
-    <string name="button_label_confirmation_of_system_locale_change" msgid="5593798559604894733">"మార్చండి"</string>
-    <string name="title_unavailable_locale" msgid="2628898110416542386">"%s అందుబాటులో లేదు"</string>
-    <string name="desc_unavailable_locale" msgid="2201756477400935896">"ఈ భాషను సిస్టమ్ భాషగా ఉపయోగించలేరు, కానీ మీరు ఇది మీ ప్రాధాన్య భాష అని యాప్‌లకు, వెబ్‌సైట్‌లకు తెలియజేశారు."</string>
-    <string name="regional_preferences_title" msgid="4304567374498629528">"ప్రాంతీయ ప్రాధాన్యతలు"</string>
-    <string name="regional_preferences_summary" msgid="1189876997389469650">"యానిట్‌లు, నంబర్ ప్రాధాన్యతలను సెట్ చేయండి"</string>
-    <string name="regional_preferences_main_page_sub_title" msgid="4237109940015254725">"యాప్‌లకు మీ ప్రాంతీయ ప్రాధాన్యతలను తెలియజేయండి, తద్వారా అవి మీ అనుభవాన్ని వ్యక్తిగతీకరించగలుగుతాయి."</string>
-    <string name="regional_preferences_option_page_sub_title" msgid="8303661099255197036">"యాప్‌లు సాధ్యమైన చోట మీ ప్రాంతీయ ప్రాధాన్యతలను ఉపయోగిస్తాయి."</string>
-    <string name="temperature_preferences_title" msgid="5009881556503629058">"ఉష్ణోగ్రత"</string>
-    <string name="first_day_of_week_preferences_title" msgid="1971850087589599553">"వారంలో మొదటి రోజు"</string>
-    <string name="numbers_preferences_title" msgid="8197418984391195446">"నంబర్‌ల ప్రాధాన్యతలు"</string>
-    <string name="default_string_of_regional_preference" msgid="7662581547334113719">"యాప్ ఆటోమేటిక్ సెట్టింగ్‌ను ఉపయోగించండి"</string>
-    <string name="celsius_temperature_unit" msgid="8896459071273084507">"సెల్సియస్ (°C)"</string>
-    <string name="fahrenheit_temperature_unit" msgid="1118677820614569801">"ఫారెన్‌హీట్ (°F)"</string>
-    <string name="sunday_first_day_of_week" msgid="7644548348295686051">"ఆదివారం"</string>
-    <string name="monday_first_day_of_week" msgid="7244698610476506771">"సోమవారం"</string>
-    <string name="tuesday_first_day_of_week" msgid="5085370946936582391">"మంగళవారం"</string>
-    <string name="wednesday_first_day_of_week" msgid="6544537589727042869">"బుధవారం"</string>
-    <string name="thursday_first_day_of_week" msgid="3035885630945594833">"గురువారం"</string>
-    <string name="friday_first_day_of_week" msgid="7074795061812083541">"శుక్రవారం"</string>
-    <string name="saturday_first_day_of_week" msgid="3702282590450322727">"శనివారం"</string>
-    <string name="title_regional_pref_footer" msgid="7450438024324794380">"ప్రాంతీయ భాషా ప్రాధాన్యతలకు యాప్, సపోర్ట్ చేయకపోతే, ఆటోమేటిక్ భాషా సెట్టింగ్‌లను యాప్ ఉపయోగిస్తుంది."</string>
-    <string name="desc_regional_pref_footer_learn_more" msgid="4401708653329230081">"భాషా ప్రాధాన్యతల గురించి మరింత తెలుసుకోండి."</string>
-    <string name="dlg_remove_locales_title" msgid="3170501604483612114">"{count,plural, =1{ఎంచుకున్న భాషను తీసివేయాలా?}other{ఎంచుకున్న భాషలను తీసివేయాలా?}}"</string>
+    <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"భాష ఎంపికను సపోర్ట్ చేసే యాప్‌లు మాత్రమే ఇక్కడ చూపబడతాయి."</string>
+    <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
+      <item quantity="other">ఎంచుకున్న భాషలను తీసివేయాలా?</item>
+      <item quantity="one">ఎంచుకున్న భాషను తీసివేయాలా?</item>
+    </plurals>
     <string name="dlg_remove_locales_message" msgid="8110560091134252067">"వచనం మరొక భాషలో ప్రదర్శించబడుతుంది."</string>
     <string name="dlg_remove_locales_error_title" msgid="5875503658221562572">"అన్ని భాషలను తీసివేయలేరు"</string>
     <string name="dlg_remove_locales_error_message" msgid="6504279959974675302">"కనీసం ఒక ప్రాధాన్య భాషను ఉంచండి"</string>

@@ -146,8 +146,6 @@
     <string name="skip_label" msgid="6380034601349015895">"Izlaist"</string>
     <string name="next_label" msgid="1248293387735652187">"Tālāk"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"Valodas"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"Vēlamo valodu secība"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"Sistēmas valoda"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"Noņemt"</string>
     <string name="add_a_language" msgid="2126220398077503271">"Pievienot valodu"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"Valoda"</string>
@@ -161,35 +159,12 @@
     <string name="preference_of_system_locale_summary" msgid="5612241394431188535">"Sistēmas noklusējums"</string>
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"Iestatījumos nav pieejama valodas atlase šai lietotnei."</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"Valoda var atšķirties no lietotnē pieejamās valodas. Dažās lietotnēs šis iestatījums var netikt atbalstīts."</string>
-    <string name="desc_app_locale_selection_supported" msgid="6744909281573556379">"Iestatiet valodu katrai lietotnei."</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"Sistēmā, lietotnēs un tīmekļa vietnēs tiek izmantota pirmā atbalstītā valoda no jūsu vēlamajām valodām."</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"Lai atlasītu valodu katrai lietotnei, pārejiet uz lietotnes valodas iestatījumiem."</string>
-    <string name="desc_locale_helper_footer_general" msgid="6112153921151780303">"Plašāka informācija par lietotņu valodām"</string>
-    <string name="title_change_system_locale" msgid="8589844586256566951">"Vai mainīt sistēmas valodu uz šādu: %s?"</string>
-    <string name="desc_notice_device_locale_settings_change" msgid="8311132485850714160">"Tiks mainīti jūsu ierīces iestatījumi un reģionālās preferences."</string>
-    <string name="button_label_confirmation_of_system_locale_change" msgid="5593798559604894733">"Mainīt"</string>
-    <string name="title_unavailable_locale" msgid="2628898110416542386">"Šī valoda nav pieejama: %s"</string>
-    <string name="desc_unavailable_locale" msgid="2201756477400935896">"Šo valodu nevar lietot kā sistēmas valodu, bet esat norādījis lietotnēm un vietnēm, ka dodat priekšroku šai valodai."</string>
-    <string name="regional_preferences_title" msgid="4304567374498629528">"Reģionālās preferences"</string>
-    <string name="regional_preferences_summary" msgid="1189876997389469650">"Iestatiet vienību un skaitļu preferences."</string>
-    <string name="regional_preferences_main_page_sub_title" msgid="4237109940015254725">"Atklājiet lietotnēm savas reģionālās preferences, lai lietotnes varētu personalizēt jums pieejamās iespējas."</string>
-    <string name="regional_preferences_option_page_sub_title" msgid="8303661099255197036">"Lietotnēs tiks izmantotas jūsu reģionālās preferences, kad tas būs iespējams."</string>
-    <string name="temperature_preferences_title" msgid="5009881556503629058">"Temperatūra"</string>
-    <string name="first_day_of_week_preferences_title" msgid="1971850087589599553">"Pirmā nedēļas diena"</string>
-    <string name="numbers_preferences_title" msgid="8197418984391195446">"Skaitļu preferences"</string>
-    <string name="default_string_of_regional_preference" msgid="7662581547334113719">"Izmantot lietotnes noklusējuma iestatījumus"</string>
-    <string name="celsius_temperature_unit" msgid="8896459071273084507">"Celsija skala (°C)"</string>
-    <string name="fahrenheit_temperature_unit" msgid="1118677820614569801">"Fārenheita skala (°F)"</string>
-    <string name="sunday_first_day_of_week" msgid="7644548348295686051">"Svētdiena"</string>
-    <string name="monday_first_day_of_week" msgid="7244698610476506771">"Pirmdiena"</string>
-    <string name="tuesday_first_day_of_week" msgid="5085370946936582391">"Otrdiena"</string>
-    <string name="wednesday_first_day_of_week" msgid="6544537589727042869">"Trešdiena"</string>
-    <string name="thursday_first_day_of_week" msgid="3035885630945594833">"Ceturtdiena"</string>
-    <string name="friday_first_day_of_week" msgid="7074795061812083541">"Piektdiena"</string>
-    <string name="saturday_first_day_of_week" msgid="3702282590450322727">"Sestdiena"</string>
-    <string name="title_regional_pref_footer" msgid="7450438024324794380">"Ja kādā lietotnē netiek atbalstītas reģionālās preferences, tiks izmantoti tās noklusējuma lokalizācijas iestatījumi."</string>
-    <string name="desc_regional_pref_footer_learn_more" msgid="4401708653329230081">"Uzziniet vairāk par valodas preferencēm."</string>
-    <string name="dlg_remove_locales_title" msgid="3170501604483612114">"{count,plural, =1{Vai noņemt atlasīto valodu?}zero{Vai noņemt atlasītās valodas?}one{Vai noņemt atlasītās valodas?}other{Vai noņemt atlasītās valodas?}}"</string>
+    <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"Šeit tiek rādītas tikai lietotnes, kurās tiek atbalstīta valodas atlase."</string>
+    <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
+      <item quantity="zero">Vai noņemt atlasītās valodas?</item>
+      <item quantity="one">Vai noņemt atlasītās valodas?</item>
+      <item quantity="other">Vai noņemt atlasītās valodas?</item>
+    </plurals>
     <string name="dlg_remove_locales_message" msgid="8110560091134252067">"Teksts tiks rādīts citā valodā."</string>
     <string name="dlg_remove_locales_error_title" msgid="5875503658221562572">"Nevar noņemt visas valodas"</string>
     <string name="dlg_remove_locales_error_message" msgid="6504279959974675302">"Paturiet vismaz vienu vēlamo valodu"</string>

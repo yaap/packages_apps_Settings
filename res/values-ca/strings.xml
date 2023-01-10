@@ -146,8 +146,6 @@
     <string name="skip_label" msgid="6380034601349015895">"Omet"</string>
     <string name="next_label" msgid="1248293387735652187">"Següent"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"Idiomes"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"Ordre d\'idiomes preferits"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"Idioma del sistema"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"Suprimeix"</string>
     <string name="add_a_language" msgid="2126220398077503271">"Afegeix un idioma"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"Idioma"</string>
@@ -161,35 +159,11 @@
     <string name="preference_of_system_locale_summary" msgid="5612241394431188535">"Valor predeterminat del sistema"</string>
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"La selecció d\'idioma per a aquesta aplicació no està disponible des de Configuració."</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"És possible que l\'idioma no coincideixi amb els que hi ha disponibles a l\'aplicació. Algunes aplicacions no admeten aquesta opció de configuració."</string>
-    <string name="desc_app_locale_selection_supported" msgid="6744909281573556379">"Configura l\'idioma per a cada aplicació."</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"El sistema, les aplicacions i els llocs web utilitzen el primer idioma admès dels teus idiomes preferits."</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"Per seleccionar un idioma en cada aplicació, ves a la configuració d\'idioma de l\'aplicació."</string>
-    <string name="desc_locale_helper_footer_general" msgid="6112153921151780303">"Més informació sobre els idiomes de les aplicacions"</string>
-    <string name="title_change_system_locale" msgid="8589844586256566951">"Vols canviar l\'idioma del sistema a %s?"</string>
-    <string name="desc_notice_device_locale_settings_change" msgid="8311132485850714160">"La configuració del dispositiu i les preferències regionals canviaran."</string>
-    <string name="button_label_confirmation_of_system_locale_change" msgid="5593798559604894733">"Canvia"</string>
-    <string name="title_unavailable_locale" msgid="2628898110416542386">"Aquest idioma (%s) no està disponible"</string>
-    <string name="desc_unavailable_locale" msgid="2201756477400935896">"Aquest idioma no es pot utilitzar com a idioma del sistema, però has permès que les aplicacions i els llocs web sàpiguen quin prefereixes."</string>
-    <string name="regional_preferences_title" msgid="4304567374498629528">"Preferències regionals"</string>
-    <string name="regional_preferences_summary" msgid="1189876997389469650">"Estableix preferències d\'unitats i de números"</string>
-    <string name="regional_preferences_main_page_sub_title" msgid="4237109940015254725">"Permet a les aplicacions conèixer les preferències regionals perquè puguin personalitzar la teva experiència."</string>
-    <string name="regional_preferences_option_page_sub_title" msgid="8303661099255197036">"Les aplicacions utilitzaran les teves preferències regionals quan sigui possible."</string>
-    <string name="temperature_preferences_title" msgid="5009881556503629058">"Temperatura"</string>
-    <string name="first_day_of_week_preferences_title" msgid="1971850087589599553">"Primer dia de la setmana"</string>
-    <string name="numbers_preferences_title" msgid="8197418984391195446">"Preferències de números"</string>
-    <string name="default_string_of_regional_preference" msgid="7662581547334113719">"Utilitza la configuració predeterminada de l\'app"</string>
-    <string name="celsius_temperature_unit" msgid="8896459071273084507">"Celsius (°C)"</string>
-    <string name="fahrenheit_temperature_unit" msgid="1118677820614569801">"Fahrenheit (°F)"</string>
-    <string name="sunday_first_day_of_week" msgid="7644548348295686051">"Diumenge"</string>
-    <string name="monday_first_day_of_week" msgid="7244698610476506771">"Dilluns"</string>
-    <string name="tuesday_first_day_of_week" msgid="5085370946936582391">"Dimarts"</string>
-    <string name="wednesday_first_day_of_week" msgid="6544537589727042869">"Dimecres"</string>
-    <string name="thursday_first_day_of_week" msgid="3035885630945594833">"Dijous"</string>
-    <string name="friday_first_day_of_week" msgid="7074795061812083541">"Divendres"</string>
-    <string name="saturday_first_day_of_week" msgid="3702282590450322727">"Dissabte"</string>
-    <string name="title_regional_pref_footer" msgid="7450438024324794380">"Si una aplicació no admet preferències regionals, utilitzarà la seva configuració regional predeterminada."</string>
-    <string name="desc_regional_pref_footer_learn_more" msgid="4401708653329230081">"Més informació sobre les preferències d\'idioma"</string>
-    <string name="dlg_remove_locales_title" msgid="3170501604483612114">"{count,plural, =1{Vols suprimir l\'idioma seleccionat?}other{Vols suprimir els idiomes seleccionats?}}"</string>
+    <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"Aquí només es mostren les aplicacions que admeten la selecció d\'idioma."</string>
+    <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
+      <item quantity="other">Vols suprimir els idiomes seleccionats?</item>
+      <item quantity="one">Vols suprimir l\'idioma seleccionat?</item>
+    </plurals>
     <string name="dlg_remove_locales_message" msgid="8110560091134252067">"El text es mostrarà en un altre idioma."</string>
     <string name="dlg_remove_locales_error_title" msgid="5875503658221562572">"No es poden suprimir tots els idiomes"</string>
     <string name="dlg_remove_locales_error_message" msgid="6504279959974675302">"Conserva almenys un idioma preferit"</string>

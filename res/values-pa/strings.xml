@@ -146,8 +146,6 @@
     <string name="skip_label" msgid="6380034601349015895">"ਛੱਡੋ"</string>
     <string name="next_label" msgid="1248293387735652187">"ਅੱਗੇ"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"ਭਾਸ਼ਾਵਾਂ"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"ਤਰਜੀਹੀ ਭਾਸ਼ਾ ਕ੍ਰਮ"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"ਸਿਸਟਮ ਦੀ ਭਾਸ਼ਾ"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"ਹਟਾਓ"</string>
     <string name="add_a_language" msgid="2126220398077503271">"ਇੱਕ ਭਾਸ਼ਾ ਸ਼ਾਮਲ ਕਰੋ"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"ਭਾਸ਼ਾ"</string>
@@ -161,35 +159,11 @@
     <string name="preference_of_system_locale_summary" msgid="5612241394431188535">"ਸਿਸਟਮ ਪੂਰਵ-ਨਿਰਧਾਰਿਤ"</string>
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"ਸੈਟਿੰਗਾਂ ਵਿੱਚ ਇਸ ਐਪ ਲਈ ਭਾਸ਼ਾ ਦੀ ਚੋਣ ਉਪਲਬਧ ਨਹੀਂ ਹੈ।"</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"ਭਾਸ਼ਾ ਐਪ ਵਿਚਲੀਆਂ ਉਪਲਬਧ ਭਾਸ਼ਾਵਾਂ ਨਾਲੋਂ ਵੱਖਰੀ ਹੋ ਸਕਦੀ ਹੈ। ਕੁਝ ਐਪਾਂ ਸ਼ਾਇਦ ਇਸ ਸੈਟਿੰਗਾਂ ਦਾ ਸਮਰਥਨ ਨਾ ਕਰਨ।"</string>
-    <string name="desc_app_locale_selection_supported" msgid="6744909281573556379">"ਹਰੇਕ ਐਪ ਲਈ ਭਾਸ਼ਾ ਸੈੱਟ ਕਰੋ।"</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"ਤੁਹਾਡਾ ਸਿਸਟਮ, ਐਪਾਂ ਅਤੇ ਵੈੱਬਸਾਈਟਾਂ ਤੁਹਾਡੀਆਂ ਤਰਜੀਹੀ ਭਾਸ਼ਾਵਾਂ ਵਿੱਚੋਂ ਪਹਿਲੀ ਸਮਰਥਿਤ ਭਾਸ਼ਾ ਦੀ ਵਰਤੋਂ ਕਰਦੀਆਂ ਹਨ।"</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"ਹਰੇਕ ਐਪ ਲਈ ਇੱਕ ਭਾਸ਼ਾ ਚੁਣਨ ਵਾਸਤੇ, ਐਪ ਦੀਆਂ ਭਾਸ਼ਾ ਸੈਟਿੰਗਾਂ \'ਤੇ ਜਾਓ।"</string>
-    <string name="desc_locale_helper_footer_general" msgid="6112153921151780303">"ਐਪ ਭਾਸ਼ਾਵਾਂ ਬਾਰੇ ਹੋਰ ਜਾਣੋ"</string>
-    <string name="title_change_system_locale" msgid="8589844586256566951">"ਕੀ ਸਿਸਟਮ ਭਾਸ਼ਾ ਨੂੰ %s ਵਿੱਚ ਬਦਲਣਾ ਹੈ?"</string>
-    <string name="desc_notice_device_locale_settings_change" msgid="8311132485850714160">"ਤੁਹਾਡੇ ਡੀਵਾਈਸ ਦੀਆਂ ਸੈਟਿੰਗਾਂ ਅਤੇ ਖੇਤਰੀ ਤਰਜੀਹਾਂ ਬਦਲ ਜਾਣਗੀਆਂ।"</string>
-    <string name="button_label_confirmation_of_system_locale_change" msgid="5593798559604894733">"ਬਦਲੋ"</string>
-    <string name="title_unavailable_locale" msgid="2628898110416542386">"%s ਉਪਲਬਧ ਨਹੀਂ ਹੈ"</string>
-    <string name="desc_unavailable_locale" msgid="2201756477400935896">"ਇਸ ਭਾਸ਼ਾ ਨੂੰ ਸਿਸਟਮ ਭਾਸ਼ਾ ਵਜੋਂ ਵਰਤਿਆ ਨਹੀਂ ਜਾ ਸਕਦਾ, ਪਰ ਤੁਸੀਂ ਐਪਾਂ ਅਤੇ ਵੈੱਬਸਾਈਟਾਂ ਨੂੰ ਇਹ ਦੱਸ ਦਿੱਤਾ ਹੈ ਕਿ ਤੁਸੀਂ ਇਸ ਭਾਸ਼ਾ ਨੂੰ ਤਰਜੀਹ ਦਿੰਦੇ ਹੋ।"</string>
-    <string name="regional_preferences_title" msgid="4304567374498629528">"ਖੇਤਰੀ ਤਰਜੀਹਾਂ"</string>
-    <string name="regional_preferences_summary" msgid="1189876997389469650">"ਇਕਾਈਆਂ ਅਤੇ ਨੰਬਰ ਸੰਬੰਧੀ ਤਰਜੀਹਾਂ ਨੂੰ ਸੈੱਟ ਕਰੋ"</string>
-    <string name="regional_preferences_main_page_sub_title" msgid="4237109940015254725">"ਐਪਾਂ ਨੂੰ ਤੁਹਾਡੀਆਂ ਖੇਤਰੀ ਤਰਜੀਹਾਂ ਜਾਣਨ ਦਿਓ ਤਾਂ ਜੋ ਉਹ ਤੁਹਾਡੇ ਅਨੁਭਵ ਨੂੰ ਵਿਅਕਤੀਗਤ ਬਣਾ ਸਕਣ।"</string>
-    <string name="regional_preferences_option_page_sub_title" msgid="8303661099255197036">"ਜਿੱਥੇ ਸੰਭਵ ਹੋਇਆ ਐਪਾਂ ਤੁਹਾਡੀਆਂ ਖੇਤਰੀ ਤਰਜੀਹਾਂ ਦੀ ਵਰਤੋਂ ਕਰਨਗੀਆਂ।"</string>
-    <string name="temperature_preferences_title" msgid="5009881556503629058">"ਤਾਪਮਾਨ"</string>
-    <string name="first_day_of_week_preferences_title" msgid="1971850087589599553">"ਹਫ਼ਤੇ ਦਾ ਪਹਿਲਾ ਦਿਨ"</string>
-    <string name="numbers_preferences_title" msgid="8197418984391195446">"ਨੰਬਰਾਂ ਸੰਬੰਧੀ ਤਰਜੀਹਾਂ"</string>
-    <string name="default_string_of_regional_preference" msgid="7662581547334113719">"ਐਪ ਦੀ ਪੂਰਵ-ਨਿਰਧਾਰਿਤ ਵਜੋਂ ਵਰਤੋਂ ਕਰੋ"</string>
-    <string name="celsius_temperature_unit" msgid="8896459071273084507">"ਸੈਲਸੀਅਸ (°C)"</string>
-    <string name="fahrenheit_temperature_unit" msgid="1118677820614569801">"ਫ਼ਾਰਨਹਾਈਟ (°F)"</string>
-    <string name="sunday_first_day_of_week" msgid="7644548348295686051">"ਐਤਵਾਰ"</string>
-    <string name="monday_first_day_of_week" msgid="7244698610476506771">"ਸੋਮਵਾਰ"</string>
-    <string name="tuesday_first_day_of_week" msgid="5085370946936582391">"ਮੰਗਲਵਾਰ"</string>
-    <string name="wednesday_first_day_of_week" msgid="6544537589727042869">"ਬੁੱਧਵਾਰ"</string>
-    <string name="thursday_first_day_of_week" msgid="3035885630945594833">"ਵੀਰਵਾਰ"</string>
-    <string name="friday_first_day_of_week" msgid="7074795061812083541">"ਸ਼ੁੱਕਰਵਾਰ"</string>
-    <string name="saturday_first_day_of_week" msgid="3702282590450322727">"ਸ਼ਨੀਵਾਰ"</string>
-    <string name="title_regional_pref_footer" msgid="7450438024324794380">"ਜੇ ਕੋਈ ਐਪ ਖੇਤਰੀ ਤਰਜੀਹਾਂ ਦਾ ਸਮਰਥਨ ਨਹੀਂ ਕਰਦੀ, ਤਾਂ ਐਪ ਆਪਣੀਆਂ ਪੂਰਵ-ਨਿਰਧਾਰਿਤ ਲੋਕੇਲ ਸੈਟਿੰਗਾਂ ਵਰਤੇਗੀ।"</string>
-    <string name="desc_regional_pref_footer_learn_more" msgid="4401708653329230081">"ਭਾਸ਼ਾਈ ਤਰਜੀਹਾਂ ਬਾਰੇ ਹੋਰ ਜਾਣੋ।"</string>
-    <string name="dlg_remove_locales_title" msgid="3170501604483612114">"{count,plural, =1{ਕੀ ਚੁਣੀ ਗਈ ਭਾਸ਼ਾ ਨੂੰ ਹਟਾਉਣਾ ਹੈ?}one{ਕੀ ਚੁਣੀ ਗਈ ਭਾਸ਼ਾ ਨੂੰ ਹਟਾਉਣਾ ਹੈ?}other{ਕੀ ਚੁਣੀਆਂ ਗਈਆਂ ਭਾਸ਼ਾਵਾਂ ਨੂੰ ਹਟਾਉਣਾ ਹੈ?}}"</string>
+    <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"ਸਿਰਫ਼ ਉਹ ਐਪਾਂ ਹੀ ਇੱਥੇ ਦਿਖਾਈਆਂ ਜਾਂਦੀਆਂ ਹਨ ਜੋ ਭਾਸ਼ਾ ਦੀ ਚੋਣ ਦਾ ਸਮਰਥਨ ਕਰਦੀਆਂ ਹਨ।"</string>
+    <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
+      <item quantity="one">ਕੀ ਚੁਣੀ ਗਈ ਭਾਸ਼ਾ ਨੂੰ ਹਟਾਉਣਾ ਹੈ?</item>
+      <item quantity="other">ਕੀ ਚੁਣੀਆਂ ਗਈਆਂ ਭਾਸ਼ਾਵਾਂ ਨੂੰ ਹਟਾਉਣਾ ਹੈ?</item>
+    </plurals>
     <string name="dlg_remove_locales_message" msgid="8110560091134252067">"ਲਿਖਤ ਨੂੰ ਕਿਸੇ ਹੋਰ ਭਾਸ਼ਾ ਵਿੱਚ ਦਿਖਾਇਆ ਜਾਵੇਗਾ"</string>
     <string name="dlg_remove_locales_error_title" msgid="5875503658221562572">"ਸਾਰੀਆਂ ਭਾਸ਼ਾਵਾਂ ਨੂੰ ਮਿਟਾਇਆ ਨਹੀਂ ਜਾ ਸਕਦਾ"</string>
     <string name="dlg_remove_locales_error_message" msgid="6504279959974675302">"ਘੱਟੋ-ਘੱਟ ਇੱਕ ਤਰਜੀਹੀ ਭਾਸ਼ਾ ਨੂੰ ਰੱਖੋ"</string>

@@ -146,8 +146,6 @@
     <string name="skip_label" msgid="6380034601349015895">"Preskoči"</string>
     <string name="next_label" msgid="1248293387735652187">"Dalje"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"Jezici"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"Redoslijed željenih jezika"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"Jezik sustava"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"Ukloni"</string>
     <string name="add_a_language" msgid="2126220398077503271">"Dodajte jezik"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"Jezik"</string>
@@ -161,35 +159,12 @@
     <string name="preference_of_system_locale_summary" msgid="5612241394431188535">"Zadane postavke sustava"</string>
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"Odabir jezika za ovu aplikaciju nije dostupan u postavkama."</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"Jezik se može razlikovati od jezika dostupnih u aplikaciji. Neke aplikacije možda ne podržavaju tu postavku."</string>
-    <string name="desc_app_locale_selection_supported" msgid="6744909281573556379">"Postavite jezik za svaku aplikaciju."</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"Vaš sustav, aplikacije i web-lokacije upotrebljavaju prvi podržani jezik s popisa željenih jezika."</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"Da biste odabrali jezik za svaku aplikaciju, otvorite postavke jezika aplikacije."</string>
-    <string name="desc_locale_helper_footer_general" msgid="6112153921151780303">"Saznajte više o jezicima aplikacije"</string>
-    <string name="title_change_system_locale" msgid="8589844586256566951">"Želite li jezik sustava promijeniti na %s?"</string>
-    <string name="desc_notice_device_locale_settings_change" msgid="8311132485850714160">"Promijenit će se postavke uređaja i regionalne preferencije."</string>
-    <string name="button_label_confirmation_of_system_locale_change" msgid="5593798559604894733">"Promijeni"</string>
-    <string name="title_unavailable_locale" msgid="2628898110416542386">"%s nije dostupan"</string>
-    <string name="desc_unavailable_locale" msgid="2201756477400935896">"Taj se jezik ne može upotrebljavati kao jezik sustava, no postavili ste ga kao preferirani jezik za aplikacije i web-lokacije."</string>
-    <string name="regional_preferences_title" msgid="4304567374498629528">"Regionalne preferencije"</string>
-    <string name="regional_preferences_summary" msgid="1189876997389469650">"Odredite kako će se prikazivati mjerne jedinice i brojke"</string>
-    <string name="regional_preferences_main_page_sub_title" msgid="4237109940015254725">"Unesite svoje regionalne preferencije u aplikacije kako bi mogle personalizirati vaš doživljaj."</string>
-    <string name="regional_preferences_option_page_sub_title" msgid="8303661099255197036">"Aplikacije će upotrebljavati vaše regionalne preferencije kad je to moguće."</string>
-    <string name="temperature_preferences_title" msgid="5009881556503629058">"Temperatura"</string>
-    <string name="first_day_of_week_preferences_title" msgid="1971850087589599553">"Prvi dan u tjednu"</string>
-    <string name="numbers_preferences_title" msgid="8197418984391195446">"Postavke brojeva"</string>
-    <string name="default_string_of_regional_preference" msgid="7662581547334113719">"Koristi zadanu vrijednost aplikacije"</string>
-    <string name="celsius_temperature_unit" msgid="8896459071273084507">"Celzij (°C)"</string>
-    <string name="fahrenheit_temperature_unit" msgid="1118677820614569801">"Fahrenheit (°F)"</string>
-    <string name="sunday_first_day_of_week" msgid="7644548348295686051">"Nedjelja"</string>
-    <string name="monday_first_day_of_week" msgid="7244698610476506771">"Ponedjeljak"</string>
-    <string name="tuesday_first_day_of_week" msgid="5085370946936582391">"Utorak"</string>
-    <string name="wednesday_first_day_of_week" msgid="6544537589727042869">"Srijeda"</string>
-    <string name="thursday_first_day_of_week" msgid="3035885630945594833">"Četvrtak"</string>
-    <string name="friday_first_day_of_week" msgid="7074795061812083541">"Petak"</string>
-    <string name="saturday_first_day_of_week" msgid="3702282590450322727">"Subota"</string>
-    <string name="title_regional_pref_footer" msgid="7450438024324794380">"Ako aplikacija ne podržava regionalne preferencije, aplikacija će upotrebljavati zadane postavke države/jezika."</string>
-    <string name="desc_regional_pref_footer_learn_more" msgid="4401708653329230081">"Saznajte više o postavkama jezika."</string>
-    <string name="dlg_remove_locales_title" msgid="3170501604483612114">"{count,plural, =1{Želite li ukloniti odabran jezik?}one{Želite li ukloniti odabran jezik?}few{Želite li ukloniti odabrana jezika?}other{Želite li ukloniti odabranih jezika?}}"</string>
+    <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"Ovdje se prikazuju samo aplikacije koje podržavaju odabir jezika."</string>
+    <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
+      <item quantity="one">Želite li ukloniti odabrane jezike?</item>
+      <item quantity="few">Želite li ukloniti odabrane jezike?</item>
+      <item quantity="other">Želite li ukloniti odabrane jezike?</item>
+    </plurals>
     <string name="dlg_remove_locales_message" msgid="8110560091134252067">"Tekst će se prikazivati na nekom drugom jeziku."</string>
     <string name="dlg_remove_locales_error_title" msgid="5875503658221562572">"Ne možete ukloniti sve jezike"</string>
     <string name="dlg_remove_locales_error_message" msgid="6504279959974675302">"Zadržite barem jedan preferirani jezik"</string>

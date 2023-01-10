@@ -146,8 +146,6 @@
     <string name="skip_label" msgid="6380034601349015895">"رد شدن"</string>
     <string name="next_label" msgid="1248293387735652187">"بعدی"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"زبان‌ها"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"ترتیب زبان ترجیحی"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"زبان سیستم"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"حذف کردن"</string>
     <string name="add_a_language" msgid="2126220398077503271">"افزودن زبان"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"زبان"</string>
@@ -161,35 +159,11 @@
     <string name="preference_of_system_locale_summary" msgid="5612241394431188535">"پیش‌فرض سیستم"</string>
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"انتخاب زبان از «تنظیمات» برای این برنامه دردسترس نیست."</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"زبان ممکن است با زبان‌های موجود در برنامه متفاوت باشد. ممکن است برخی‌از برنامه‌ها از این تنظیم پشتیبانی نکنند."</string>
-    <string name="desc_app_locale_selection_supported" msgid="6744909281573556379">"زبان هر برنامه را تنظیم کنید."</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"سیستم، برنامه‌ها، و وب‌سایت‌های شما از اولین زبان پشتیبانی‌شده ازمیان زبان‌های ترجیحی استفاده می‌کنند."</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"برای انتخاب زبان هر برنامه، به تنظیمات زبان برنامه بروید."</string>
-    <string name="desc_locale_helper_footer_general" msgid="6112153921151780303">"درباره زبان‌های برنامه بیشتر بدانید"</string>
-    <string name="title_change_system_locale" msgid="8589844586256566951">"‏زبان سیستم به %s تغییر کند؟"</string>
-    <string name="desc_notice_device_locale_settings_change" msgid="8311132485850714160">"تنظیمات دستگاه و اولویت‌های منطقه‌ای تغییر می‌کند."</string>
-    <string name="button_label_confirmation_of_system_locale_change" msgid="5593798559604894733">"تغییر دادن"</string>
-    <string name="title_unavailable_locale" msgid="2628898110416542386">"‏%s دردسترس نیست"</string>
-    <string name="desc_unavailable_locale" msgid="2201756477400935896">"نمی‌توان از این زبان به‌عنوان زبان سیستم استفاده کرد، اما به برنامه‌ها و وب‌سایت‌ها اجازه داده‌اید بدانند شما این زبان را ترجیح می‌دهید."</string>
-    <string name="regional_preferences_title" msgid="4304567374498629528">"اولویت‌های منطقه‌ای"</string>
-    <string name="regional_preferences_summary" msgid="1189876997389469650">"تنظیم اولویت‌های واحد و عدد"</string>
-    <string name="regional_preferences_main_page_sub_title" msgid="4237109940015254725">"به برنامه‌ها اجازه می‌دهد اولویت‌های منطقه‌ای شما را بدانند تا بتوانند تجربه‌تان را شخصی‌سازی کنند."</string>
-    <string name="regional_preferences_option_page_sub_title" msgid="8303661099255197036">"برنامه‌ها هر زمان ممکن باشد از اولویت‌های منطقه‌ای شما استفاده خواهند کرد."</string>
-    <string name="temperature_preferences_title" msgid="5009881556503629058">"دما"</string>
-    <string name="first_day_of_week_preferences_title" msgid="1971850087589599553">"اولین روز هفته"</string>
-    <string name="numbers_preferences_title" msgid="8197418984391195446">"اولویت‌های اعداد"</string>
-    <string name="default_string_of_regional_preference" msgid="7662581547334113719">"استفاده از پیش‌فرض برنامه"</string>
-    <string name="celsius_temperature_unit" msgid="8896459071273084507">"‏سلسیوس (‎°C)"</string>
-    <string name="fahrenheit_temperature_unit" msgid="1118677820614569801">"‏فارنهایت (‎°F)"</string>
-    <string name="sunday_first_day_of_week" msgid="7644548348295686051">"یکشنبه"</string>
-    <string name="monday_first_day_of_week" msgid="7244698610476506771">"دوشنبه"</string>
-    <string name="tuesday_first_day_of_week" msgid="5085370946936582391">"سه‌شنبه"</string>
-    <string name="wednesday_first_day_of_week" msgid="6544537589727042869">"چهارشنبه"</string>
-    <string name="thursday_first_day_of_week" msgid="3035885630945594833">"پنجشنبه"</string>
-    <string name="friday_first_day_of_week" msgid="7074795061812083541">"جمعه"</string>
-    <string name="saturday_first_day_of_week" msgid="3702282590450322727">"شنبه"</string>
-    <string name="title_regional_pref_footer" msgid="7450438024324794380">"اگر برنامه‌ای از اولویت‌های منطقه‌ای پشتیبانی نکند، آن برنامه از تنظیمات منطقه زبانی پیش‌فرض استفاده می‌کند."</string>
-    <string name="desc_regional_pref_footer_learn_more" msgid="4401708653329230081">"درباره اولویت‌های زبان بیشتر بدانید."</string>
-    <string name="dlg_remove_locales_title" msgid="3170501604483612114">"{count,plural, =1{زبان انتخاب‌شده حذف شود؟}one{زبان انتخاب‌شده حذف شود؟}other{زبان‌های انتخاب‌شده حذف شود؟}}"</string>
+    <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"فقط برنامه‌هایی که از انتخاب زبان پشتیبانی می‌کنند اینجا نمایش داده می‌شود."</string>
+    <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
+      <item quantity="one">زبان‌های انتخابی حذف شوند؟</item>
+      <item quantity="other">زبان‌های انتخابی حذف شوند؟</item>
+    </plurals>
     <string name="dlg_remove_locales_message" msgid="8110560091134252067">"نوشتار به زبان دیگری نشان داده می‌شود."</string>
     <string name="dlg_remove_locales_error_title" msgid="5875503658221562572">"همه زبان‌ها حذف نمی‌شوند"</string>
     <string name="dlg_remove_locales_error_message" msgid="6504279959974675302">"حداقل یک زبان ترجیحی را نگه دارید"</string>

@@ -146,8 +146,6 @@
     <string name="skip_label" msgid="6380034601349015895">"Hoppa över"</string>
     <string name="next_label" msgid="1248293387735652187">"Nästa"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"Språk"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"Rangordning av föredragna språk"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"Systemets språkinställning"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"Ta bort"</string>
     <string name="add_a_language" msgid="2126220398077503271">"Lägg till ett språk"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"Språk"</string>
@@ -161,35 +159,11 @@
     <string name="preference_of_system_locale_summary" msgid="5612241394431188535">"Systemets standardinställning"</string>
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"Det går inte att välja språk för den här appen i Inställningar."</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"Alla språk kanske inte är tillgängliga i appen. Vissa appar kanske inte har stöd för denna inställning."</string>
-    <string name="desc_app_locale_selection_supported" msgid="6744909281573556379">"Ställ in språket för varje app."</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"Systemet, apparna och webbplatserna använder det första språket som stöds från din lista över föredragna språk."</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"Gå till en apps inställningar för att välja språk i den."</string>
-    <string name="desc_locale_helper_footer_general" msgid="6112153921151780303">"Läs mer om appspråk"</string>
-    <string name="title_change_system_locale" msgid="8589844586256566951">"Vill du ändra systemspråk till %s?"</string>
-    <string name="desc_notice_device_locale_settings_change" msgid="8311132485850714160">"Dina enhets- och regionsinställningar ändras."</string>
-    <string name="button_label_confirmation_of_system_locale_change" msgid="5593798559604894733">"Ändra"</string>
-    <string name="title_unavailable_locale" msgid="2628898110416542386">"%s är inte tillgängligt"</string>
-    <string name="desc_unavailable_locale" msgid="2201756477400935896">"Du kan inte använda det här språket som systemspråk, men appar och webbplatser informeras om att du föredrar det."</string>
-    <string name="regional_preferences_title" msgid="4304567374498629528">"Regioninställningar"</string>
-    <string name="regional_preferences_summary" msgid="1189876997389469650">"Anger inställningar för enheter och siffror"</string>
-    <string name="regional_preferences_main_page_sub_title" msgid="4237109940015254725">"Ge appar åtkomst till dina regionsinställningar så att din upplevelse kan anpassas."</string>
-    <string name="regional_preferences_option_page_sub_title" msgid="8303661099255197036">"Appar använder dina regionsinställningar om möjligt."</string>
-    <string name="temperature_preferences_title" msgid="5009881556503629058">"Temperatur"</string>
-    <string name="first_day_of_week_preferences_title" msgid="1971850087589599553">"Första dagen i veckan"</string>
-    <string name="numbers_preferences_title" msgid="8197418984391195446">"Sifferinställningar"</string>
-    <string name="default_string_of_regional_preference" msgid="7662581547334113719">"Använd appstandard"</string>
-    <string name="celsius_temperature_unit" msgid="8896459071273084507">"Celsius (°C)"</string>
-    <string name="fahrenheit_temperature_unit" msgid="1118677820614569801">"Fahrenheit (°F)"</string>
-    <string name="sunday_first_day_of_week" msgid="7644548348295686051">"söndag"</string>
-    <string name="monday_first_day_of_week" msgid="7244698610476506771">"måndag"</string>
-    <string name="tuesday_first_day_of_week" msgid="5085370946936582391">"tisdag"</string>
-    <string name="wednesday_first_day_of_week" msgid="6544537589727042869">"onsdag"</string>
-    <string name="thursday_first_day_of_week" msgid="3035885630945594833">"torsdag"</string>
-    <string name="friday_first_day_of_week" msgid="7074795061812083541">"fredag"</string>
-    <string name="saturday_first_day_of_week" msgid="3702282590450322727">"lördag"</string>
-    <string name="title_regional_pref_footer" msgid="7450438024324794380">"Om en app inte har stöd för regionsinställningar används appens standardinställningar."</string>
-    <string name="desc_regional_pref_footer_learn_more" msgid="4401708653329230081">"Läs mer om språkinställningar."</string>
-    <string name="dlg_remove_locales_title" msgid="3170501604483612114">"{count,plural, =1{Vill du ta bort det valda språket?}other{Vill du ta bort de valda språken?}}"</string>
+    <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"Endast appar som har stöd för språkval visas här."</string>
+    <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
+      <item quantity="other">Vill du ta bort de valda språken?</item>
+      <item quantity="one">Vill du ta bort det valda språket?</item>
+    </plurals>
     <string name="dlg_remove_locales_message" msgid="8110560091134252067">"Text visas på ett annat språk."</string>
     <string name="dlg_remove_locales_error_title" msgid="5875503658221562572">"Det går inte att ta bort alla språk"</string>
     <string name="dlg_remove_locales_error_message" msgid="6504279959974675302">"Minst ett önskat språk måste finnas kvar"</string>

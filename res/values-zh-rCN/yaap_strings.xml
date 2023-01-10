@@ -52,17 +52,6 @@
     <!-- YAAP Version -->
     <string name="yaap_version">YAAP 版本</string>
 
-    <!-- Custom vibration intensity -->
-    <string name="vibration_intensity_title">振动强度</string>
-    <string name="vibration_intensity_summary">调整不同情况下的振动强度</string>
-    <string name="notification_vibration_intensity_title">通知</string>
-    <string name="ring_vibration_intensity_title">响铃</string>
-    <string name="haptic_feedback_intensity_title">触摸振动</string>
-    <string name="vibration_intensity_off">禁用</string>
-    <string name="vibration_intensity_low">弱</string>
-    <string name="vibration_intensity_medium">中</string>
-    <string name="vibration_intensity_high">强</string>
-
     <!-- QSTile requires unlocking before being accessible -->
     <string name="qstile_requires_unlocking_title">需要解锁手机才能使用QS磁贴</string>
     <string name="qstile_requires_unlocking_summary">您需要先解锁手机，然后才能从锁定屏幕访问以下QS磁贴：飞行模式，移动数据，NFC，热点，USB网络共享和位置</string>

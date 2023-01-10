@@ -146,8 +146,6 @@
     <string name="skip_label" msgid="6380034601349015895">"건너뛰기"</string>
     <string name="next_label" msgid="1248293387735652187">"다음"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"언어"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"선호 언어 순서"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"시스템 언어"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"삭제"</string>
     <string name="add_a_language" msgid="2126220398077503271">"언어 추가"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"언어"</string>
@@ -161,35 +159,11 @@
     <string name="preference_of_system_locale_summary" msgid="5612241394431188535">"시스템 기본값"</string>
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"설정에서 이 앱의 언어를 선택할 수 없습니다."</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"언어가 앱에서 사용 가능한 언어와 다를 수 있습니다. 일부 앱에서는 이 설정을 지원하지 않을 수도 있습니다."</string>
-    <string name="desc_app_locale_selection_supported" msgid="6744909281573556379">"각 앱에 사용할 언어를 설정하세요."</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"시스템, 앱, 웹사이트는 선호하는 언어 중 최우선 지원 언어를 사용합니다."</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"앱별로 언어를 선택하려면 앱 언어 설정으로 이동하세요."</string>
-    <string name="desc_locale_helper_footer_general" msgid="6112153921151780303">"앱 언어 자세히 알아보기"</string>
-    <string name="title_change_system_locale" msgid="8589844586256566951">"시스템 언어를 %s 언어로 변경하시겠습니까?"</string>
-    <string name="desc_notice_device_locale_settings_change" msgid="8311132485850714160">"기기 설정과 지역 설정이 변경됩니다."</string>
-    <string name="button_label_confirmation_of_system_locale_change" msgid="5593798559604894733">"변경"</string>
-    <string name="title_unavailable_locale" msgid="2628898110416542386">"%s 사용할 수 없음"</string>
-    <string name="desc_unavailable_locale" msgid="2201756477400935896">"이 언어는 시스템 언어로 사용할 수 없습니다. 단, 이제 앱과 웹사이트에서 이 언어가 선호 언어로 인식됩니다."</string>
-    <string name="regional_preferences_title" msgid="4304567374498629528">"지역 설정"</string>
-    <string name="regional_preferences_summary" msgid="1189876997389469650">"단위 및 숫자 환경설정"</string>
-    <string name="regional_preferences_main_page_sub_title" msgid="4237109940015254725">"앱 환경을 맞춤설정할 수 있도록 지역 설정을 알려주세요."</string>
-    <string name="regional_preferences_option_page_sub_title" msgid="8303661099255197036">"가능한 경우 앱에서 지역 설정을 사용합니다."</string>
-    <string name="temperature_preferences_title" msgid="5009881556503629058">"온도"</string>
-    <string name="first_day_of_week_preferences_title" msgid="1971850087589599553">"일주일 중 첫날"</string>
-    <string name="numbers_preferences_title" msgid="8197418984391195446">"숫자 환경설정"</string>
-    <string name="default_string_of_regional_preference" msgid="7662581547334113719">"앱 기본값 사용"</string>
-    <string name="celsius_temperature_unit" msgid="8896459071273084507">"섭씨(°C)"</string>
-    <string name="fahrenheit_temperature_unit" msgid="1118677820614569801">"화씨(°F)"</string>
-    <string name="sunday_first_day_of_week" msgid="7644548348295686051">"일요일"</string>
-    <string name="monday_first_day_of_week" msgid="7244698610476506771">"월요일"</string>
-    <string name="tuesday_first_day_of_week" msgid="5085370946936582391">"화요일"</string>
-    <string name="wednesday_first_day_of_week" msgid="6544537589727042869">"수요일"</string>
-    <string name="thursday_first_day_of_week" msgid="3035885630945594833">"목요일"</string>
-    <string name="friday_first_day_of_week" msgid="7074795061812083541">"금요일"</string>
-    <string name="saturday_first_day_of_week" msgid="3702282590450322727">"토요일"</string>
-    <string name="title_regional_pref_footer" msgid="7450438024324794380">"지역 설정을 지원하지 않는 앱에서는 기본 언어 설정이 사용됩니다"</string>
-    <string name="desc_regional_pref_footer_learn_more" msgid="4401708653329230081">"언어 환경설정에 관해 자세히 알아보세요."</string>
-    <string name="dlg_remove_locales_title" msgid="3170501604483612114">"{count,plural, =1{선택한 언어를 삭제하시겠습니까?}other{선택한 언어를 삭제하시겠습니까?}}"</string>
+    <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"언어 선택을 지원하는 앱만 여기에 표시됩니다."</string>
+    <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
+      <item quantity="other">선택한 언어를 삭제하시겠습니까?</item>
+      <item quantity="one">선택한 언어를 삭제하시겠습니까?</item>
+    </plurals>
     <string name="dlg_remove_locales_message" msgid="8110560091134252067">"텍스트가 다른 언어로 표시됩니다."</string>
     <string name="dlg_remove_locales_error_title" msgid="5875503658221562572">"모든 언어를 삭제할 수는 없습니다."</string>
     <string name="dlg_remove_locales_error_message" msgid="6504279959974675302">"기본 언어를 하나 이상 유지해야 합니다."</string>

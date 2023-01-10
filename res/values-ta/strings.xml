@@ -146,8 +146,6 @@
     <string name="skip_label" msgid="6380034601349015895">"தவிர்"</string>
     <string name="next_label" msgid="1248293387735652187">"அடுத்து"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"மொழிகள்"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"விருப்பமான மொழிகளின் வரிசை"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"சிஸ்டம் மொழி"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"அகற்று"</string>
     <string name="add_a_language" msgid="2126220398077503271">"மொழியைச் சேர்"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"மொழி"</string>
@@ -161,35 +159,11 @@
     <string name="preference_of_system_locale_summary" msgid="5612241394431188535">"சிஸ்டத்தின் இயல்பு"</string>
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"அமைப்புகளில் இந்த ஆப்ஸுக்கான மொழித் தேர்வு கிடைக்கவில்லை."</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"ஆப்ஸில் இருக்கும் மொழிகளிலிருந்து மொழி வேறுபடலாம். சில ஆப்ஸில் இந்த அமைப்பைப் பயன்படுத்த முடியாது."</string>
-    <string name="desc_app_locale_selection_supported" msgid="6744909281573556379">"ஒவ்வொரு ஆப்ஸுக்கும் மொழியை அமைக்கலாம்."</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"உங்களுக்கு விருப்பமான மொழிகளில் \'ஆதரிக்கப்படும் முதல் மொழியை\' உங்கள் சிஸ்டம், ஆப்ஸ், இணையதளங்கள் ஆகியவை பயன்படுத்தும்."</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"ஒவ்வொரு ஆப்ஸுக்கும் மொழியைத் தேர்ந்தெடுக்க ஆப்ஸ் மொழி அமைப்புகளுக்குச் செல்லுங்கள்."</string>
-    <string name="desc_locale_helper_footer_general" msgid="6112153921151780303">"ஆப்ஸ் மொழிகள் குறித்து மேலும் அறிந்துகொள்ளுங்கள்"</string>
-    <string name="title_change_system_locale" msgid="8589844586256566951">"சிஸ்டம் மொழியை %s என்பதாக மாற்றவா?"</string>
-    <string name="desc_notice_device_locale_settings_change" msgid="8311132485850714160">"உங்கள் சாதன அமைப்புகளும் பிராந்தியத்திற்கேற்ற விருப்பங்களும் மாறும்."</string>
-    <string name="button_label_confirmation_of_system_locale_change" msgid="5593798559604894733">"மாற்று"</string>
-    <string name="title_unavailable_locale" msgid="2628898110416542386">"%s கிடைக்கவில்லை"</string>
-    <string name="desc_unavailable_locale" msgid="2201756477400935896">"இந்த மொழியை சிஸ்டம் மொழியாகப் பயன்படுத்த முடியாது. ஆனால் நீங்கள் இந்த மொழியை விரும்புகிறீர்கள் என்பதை ஆப்ஸுக்கும் இணையதளங்களுக்கும் தெரிவித்துள்ளீர்கள்."</string>
-    <string name="regional_preferences_title" msgid="4304567374498629528">"பிராந்தியத்திற்கேற்ற விருப்பங்கள்"</string>
-    <string name="regional_preferences_summary" msgid="1189876997389469650">"யூனிட்கள் மற்றும் எண் விருப்பத்தேர்வுகளை அமைக்கலாம்"</string>
-    <string name="regional_preferences_main_page_sub_title" msgid="4237109940015254725">"உங்கள் பிராந்தியத்திற்கேற்ற விருப்பங்களை ஆப்ஸுக்குத் தெரிவியுங்கள். இதனால் உங்கள் அனுபவத்தை ஆப்ஸால் பிரத்தியேகமாக்க முடியும்."</string>
-    <string name="regional_preferences_option_page_sub_title" msgid="8303661099255197036">"சாத்தியமாக இருக்கும்பட்சத்தில் உங்கள் பிராந்தியத்திற்கேற்ற விருப்பங்களை ஆப்ஸ் பயன்படுத்தும்."</string>
-    <string name="temperature_preferences_title" msgid="5009881556503629058">"வெப்பநிலை"</string>
-    <string name="first_day_of_week_preferences_title" msgid="1971850087589599553">"வாரத்தின் முதல் நாள்"</string>
-    <string name="numbers_preferences_title" msgid="8197418984391195446">"எண்களுக்கான விருப்பத்தேர்வுகள்"</string>
-    <string name="default_string_of_regional_preference" msgid="7662581547334113719">"ஆப்ஸின் இயல்புநிலையைப் பயன்படுத்தும்"</string>
-    <string name="celsius_temperature_unit" msgid="8896459071273084507">"செல்சியஸ் (°C)"</string>
-    <string name="fahrenheit_temperature_unit" msgid="1118677820614569801">"ஃபாரன்ஹீட் (°F)"</string>
-    <string name="sunday_first_day_of_week" msgid="7644548348295686051">"ஞாயிறு"</string>
-    <string name="monday_first_day_of_week" msgid="7244698610476506771">"திங்கள்"</string>
-    <string name="tuesday_first_day_of_week" msgid="5085370946936582391">"செவ்வாய்"</string>
-    <string name="wednesday_first_day_of_week" msgid="6544537589727042869">"புதன்"</string>
-    <string name="thursday_first_day_of_week" msgid="3035885630945594833">"வியாழன்"</string>
-    <string name="friday_first_day_of_week" msgid="7074795061812083541">"வெள்ளிக்கிழமை"</string>
-    <string name="saturday_first_day_of_week" msgid="3702282590450322727">"சனி"</string>
-    <string name="title_regional_pref_footer" msgid="7450438024324794380">"பிராந்தியத்திற்கேற்ற விருப்பங்களை ஓர் ஆப்ஸ் ஆதரிக்கவில்லை எனில், அதன் இயல்புநிலை மொழி அமைப்புகளை அந்த ஆப்ஸ் பயன்படுத்தும்."</string>
-    <string name="desc_regional_pref_footer_learn_more" msgid="4401708653329230081">"மொழி விருப்பத்தேர்வுகள் குறித்து மேலும் அறிக."</string>
-    <string name="dlg_remove_locales_title" msgid="3170501604483612114">"{count,plural, =1{தேர்ந்தெடுக்கப்பட்ட மொழியை அகற்றவா?}other{தேர்ந்தெடுக்கப்பட்ட மொழிகளை அகற்றவா?}}"</string>
+    <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"மொழித் தேர்வை ஆதரிக்கும் ஆப்ஸ் மட்டும் இங்கே காட்டப்படும்."</string>
+    <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
+      <item quantity="other">தேர்ந்தெடுத்த மொழிகளை அகற்றவா?</item>
+      <item quantity="one">தேர்ந்தெடுத்த மொழியை அகற்றவா?</item>
+    </plurals>
     <string name="dlg_remove_locales_message" msgid="8110560091134252067">"உரை மற்றொரு மொழியில் காட்டப்படும்."</string>
     <string name="dlg_remove_locales_error_title" msgid="5875503658221562572">"எல்லா மொழிகளையும் அகற்ற முடியாது"</string>
     <string name="dlg_remove_locales_error_message" msgid="6504279959974675302">"விரும்பப்படும் மொழி ஒன்றாவது இருக்க வேண்டும்"</string>
