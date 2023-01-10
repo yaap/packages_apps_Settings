@@ -146,8 +146,6 @@
     <string name="skip_label" msgid="6380034601349015895">"वगळा"</string>
     <string name="next_label" msgid="1248293387735652187">"पुढील"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"भाषा"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"प्राधान्य असलेल्या भाषेचा क्रम"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"सिस्टीमची भाषा"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"काढा"</string>
     <string name="add_a_language" msgid="2126220398077503271">"एक भाषा जोडा"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"भाषा"</string>
@@ -161,35 +159,11 @@
     <string name="preference_of_system_locale_summary" msgid="5612241394431188535">"सिस्टीम डीफॉल्ट"</string>
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"या अ‍ॅपसाठीची भाषा निवडणे हे सेटिंग्ज मध्ये उपलब्ध नाही."</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"अ‍ॅपमध्ये उपलब्ध असलेल्या भाषांपेक्षा भाषा वेगळी असू शकते. काही अ‍ॅप्स कदाचित या सेटिंगला सपोर्ट करत नाहीत."</string>
-    <string name="desc_app_locale_selection_supported" msgid="6744909281573556379">"प्रत्येक ॲपसाठी भाषा सेट करा."</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"तुमची सिस्टीम, अ‍ॅप्स आणि वेबसाइट या तुमच्या प्राधान्य दिलेल्या भाषांमधील पहिली सपोर्ट असलेली भाषा वापरतात."</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"प्रत्येक अ‍ॅपसाठी भाषा निवडण्यासाठी, अ‍ॅप भाषा सेटिंग्जवर जा."</string>
-    <string name="desc_locale_helper_footer_general" msgid="6112153921151780303">"ॲपच्या भाषांविषयी अधिक जाणून घ्या"</string>
-    <string name="title_change_system_locale" msgid="8589844586256566951">"सिस्टीमची भाषा %s वर बदलायची आहे का ?"</string>
-    <string name="desc_notice_device_locale_settings_change" msgid="8311132485850714160">"तुमच्या डिव्हाइसची सेटिंग्ज आणि प्रादेशिक प्राधान्ये बदलतील."</string>
-    <string name="button_label_confirmation_of_system_locale_change" msgid="5593798559604894733">"बदला"</string>
-    <string name="title_unavailable_locale" msgid="2628898110416542386">"%s उपलब्ध नाही"</string>
-    <string name="desc_unavailable_locale" msgid="2201756477400935896">"ही भाषा सिस्टीमची भाषा म्हणून वापरली जाऊ शकत नाही, मात्र तुम्ही या भाषेला प्राधान्य देता हे तुम्ही अ‍ॅप्स आणि वेबसाइटना सांगितले आहे."</string>
-    <string name="regional_preferences_title" msgid="4304567374498629528">"प्रादेशिक प्राधान्ये"</string>
-    <string name="regional_preferences_summary" msgid="1189876997389469650">"युनिट आणि नंबर प्राधान्ये सेट करा"</string>
-    <string name="regional_preferences_main_page_sub_title" msgid="4237109940015254725">"अ‍ॅप्सना तुमची प्रादेशिक प्राधान्ये सांगा ज्यामुळे ते तुमचा अनुभव पर्सनलाइझ करतील."</string>
-    <string name="regional_preferences_option_page_sub_title" msgid="8303661099255197036">"शक्य असेल तेथे ॲप्स तुमची प्रादेशिक प्राधान्ये वापरतील."</string>
-    <string name="temperature_preferences_title" msgid="5009881556503629058">"तापमान"</string>
-    <string name="first_day_of_week_preferences_title" msgid="1971850087589599553">"आठवड्याचा पहिला दिवस"</string>
-    <string name="numbers_preferences_title" msgid="8197418984391195446">"क्रमांकांची प्राधान्ये"</string>
-    <string name="default_string_of_regional_preference" msgid="7662581547334113719">"अ‍ॅपमधील डीफॉल्ट वापरा"</string>
-    <string name="celsius_temperature_unit" msgid="8896459071273084507">"सेल्सियस (°C)"</string>
-    <string name="fahrenheit_temperature_unit" msgid="1118677820614569801">"फेरनहाइट (°F)"</string>
-    <string name="sunday_first_day_of_week" msgid="7644548348295686051">"रविवार"</string>
-    <string name="monday_first_day_of_week" msgid="7244698610476506771">"सोमवार"</string>
-    <string name="tuesday_first_day_of_week" msgid="5085370946936582391">"मंगळवार"</string>
-    <string name="wednesday_first_day_of_week" msgid="6544537589727042869">"बुधवार"</string>
-    <string name="thursday_first_day_of_week" msgid="3035885630945594833">"गुरुवार"</string>
-    <string name="friday_first_day_of_week" msgid="7074795061812083541">"शुक्रवार"</string>
-    <string name="saturday_first_day_of_week" msgid="3702282590450322727">"शनिवार"</string>
-    <string name="title_regional_pref_footer" msgid="7450438024324794380">"अ‍ॅप हे प्रादेशिक प्राधान्यांना सपोर्ट करत नसल्यास, अ‍ॅप त्यांची डीफॉल्ट लोकॅल सेटिंग्ज वापरेल."</string>
-    <string name="desc_regional_pref_footer_learn_more" msgid="4401708653329230081">"भाषा प्राधान्यांबद्दल अधिक जाणून घ्या."</string>
-    <string name="dlg_remove_locales_title" msgid="3170501604483612114">"{count,plural, =1{निवडलेली भाषा काढून टाकायची का?}other{निवडलेल्या भाषा काढून टाकायच्या का?}}"</string>
+    <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"येथे फक्त भाषेच्या निवडीला सपोर्ट करणारी अ‍ॅप्स दाखवली आहेत."</string>
+    <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
+      <item quantity="other">निवडक भाषा काढायच्या?</item>
+      <item quantity="one">निवडक भाषा काढायची?</item>
+    </plurals>
     <string name="dlg_remove_locales_message" msgid="8110560091134252067">"मजकूर दुसऱ्या भाषेत डिस्प्ले केला जाईल."</string>
     <string name="dlg_remove_locales_error_title" msgid="5875503658221562572">"सर्व भाषा काढू शकत नाही"</string>
     <string name="dlg_remove_locales_error_message" msgid="6504279959974675302">"किमान एक प्राधान्यीकृत भाषा ठेवा"</string>

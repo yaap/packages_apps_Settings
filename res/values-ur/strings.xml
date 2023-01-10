@@ -146,8 +146,6 @@
     <string name="skip_label" msgid="6380034601349015895">"نظر انداز کریں"</string>
     <string name="next_label" msgid="1248293387735652187">"اگلا"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"زبانیں"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"ترجیحی زبان کی ترتیب"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"سسٹم کی زبان"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"ہٹائیں"</string>
     <string name="add_a_language" msgid="2126220398077503271">"ایک زبان شامل کریں"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"زبان"</string>
@@ -161,35 +159,11 @@
     <string name="preference_of_system_locale_summary" msgid="5612241394431188535">"سسٹم ڈیفالٹ"</string>
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"اس ایپ کے لیے زبان کا انتخاب ترتیبات سے دستیاب نہیں ہے۔"</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"زبان ایپ میں دستیاب زبانوں سے مختلف ہو سکتی ہے۔ ہو سکتا ہے کچھ ایپس اس ترتیب کو سپورٹ نہ کریں۔"</string>
-    <string name="desc_app_locale_selection_supported" msgid="6744909281573556379">"ہر ایپ کے لیے زبان سیٹ کریں۔"</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"آپ کا سسٹم، ایپس اور ویب سائٹس آپ کی ترجیحی زبانوں میں سے پہلی تعاون یافتہ زبان استعمال کرتی ہیں۔"</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"ہر ایپ کے لیے زبان منتخب کرنے کے لیے، ایپ کی زبان کی ترتیبات پر جائیں۔"</string>
-    <string name="desc_locale_helper_footer_general" msgid="6112153921151780303">"ایپ کی زبانوں کے بارے میں مزید جانیں"</string>
-    <string name="title_change_system_locale" msgid="8589844586256566951">"‏سسٹم کی زبان کو %s پر تبدیل کریں ؟"</string>
-    <string name="desc_notice_device_locale_settings_change" msgid="8311132485850714160">"آپ کے آلہ کی ترتیبات اور علاقائی ترجیحات تبدیل ہو جائیں گی۔"</string>
-    <string name="button_label_confirmation_of_system_locale_change" msgid="5593798559604894733">"تبدیل کریں"</string>
-    <string name="title_unavailable_locale" msgid="2628898110416542386">"‏%s دستیاب نہیں ہے"</string>
-    <string name="desc_unavailable_locale" msgid="2201756477400935896">"اس زبان کو سسٹم کی زبان کے طور پر استعمال نہیں کیا جا سکتا ہے، لیکن آپ نے ایپس اور ویب سائٹ کو بتایا ہوا ہے کہ آپ اس زبان کو ترجیح دیتے ہیں۔"</string>
-    <string name="regional_preferences_title" msgid="4304567374498629528">"علاقائی ترجیحات"</string>
-    <string name="regional_preferences_summary" msgid="1189876997389469650">"یونٹس اور نمبر کی ترجیحات سیٹ کریں"</string>
-    <string name="regional_preferences_main_page_sub_title" msgid="4237109940015254725">"ایپس کو اپنی علاقائی ترجیحات کو جاننے کی اجازت دیں تاکہ وہ آپ کے تجربے کو ذاتی نوعیت کا بنا سکیں۔"</string>
-    <string name="regional_preferences_option_page_sub_title" msgid="8303661099255197036">"جہاں ممکن ہو وہاں ایپس آپ کی علاقائی ترجیحات کا استعمال کریں گی۔"</string>
-    <string name="temperature_preferences_title" msgid="5009881556503629058">"درجہ حرارت"</string>
-    <string name="first_day_of_week_preferences_title" msgid="1971850087589599553">"ہفتے کا پہلا دن"</string>
-    <string name="numbers_preferences_title" msgid="8197418984391195446">"نمبرز کی ترجیحات"</string>
-    <string name="default_string_of_regional_preference" msgid="7662581547334113719">"ایپ کا ڈیفالٹ استعمال کریں"</string>
-    <string name="celsius_temperature_unit" msgid="8896459071273084507">"‏سیلسیئس(‎°C)"</string>
-    <string name="fahrenheit_temperature_unit" msgid="1118677820614569801">"‏فارن ہائیٹ(‎°F)"</string>
-    <string name="sunday_first_day_of_week" msgid="7644548348295686051">"اتوار"</string>
-    <string name="monday_first_day_of_week" msgid="7244698610476506771">"پیر"</string>
-    <string name="tuesday_first_day_of_week" msgid="5085370946936582391">"منگل"</string>
-    <string name="wednesday_first_day_of_week" msgid="6544537589727042869">"بدھ"</string>
-    <string name="thursday_first_day_of_week" msgid="3035885630945594833">"جمعرات"</string>
-    <string name="friday_first_day_of_week" msgid="7074795061812083541">"جمعہ"</string>
-    <string name="saturday_first_day_of_week" msgid="3702282590450322727">"ہفتہ"</string>
-    <string name="title_regional_pref_footer" msgid="7450438024324794380">"‏اگر کوئی ایپ علاقائی ترجیحات کو سپورٹ نہیں کرتی ہے تو ایپ اپنی ڈیفالٹ locale کی ترتیبات استعمال کرے گی۔"</string>
-    <string name="desc_regional_pref_footer_learn_more" msgid="4401708653329230081">"زبان کی ترجیحات کے بارے میں مزید جانیں۔"</string>
-    <string name="dlg_remove_locales_title" msgid="3170501604483612114">"{count,plural, =1{منتخب کردہ زبان ہٹائیں؟}other{منتخب کردہ زبانوں کو ہٹائیں؟}}"</string>
+    <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"یہاں صرف ان ایپس کی فہرست دکھائی جاتی ہے جو زبان کے انتخاب کو سپورٹ کرتی ہیں۔"</string>
+    <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
+      <item quantity="other">منتخب کردہ زبانیں ہٹائیں؟</item>
+      <item quantity="one">منتخب کردہ زبان ہٹائیں؟</item>
+    </plurals>
     <string name="dlg_remove_locales_message" msgid="8110560091134252067">"متن ایک دوسری زبان میں ڈسپلے کیا جائے گا۔"</string>
     <string name="dlg_remove_locales_error_title" msgid="5875503658221562572">"ساری زبانیں نہیں ہٹا سکتا"</string>
     <string name="dlg_remove_locales_error_message" msgid="6504279959974675302">"کم از کم ایک ترجیحی زبان رکھیں"</string>

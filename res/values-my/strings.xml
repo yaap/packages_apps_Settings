@@ -146,8 +146,6 @@
     <string name="skip_label" msgid="6380034601349015895">"ကျော်ရန်"</string>
     <string name="next_label" msgid="1248293387735652187">"ရှေ့သို့"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"ဘာသာစကားများ"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"စိတ်ကြိုက်ဘာသာစကား အစီအစဉ်"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"စနစ် ဘာသာစကား"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"ဖယ်ရှားရန်"</string>
     <string name="add_a_language" msgid="2126220398077503271">"ဘာသာစကားတစ်ခု ထည့်ပါ"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"ဘာသာစကား"</string>
@@ -161,35 +159,11 @@
     <string name="preference_of_system_locale_summary" msgid="5612241394431188535">"စနစ်မူရင်း"</string>
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"ဤအက်ပ်အတွက် ‘ဆက်တင်များ’ မှ ဘာသာစကား ရွေးချယ်မှု မရရှိနိုင်ပါ။"</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"ဘာသာစကားသည် အက်ပ်တွင် ရရှိနိုင်သော ဘာသာစကားများမှ ကွဲပြားနိုင်သည်။ အချို့အက်ပ်များက ဤဆက်တင်ကို မပံ့ပိုးနိုင်ပါ။"</string>
-    <string name="desc_app_locale_selection_supported" msgid="6744909281573556379">"အက်ပ်တစ်ခုစီအတွက် ဘာသာစကား သတ်မှတ်သည်။"</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"သင့်စနစ်၊ အက်ပ်နှင့် ဝဘ်ဆိုက်များက သင့်စိတ်ကြိုက်ဘာသာစကားများမှ ပထမဆုံး ပံ့ပိုးပေးသည့် ဘာသာစကားကို သုံးသည်။"</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"အက်ပ်တစ်ခုချင်းစီအတွက် ဘာသာစကားရွေးရန် အက်ပ်ဘာသာစကား ဆက်တင်များသို့ သွားပါ။"</string>
-    <string name="desc_locale_helper_footer_general" msgid="6112153921151780303">"အက်ပ်ဘာသာစကားများအကြောင်း ပိုမိုလေ့လာခြင်း"</string>
-    <string name="title_change_system_locale" msgid="8589844586256566951">"စနစ်ဘာသာစကားကို %s သို့ပြောင်းမလား။"</string>
-    <string name="desc_notice_device_locale_settings_change" msgid="8311132485850714160">"သင့်စက်ဆက်တင်များနှင့် ဒေသဆိုင်ရာ သတ်မှတ်ချက်များ ပြောင်းသွားမည်။"</string>
-    <string name="button_label_confirmation_of_system_locale_change" msgid="5593798559604894733">"ပြောင်းရန်"</string>
-    <string name="title_unavailable_locale" msgid="2628898110416542386">"%s ကိုမရနိုင်ပါ"</string>
-    <string name="desc_unavailable_locale" msgid="2201756477400935896">"ဤဘာသာစကားကို စနစ်ဘာသာစကားအဖြစ် မသုံးနိုင်သော်လည်း အက်ပ်နှင့် ဝဘ်ဆိုက်များတွင် ဤဘာသာစကားဖြင့် သုံးလိုကြောင်း သင်က သတ်မှတ်ထားသည်။"</string>
-    <string name="regional_preferences_title" msgid="4304567374498629528">"ဒေသဆိုင်ရာ သတ်မှတ်ချက်များ"</string>
-    <string name="regional_preferences_summary" msgid="1189876997389469650">"ယူနစ်နှင့် နံပါတ်သတ်မှတ်ချက်များ ချမှတ်ရန်"</string>
-    <string name="regional_preferences_main_page_sub_title" msgid="4237109940015254725">"သင်၏ ဒေသဆိုင်ရာ သတ်မှတ်ချက်များကို အက်ပ်များအား အသိပေးလျှင် သင့်အသုံးပြုမှုကို ပုဂ္ဂိုလ်ရေးသီးသန့်ပြုလုပ်ပေးနိုင်သည်။"</string>
-    <string name="regional_preferences_option_page_sub_title" msgid="8303661099255197036">"အက်ပ်များသည် ဖြစ်နိုင်ပါက သင်၏ ဒေသဆိုင်ရာ သတ်မှတ်ချက်များကို သုံးပါမည်။"</string>
-    <string name="temperature_preferences_title" msgid="5009881556503629058">"အပူချိန်"</string>
-    <string name="first_day_of_week_preferences_title" msgid="1971850087589599553">"ရက်သတ္တပတ်၏ ပထမဆုံးနေ့"</string>
-    <string name="numbers_preferences_title" msgid="8197418984391195446">"နံပါတ် သတ်မှတ်ချက်များ"</string>
-    <string name="default_string_of_regional_preference" msgid="7662581547334113719">"အက်ပ်၏မူရင်းအတိုင်း သုံးရန်"</string>
-    <string name="celsius_temperature_unit" msgid="8896459071273084507">"စင်တီဂရိတ် (°C)"</string>
-    <string name="fahrenheit_temperature_unit" msgid="1118677820614569801">"ဖာရင်ဟိုက် (°F)"</string>
-    <string name="sunday_first_day_of_week" msgid="7644548348295686051">"တနင်္ဂနွေ"</string>
-    <string name="monday_first_day_of_week" msgid="7244698610476506771">"တနင်္လာ"</string>
-    <string name="tuesday_first_day_of_week" msgid="5085370946936582391">"အင်္ဂါ"</string>
-    <string name="wednesday_first_day_of_week" msgid="6544537589727042869">"ဗုဒ္ဓဟူး"</string>
-    <string name="thursday_first_day_of_week" msgid="3035885630945594833">"ကြာသပတေး"</string>
-    <string name="friday_first_day_of_week" msgid="7074795061812083541">"သောကြာ"</string>
-    <string name="saturday_first_day_of_week" msgid="3702282590450322727">"စနေ"</string>
-    <string name="title_regional_pref_footer" msgid="7450438024324794380">"အက်ပ်သည် ဒေသဆိုင်ရာ သတ်မှတ်ချက်များကို မပံ့ပိုးပါက ၎င်း၏ မူလဘာသာစကားဆက်တင်များကို သုံးပါမည်။"</string>
-    <string name="desc_regional_pref_footer_learn_more" msgid="4401708653329230081">"ဦးစားပေး ဘာသာစကားများအကြောင်း ပိုမိုလေ့လာပါ။"</string>
-    <string name="dlg_remove_locales_title" msgid="3170501604483612114">"{count,plural, =1{ရွေးထားသည့် ဘာသာစကားကို ဖယ်ရှားမလား။}other{ရွေးထားသည့် ဘာသာစကားများကို ဖယ်ရှားမလား။}}"</string>
+    <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"ဘာသာစကားရွေးချယ်မှုကို ပံ့ပိုးသည့် အက်ပ်များကိုသာ ဤနေရာတွင် ပြထားသည်။"</string>
+    <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
+      <item quantity="other">ရွေးထားသည့် ဘာသာစကားများကို ဖယ်ရှားမလား။</item>
+      <item quantity="one">ရွေးထားသည့် ဘာသာစကားကို ဖယ်ရှားမလား။</item>
+    </plurals>
     <string name="dlg_remove_locales_message" msgid="8110560091134252067">"စာသားများကို အခြားဘာသာစကားဖြင့်ပြပါလိမ့်မည်။"</string>
     <string name="dlg_remove_locales_error_title" msgid="5875503658221562572">"ဘာသာစကားများ အားလုံးကိုဖယ်ရှား၍မရပါ"</string>
     <string name="dlg_remove_locales_error_message" msgid="6504279959974675302">"ပိုနှစ်သက်သည့် ဘာသာစကားတစ်ခု အနည်းဆုံးထားပါ"</string>

@@ -146,8 +146,6 @@
     <string name="skip_label" msgid="6380034601349015895">"Praleisti"</string>
     <string name="next_label" msgid="1248293387735652187">"Kitas"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"Kalbos"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"Pageidaujamų kalbų eiliškumas"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"Sistemos kalba"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"Pašalinti"</string>
     <string name="add_a_language" msgid="2126220398077503271">"Pridėti kalbą"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"Kalba"</string>
@@ -161,35 +159,13 @@
     <string name="preference_of_system_locale_summary" msgid="5612241394431188535">"Numatytoji sistemos vertė"</string>
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"Šios programos kalbos pasirinkimas nepasiekiamas iš skilties „Nustatymai“."</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"Kalba gali skirtis nuo programoje pasiekiamų kalbų. Kai kuriose programose šis nustatymas gali būti nepalaikomas."</string>
-    <string name="desc_app_locale_selection_supported" msgid="6744909281573556379">"Nustatykite kiekvienos programos kalbą."</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"Jūsų sistema, programos ir svetainės naudoja pirmąją palaikomą kalbą iš pageidaujamų sąrašo."</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"Norėdami pasirinkti kalbą kiekvienai programai, eikite į programų kalbų nustatymus."</string>
-    <string name="desc_locale_helper_footer_general" msgid="6112153921151780303">"Sužinokite daugiau apie programos kalbas"</string>
-    <string name="title_change_system_locale" msgid="8589844586256566951">"Pakeisti sistemos kalbą į %s ?"</string>
-    <string name="desc_notice_device_locale_settings_change" msgid="8311132485850714160">"Pasikeis įrenginio nustatymai ir tinkamumo nustatymai pagal regioną."</string>
-    <string name="button_label_confirmation_of_system_locale_change" msgid="5593798559604894733">"Keisti"</string>
-    <string name="title_unavailable_locale" msgid="2628898110416542386">"%s nepasiekiama"</string>
-    <string name="desc_unavailable_locale" msgid="2201756477400935896">"Šios kalbos negalima naudoti kaip sistemos kalbos, bet programoms ir svetainėms nurodėte, kad teikiate pirmenybę šiai kalbai."</string>
-    <string name="regional_preferences_title" msgid="4304567374498629528">"Tinkamumo nustatymai pagal regioną"</string>
-    <string name="regional_preferences_summary" msgid="1189876997389469650">"Nustatyti vienetus ir numerių nuostatas"</string>
-    <string name="regional_preferences_main_page_sub_title" msgid="4237109940015254725">"Leiskite programoms žinoti jūsų tinkamumo nustatymus pagal regioną, kad galėtų suasmeninti funkcijas."</string>
-    <string name="regional_preferences_option_page_sub_title" msgid="8303661099255197036">"Programos naudos jūsų tinkamumo nustatymus pagal regioną, kai bus galima."</string>
-    <string name="temperature_preferences_title" msgid="5009881556503629058">"Temperatūra"</string>
-    <string name="first_day_of_week_preferences_title" msgid="1971850087589599553">"Pirma savaitės diena"</string>
-    <string name="numbers_preferences_title" msgid="8197418984391195446">"Skaičių nuostatos"</string>
-    <string name="default_string_of_regional_preference" msgid="7662581547334113719">"Naudoti numatytąją programą"</string>
-    <string name="celsius_temperature_unit" msgid="8896459071273084507">"Celsijaus laipsnis (°C)"</string>
-    <string name="fahrenheit_temperature_unit" msgid="1118677820614569801">"Farenheito laipsnis (°F)"</string>
-    <string name="sunday_first_day_of_week" msgid="7644548348295686051">"Sekmadienis"</string>
-    <string name="monday_first_day_of_week" msgid="7244698610476506771">"Pirmadienis"</string>
-    <string name="tuesday_first_day_of_week" msgid="5085370946936582391">"Antradienis"</string>
-    <string name="wednesday_first_day_of_week" msgid="6544537589727042869">"Trečiadienis"</string>
-    <string name="thursday_first_day_of_week" msgid="3035885630945594833">"Ketvirtadienis"</string>
-    <string name="friday_first_day_of_week" msgid="7074795061812083541">"Penktadienis"</string>
-    <string name="saturday_first_day_of_week" msgid="3702282590450322727">"Šeštadienis"</string>
-    <string name="title_regional_pref_footer" msgid="7450438024324794380">"Jei programa nepalaiko tinkamumo nustatymų pagal regioną, ji naudos savo numatytuosius lokalės nustatymus."</string>
-    <string name="desc_regional_pref_footer_learn_more" msgid="4401708653329230081">"Sužinokite daugiau apie kalbos nuostatas."</string>
-    <string name="dlg_remove_locales_title" msgid="3170501604483612114">"{count,plural, =1{Pašalinti pasirinktą kalbą?}one{Pašalinti pasirinktas kalbas?}few{Pašalinti pasirinktas kalbas?}many{Pašalinti pasirinktas kalbas?}other{Pašalinti pasirinktas kalbas?}}"</string>
+    <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"Čia rodomos tik kalbos pasirinkimą palaikančios programos."</string>
+    <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
+      <item quantity="one">Pašalinti pasirinktas kalbas?</item>
+      <item quantity="few">Pašalinti pasirinktas kalbas?</item>
+      <item quantity="many">Pašalinti pasirinktas kalbas?</item>
+      <item quantity="other">Pašalinti pasirinktas kalbas?</item>
+    </plurals>
     <string name="dlg_remove_locales_message" msgid="8110560091134252067">"Tekstas bus rodomas kita kalba."</string>
     <string name="dlg_remove_locales_error_title" msgid="5875503658221562572">"Negalima pašalinti visų kalbų"</string>
     <string name="dlg_remove_locales_error_message" msgid="6504279959974675302">"Palikite bent vieną pageidaujamą kalbą"</string>

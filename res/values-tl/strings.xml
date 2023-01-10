@@ -146,8 +146,6 @@
     <string name="skip_label" msgid="6380034601349015895">"Laktawan"</string>
     <string name="next_label" msgid="1248293387735652187">"Susunod"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"Mga Wika"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"Pagkakasunod-sunod ng gustong wika"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"Wika ng system"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"Alisin"</string>
     <string name="add_a_language" msgid="2126220398077503271">"Magdagdag ng wika"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"Wika"</string>
@@ -161,35 +159,11 @@
     <string name="preference_of_system_locale_summary" msgid="5612241394431188535">"Default ng system"</string>
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"Hindi available sa Mga Setting ang pagpili ng wika para sa app na ito."</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"Posibleng iba ang wika sa mga wikang available sa app. Posibleng hindi suportahan ng ilang app ang setting na ito."</string>
-    <string name="desc_app_locale_selection_supported" msgid="6744909281573556379">"Itakda ang wika para sa bawat app."</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"Ginagamit ng iyong system, mga app, at mga website ang unang sinusuportahang wika mula sa mga gusto mong wika."</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"Para pumili ng wika para sa bawat app, pumunta sa mga setting ng wika ng app."</string>
-    <string name="desc_locale_helper_footer_general" msgid="6112153921151780303">"Matuto pa tungkol sa mga wika ng app"</string>
-    <string name="title_change_system_locale" msgid="8589844586256566951">"Gawing %s ang wika ng system?"</string>
-    <string name="desc_notice_device_locale_settings_change" msgid="8311132485850714160">"Magbabago ang mga setting ng device at panrehiyong preference mo."</string>
-    <string name="button_label_confirmation_of_system_locale_change" msgid="5593798559604894733">"Palitan"</string>
-    <string name="title_unavailable_locale" msgid="2628898110416542386">"Hindi available ang %s"</string>
-    <string name="desc_unavailable_locale" msgid="2201756477400935896">"Hindi puwedeng gamitin ang wikang ito bilang wika ng system, pero ipinaalam mo sa mga app at website na gusto mo ang wikang ito."</string>
-    <string name="regional_preferences_title" msgid="4304567374498629528">"Mga panrehiyong preference"</string>
-    <string name="regional_preferences_summary" msgid="1189876997389469650">"Magtakda ng mga kagustuhan sa mga yunit at numero"</string>
-    <string name="regional_preferences_main_page_sub_title" msgid="4237109940015254725">"Ipaalam sa mga app kung ano ang mga panrehiyong preference mo para ma-personalize ng mga ito ang iyong experience."</string>
-    <string name="regional_preferences_option_page_sub_title" msgid="8303661099255197036">"Gagamitin ng mga app ang iyong mga panrehiyong preference kapag posible."</string>
-    <string name="temperature_preferences_title" msgid="5009881556503629058">"Temperatura"</string>
-    <string name="first_day_of_week_preferences_title" msgid="1971850087589599553">"Unang araw ng linggo"</string>
-    <string name="numbers_preferences_title" msgid="8197418984391195446">"Mga kagustuhan sa mga numero"</string>
-    <string name="default_string_of_regional_preference" msgid="7662581547334113719">"Gamitin ang default ng app"</string>
-    <string name="celsius_temperature_unit" msgid="8896459071273084507">"Celsius (°C)"</string>
-    <string name="fahrenheit_temperature_unit" msgid="1118677820614569801">"Fahrenheit (°F)"</string>
-    <string name="sunday_first_day_of_week" msgid="7644548348295686051">"Linggo"</string>
-    <string name="monday_first_day_of_week" msgid="7244698610476506771">"Lunes"</string>
-    <string name="tuesday_first_day_of_week" msgid="5085370946936582391">"Martes"</string>
-    <string name="wednesday_first_day_of_week" msgid="6544537589727042869">"Miyerkules"</string>
-    <string name="thursday_first_day_of_week" msgid="3035885630945594833">"Huwebes"</string>
-    <string name="friday_first_day_of_week" msgid="7074795061812083541">"Biyernes"</string>
-    <string name="saturday_first_day_of_week" msgid="3702282590450322727">"Sabado"</string>
-    <string name="title_regional_pref_footer" msgid="7450438024324794380">"Kung hindi sinusuportahan ng isang app ang mga panrehiyong preference, gagamitin ng app ang mga default nitong setting sa lokalidad."</string>
-    <string name="desc_regional_pref_footer_learn_more" msgid="4401708653329230081">"Matuto pa tungkol sa mga preference sa wika."</string>
-    <string name="dlg_remove_locales_title" msgid="3170501604483612114">"{count,plural, =1{Alisin ang piniling wika?}one{Alisin ang mga piniling wika?}other{Alisin ang mga piniling wika?}}"</string>
+    <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"Mga app lang na sumusuporta sa pagpili ng wika ang ipinapakita dito."</string>
+    <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
+      <item quantity="one">Alisin ang mga piniling wika?</item>
+      <item quantity="other">Alisin ang mga piniling wika?</item>
+    </plurals>
     <string name="dlg_remove_locales_message" msgid="8110560091134252067">"Ipapakita ang text sa ibang wika."</string>
     <string name="dlg_remove_locales_error_title" msgid="5875503658221562572">"Hindi maaalis ang lahat ng wika"</string>
     <string name="dlg_remove_locales_error_message" msgid="6504279959974675302">"Magtira ng kahit isang gustong wika"</string>

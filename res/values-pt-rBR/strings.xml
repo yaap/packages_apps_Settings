@@ -146,8 +146,6 @@
     <string name="skip_label" msgid="6380034601349015895">"Pular"</string>
     <string name="next_label" msgid="1248293387735652187">"Avançar"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"Idiomas"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"Ordem dos idiomas preferenciais"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"Idioma do sistema"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"Remover"</string>
     <string name="add_a_language" msgid="2126220398077503271">"Adicionar um idioma"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"Idioma"</string>
@@ -161,35 +159,11 @@
     <string name="preference_of_system_locale_summary" msgid="5612241394431188535">"Padrão do sistema"</string>
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"A seleção de idioma para este app não está disponível nas configurações."</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"O idioma pode ser diferente dos disponíveis no app. Alguns apps podem não ter suporte a essa configuração."</string>
-    <string name="desc_app_locale_selection_supported" msgid="6744909281573556379">"Defina o idioma de cada app."</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"O sistema, os apps e os sites usam o primeiro idioma com suporte na sua lista de idiomas preferenciais."</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"Para selecionar um idioma para cada app, acesse as configurações de idioma deles."</string>
-    <string name="desc_locale_helper_footer_general" msgid="6112153921151780303">"Saiba mais sobre idiomas de apps"</string>
-    <string name="title_change_system_locale" msgid="8589844586256566951">"Mudar o idioma do sistema para %s?"</string>
-    <string name="desc_notice_device_locale_settings_change" msgid="8311132485850714160">"As configurações e as preferências regionais do seu dispositivo vão mudar."</string>
-    <string name="button_label_confirmation_of_system_locale_change" msgid="5593798559604894733">"Mudar"</string>
-    <string name="title_unavailable_locale" msgid="2628898110416542386">"%s indisponível"</string>
-    <string name="desc_unavailable_locale" msgid="2201756477400935896">"Esse idioma não pode ser usado para o sistema, mas os apps e sites vão identificar sua preferência."</string>
-    <string name="regional_preferences_title" msgid="4304567374498629528">"Preferências regionais"</string>
-    <string name="regional_preferences_summary" msgid="1189876997389469650">"Definir preferências de número e unidades"</string>
-    <string name="regional_preferences_main_page_sub_title" msgid="4237109940015254725">"Permita que os apps saibam suas preferências regionais para personalizar sua experiência."</string>
-    <string name="regional_preferences_option_page_sub_title" msgid="8303661099255197036">"Os apps vão usar suas preferências regionais quando possível."</string>
-    <string name="temperature_preferences_title" msgid="5009881556503629058">"Temperatura"</string>
-    <string name="first_day_of_week_preferences_title" msgid="1971850087589599553">"Primeiro dia da semana"</string>
-    <string name="numbers_preferences_title" msgid="8197418984391195446">"Preferências de números"</string>
-    <string name="default_string_of_regional_preference" msgid="7662581547334113719">"Usar o padrão do app"</string>
-    <string name="celsius_temperature_unit" msgid="8896459071273084507">"Celsius (°C)"</string>
-    <string name="fahrenheit_temperature_unit" msgid="1118677820614569801">"Fahrenheit (°F)"</string>
-    <string name="sunday_first_day_of_week" msgid="7644548348295686051">"Domingo"</string>
-    <string name="monday_first_day_of_week" msgid="7244698610476506771">"Segunda-feira"</string>
-    <string name="tuesday_first_day_of_week" msgid="5085370946936582391">"Terça-feira"</string>
-    <string name="wednesday_first_day_of_week" msgid="6544537589727042869">"Quarta-feira"</string>
-    <string name="thursday_first_day_of_week" msgid="3035885630945594833">"Quinta-feira"</string>
-    <string name="friday_first_day_of_week" msgid="7074795061812083541">"Sexta-feira"</string>
-    <string name="saturday_first_day_of_week" msgid="3702282590450322727">"Sábado"</string>
-    <string name="title_regional_pref_footer" msgid="7450438024324794380">"Se um app não oferecer suporte a preferências regionais, ele usará as configurações padrão de localidade."</string>
-    <string name="desc_regional_pref_footer_learn_more" msgid="4401708653329230081">"Saiba mais sobre as preferências de idioma."</string>
-    <string name="dlg_remove_locales_title" msgid="3170501604483612114">"{count,plural, =1{Remover idioma selecionado?}one{Remover idioma selecionado?}other{Remover idiomas selecionados?}}"</string>
+    <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"Apenas apps que têm suporte à seleção de idioma são mostrados aqui."</string>
+    <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
+      <item quantity="one">Remover o idioma selecionado?</item>
+      <item quantity="other">Remover idiomas selecionados?</item>
+    </plurals>
     <string name="dlg_remove_locales_message" msgid="8110560091134252067">"O texto será exibido em outro idioma."</string>
     <string name="dlg_remove_locales_error_title" msgid="5875503658221562572">"Não é possível remover todos os idiomas"</string>
     <string name="dlg_remove_locales_error_message" msgid="6504279959974675302">"Mantenha pelo menos um idioma preferencial"</string>

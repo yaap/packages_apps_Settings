@@ -146,8 +146,6 @@
     <string name="skip_label" msgid="6380034601349015895">"Ruka"</string>
     <string name="next_label" msgid="1248293387735652187">"Endelea"</string>
     <string name="language_picker_title" msgid="4271307478263345133">"Lugha"</string>
-    <string name="language_picker_category_title" msgid="1792199453060454565">"Mpangilio wa lugha unayopendelea"</string>
-    <string name="desc_current_default_language" msgid="1901157141663662859">"Lugha ya mfumo"</string>
     <string name="locale_remove_menu" msgid="3521546263421387474">"Ondoa"</string>
     <string name="add_a_language" msgid="2126220398077503271">"Ongeza lugha nyingine"</string>
     <string name="app_locale_preference_title" msgid="5513627099300360232">"Lugha"</string>
@@ -161,35 +159,11 @@
     <string name="preference_of_system_locale_summary" msgid="5612241394431188535">"Chaguomsingi la mfumo"</string>
     <string name="desc_no_available_supported_locale" msgid="7883271726226947273">"Chaguo la lugha kwa programu hii halipatikani kwenye Mipangilio."</string>
     <string name="desc_app_locale_disclaimer" msgid="5295933110644789052">"Huenda lugha ikatofautiana na zinazopatikana katika programu. Huenda baadhi ya programu zisiwe na uwezo wa kutumia mipangilio hii."</string>
-    <string name="desc_app_locale_selection_supported" msgid="6744909281573556379">"Weka lugha ya kila programu."</string>
-    <string name="desc_introduction_of_language_picker" msgid="1038423471887102449">"Mfumo wako, programu na tovuti hutumia lugha ya kwanza inayotumika katika chaguo za lugha unazozipendelea."</string>
-    <string name="desc_notice_of_language_picker" msgid="3449290526457925447">"Ili uchague lugha kwa kila programu, nenda kwenye mipangilio ya lugha ya programu."</string>
-    <string name="desc_locale_helper_footer_general" msgid="6112153921151780303">"Pata maelezo zaidi kuhusu lugha za programu"</string>
-    <string name="title_change_system_locale" msgid="8589844586256566951">"Ungependa kubadilisha lugha ya mfumo kuwa %s ?"</string>
-    <string name="desc_notice_device_locale_settings_change" msgid="8311132485850714160">"Mipangilio ya kifaa chako na mapendeleo ya kimaeneo yatabadilika."</string>
-    <string name="button_label_confirmation_of_system_locale_change" msgid="5593798559604894733">"Badilisha"</string>
-    <string name="title_unavailable_locale" msgid="2628898110416542386">"%s haipatikani"</string>
-    <string name="desc_unavailable_locale" msgid="2201756477400935896">"Lugha hii haiwezi kutumika kama lugha ya mfumo, lakini umeruhusu programu na tovuti zitambue kuwa unapendelea lugha hii."</string>
-    <string name="regional_preferences_title" msgid="4304567374498629528">"Mapendeleo ya kimaeneo"</string>
-    <string name="regional_preferences_summary" msgid="1189876997389469650">"Weka mapendeleo ya vipimo na nambari"</string>
-    <string name="regional_preferences_main_page_sub_title" msgid="4237109940015254725">"Ruhusu programu zifahamu mapendeleo yako ya kimaeneo ili ziweze kuwekea hali yako ya utumiaji mapendeleo."</string>
-    <string name="regional_preferences_option_page_sub_title" msgid="8303661099255197036">"Programu zitatumia mapendeleo yako ya kimaeneo inapowezekana."</string>
-    <string name="temperature_preferences_title" msgid="5009881556503629058">"Halijoto"</string>
-    <string name="first_day_of_week_preferences_title" msgid="1971850087589599553">"Siku ya kwanza ya wiki"</string>
-    <string name="numbers_preferences_title" msgid="8197418984391195446">"Mapendeleo ya nambari"</string>
-    <string name="default_string_of_regional_preference" msgid="7662581547334113719">"Tumia chaguomsingi ya programu"</string>
-    <string name="celsius_temperature_unit" msgid="8896459071273084507">"Selsiasi (°C)"</string>
-    <string name="fahrenheit_temperature_unit" msgid="1118677820614569801">"Farenhaiti (°F)"</string>
-    <string name="sunday_first_day_of_week" msgid="7644548348295686051">"Jumapili"</string>
-    <string name="monday_first_day_of_week" msgid="7244698610476506771">"Jumatatu"</string>
-    <string name="tuesday_first_day_of_week" msgid="5085370946936582391">"Jumanne"</string>
-    <string name="wednesday_first_day_of_week" msgid="6544537589727042869">"Jumatano"</string>
-    <string name="thursday_first_day_of_week" msgid="3035885630945594833">"Alhamisi"</string>
-    <string name="friday_first_day_of_week" msgid="7074795061812083541">"Ijumaa"</string>
-    <string name="saturday_first_day_of_week" msgid="3702282590450322727">"Jumamosi"</string>
-    <string name="title_regional_pref_footer" msgid="7450438024324794380">"Ikiwa programu hairuhusu mapendeleo ya kimaeneo, programu itatumia mipangilio yake chaguomsingi ya lugha."</string>
-    <string name="desc_regional_pref_footer_learn_more" msgid="4401708653329230081">"Pata maelezo zaidi kuhusu mapendeleo ya lugha."</string>
-    <string name="dlg_remove_locales_title" msgid="3170501604483612114">"{count,plural, =1{Ungependa kuondoa lugha iliyochaguliwa?}other{Ungependa kuondoa lugha zilizochaguliwa?}}"</string>
+    <string name="desc_app_locale_selection_supported" msgid="6149467826636295127">"Programu zinazoruhusu kuteua lugha ndizo zinazoonyeshwa hapa."</string>
+    <plurals name="dlg_remove_locales_title" formatted="false" msgid="2845515796732609837">
+      <item quantity="other">Ungependa kuondoa lugha zilizochaguliwa?</item>
+      <item quantity="one">Ungependa kuondoa lugha iliyochaguliwa?</item>
+    </plurals>
     <string name="dlg_remove_locales_message" msgid="8110560091134252067">"Maandishi yataonyeshwa katika lugha nyingine."</string>
     <string name="dlg_remove_locales_error_title" msgid="5875503658221562572">"Haiwezi kuondoa lugha zote"</string>
     <string name="dlg_remove_locales_error_message" msgid="6504279959974675302">"Hifadhi angalau lugha moja unayopendelea"</string>
