@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Copyright (C) 2020 YAAP
+<!-- Copyright (C) 2023 YAAP
 
      Licensed under the Apache License, Version 2.0 (the "License");
      you may not use this file except in compliance with the License.
@@ -98,7 +98,7 @@
     <string name="gesture_playback_control_delay">задержка</string>
     <string name="unit_ms">мс</string>
     <string name="unit_hz">Гц</string>
-    <string name="unit_times">Times</string>
+    <string name="unit_times">Количество раз</string>
 
     <!-- Quick Mute -->
     <string name="quick_mute_title">Быстрое отключение звука</string>
@@ -215,7 +215,12 @@
     <string name="nfc_sounds_title">Звук использования NFC</string>
 
     <!-- Doze enablement -->
-    <string name="doze_enabled_title">Ambient display</string>
-    <string name="doze_enabled_summary">Whether to enable the doze package functionality</string>
+    <string name="doze_enabled_title">Эмбиент дисплей</string>
+    <string name="doze_enabled_summary">Включает функции doze экрана(?)</string>
+
+    <!-- Preference and settings suggestion title text for screen off UDFPS [CHAR LIMIT=60]-->
+    <string name="ambient_display_screen_off_udfps_title">Отпечаток на выключенном экране</string>
+    <!-- Summary text for screen off UDFPS [CHAR LIMIT=NONE]-->
+    <string name="ambient_display_screen_off_udfps_summary">Позволяет разблокировку отпечатком на выключенном экране.\nМожет вызвать случайные включения экрана.</string>
 
 </resources>
