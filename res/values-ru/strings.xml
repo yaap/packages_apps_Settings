@@ -6070,4 +6070,35 @@
     <string name="find_broadcast_password_dialog_password_error" msgid="243855327674765">"Пароль указан неверно."</string>
     <string name="bt_le_audio_scan_qr_code_scanner" msgid="7614569515419813053">"Чтобы прослушать аудио, поместите QR-код в центр."</string>
     <string name="bt_le_audio_qr_code_is_not_valid_format" msgid="7821837654128137901">"Недопустимый формат QR-кода."</string>
+
+    <!-- 2023 Bacer-->
+
+    <string name="connectivity_check_title">"Подключение к Интернету"</string>
+    <string name="connectivity_check_summary">"Выбор HTTP домена для проверки соединения с интернетом."</string>
+
+    <string name="sandboxed_google_play">Песочница Google Play</string>
+    <string name="sandboxed_google_play_work_profile">Песочница Google Play (рабочий профиль)</string>
+
+    <string name="auto_grant_OTHER_SENSORS_permission_title">По умолчанию разрешить приложениям доступ к Датчикам</string>
+    <string name="auto_grant_OTHER_SENSORS_permission_summary_on">Датчики - нестандартное разрешение. При отключении приложения могут работать со сбоями.</string>
+    <string name="auto_grant_OTHER_SENSORS_permission_summary_off">Запрос на разрешение доступа к Датчикам будет отображен если приложение запросит его. Имейте ввиду что приложение возможно потребует перезапуска после разрешения. </string>
+
+    <string name="app_info_install_time">Установлено: %1$s</string>
+    <string name="app_info_update_time">Обновлено: %1$s</string>
+
+    <string name="allow_access_to_obb_directory_title">Разрешить доступ к папке Android/obb</string>
+    <string name="allow_access_to_obb_directory_summary">Нужно для некоторых больших приложений (обычно игр) которые используют OBB файлы</string>
+
+    <string name="lockdown_settings_title">Отображать кнопку Блокировки</string>
+    <string name="lockdown_settings_summary">Отображать кнопку Блокировки в меню питания/выключения смартфона. Скрывает уведомления и отключает все способы авторизации кроме пароля или пин-кода</string>
+
+    <string name="touch_sensitivity_title">Увеличить чувствительность к касаниям</string>
+    <string name="touch_sensitivity_summary">Улучшает отзывчивость сенсора при использовании защитного стекла или плёнки</string>
+
+    <string name="color_mode_balance_red">Яроксть Красного</string>
+    <string name="color_mode_balance_green">Яркость Зеленого</string>
+    <string name="color_mode_balance_blue">Яроксть Синего</string>
+    
+    <!-- Screenshot shutter -->
+    <string name="screenshot_shutter_sound_title">Звук скриншота</string>
 </resources>
