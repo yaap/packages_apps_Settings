@@ -89,7 +89,7 @@
     <string name="torch_power_button_gesture_none">Выключено</string>
     <string name="torch_power_button_gesture_dt">Двойное нажатие кнопки питания</string>
     <string name="torch_power_button_gesture_lp">Долгое нажатие кнопки питания</string>
-    <string name="quickly_open_camera_disabled">Выключено для использования фонарика на заблокированном экране/string>
+    <string name="quickly_open_camera_disabled">Выключено для использования фонарика на заблокированном экране</string>
 
     <!-- Playback control -->
     <string name="gesture_playback_control_screen_title">Управление воспроизведением</string>
