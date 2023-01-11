@@ -4654,47 +4654,35 @@
     <string name="find_broadcast_join_broadcast_error" msgid="5486980388774711346">"Не удается присоединиться к трансляции."</string>
     <string name="bt_le_audio_scan_qr_code_scanner" msgid="7614569515419813053">"Чтобы прослушать аудио, поместите QR-код в центр."</string>
     <string name="bt_le_audio_qr_code_is_not_valid_format" msgid="7821837654128137901">"Недопустимый формат QR-кода."</string>
-    <string name="convert_to_esim_title" msgid="71037864129009206">"Преобразовать в eSIM"</string>
-    <string name="transfer_esim_to_another_device_title" msgid="5286117866086383192">"Перенести eSIM на другое устройство"</string>
-    <string name="background_install_preference_summary" msgid="3065219346519340364">"{count,plural, =1{# приложение}one{# приложение}few{# приложения}many{# приложений}other{# приложения}}"</string>
-    <string name="background_install_title" msgid="607913515188276168">"Приложения, уста­нов­лен­ные в фоновом режиме"</string>
-    <string name="background_install_summary" msgid="3890296129543309666">"Производитель может устанавливать приложения на устройстве в фоновом режиме, а также предоставлять такую возможность вашему оператору связи или другим партнерам.\n\nПриложения из этого списка не обязательны для нормальной работы устройства. Ненужные приложения можно удалить."</string>
-    <string name="background_install_feature_list_no_entry" msgid="2071343281272266154">"У вас нет приложений, установленных в фоновом режиме."</string>
-    <string name="background_install_uninstall_button_description" msgid="1189649052911501249">"Удалить приложение"</string>
-    <string name="background_install_before" msgid="8608614957688912715">"{count,plural, =1{Приложения, установленные в течение # последнего месяца}one{Приложения, установленные в течение # последнего месяца}few{Приложения, установленные в течение # последних месяцев}many{Приложения, установленные в течение # последних месяцев}other{Приложения, установленные в течение # последнего месяца}}"</string>
-    <string name="background_install_after" msgid="7983488897570908149">"{count,plural, =1{Приложения, установленные более # месяца назад}one{Приложения, установленные более # месяца назад}few{Приложения, установленные более # месяцев назад}many{Приложения, установленные более # месяцев назад}other{Приложения, установленные более # месяца назад}}"</string>
-    <string name="accessibility_fingerprint_label" msgid="5017431423168191733">"Сканер отпечатков пальцев"</string>
-    <string name="flash_notifications_title" msgid="4490438861180492311">"Уведомления со вспышкой"</string>
-    <string name="flash_notifications_about_title" msgid="9004351252928121214">"Об уведомлениях со вспышкой"</string>
-    <string name="flash_notifications_summary_off" msgid="6056282996770691461">"Выключено"</string>
-    <string name="flash_notifications_summary_on_camera" msgid="3286405833586333730">"Вкл. (вспышка камеры)"</string>
-    <string name="flash_notifications_summary_on_screen" msgid="9040640799633336219">"Вкл. (подсветка экрана)"</string>
-    <string name="flash_notifications_summary_on_camera_and_screen" msgid="2326268141063768701">"Вкл. (вспышка камеры и подсветка экрана)"</string>
-    <string name="flash_notifications_intro" msgid="8409873413480928249">"Вспышка камеры или экран замигают, когда придет уведомление или зазвучит будильник."</string>
-    <string name="flash_notifications_intro_without_camera_flash" msgid="6297337174487793891">"Экран замигает, когда придет уведомление или зазвучит будильник."</string>
-    <string name="flash_notifications_note" msgid="2426125248448055075">"Используйте уведомление со вспышкой осторожно, если вы чувствительны к свету."</string>
-    <string name="flash_notifications_keywords" msgid="2458759275318514836">"вспышка, световой сигнал, мигать, слабослышащий, потеря слуха"</string>
-    <string name="flash_notifications_preview" msgid="5320176885050440874">"Посмотреть"</string>
-    <string name="camera_flash_notification_title" msgid="2475084876382922732">"Вспышка камеры"</string>
-    <string name="screen_flash_notification_title" msgid="3773100725793316708">"Подсветка экрана"</string>
-    <string name="screen_flash_notification_color_title" msgid="7213407653340970790">"Цвет подсветки экрана"</string>
-    <string name="screen_flash_color_blue" msgid="3585766657607931371">"Синий"</string>
-    <string name="screen_flash_color_azure" msgid="8691198532944992243">"Лазурный"</string>
-    <string name="screen_flash_color_cyan" msgid="6878780006173747267">"Голубой"</string>
-    <string name="screen_flash_color_spring_green" msgid="4466548514738457815">"Весенне-зеленый"</string>
-    <string name="screen_flash_color_green" msgid="8418019648507964564">"Зеленый"</string>
-    <string name="screen_flash_color_chartreuse_green" msgid="7456381649919010366">"Светло-зеленый"</string>
-    <string name="screen_flash_color_yellow" msgid="7413465411615454556">"Желтый"</string>
-    <string name="screen_flash_color_orange" msgid="979177126315557656">"Оранжевый"</string>
-    <string name="screen_flash_color_red" msgid="8954162219886445491">"Красный"</string>
-    <string name="screen_flash_color_rose" msgid="1216848195972231251">"Розовый"</string>
-    <string name="screen_flash_color_magenta" msgid="7726221666557102155">"Пурпурный"</string>
-    <string name="screen_flash_color_violet" msgid="1279950780509029495">"Фиолетовый"</string>
-    <string name="color_selector_dialog_done" msgid="121253968943363376">"Готово"</string>
-    <string name="color_selector_dialog_cancel" msgid="8667350644753900701">"Отмена"</string>
-    <string name="contrast_title" msgid="6885768151336508075">"Контрастность"</string>
-    <string name="contrast_standard" msgid="1097297089917185235">"Стандартная"</string>
-    <string name="contrast_medium" msgid="384414510709285811">"Средняя"</string>
-    <string name="contrast_high" msgid="3988567609694797696">"Высокая"</string>
-    <string name="dock_multi_instances_not_supported_text" msgid="3513493664467667084">"Это приложение можно открыть только в одном окне."</string>
+
+    <!-- 2023 Bacer-->
+
+    <string name="connectivity_check_title">"Подключение к Интернету"</string>
+    <string name="connectivity_check_summary">"Выбор HTTP домена для проверки соединения с интернетом."</string>
+
+    <string name="sandboxed_google_play">Песочница Google Play</string>
+    <string name="sandboxed_google_play_work_profile">Песочница Google Play (рабочий профиль)</string>
+
+    <string name="auto_grant_OTHER_SENSORS_permission_title">По умолчанию разрешить приложениям доступ к Датчикам</string>
+    <string name="auto_grant_OTHER_SENSORS_permission_summary_on">Датчики - нестандартное разрешение. При отключении приложения могут работать со сбоями.</string>
+    <string name="auto_grant_OTHER_SENSORS_permission_summary_off">Запрос на разрешение доступа к Датчикам будет отображен если приложение запросит его. Имейте ввиду что приложение возможно потребует перезапуска после разрешения. </string>
+
+    <string name="app_info_install_time">Установлено: %1$s</string>
+    <string name="app_info_update_time">Обновлено: %1$s</string>
+
+    <string name="allow_access_to_obb_directory_title">Разрешить доступ к папке Android/obb</string>
+    <string name="allow_access_to_obb_directory_summary">Нужно для некоторых больших приложений (обычно игр) которые используют OBB файлы</string>
+
+    <string name="lockdown_settings_title">Отображать кнопку Блокировки</string>
+    <string name="lockdown_settings_summary">Отображать кнопку Блокировки в меню питания/выключения смартфона. Скрывает уведомления и отключает все способы авторизации кроме пароля или пин-кода</string>
+
+    <string name="touch_sensitivity_title">Увеличить чувствительность к касаниям</string>
+    <string name="touch_sensitivity_summary">Улучшает отзывчивость сенсора при использовании защитного стекла или плёнки</string>
+
+    <string name="color_mode_balance_red">Яроксть Красного</string>
+    <string name="color_mode_balance_green">Яркость Зеленого</string>
+    <string name="color_mode_balance_blue">Яроксть Синего</string>
+    
+    <!-- Screenshot shutter -->
+    <string name="screenshot_shutter_sound_title">Звук скриншота</string>
 </resources>

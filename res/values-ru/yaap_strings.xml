@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2023 YAAP
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Top level YASP -->
+    <string name="yaap_settings_title">YASP</string>
+    <string name="yaap_settings_summary">Yet Another Settings Page</string>
+
+    <!-- General -->
+    <string name="copied_to_clipboard">Скопировано в буфер обмена</string>
+    <string name="longpress_to_clipboard">Зажмите чтобы скопировать</string>
+
+    <!-- Doze on charge -->
+    <string name="doze_on_charge_title">Всегда включен на зарядке</string>
+    <string name="doze_on_charge_summary">Не выключать экран во время зарядки</string>
+
+    <!-- Volume dialog position -->
+    <string name="volume_panel_on_left_title">Панель громкости слева</string>
+    <string name="volume_panel_on_left_summary">Отображать панель громкости с левой стороны экрана</string>
+    <string name="volume_panel_on_left_land_title">Панель громкости слева в горизонт.</string>
+    <string name="volume_panel_on_left_land_summary">Панель громкости с левой стороны экрана в горизонтальной ориентации</string>
+
+    <!-- Volume dialog timeout -->
+    <string name="unit_seconds">Секунд(а/ы)</string>
+    <string name="volume_dialog_timeout_title">Таймаут панели громкости</string>
+    <string name="volume_dialog_timeout_summary">Время через которое панель громкости пропадет</string>
+
+    <!-- Volume link notification -->
+    <string name="volume_link_notification_title">Обьединить громкость звонка и уведомлений</string>
+
+    <!-- Vibration patterns -->
+    <string name="vibration_pattern_title">Шаблон вибрации звонка</string>
+    <string name="notification_vibration_pattern_title">Шаблон вибрации звонка уведомления</string>
+    <string name="pattern_dzzz_dzzz">дззз-дззз</string>
+    <string name="pattern_dzzz_da">дззз-тук</string>
+    <string name="pattern_mm_mm_mm">мм-мм-мм</string>
+    <string name="pattern_da_da_dzzz">тук-тук-дззз</string>
+    <string name="pattern_da_dzzz_da">тук-дззз-тук</string>
+    <string name="pattern_custom">Настроить</string>
+    <string name="custom_vibration_pattern_title">Пользовательский шаблон</string>
+    <string name="custom_vibration_pattern_summary">Вручную настроить шаблон вибрации</string>
+
+    <!-- Cycle through ringer modes gesture | Вроде как отсутсвует в прошике -->
+    <string name="prevent_ringing_option_cycle">Cycle through modes</string>
+    <string name="prevent_ringing_option_cycle_summary">On (cycle through modes)</string>
+    <string name="prevent_ringing_option_normal">Normal</string>
+
+    <!-- OTA App -->
+    <string name="update_settings_title">Обновление YAAP</string>
+    <string name="update_settings_summary">Проверить доступные обновления прошивки</string>
+
+    <!-- Radio Info -->
+    <string name="radio_info_title">Radio info</string>
+
+    <!-- String for removal of sensitive info on about, depending on tap -->
+    <string name="device_info_protected_single_press">Нажмите для отображения</string>
+
+    <!-- YAAP Version -->
+    <string name="yaap_version">Версия YAAP</string>
+
+    <!-- QSTile requires unlocking before being accessible -->
+    <string name="qstile_requires_unlocking_title">Важные плитки в шторке требуют разблокировки</string>
+    <string name="qstile_requires_unlocking_summary">Эти плитки будут требовать разблокировки прежде чем можно будет их использовать с экрана блокировки:\nРежим полета, Интернет, Bluetooth, Экономия трафика, Режим энергосбережения, Автоповорот, NFC, Точка доступа, USB модем</string>
+
+    <!-- Default getTimeSpentInApp string for Wellbeing to display. [CHAR LIMIT=NONE] -->
+    <string name="duration_less_than_one_minute">Меньше 1 минуты</string>
+    <!-- Summary for Wellbeing screen time usage. [CHAR LIMIT=NONE] -->
+    <string name="screen_time_summary_usage_today">%1$s сегодня</string>
+
+    <!-- Floating rotation button -->
+    <string name="enable_floating_rotation_button_title">Включить плавающую кнопку автоповорота</string>
+
+    <!-- Power button -->
+    <string name="power_menu_setting_name">Кнопка питания</string>
+    <string name="power_menu_setting_summary">Жесты с кнопкой питания</string>
+    <string name="torch_power_button_gesture_title">Вкл/выкл фонарик на выключенном экране</string>
+    <string name="torch_power_button_gesture_none">Выключено</string>
+    <string name="torch_power_button_gesture_dt">Двойное нажатие кнопки питания</string>
+    <string name="torch_power_button_gesture_lp">Долгое нажатие кнопки питания</string>
+    <string name="quickly_open_camera_disabled">Выключено для использования фонарика на заблокированном экране</string>
+
+    <!-- Playback control -->
+    <string name="gesture_playback_control_screen_title">Управление воспроизведением</string>
+    <string name="gesture_playback_control_title">При выключенном экране долгое нажатие на кнопки громкости будет переключать треки</string>
+    <string name="volume_rocker_music_controls_delay_title">Задержка распознования нажатия</string>
+    <string name="gesture_playback_control_delay">задержка</string>
+    <string name="unit_ms">мс</string>
+    <string name="unit_hz">Гц</string>
+    <string name="unit_times">Количество раз</string>
+
+    <!-- Quick Mute -->
+    <string name="quick_mute_title">Быстрое отключение звука</string>
+    <string name="volume_button_quick_mute_category_title">Долгое нажатия на кнопку понижения громкости отключит воспроизводимый звук</string>
+    <string name="volume_button_quick_mute_delay_title">Задержка распознования нажатия</string>
+
+    <!-- Gaming macro QS tile -->
+    <string name="gaming_mode_tile_title">Игровой Режим</string>
+    <string name="gaming_mode_tile_summary">Настройки плитки ИгрРеж в шторке</string>
+    <string name="gaming_mode_heads_up_title">Всплывающие уведомления</string>
+    <string name="gaming_mode_heads_up_summary">Отключить всплывающие уведомления</string>
+    <string name="gaming_mode_zen_title">Не беспокоить</string>
+    <string name="gaming_mode_zen_summary">Включить режим "не беспокоить"</string>
+    <string name="gaming_mode_ringer_title">Режим звонка</string>
+    <string name="gaming_mode_ringer_disabled">Не изменять</string>
+    <string name="gaming_mode_ringer_vibrate">Вибрация</string>
+    <string name="gaming_mode_ringer_silent">Без звука</string>
+    <string name="gaming_mode_night_light_title">Ночная подсветка</string>
+    <string name="gaming_mode_night_light_summary">Отключить ночную подсветку и её автоматическое включение</string>
+    <string name="gaming_mode_battery_schedule_title">Режим энергосбережения</string>
+    <string name="gaming_mode_battery_schedule_summary">Отключить режим энергосбережения и его автоматическое включение</string>
+    <string name="gaming_mode_brightness_enabled_title">Автояркость</string>
+    <string name="gaming_mode_brightness_enabled_summary">Отключит автояркость</string>
+    <string name="gaming_mode_brightness_title">Установить яркость на</string>
+    <string name="gaming_mode_brightness_summary">Оставьте 0 чтобы не изменять</string>
+    <string name="gaming_mode_media_enabled_title">Громкость медиа</string>
+    <string name="gaming_mode_media_enabled_summary">Изменение громкости медиа</string>
+    <string name="gaming_mode_media_title">Установить громкость на</string>
+    <string name="gaming_mode_desc">При включении Игровой Режим изменит настройки на те которые вы указали выше. При отключении он их вернет обратно.</string>
+    <string name="gaming_mode_screen_off_title">Отключить после отключения экрана</string>
+    <string name="gaming_mode_screen_off_summary">Отключит игровой режим когда выключается экран</string>
+
+    <!-- 3-Button navigation settings -->
+    <string name="button_settings_activity_title">Настройки навигации с помощью 3-х кнопок</string>
+    <string name="navigation_bar_inverse_title">Инвертировать макет</string>
+    <string name="navigation_bar_inverse_summary">Меняет местами "недавнее" и "назад"</string>
+    <string name="navbar_layout_title">Макет</string>
+    <string name="navbar_layout_normal">Обычный</string>
+    <string name="navbar_layout_compact">Компактный</string>
+    <string name="navbar_layout_leftleaning">Правее</string>
+    <string name="navbar_layout_rightleaning">Левее</string>
+
+    <!-- Back gesture height -->
+    <string name="back_height_low_label">Полная</string>
+    <string name="back_height_high_label">Только снизу</string>
+    <string name="back_options_dialog_title">Настройки</string>
+    <string name="back_height_title">Высота жеста "назад"</string>
+    <string name="back_height_message">Высота срабатывания жеста "назад"</string>
+
+    <!-- Reset auto brightness adjustment -->
+    <string name="reset_auto_brightness_adjustment_title">Сбросить подстройку</string>
+    <string name="reset_auto_brightness_adjustment_summary">Сбрасывает вашу донастроку автояркости на стандартную</string>
+    <string name="reset_auto_brightness_adjustment_done">Предпочтения автояркости были сброшены</string>
+
+    <!-- Hotspot -->
+    <string name="wifi_band_24ghz_and_5ghz">2.4 ГГц &amp; 5 ГГц</string>
+    <string name="wifi_band_24ghz_and_6ghz">2.4 ГГц &amp; 6 ГГц</string>
+    <string name="wifi_band_60ghz">60 ГГц</string>
+    <plurals name="wifi_hotspot_auto_off_timeout">
+        <item quantity="other">Выключить если нет подключенных устройств в течении <xliff:g id="DURATION">%1$d</xliff:g> мин</item>
+        <item quantity="one">Выключить если нет подключенных устройств в течении <xliff:g id="DURATION">%1$d</xliff:g> мин</item>
+    </plurals>
+    <string name="wifi_hotspot_auto_off_timeout_never">Никогда не выключать точку доступа</string>
+    <string name="wifi_hotspot_client_manager_title">Подключенные устройства</string>
+    <string name="wifi_hotspot_client_manager_summary">Список и настройка подключенных устройств и настройка ограничения их кол-ва</string>
+    <string name="wifi_hotspot_client_manager_list_only_summary">Список устройств подключенных к точке доступа</string>
+    <string name="wifi_hotspot_client_limit_title">Ограничение подключенных устройств</string>
+    <plurals name="wifi_hotspot_client_limit_summary">
+        <item quantity="other">До <xliff:g id="device_num">%1$d</xliff:g> устройств можно подключить к точке доступа</item>
+        <item quantity="one">До <xliff:g id="device_num">%1$d</xliff:g> устройства можно подключить к точке доступа</item>
+    </plurals>
+    <string name="wifi_hotspot_blocked_clients_list_title">Заблокированные устройства</string>
+    <string name="wifi_hotspot_connected_clients_list_title">Подключенные устройства</string>
+    <string name="wifi_hotspot_block_client_dialog_title">Заблокировать устройство</string>
+    <string name="wifi_hotspot_block_client_dialog_text">Это действие отключит \"<xliff:g id="device_name">%1$s</xliff:g>\" и добавит в блок-лист</string>
+    <string name="wifi_hotspot_unblock_client_dialog_title">Разблокировать устройство</string>
+    <string name="wifi_hotspot_unblock_client_dialog_text">Этому устройству \"<xliff:g id="device_name">%1$s</xliff:g>\" будет разрешено подкючение к точке доступа</string>
+    <string name="wifi_hotspot_client_manager_footer_text">Нет подключенных устройств. Подключенные и заблокированные устройства будут отображаться здесь когда появятся.</string>
+
+    <!-- Notch: Full screen apps -->
+    <string name="display_cutout_force_fullscreen_title">Полноэкранные приложения</string>
+    <string name="display_cutout_force_fullscreen_summary">Заставить приложения игнорировать вырез экрана</string>
+    <string name="display_cutout_force_fullscreen_no_apps">Нет приложений</string>
+    <string name="display_cutout_force_fullscreen_restart_app">Перезапустите приложение для применения изменений.</string>
+
+    <!-- Black background -->
+    <string name="black_bg_title">Чёрный фон</string>
+    <string name="black_bg_summary">Использовать полностью черный фон когда тёмная тема включена</string>
+
+    <!-- Disable VRR -->
+    <string name="disable_vrr_title">Отключить VRR</string>
+    <string name="disable_vrr_summary">Не использовать динамическое изменение частоты обновления\nМожет избавить от мерцания</string>
+
+    <!-- Per-channel vibration pattern -->
+    <string name="notification_custom_vibrate_title">Кастомный паттерн вибрации</string>
+    <string name="notification_custom_vibrate_summary">Заменяет только стандартный паттерн\nПаттерн выбранный для приложения приоритетнее</string>
+    <string name="notification_custom_vibrate_slider1">Вибрировать</string>
+    <string name="notification_custom_vibrate_slider2">Пауза на</string>
+
+    <!-- Per-channel torch blinking -->
+    <string name="default_notification_torch_title">Мигающий Фонарик</string>
+    <string name="default_notification_torch_summary">Мигать фонариком для этого уведомления</string>
+    <string name="default_notification_torch_slider1">Количество мигания</string>
+    <string name="default_notification_torch_slider2">Частота мигания</string>
+
+    <!-- Pocket mode -->
+    <string name="proximity_wake_title">Карманный режим</string>
+    <string name="proximity_wake_summary">Проверить датчик приближения при разблокировке экрана</string>
+
+    <!-- In-call notifications -->
+    <string name="in_call_notifications_title">Уведомления во время звонка</string>
+
+    <!-- NFC sounds -->
+    <string name="nfc_sounds_title">Звук использования NFC</string>
+
+    <!-- Doze enablement -->
+    <string name="doze_enabled_title">Эмбиент дисплей</string>
+    <string name="doze_enabled_summary">Включает функции doze экрана(?)</string>
+
+    <!-- Preference and settings suggestion title text for screen off UDFPS [CHAR LIMIT=60]-->
+    <string name="ambient_display_screen_off_udfps_title">Отпечаток на выключенном экране</string>
+    <!-- Summary text for screen off UDFPS [CHAR LIMIT=NONE]-->
+    <string name="ambient_display_screen_off_udfps_summary">Позволяет разблокировку отпечатком на выключенном экране.\nМожет вызвать случайные включения экрана.</string>
+
+</resources>
