@@ -530,6 +530,8 @@ public class Settings extends SettingsActivity {
      */
     public static class OneHandedSettingsActivity extends SettingsActivity { /* empty */ }
 
+    public static class WirelessDebuggingActivity extends SettingsActivity { /* empty */ }
+
     public static class YAAPSettingsActivity extends SettingsActivity { /* empty */ }
 
     public static class GamingModeActivity extends SettingsActivity { /* empty */ }
