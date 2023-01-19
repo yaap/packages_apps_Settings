@@ -23,7 +23,4 @@
     <!-- Screenshot shutter -->
     <string name="screenshot_shutter_sound_title">Screenshot sound</string>
 
-    <!-- Does the device support color inversion -->
-    <bool name="config_displayInversionAvailable">true</bool>
-
 </resources>
