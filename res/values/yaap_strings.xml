@@ -194,4 +194,8 @@
     <!-- Summary text for screen off UDFPS [CHAR LIMIT=NONE]-->
     <string name="ambient_display_screen_off_udfps_summary">Allows unlocking with the screen off.\nEnabling may cause accidental wake-ups.</string>
 
+    <!-- Media player settings -->
+    <string name="media_controls_always_show_time_title">Always show time</string>
+    <string name="media_controls_always_show_time_summary">Always show passed and total time on media player</string>
+
 </resources>
