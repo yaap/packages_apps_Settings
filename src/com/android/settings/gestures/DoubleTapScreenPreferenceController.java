@@ -20,20 +20,18 @@ import static android.provider.Settings.Secure.DOZE_DOUBLE_TAP_GESTURE;
 
 import android.annotation.UserIdInt;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.hardware.display.AmbientDisplayConfiguration;
 import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.TextUtils;
 
-import androidx.annotation.VisibleForTesting;
+import com.android.settings.core.TogglePreferenceController;
+import com.android.settings.R;
 
-public class DoubleTapScreenPreferenceController extends GesturePreferenceController {
+public class DoubleTapScreenPreferenceController extends TogglePreferenceController {
 
     private final int ON = 1;
     private final int OFF = 0;
-
-    private static final String PREF_KEY_VIDEO = "gesture_double_tap_screen_video";
 
     private static final String SECURE_KEY = DOZE_DOUBLE_TAP_GESTURE;
 
@@ -49,17 +47,6 @@ public class DoubleTapScreenPreferenceController extends GesturePreferenceContro
     public DoubleTapScreenPreferenceController setConfig(AmbientDisplayConfiguration config) {
         mAmbientConfig = config;
         return this;
-    }
-
-    public static boolean isSuggestionComplete(Context context, SharedPreferences prefs) {
-        return isSuggestionComplete(new AmbientDisplayConfiguration(context), prefs);
-    }
-
-    @VisibleForTesting
-    static boolean isSuggestionComplete(AmbientDisplayConfiguration config,
-            SharedPreferences prefs) {
-        return !config.doubleTapSensorAvailable()
-                || prefs.getBoolean(DoubleTapScreenSettings.PREF_KEY_SUGGESTION_COMPLETE, false);
     }
 
     @Override
@@ -89,11 +76,6 @@ public class DoubleTapScreenPreferenceController extends GesturePreferenceContro
     }
 
     @Override
-    protected String getVideoPrefKey() {
-        return PREF_KEY_VIDEO;
-    }
-
-    @Override
     public boolean isChecked() {
         return getAmbientConfig().doubleTapGestureEnabled(mUserId);
     }
@@ -103,5 +85,10 @@ public class DoubleTapScreenPreferenceController extends GesturePreferenceContro
             mAmbientConfig = new AmbientDisplayConfiguration(mContext);
         }
         return mAmbientConfig;
+    }
+
+    @Override
+    public int getSliceHighlightMenuRes() {
+        return R.string.menu_key_yasp;
     }
 }

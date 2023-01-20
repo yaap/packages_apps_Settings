@@ -107,18 +107,6 @@ public class DoubleTwistPreferenceControllerTest {
     }
 
     @Test
-    public void isSuggestionCompleted_doubleTwist_trueWhenNotAvailable() {
-        SettingsShadowResources.overrideResource(
-                R.string.gesture_double_twist_sensor_type, "nonexistent type");
-        SettingsShadowResources.overrideResource(
-                R.string.gesture_double_twist_sensor_vendor, "nonexistent vendor");
-
-        assertThat(DoubleTwistPreferenceController.isSuggestionComplete(
-                RuntimeEnvironment.application, null /* prefs */))
-                .isTrue();
-    }
-
-    @Test
     @Config(shadows = ShadowDoubleTwistPreferenceController.class)
     public void onPreferenceChange_hasWorkProfile_shouldUpdateSettingForWorkProfileUser() {
         final int managedId = 2;

@@ -30,13 +30,13 @@ import androidx.annotation.VisibleForTesting;
 
 import com.android.settings.R;
 import com.android.settings.Utils;
+import com.android.settings.core.TogglePreferenceController;
 
-public class DoubleTwistPreferenceController extends GesturePreferenceController {
+public class DoubleTwistPreferenceController extends TogglePreferenceController {
 
     private final int ON = 1;
     private final int OFF = 0;
 
-    private static final String PREF_KEY_VIDEO = "gesture_double_twist_video";
     private final String mDoubleTwistPrefKey;
     private final UserManager mUserManager;
 
@@ -44,11 +44,6 @@ public class DoubleTwistPreferenceController extends GesturePreferenceController
         super(context, key);
         mDoubleTwistPrefKey = key;
         mUserManager = (UserManager) context.getSystemService(Context.USER_SERVICE);
-    }
-
-    public static boolean isSuggestionComplete(Context context, SharedPreferences prefs) {
-        return !isGestureAvailable(context)
-                || prefs.getBoolean(DoubleTwistGestureSettings.PREF_KEY_SUGGESTION_COMPLETE, false);
     }
 
     public static boolean isGestureAvailable(Context context) {
@@ -80,11 +75,6 @@ public class DoubleTwistPreferenceController extends GesturePreferenceController
     @Override
     public boolean isPublicSlice() {
         return true;
-    }
-
-    @Override
-    protected String getVideoPrefKey() {
-        return PREF_KEY_VIDEO;
     }
 
     @Override
@@ -121,4 +111,10 @@ public class DoubleTwistPreferenceController extends GesturePreferenceController
     public static int getManagedProfileId(UserManager userManager) {
         return Utils.getManagedProfileId(userManager, UserHandle.myUserId());
     }
+
+    @Override
+    public int getSliceHighlightMenuRes() {
+        return R.string.menu_key_yasp;
+    }
+
 }
