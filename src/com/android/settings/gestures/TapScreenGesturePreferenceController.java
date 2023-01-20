@@ -25,9 +25,10 @@ import android.os.SystemProperties;
 import android.os.UserHandle;
 import android.provider.Settings;
 
-public class TapScreenGesturePreferenceController extends GesturePreferenceController {
+import com.android.settings.R;
+import com.android.settings.core.TogglePreferenceController;
 
-    private static final String PREF_KEY_VIDEO = "gesture_tap_screen_video";
+public class TapScreenGesturePreferenceController extends TogglePreferenceController {
 
     private AmbientDisplayConfiguration mAmbientConfig;
     @UserIdInt
@@ -59,11 +60,6 @@ public class TapScreenGesturePreferenceController extends GesturePreferenceContr
     }
 
     @Override
-    protected String getVideoPrefKey() {
-        return PREF_KEY_VIDEO;
-    }
-
-    @Override
     public CharSequence getSummary() {
         return super.getSummary();
     }
@@ -86,5 +82,10 @@ public class TapScreenGesturePreferenceController extends GesturePreferenceContr
             mAmbientConfig = new AmbientDisplayConfiguration(mContext);
         }
         return mAmbientConfig;
+    }
+
+    @Override
+    public int getSliceHighlightMenuRes() {
+        return R.string.menu_key_yasp;
     }
 }

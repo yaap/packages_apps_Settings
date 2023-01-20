@@ -23,14 +23,14 @@ import android.content.SharedPreferences;
 import android.provider.Settings;
 import android.text.TextUtils;
 
+import com.android.settings.R;
+import com.android.settings.core.TogglePreferenceController;
 import com.android.settings.Utils;
 
-public class SwipeToNotificationPreferenceController extends GesturePreferenceController {
+public class SwipeToNotificationPreferenceController extends TogglePreferenceController {
 
     private static final int ON = 1;
     private static final int OFF = 0;
-
-    private static final String PREF_KEY_VIDEO = "gesture_swipe_down_fingerprint_video";
 
     private static final String SECURE_KEY = SYSTEM_NAVIGATION_KEYS_ENABLED;
 
@@ -38,21 +38,10 @@ public class SwipeToNotificationPreferenceController extends GesturePreferenceCo
         super(context, key);
     }
 
-    public static boolean isSuggestionComplete(Context context, SharedPreferences prefs) {
-        return !isGestureAvailable(context)
-                || prefs.getBoolean(SwipeToNotificationSettings.PREF_KEY_SUGGESTION_COMPLETE,
-                false);
-    }
-
     private static boolean isGestureAvailable(Context context) {
         return Utils.hasFingerprintHardware(context)
                 && context.getResources()
                 .getBoolean(com.android.internal.R.bool.config_supportSystemNavigationKeys);
-    }
-
-    @Override
-    protected String getVideoPrefKey() {
-        return PREF_KEY_VIDEO;
     }
 
     @Override
@@ -93,4 +82,10 @@ public class SwipeToNotificationPreferenceController extends GesturePreferenceCo
     public static boolean isAvailable(Context context) {
         return isGestureAvailable(context);
     }
+
+    @Override
+    public int getSliceHighlightMenuRes() {
+        return R.string.menu_key_yasp;
+    }
+
 }
