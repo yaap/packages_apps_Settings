@@ -45,4 +45,10 @@
         android:summary="@string/media_controls_always_show_time_summary"
         android:defaultValue="false" />
 
+    <com.yasp.settings.preferences.SecureSettingSwitchPreference
+        android:key="media_controls_squiggle"
+        android:title="@string/media_controls_squiggle_title"
+        android:summary="@string/media_controls_squiggle_summary"
+        android:defaultValue="false" />
+
 </PreferenceScreen>
