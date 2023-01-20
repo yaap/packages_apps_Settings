@@ -194,5 +194,7 @@
     <!-- Media player settings -->
     <string name="media_controls_always_show_time_title">Always show time</string>
     <string name="media_controls_always_show_time_summary">Always show passed and total time on media player</string>
+    <string name="media_controls_squiggle_title">Squiggly progress</string>
+    <string name="media_controls_squiggle_summary">Show a squiggly, annoying, useless, sperm-looking and distracting progress bar on media player\nRequires a SystemUI restart to take effect</string>
 
 </resources>
