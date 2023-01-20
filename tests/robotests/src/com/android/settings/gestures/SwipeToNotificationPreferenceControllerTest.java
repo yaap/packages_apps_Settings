@@ -123,54 +123,6 @@ public class SwipeToNotificationPreferenceControllerTest {
         assertThat(mController.isChecked()).isFalse();
     }
 
-    @Test
-    public void isSuggestionCompleted_configDisabled_shouldReturnTrue() {
-        stubFingerprintSupported(true);
-        when(mFingerprintManager.isHardwareDetected()).thenReturn(true);
-        when(mContext.getResources().
-                getBoolean(com.android.internal.R.bool.config_supportSystemNavigationKeys))
-                .thenReturn(false);
-
-        assertThat(SwipeToNotificationPreferenceController.isSuggestionComplete(
-                mContext, null /* prefs */))
-                .isTrue();
-    }
-
-    @Test
-    public void isSuggestionCompleted_notVisited_shouldReturnFalse() {
-        stubFingerprintSupported(true);
-        when(mFingerprintManager.isHardwareDetected()).thenReturn(true);
-        when(mContext.getResources().
-                getBoolean(com.android.internal.R.bool.config_supportSystemNavigationKeys))
-                .thenReturn(true);
-        // No stored value in shared preferences if not visited yet.
-        final Context context = RuntimeEnvironment.application;
-        final SharedPreferences prefs = new SuggestionFeatureProviderImpl()
-                .getSharedPrefs(context);
-
-        assertThat(SwipeToNotificationPreferenceController.isSuggestionComplete(mContext, prefs))
-                .isFalse();
-    }
-
-    @Test
-    public void isSuggestionCompleted_visited_shouldReturnTrue() {
-        stubFingerprintSupported(true);
-        when(mFingerprintManager.isHardwareDetected()).thenReturn(true);
-        when(mContext.getResources().
-                getBoolean(com.android.internal.R.bool.config_supportSystemNavigationKeys))
-                .thenReturn(true);
-        // No stored value in shared preferences if not visited yet.
-        final Context context = RuntimeEnvironment.application;
-        final SharedPreferences prefs = new SuggestionFeatureProviderImpl()
-                .getSharedPrefs(context);
-        prefs.edit()
-                .putBoolean(SwipeToNotificationSettings.PREF_KEY_SUGGESTION_COMPLETE, true)
-                .commit();
-
-        assertThat(SwipeToNotificationPreferenceController.isSuggestionComplete(mContext, prefs))
-                .isTrue();
-    }
-
     private void stubFingerprintSupported(boolean enabled) {
         when(mPackageManager.hasSystemFeature(PackageManager.FEATURE_FINGERPRINT))
                 .thenReturn(enabled);

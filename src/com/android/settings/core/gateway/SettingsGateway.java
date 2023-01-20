@@ -108,15 +108,11 @@ import com.android.settings.fuelgauge.batterysaver.BatterySaverScheduleSettings;
 import com.android.settings.fuelgauge.batterysaver.BatterySaverSettings;
 import com.android.settings.fuelgauge.batteryusage.PowerUsageSummary;
 import com.android.settings.gaming.GamingModeFragment;
-import com.android.settings.gestures.AssistGestureSettings;
 import com.android.settings.gestures.ButtonNavigationSettingsFragment;
-import com.android.settings.gestures.DoubleTapScreenSettings;
-import com.android.settings.gestures.DoubleTwistGestureSettings;
 import com.android.settings.gestures.ButtonNavigationSettingsFragment;
 import com.android.settings.gestures.GestureNavigationSettingsFragment;
 import com.android.settings.gestures.OneHandedSettings;
 import com.android.settings.gestures.PowerMenuSettings;
-import com.android.settings.gestures.SwipeToNotificationSettings;
 import com.android.settings.gestures.SystemNavigationGestureSettings;
 import com.android.settings.inputmethod.AvailableVirtualKeyboardFragment;
 import com.android.settings.inputmethod.KeyboardLayoutPickerFragment;
@@ -266,14 +262,10 @@ public class SettingsGateway {
             WifiDisplaySettings.class.getName(),
             PowerUsageSummary.class.getName(),
             AccountSyncSettings.class.getName(),
-            AssistGestureSettings.class.getName(),
             FaceSettings.class.getName(),
             FingerprintSettings.FingerprintSettingsFragment.class.getName(),
             CombinedBiometricSettings.class.getName(),
             CombinedBiometricProfileSettings.class.getName(),
-            SwipeToNotificationSettings.class.getName(),
-            DoubleTapScreenSettings.class.getName(),
-            DoubleTwistGestureSettings.class.getName(),
             SystemNavigationGestureSettings.class.getName(),
             DataUsageSummary.class.getName(),
             DreamSettings.class.getName(),

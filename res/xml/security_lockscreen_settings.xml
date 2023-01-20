@@ -107,18 +107,18 @@
             android:title="@string/doze_on_charge_title"
             android:summary="@string/doze_on_charge_summary" />
 
-        <Preference
-            android:key="ambient_display_tap"
+        <SwitchPreference
+            android:key="gesture_tap"
             android:title="@string/ambient_display_tap_screen_title"
-            android:fragment="com.android.settings.gestures.TapScreenGestureSettings"
-            settings:searchable="false"
+            android:summary="@string/ambient_display_tap_screen_summary"
+            settings:keywords="@string/keywords_gesture"
             settings:controller="com.android.settings.gestures.TapScreenGesturePreferenceController" />
 
-        <Preference
-            android:key="ambient_display_double_tap"
+        <SwitchPreference
+            android:key="gesture_double_tap_screen"
             android:title="@string/ambient_display_title"
-            android:fragment="com.android.settings.gestures.DoubleTapScreenSettings"
-            settings:searchable="false"
+            android:summary="@string/ambient_display_summary"
+            settings:keywords="@string/keywords_gesture"
             settings:controller="com.android.settings.gestures.DoubleTapScreenPreferenceController" />
 
         <SwitchPreference

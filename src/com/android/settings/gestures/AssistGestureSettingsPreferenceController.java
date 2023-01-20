@@ -28,12 +28,12 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
 
 import com.android.settings.R;
+import com.android.settings.core.TogglePreferenceController;
 import com.android.settings.overlay.FeatureFactory;
 
-public class AssistGestureSettingsPreferenceController extends GesturePreferenceController {
+public class AssistGestureSettingsPreferenceController extends TogglePreferenceController {
 
     private static final String TAG = "AssistGesture";
-    private static final String PREF_KEY_VIDEO = "gesture_assist_video";
 
     private static final String SECURE_KEY_ASSIST = ASSIST_GESTURE_ENABLED;
     private static final String SECURE_KEY_SILENCE = ASSIST_GESTURE_SILENCE_ALERTS_ENABLED;
@@ -70,10 +70,7 @@ public class AssistGestureSettingsPreferenceController extends GesturePreference
         mScreen = screen;
         mPreference = screen.findPreference(getPreferenceKey());
         super.displayPreference(screen);
-    }
 
-    @Override
-    public void onStart() {
         if (mWasAvailable != isAvailable()) {
             // Only update the preference visibility if the availability has changed -- otherwise
             // the preference may be incorrectly added to screens with collapsed sections.
@@ -118,11 +115,6 @@ public class AssistGestureSettingsPreferenceController extends GesturePreference
     }
 
     @Override
-    protected String getVideoPrefKey() {
-        return PREF_KEY_VIDEO;
-    }
-
-    @Override
     public CharSequence getSummary() {
         boolean isEnabled = isAssistGestureEnabled() && mFeatureProvider.isSupported(mContext);
         if (!mAssistOnly) {
@@ -135,5 +127,10 @@ public class AssistGestureSettingsPreferenceController extends GesturePreference
     @Override
     public boolean isChecked() {
         return Settings.Secure.getInt(mContext.getContentResolver(), SECURE_KEY_ASSIST, OFF) == ON;
+    }
+
+    @Override
+    public int getSliceHighlightMenuRes() {
+        return R.string.menu_key_yasp;
     }
 }
