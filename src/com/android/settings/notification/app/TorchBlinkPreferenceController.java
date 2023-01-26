@@ -101,8 +101,7 @@ public class TorchBlinkPreferenceController extends NotificationPreferenceContro
             Boolean value = (Boolean) newValue;
             mBarsCategory.setVisible(value);
             if (value) getValues();
-            else setValues(false, 0, 0);
-            return true;
+            return setValues(value, 0, 0);
         } else if (preference == mSeekBar1) {
             pref = 1;
         } else if (preference == mSeekBar2) {
