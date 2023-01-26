@@ -17,94 +17,111 @@
     <!-- Top level YASP -->
     <string name="yaap_settings_summary">一起向未来</string>
 
+    <!-- General -->
+    <string name="copied_to_clipboard">已复制到剪切板</string>
+    <string name="longpress_to_clipboard">长按复制</string>
+
     <!-- Doze on charge -->
     <string name="doze_on_charge_title">充电时始终开启</string>
-    <string name="doze_on_charge_summary">充电时显示熄屏显示</string>
+    <string name="doze_on_charge_summary">充电时显示环境显示</string>
+
+    <!-- Volume dialog position -->
+    <string name="volume_panel_on_left_title">音量面板居左</string>
+    <string name="volume_panel_on_left_summary">在屏幕左侧显示音量面板</string>
+    <string name="volume_panel_on_left_land_title">横屏音量面板居左</string>
+    <string name="volume_panel_on_left_land_summary">横屏时在屏幕左侧显示音量面板</string>
 
     <!-- Volume dialog timeout -->
     <string name="unit_seconds">秒</string>
-    <string name="volume_dialog_timeout_title">音量面板超时时间</string>
-    <string name="volume_dialog_timeout_summary">音量面板消失所需的时间</string>
+    <string name="volume_dialog_timeout_title">音量面板超时</string>
+    <string name="volume_dialog_timeout_summary">音量面板消失所需时间</string>
     <!-- Volume link notification -->
-    <string name="volume_link_notification_title">关联铃声和通知的音量</string>
+    <string name="volume_link_notification_title">关联铃声和通知音量</string>
 
     <!-- Vibration patterns -->
     <string name="vibration_pattern_title">铃声振动模式</string>
+    <string name="notification_vibration_pattern_title">通知振动模式</string>
     <string name="pattern_custom">自定义</string>
     <string name="custom_vibration_pattern_title">自定义模式</string>
-    <string name="custom_vibration_pattern_summary">设置自定义振动模式</string>
+    <string name="custom_vibration_pattern_summary">设置一个自定义振动模式</string>
 
     <!-- Cycle through ringer modes gesture -->
-    <string name="prevent_ringing_option_cycle">循环通过模式</string>
-    <string name="prevent_ringing_option_cycle_summary">开启 (循环通过模式)</string>
-    <string name="prevent_ringing_option_normal">普通</string>
+    <string name="prevent_ringing_option_cycle">循环播放模式</string>
+    <string name="prevent_ringing_option_cycle_summary">开启 (循环播放模式)</string>
+    <string name="prevent_ringing_option_normal">默认</string>
 
     <!-- OTA App -->
-    <string name="update_settings_title">系统更新</string>
+    <string name="update_settings_title">YAAP 更新</string>
     <string name="update_settings_summary">检查系统最新版本</string>
 
     <!-- Radio Info -->
-    <string name="radio_info_title">手机信号参数</string>
+    <string name="radio_info_title">手机信息</string>
 
     <!-- String for removal of sensitive info on about, depending on tap -->
-    <string name="device_info_protected_single_press">点击显示信息</string>
+    <string name="device_info_protected_single_press">点击显示</string>
 
     <!-- YAAP Version -->
     <string name="yaap_version">YAAP 版本</string>
 
     <!-- QSTile requires unlocking before being accessible -->
-    <string name="qstile_requires_unlocking_title">需要解锁手机才能使用QS磁贴</string>
-    <string name="qstile_requires_unlocking_summary">您需要先解锁手机，然后才能从锁定屏幕访问以下QS磁贴：飞行模式，移动数据，NFC，热点，USB网络共享和位置</string>
+    <string name="qstile_requires_unlocking_title">需要解锁手机才能使用磁贴面板</string>
+    <string name="qstile_requires_unlocking_summary">您需要先解锁手机，然后才能从锁定屏幕访问以下磁贴：飞行模式，移动数据，NFC，热点，USB 网络共享和位置</string>
 
     <!-- Default getTimeSpentInApp string for Wellbeing to display. [CHAR LIMIT=NONE] -->
-    <string name="duration_less_than_one_minute">不到1分钟</string>
+    <string name="duration_less_than_one_minute">少于一分钟</string>
     <!-- Summary for Wellbeing screen time usage. [CHAR LIMIT=NONE] -->
-    <string name="screen_time_summary_usage_today">%1$s 今天</string>
+    <string name="screen_time_summary_usage_today">今天 %1$s</string>
 
     <!-- Floating rotation button -->
-    <string name="enable_floating_rotation_button_title">使用悬浮旋转按钮</string>
+    <string name="enable_floating_rotation_button_title">浮动旋转按钮</string>
 
     <!-- Power button -->
     <string name="power_menu_setting_name">电源键</string>
     <string name="power_menu_setting_summary">电源键手势</string>
-    <string name="torch_power_button_gesture_title">息屏状态按电源键开关手电筒</string>
+    <string name="torch_power_button_gesture_title">息屏时按下电源开关手电筒</string>
     <string name="torch_power_button_gesture_none">禁用</string>
-    <string name="torch_power_button_gesture_dt">双击开关</string>
-    <string name="torch_power_button_gesture_lp">长按开关</string>
-    <string name="quickly_open_camera_disabled">开启息屏双击开关手电筒时禁用</string>
+    <string name="torch_power_button_gesture_dt">双击</string>
+    <string name="torch_power_button_gesture_lp">长按</string>
+    <string name="quickly_open_camera_disabled">息屏双击开关手电筒开启时禁用</string>
 
     <!-- Playback control -->
     <string name="gesture_playback_control_screen_title">播放控制</string>
     <string name="gesture_playback_control_title">屏幕关闭时，长按音量键来切换歌曲</string>
-    <string name="volume_rocker_music_controls_delay_title">播放控制激活时间</string>
+    <string name="volume_rocker_music_controls_delay_title">播放控制激活延迟</string>
     <string name="gesture_playback_control_delay">延迟</string>
     <string name="unit_ms">毫秒</string>
+    <string name="unit_times">次</string>
+
+    <!-- Quick Mute -->
+    <string name="quick_mute_title">快速静音</string>
+    <string name="volume_button_quick_mute_category_title">长按音量下键使当前音频流静音</string>
+    <string name="volume_button_quick_mute_delay_title">音频控制激活延迟</string>
 
     <!-- Gaming macro QS tile -->
     <string name="gaming_mode_tile_title">游戏模式</string>
     <string name="gaming_mode_tile_summary">游戏模式磁贴设置</string>
-    <string name="gaming_mode_heads_up_title">注意脚下</string>
-    <string name="gaming_mode_heads_up_summary">是否关闭注意脚下</string>
+    <string name="gaming_mode_heads_up_title">浮动通知</string>
+    <string name="gaming_mode_heads_up_summary">关闭浮动通知</string>
     <string name="gaming_mode_zen_title">勿扰模式</string>
-    <string name="gaming_mode_zen_summary">是否开启勿扰模式</string>
+    <string name="gaming_mode_zen_summary">开启勿扰模式</string>
     <string name="gaming_mode_ringer_title">铃声模式</string>
     <string name="gaming_mode_ringer_disabled">不改变</string>
     <string name="gaming_mode_ringer_vibrate">振动</string>
     <string name="gaming_mode_ringer_silent">静音</string>
     <string name="gaming_mode_night_light_title">护眼模式</string>
-    <string name="gaming_mode_night_light_summary">是否关闭护眼模式</string>
+    <string name="gaming_mode_night_light_summary">关闭护眼模式</string>
     <string name="gaming_mode_battery_schedule_title">省电模式</string>
-    <string name="gaming_mode_battery_schedule_summary">是否关闭省电模式</string>
+    <string name="gaming_mode_battery_schedule_summary">关闭省电模式</string>
     <string name="gaming_mode_brightness_enabled_title">自动亮度</string>
-    <string name="gaming_mode_brightness_enabled_summary">是否关闭自动亮度</string>
-    <string name="gaming_mode_brightness_title">设置亮度为</string>
-    <string name="gaming_mode_brightness_summary">设置为0时保持不变</string>
+    <string name="gaming_mode_brightness_enabled_summary">关闭自动亮度</string>
+    <string name="gaming_mode_brightness_title">亮度设置</string>
+    <string name="gaming_mode_brightness_summary">设置为 0 时保持不变</string>
     <string name="gaming_mode_media_enabled_title">媒体音量</string>
-    <string name="gaming_mode_media_enabled_summary">是否设置媒体音量</string>
-    <string name="gaming_mode_media_title">设置音量为</string>
-    <string name="gaming_mode_desc">打开游戏模式将会切换为上面的设置，关闭游戏模式时会恢复原来的设置。</string>
-    <string name="gaming_mode_screen_off_title">熄屏关闭</string>
-    <string name="gaming_mode_screen_off_summary">熄屏时自动关闭游戏模式</string>
+    <string name="gaming_mode_media_enabled_summary">设置媒体音量</string>
+    <string name="gaming_mode_media_title">音量设置</string>
+    <string name="gaming_mode_desc">打开游戏模式时将会启用上方设置，关闭后将会恢复原本设置</string>
+    <string name="gaming_mode_screen_off_title">息屏关闭</string>
+    <string name="gaming_mode_screen_off_summary">息屏时自动关闭游戏模式</string>
 
     <!-- 3-Button navigation settings -->
     <string name="button_settings_activity_title">“三按钮”导航</string>
@@ -124,32 +141,64 @@
     <string name="back_height_message">返回手势可触摸区域的屏幕高度量</string>
 
     <!-- Reset auto brightness adjustment -->
-    <string name="reset_auto_brightness_adjustment_title">重置首选项</string>
+    <string name="reset_auto_brightness_adjustment_title">重置偏好</string>
     <string name="reset_auto_brightness_adjustment_summary">让系统忘记您的亮度偏好并将其重置为默认值</string>
-    <string name="reset_auto_brightness_adjustment_done">自动亮度首选项已重置</string>
+    <string name="reset_auto_brightness_adjustment_done">自动亮度偏好已重置</string>
 
     <!-- Hotspot -->
-    <string name="wifi_hotspot_client_manager_title">连接中的设备</string>
-    <string name="wifi_hotspot_client_manager_summary">列出和管理连接到热点的设备，并设置客户端数量限制</string>
+    <string name="wifi_band_24ghz_and_5ghz">2.4 GHz &amp; 5 GHz</string>
+    <string name="wifi_band_24ghz_and_6ghz">2.4 GHz &amp; 6 GHz</string>
+    <string name="wifi_band_60ghz">60 GHz</string>
+    <plurals name="wifi_hotspot_auto_off_timeout">
+        <item quantity="other">若无设备连接，将在 <xliff:g id="DURATION">%1$d</xliff:g>分钟后 关闭热点</item>
+        <item quantity="one">若无设备连接，将在 <xliff:g id="DURATION">%1$d</xliff:g>分钟后 关闭热点</item>
+    </plurals>
+    <string name="wifi_hotspot_auto_off_timeout_never">永不关闭</string>
+    <string name="wifi_hotspot_client_manager_title">已连接的设备</string>
+    <string name="wifi_hotspot_client_manager_summary">列出并管理连接到热点的设备，并设置最大客户端连接数量限制</string>
     <string name="wifi_hotspot_client_manager_list_only_summary">列出连接到热点的设备</string>
-    <string name="wifi_hotspot_client_limit_title">连接设备数限制</string>
-    <string name="wifi_hotspot_blocked_clients_list_title">屏蔽中的设备</string>
-    <string name="wifi_hotspot_connected_clients_list_title">连接中的设备</string>
-    <string name="wifi_hotspot_block_client_dialog_title">屏蔽设备</string>
-    <string name="wifi_hotspot_unblock_client_dialog_title">取消屏蔽设备</string>
-    <string name="wifi_hotspot_client_manager_footer_text">当前没有可用的客户端。可用时，将在此处列出已连接和已阻止的设备。</string>
+    <string name="wifi_hotspot_client_limit_title">连接设备上限</string>
+    <plurals name="wifi_hotspot_client_limit_summary">
+        <item quantity="other">最多 <xliff:g id="device_num">%1$d</xliff:g> 个设备连接到热点</item>
+        <item quantity="one">最多 <xliff:g id="device_num">%1$d</xliff:g> 个设备连接到热点</item>
+    </plurals>
+    <string name="wifi_hotspot_blocked_clients_list_title">黑名单设备</string>
+    <string name="wifi_hotspot_connected_clients_list_title">已连接的设备</string>
+    <string name="wifi_hotspot_block_client_dialog_title">黑名单设备</string>
+    <string name="wifi_hotspot_block_client_dialog_text">此操作将会断开 \"<xliff:g id="device_name">%1$s</xliff:g>\" 与此设备的连接并加入黑名单</string>
+    <string name="wifi_hotspot_unblock_client_dialog_title">解禁设备</string>
+    <string name="wifi_hotspot_unblock_client_dialog_text">设备 \"<xliff:g id="device_name">%1$s</xliff:g>\" 将可连接此设备热点</string>
+    <string name="wifi_hotspot_client_manager_footer_text">目前没有任何客户端连接到此设备。当存在时，已连接和被阻止的设备将在此列出。</string>
+
+    <!-- Notch: Full screen apps -->
+    <string name="display_cutout_force_fullscreen_title">全屏应用</string>
+    <string name="display_cutout_force_fullscreen_summary">强制此应用使用全屏</string>
+    <string name="display_cutout_force_fullscreen_no_apps">无应用</string>
+    <string name="display_cutout_force_fullscreen_restart_app">重启此应用以生效</string>
 
     <!-- Black background -->
-    <string name="black_bg_title">深色背景</string>
-    <string name="black_bg_summary">开启深色模式时使用绝对黑色背景</string>
+    <string name="black_bg_title">黑色背景</string>
+    <string name="black_bg_summary">开启深色模式时使用黑色背景</string>
 
     <!-- Disable VRR -->
     <string name="disable_vrr_title">关闭 VRR</string>
     <string name="disable_vrr_summary">不使用基于内容的刷新率切换\n将损害电池寿命</string>
 
+    <!-- Per-channel vibration pattern -->
+    <string name="notification_custom_vibrate_title">自定义振动模式</string>
+    <string name="notification_custom_vibrate_summary">取代默认模式，应用程序设置的模式优先</string>
+    <string name="notification_custom_vibrate_slider1">振动</string>
+    <string name="notification_custom_vibrate_slider2">暂停</string>
+
+    <!-- Per-channel torch blinking -->
+    <string name="default_notification_torch_title">通知闪光</string>
+    <string name="default_notification_torch_summary">为此应用闪烁闪光灯</string>
+    <string name="default_notification_torch_slider1">闪烁次数</string>
+    <string name="default_notification_torch_slider2">闪烁速度</string>
+
     <!-- Pocket mode -->
-    <string name="proximity_wake_title">防止意外唤醒</string>
-    <string name="proximity_wake_summary">在唤醒屏幕之前检查距离传感器</string>
+    <string name="proximity_wake_title">口袋模式</string>
+    <string name="proximity_wake_summary">在唤醒屏幕前检查距离传感器</string>
 
     <!-- In-call notifications -->
     <string name="in_call_notifications_title">通话时通知</string>
@@ -157,4 +206,43 @@
     <!-- NFC sounds -->
     <string name="nfc_sounds_title">NFC 声音</string>
 
+    <!-- Doze enablement -->
+    <string name="doze_enabled_title">环境显示</string>
+    <string name="doze_enabled_summary">Whether to enable the doze package functionality</string>
+
+    <!-- Preference and settings suggestion title text for screen off UDFPS [CHAR LIMIT=60]-->
+    <string name="ambient_display_screen_off_udfps_title">息屏指纹</string>
+    <!-- Summary text for screen off UDFPS [CHAR LIMIT=NONE]-->
+    <string name="ambient_display_screen_off_udfps_summary">允许在屏幕关闭时解锁\n可能会导致意外唤醒</string>
+
+    <!-- Media player settings -->
+    <string name="media_controls_always_show_time_title">始终显示时间</string>
+    <string name="media_controls_always_show_time_summary">始终在媒体播放器上显示已播放和总时间</string>
+    <string name="media_controls_squiggle_title">波浪进度条</string>
+    <string name="media_controls_squiggle_summary">在媒体播放器上显示一个扭曲的、恼人的、无用的、看起来像精子的和令人分心的进度条 \n重启系统界面后生效</string>
+
+    <!-- Hotspot extras -->
+    <string name="tethering_allow_vpn_upstreams_title">允许客户端使用 VPN</string>
+    <string name="tethering_allow_vpn_upstreams_summary">允许连接到此设备的客户端使用上游 VPN 连接</string>
+
+    <!-- Connectivity check -->
+    <string name="connectivity_check_title">网络连通性检查</string>
+    <string name="connectivity_check_summary">选择用于网络连通性检查的 HTTP 站点</string>
+
+    <string name="sandboxed_google_play">Google Play 沙盒</string>
+    <string name="sandboxed_google_play_work_profile">Google Play 沙盒 (工作资料)</string>
+
+    <string name="auto_grant_OTHER_SENSORS_permission_title">默认允许应用使用传感器权限</string>
+    <string name="auto_grant_OTHER_SENSORS_permission_summary_on">传感器是一个非标准权限，如果它被拒绝，应用程序可能会出现问题</string>
+    <string name="auto_grant_OTHER_SENSORS_permission_summary_off">当一个应用程序尝试使用传感器时，将显示一个权限提示。请注意，在允许使用传感器权限后，一些应用程序可能需要重新启动</string>
+
+    <string name="app_info_install_time">安装时间: %1$s</string>
+    <string name="app_info_update_time">更新时间: %1$s</string>
+    <string name="storage_scopes">分区存储</string>
+
+    <string name="allow_access_to_obb_directory_title">允许访问 Android/obb 文件夹</string>
+    <string name="allow_access_to_obb_directory_summary">在安装一些使用 OBB 扩展文件的大型应用程序（游戏等）时需要</string>
+
+    <string name="touch_sensitivity_title">触屏优化</string>
+    <string name="touch_sensitivity_summary">开启后将增强屏幕灵敏度</string>
 </resources>
