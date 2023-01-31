@@ -594,6 +594,7 @@
   <string-array name="connectivity_check_entries">
     <item>GrapheneOS</item>
     <item>默认 (Google)</item>
+    <item>USTC (China)</item>
     <item>禁用</item>
   </string-array>
 </resources>

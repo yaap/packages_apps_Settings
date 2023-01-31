@@ -62,9 +62,20 @@ public class ConnectivityCheckPreferenceController
     private static final String STANDARD_OTHER_FALLBACK_URLS =
             "http://play.googleapis.com/generate_204";
 
+    // 204 servers for chinese users
+    private static final String CHINA_HTTPS_URL =
+            "https://204.ustclug.org";
+    private static final String CHINA_HTTP_URL =
+            "http://204.ustclug.org";
+    private static final String CHINA_FALLBACK_URL =
+            "http://connect.rom.miui.com/generate_204";
+    private static final String CHINA_OTHER_FALLBACK_URLS =
+            "http://wifi.vivo.com.cn/generate_204";
+
     private static final int GRAPHENEOS_CAPTIVE_PORTAL_HTTP_URL_INTVAL = 0;
     private static final int STANDARD_CAPTIVE_PORTAL_HTTP_URL_INTVAL = 1;
-    private static final int DISABLED_CAPTIVE_PORTAL_INTVAL = 2;
+    private static final int CHINA_CAPTIVE_PORTAL_HTTP_URL_INTVAL = 2;
+    private static final int DISABLED_CAPTIVE_PORTAL_INTVAL = 3;
 
     private static final String KEY_CONNECTIVITY_CHECK_SETTINGS =
             "connectivity_check_settings";
@@ -120,6 +131,9 @@ public class ConnectivityCheckPreferenceController
         if (STANDARD_HTTP_URL.equals(pref)) {
             mConnectivityPreference.setValueIndex(
                     STANDARD_CAPTIVE_PORTAL_HTTP_URL_INTVAL);
+        } else if (CHINA_HTTP_URL.equals(pref)) {
+            mConnectivityPreference.setValueIndex(
+                    CHINA_CAPTIVE_PORTAL_HTTP_URL_INTVAL);
         } else {
             mConnectivityPreference.setValueIndex(
                     GRAPHENEOS_CAPTIVE_PORTAL_HTTP_URL_INTVAL);
@@ -148,6 +162,19 @@ public class ConnectivityCheckPreferenceController
                 Settings.Global.putString(
                         cr, Settings.Global.CAPTIVE_PORTAL_OTHER_FALLBACK_URLS,
                         STANDARD_OTHER_FALLBACK_URLS);
+                Settings.Global.putInt(cr, Settings.Global.CAPTIVE_PORTAL_MODE,
+                        Settings.Global.CAPTIVE_PORTAL_MODE_PROMPT);
+                break;
+            case CHINA_CAPTIVE_PORTAL_HTTP_URL_INTVAL:
+                Settings.Global.putString(cr, Settings.Global.CAPTIVE_PORTAL_HTTP_URL,
+                        CHINA_HTTP_URL);
+                Settings.Global.putString(cr, Settings.Global.CAPTIVE_PORTAL_HTTPS_URL,
+                        CHINA_HTTPS_URL);
+                Settings.Global.putString(cr, Settings.Global.CAPTIVE_PORTAL_FALLBACK_URL,
+                        CHINA_FALLBACK_URL);
+                Settings.Global.putString(
+                        cr, Settings.Global.CAPTIVE_PORTAL_OTHER_FALLBACK_URLS,
+                        CHINA_OTHER_FALLBACK_URLS);
                 Settings.Global.putInt(cr, Settings.Global.CAPTIVE_PORTAL_MODE,
                         Settings.Global.CAPTIVE_PORTAL_MODE_PROMPT);
                 break;
