@@ -121,9 +121,7 @@ public class NetworkDashboardFragment extends DashboardFragment implements
         }
         controllers.add(privateDnsPreferenceController);
         controllers.add(new NetworkProviderCallsSmsController(context, lifecycle));
-        ConnectivityCheckPreferenceController connectivityCheck =
-                new ConnectivityCheckPreferenceController(context);
-        controllers.add(connectivityCheck);
+        controllers.add(new ConnectivityCheckPreferenceController(context));
         return controllers;
     }
 
