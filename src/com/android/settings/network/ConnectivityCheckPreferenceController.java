@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 The Android Open Source Project
+ * Copyright (C) 2023 Yet Another AOSP Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,214 +16,158 @@
 
 package com.android.settings.network;
 
+import static android.provider.Settings.Global.CAPTIVE_PORTAL_MODE_IGNORE;
+import static android.provider.Settings.Global.CAPTIVE_PORTAL_MODE_PROMPT;
+
+import static com.android.settings.core.BasePreferenceController.AVAILABLE;
+import static com.android.settings.core.BasePreferenceController.DISABLED_FOR_USER;
+
 import android.content.ContentResolver;
 import android.content.Context;
-import android.content.res.Resources;
-import android.database.ContentObserver;
-import android.net.LinkProperties;
-import android.net.Network;
-import android.os.Handler;
-import android.os.Looper;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
+
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
-import com.android.internal.util.ArrayUtils;
+
 import com.android.settings.R;
 import com.android.settings.core.BasePreferenceController;
 import com.android.settings.core.PreferenceControllerMixin;
-import com.android.settingslib.RestrictedLockUtils.EnforcedAdmin;
 import com.android.settingslib.RestrictedLockUtilsInternal;
-import com.android.settingslib.core.lifecycle.events.OnResume;
 
-public class ConnectivityCheckPreferenceController
-        extends BasePreferenceController
-        implements PreferenceControllerMixin, Preference.OnPreferenceChangeListener,
-        OnResume {
+import java.util.ArrayList;
+import java.util.List;
 
-    private static final String GRAPHENEOS_CAPTIVE_PORTAL_HTTPS_URL =
-            "https://connectivitycheck.grapheneos.network/generate_204";
-    private static final String GRAPHENEOS_CAPTIVE_PORTAL_HTTP_URL =
-            "http://connectivitycheck.grapheneos.network/generate_204";
-    private static final String GRAPHENEOS_CAPTIVE_PORTAL_FALLBACK_URL =
-            "http://grapheneos.online/gen_204";
-    private static final String GRAPHENEOS_CAPTIVE_PORTAL_OTHER_FALLBACK_URL =
-            "http://grapheneos.online/generate_204";
+public class ConnectivityCheckPreferenceController extends BasePreferenceController
+        implements PreferenceControllerMixin, Preference.OnPreferenceChangeListener {
+
+    private static final String KEY = "connectivity_check_settings";
+
+    private static final int HTTPS_INDEX = 0;
+    private static final int HTTP_INDEX = 1;
+    private static final int FALLBACK_INDEX = 2;
+    private static final int OTHER_FALLBACK_INDEX = 3;
 
     // imported defaults from AOSP NetworkStack
-    private static final String STANDARD_HTTPS_URL =
-            "https://www.google.com/generate_204";
-    private static final String STANDARD_HTTP_URL =
-            "http://connectivitycheck.gstatic.com/generate_204";
-    private static final String STANDARD_FALLBACK_URL =
-            "http://www.google.com/gen_204";
-    private static final String STANDARD_OTHER_FALLBACK_URLS =
-            "http://play.googleapis.com/generate_204";
+    private static final String[] DEFAULT_PORTAL = {
+        "https://www.google.com/generate_204",
+        "http://connectivitycheck.gstatic.com/generate_204",
+        "http://www.google.com/gen_204",
+        "http://play.googleapis.com/generate_204"
+    };
+
+    private static final String[] GRAPHENEOS_PORTAL = {
+        "https://connectivitycheck.grapheneos.network/generate_204",
+        "http://connectivitycheck.grapheneos.network/generate_204",
+        "http://grapheneos.online/gen_204",
+        "http://grapheneos.online/generate_204"
+    };
 
     // 204 servers for chinese users
-    private static final String CHINA_HTTPS_URL =
-            "https://204.ustclug.org";
-    private static final String CHINA_HTTP_URL =
-            "http://204.ustclug.org";
-    private static final String CHINA_FALLBACK_URL =
-            "http://connect.rom.miui.com/generate_204";
-    private static final String CHINA_OTHER_FALLBACK_URLS =
-            "http://wifi.vivo.com.cn/generate_204";
+    private static final String[] CHINA_PORTAL = {
+        "https://204.ustclug.org",
+        "http://204.ustclug.org",
+        "http://connect.rom.miui.com/generate_204",
+        "http://wifi.vivo.com.cn/generate_204"
+    };
 
-    private static final int GRAPHENEOS_CAPTIVE_PORTAL_HTTP_URL_INTVAL = 0;
-    private static final int STANDARD_CAPTIVE_PORTAL_HTTP_URL_INTVAL = 1;
-    private static final int CHINA_CAPTIVE_PORTAL_HTTP_URL_INTVAL = 2;
-    private static final int DISABLED_CAPTIVE_PORTAL_INTVAL = 3;
+    // These values should match the preference's entry values by index
+    private static final ArrayList<String[]> PORTAL_BY_INDEX = new ArrayList<>(List.of(
+        GRAPHENEOS_PORTAL,
+        DEFAULT_PORTAL,
+        CHINA_PORTAL
+    ));
 
-    private static final String KEY_CONNECTIVITY_CHECK_SETTINGS =
-            "connectivity_check_settings";
-
-    private ListPreference mConnectivityPreference;
+    private ListPreference mPreference;
 
     public ConnectivityCheckPreferenceController(Context context) {
-        super(context, KEY_CONNECTIVITY_CHECK_SETTINGS);
+        super(context, KEY);
     }
 
     @Override
     public int getAvailabilityStatus() {
-        if (isDisabledByAdmin()) {
-            return BasePreferenceController.DISABLED_FOR_USER;
-        }
-        return BasePreferenceController.AVAILABLE;
+        return isDisabledByAdmin() ? DISABLED_FOR_USER : AVAILABLE;
     }
 
     @Override
     public void displayPreference(PreferenceScreen screen) {
-        ListPreference captiveList = new ListPreference(screen.getContext());
-        captiveList.setKey(KEY_CONNECTIVITY_CHECK_SETTINGS);
-        captiveList.setOrder(30);
-        captiveList.setIcon(R.drawable.ic_settings_language);
-        captiveList.setTitle(R.string.connectivity_check_title);
-        captiveList.setSummary(R.string.connectivity_check_summary);
-        captiveList.setEntries(R.array.connectivity_check_entries);
-        captiveList.setEntryValues(R.array.connectivity_check_values);
-
-        if (mConnectivityPreference == null) {
-            screen.addPreference(captiveList);
-            mConnectivityPreference = captiveList;
-        }
         super.displayPreference(screen);
-        updatePreferenceState();
+        mPreference = (ListPreference) screen.findPreference(KEY);
+        if (getAvailabilityStatus() == AVAILABLE && mPreference != null) {
+            updatePreferenceState();
+            return;
+        }
+        mPreference.setVisible(false);
     }
 
     @Override
     public String getPreferenceKey() {
-        return KEY_CONNECTIVITY_CHECK_SETTINGS;
+        return KEY;
     }
 
     private void updatePreferenceState() {
-        if (Settings.Global.getInt(mContext.getContentResolver(),
-                Settings.Global.CAPTIVE_PORTAL_MODE, Settings.Global.CAPTIVE_PORTAL_MODE_PROMPT)
-                == Settings.Global.CAPTIVE_PORTAL_MODE_IGNORE) {
-            mConnectivityPreference.setValueIndex(DISABLED_CAPTIVE_PORTAL_INTVAL);
+        final boolean disabled = Settings.Global.getInt(mContext.getContentResolver(),
+                Settings.Global.CAPTIVE_PORTAL_MODE, CAPTIVE_PORTAL_MODE_PROMPT)
+                == CAPTIVE_PORTAL_MODE_IGNORE;
+        if (disabled) {
+            mPreference.setValueIndex(PORTAL_BY_INDEX.size());
             return;
         }
 
-        String pref = Settings.Global.getString(
-                mContext.getContentResolver(), Settings.Global.CAPTIVE_PORTAL_HTTP_URL);
-        if (STANDARD_HTTP_URL.equals(pref)) {
-            mConnectivityPreference.setValueIndex(
-                    STANDARD_CAPTIVE_PORTAL_HTTP_URL_INTVAL);
-        } else if (CHINA_HTTP_URL.equals(pref)) {
-            mConnectivityPreference.setValueIndex(
-                    CHINA_CAPTIVE_PORTAL_HTTP_URL_INTVAL);
-        } else {
-            mConnectivityPreference.setValueIndex(
-                    GRAPHENEOS_CAPTIVE_PORTAL_HTTP_URL_INTVAL);
+        final String value = Settings.Global.getString(mContext.getContentResolver(),
+                Settings.Global.CAPTIVE_PORTAL_HTTP_URL);
+        int index = -1;
+        for (int i = 0; i < PORTAL_BY_INDEX.size(); i++) {
+            if (PORTAL_BY_INDEX.get(i)[HTTP_INDEX].equals(value)) {
+                index = i;
+                break;
+            }
         }
+        mPreference.setValueIndex(index != -1 ? index : PORTAL_BY_INDEX.size());
     }
 
-    @Override
-    public void onResume() {
-        updatePreferenceState();
-        if (mConnectivityPreference != null) {
-            setCaptivePortalURLs(
-                    mContext.getContentResolver(),
-                    Integer.parseInt(mConnectivityPreference.getValue()));
-        }
-    }
+    private void setCaptivePortalURLs(int mode) {
+        final ContentResolver resolver = mContext.getContentResolver();
 
-    private void setCaptivePortalURLs(ContentResolver cr, int mode) {
-        switch (mode) {
-            case STANDARD_CAPTIVE_PORTAL_HTTP_URL_INTVAL:
-                Settings.Global.putString(cr, Settings.Global.CAPTIVE_PORTAL_HTTP_URL,
-                        STANDARD_HTTP_URL);
-                Settings.Global.putString(cr, Settings.Global.CAPTIVE_PORTAL_HTTPS_URL,
-                        STANDARD_HTTPS_URL);
-                Settings.Global.putString(cr, Settings.Global.CAPTIVE_PORTAL_FALLBACK_URL,
-                        STANDARD_FALLBACK_URL);
-                Settings.Global.putString(
-                        cr, Settings.Global.CAPTIVE_PORTAL_OTHER_FALLBACK_URLS,
-                        STANDARD_OTHER_FALLBACK_URLS);
-                Settings.Global.putInt(cr, Settings.Global.CAPTIVE_PORTAL_MODE,
-                        Settings.Global.CAPTIVE_PORTAL_MODE_PROMPT);
-                break;
-            case CHINA_CAPTIVE_PORTAL_HTTP_URL_INTVAL:
-                Settings.Global.putString(cr, Settings.Global.CAPTIVE_PORTAL_HTTP_URL,
-                        CHINA_HTTP_URL);
-                Settings.Global.putString(cr, Settings.Global.CAPTIVE_PORTAL_HTTPS_URL,
-                        CHINA_HTTPS_URL);
-                Settings.Global.putString(cr, Settings.Global.CAPTIVE_PORTAL_FALLBACK_URL,
-                        CHINA_FALLBACK_URL);
-                Settings.Global.putString(
-                        cr, Settings.Global.CAPTIVE_PORTAL_OTHER_FALLBACK_URLS,
-                        CHINA_OTHER_FALLBACK_URLS);
-                Settings.Global.putInt(cr, Settings.Global.CAPTIVE_PORTAL_MODE,
-                        Settings.Global.CAPTIVE_PORTAL_MODE_PROMPT);
-                break;
-            case GRAPHENEOS_CAPTIVE_PORTAL_HTTP_URL_INTVAL:
-                Settings.Global.putString(cr, Settings.Global.CAPTIVE_PORTAL_HTTP_URL,
-                        GRAPHENEOS_CAPTIVE_PORTAL_HTTP_URL);
-                Settings.Global.putString(cr, Settings.Global.CAPTIVE_PORTAL_HTTPS_URL,
-                        GRAPHENEOS_CAPTIVE_PORTAL_HTTPS_URL);
-                Settings.Global.putString(cr, Settings.Global.CAPTIVE_PORTAL_FALLBACK_URL,
-                        GRAPHENEOS_CAPTIVE_PORTAL_FALLBACK_URL);
-                Settings.Global.putString(
-                        cr, Settings.Global.CAPTIVE_PORTAL_OTHER_FALLBACK_URLS,
-                        GRAPHENEOS_CAPTIVE_PORTAL_OTHER_FALLBACK_URL);
-                Settings.Global.putInt(cr, Settings.Global.CAPTIVE_PORTAL_MODE,
-                        Settings.Global.CAPTIVE_PORTAL_MODE_PROMPT);
-                break;
-            default:
-                // GrapheneOS URLs as placeholder
-                Settings.Global.putString(cr, Settings.Global.CAPTIVE_PORTAL_HTTP_URL,
-                        GRAPHENEOS_CAPTIVE_PORTAL_HTTP_URL);
-                Settings.Global.putString(cr, Settings.Global.CAPTIVE_PORTAL_HTTPS_URL,
-                        GRAPHENEOS_CAPTIVE_PORTAL_HTTPS_URL);
-                Settings.Global.putString(cr, Settings.Global.CAPTIVE_PORTAL_FALLBACK_URL,
-                        GRAPHENEOS_CAPTIVE_PORTAL_FALLBACK_URL);
-                Settings.Global.putString(
-                        cr, Settings.Global.CAPTIVE_PORTAL_OTHER_FALLBACK_URLS,
-                        GRAPHENEOS_CAPTIVE_PORTAL_OTHER_FALLBACK_URL);
-                Settings.Global.putInt(cr, Settings.Global.CAPTIVE_PORTAL_MODE,
-                        Settings.Global.CAPTIVE_PORTAL_MODE_IGNORE);
+        final boolean enabled = mode < PORTAL_BY_INDEX.size();
+        final String[] portal = enabled ? PORTAL_BY_INDEX.get(mode) : null;
+        String https = DEFAULT_PORTAL[HTTPS_INDEX];
+        String http = DEFAULT_PORTAL[HTTP_INDEX];
+        String fallback = DEFAULT_PORTAL[FALLBACK_INDEX];
+        String anotherFallback = DEFAULT_PORTAL[OTHER_FALLBACK_INDEX];
+        if (enabled) {
+            https = portal[HTTPS_INDEX];
+            http = portal[HTTP_INDEX];
+            fallback = portal[FALLBACK_INDEX];
+            anotherFallback = portal[OTHER_FALLBACK_INDEX];
         }
+
+        Settings.Global.putString(resolver,
+                Settings.Global.CAPTIVE_PORTAL_HTTP_URL, http);
+        Settings.Global.putString(resolver,
+                Settings.Global.CAPTIVE_PORTAL_HTTPS_URL, https);
+        Settings.Global.putString(resolver,
+                Settings.Global.CAPTIVE_PORTAL_FALLBACK_URL, fallback);
+        Settings.Global.putString(resolver,
+                Settings.Global.CAPTIVE_PORTAL_OTHER_FALLBACK_URLS, anotherFallback);
+        Settings.Global.putInt(resolver, Settings.Global.CAPTIVE_PORTAL_MODE,
+                enabled ? CAPTIVE_PORTAL_MODE_PROMPT : CAPTIVE_PORTAL_MODE_IGNORE);
     }
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object value) {
-        final String key = preference.getKey();
-        if (KEY_CONNECTIVITY_CHECK_SETTINGS.equals(key)) {
-            setCaptivePortalURLs(mContext.getContentResolver(),
-                    Integer.parseInt((String)value));
+        if (preference == mPreference) {
+            setCaptivePortalURLs(Integer.parseInt((String)value));
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
-    private EnforcedAdmin getEnforcedAdmin() {
+    private boolean isDisabledByAdmin() {
         return RestrictedLockUtilsInternal.checkIfRestrictionEnforced(
                 mContext, UserManager.DISALLOW_CONFIG_PRIVATE_DNS,
-                UserHandle.myUserId());
+                UserHandle.myUserId()) != null;
     }
-
-    private boolean isDisabledByAdmin() { return getEnforcedAdmin() != null; }
 }
