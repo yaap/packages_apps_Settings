@@ -131,6 +131,9 @@ public class ConnectivityCheckPreferenceController
         if (STANDARD_HTTP_URL.equals(pref)) {
             mConnectivityPreference.setValueIndex(
                     STANDARD_CAPTIVE_PORTAL_HTTP_URL_INTVAL);
+        } else if (CHINA_HTTP_URL.equals(pref)) {
+            mConnectivityPreference.setValueIndex(
+                    CHINA_CAPTIVE_PORTAL_HTTP_URL_INTVAL);
         } else {
             mConnectivityPreference.setValueIndex(
                     GRAPHENEOS_CAPTIVE_PORTAL_HTTP_URL_INTVAL);
