@@ -80,4 +80,19 @@
         <item>@string/pattern_da_dzzz_da</item>
         <item>@string/pattern_custom</item>
     </string-array>
+
+    <!-- Connectivity check -->
+    <string-array name="connectivity_check_entries">
+        <item>GrapheneOS</item>
+        <item>Standard (Google)</item>
+        <item>USTC (China)</item>
+        <item>Disabled</item>
+    </string-array>
+
+    <string-array name="connectivity_check_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
 </resources>

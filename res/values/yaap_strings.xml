@@ -204,4 +204,22 @@
     <string name="tethering_allow_vpn_upstreams_title">Allow clients to use VPNs</string>
     <string name="tethering_allow_vpn_upstreams_summary">Permit hotspot clients to use this device\u2019s VPN connections for upstream connectivity</string>
 
+    <!-- Connectivity check -->
+    <string name="connectivity_check_title">Internet connectivity check</string>
+    <string name="connectivity_check_summary">HTTP endpoints to use for performing internet connectivity checks.</string>
+
+    <string name="sandboxed_google_play">Sandboxed Google Play</string>
+    <string name="sandboxed_google_play_work_profile">Sandboxed Google Play (work profile)</string>
+
+    <string name="auto_grant_OTHER_SENSORS_permission_title">Allow Sensors permission to apps by default</string>
+    <string name="auto_grant_OTHER_SENSORS_permission_summary_on">Sensors is a non-standard permission, apps may malfunction if it’s denied.</string>
+    <string name="auto_grant_OTHER_SENSORS_permission_summary_off">A permission prompt will be shown when an app tries to access sensors. Note that some apps may need to be manually restarted after allowing the Sensors permission.</string>
+
+    <string name="app_info_install_time">Installed: %1$s</string>
+    <string name="app_info_update_time">Updated: %1$s</string>
+    <string name="storage_scopes">Storage Scopes</string>
+
+    <string name="allow_access_to_obb_directory_title">Allow access to Android/obb folder</string>
+    <string name="allow_access_to_obb_directory_summary">Required for installation of some large apps (mostly games) that use OBB expansion files</string>
+
 </resources>
