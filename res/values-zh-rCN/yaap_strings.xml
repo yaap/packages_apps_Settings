@@ -92,6 +92,11 @@
     <string name="unit_ms">毫秒</string>
     <string name="unit_times">次</string>
 
+    <!-- Quick Mute -->
+    <string name="quick_mute_title">快速静音</string>
+    <string name="volume_button_quick_mute_category_title">长按音量下键使当前音频流静音</string>
+    <string name="volume_button_quick_mute_delay_title">音频控制激活延迟</string>
+
     <!-- Gaming macro QS tile -->
     <string name="gaming_mode_tile_title">游戏模式</string>
     <string name="gaming_mode_tile_summary">游戏模式磁贴设置</string>
@@ -237,4 +242,7 @@
 
     <string name="allow_access_to_obb_directory_title">允许访问 Android/obb 文件夹</string>
     <string name="allow_access_to_obb_directory_summary">在安装一些使用 OBB 扩展文件的大型应用程序（游戏等）时需要</string>
+
+    <string name="touch_sensitivity_title">触屏优化</string>
+    <string name="touch_sensitivity_summary">开启后将增强屏幕灵敏度</string>
 </resources>
