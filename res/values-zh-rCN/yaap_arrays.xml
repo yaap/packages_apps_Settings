@@ -24,4 +24,10 @@
         <item>30 分钟</item>
         <item>1 小时</item>
     </string-array>
+  <string-array name="connectivity_check_entries">
+    <item>GrapheneOS</item>
+    <item>默认 (Google)</item>
+    <item>USTC (China)</item>
+    <item>禁用</item>
+  </string-array>
 </resources>
