@@ -30,7 +30,7 @@
     <string name="volume_panel_on_left_title">Панель громкости слева</string>
     <string name="volume_panel_on_left_summary">Отображать панель громкости с левой стороны экрана</string>
     <string name="volume_panel_on_left_land_title">Левая панель громкости альбомной ориентации</string>
-    <string name="volume_panel_on_left_land_summary">Панель громкости слева в альбомной ориентации </string>
+    <string name="volume_panel_on_left_land_summary">Панель громкости слева в альбомной ориентации</string>
 
     <!-- Volume dialog timeout -->
     <string name="unit_seconds">Секунд(а/ы)</string>
