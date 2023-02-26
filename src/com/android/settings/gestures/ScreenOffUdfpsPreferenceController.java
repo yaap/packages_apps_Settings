@@ -33,7 +33,7 @@ public class ScreenOffUdfpsPreferenceController extends TogglePreferenceControll
     private final int ON = 1;
     private final int OFF = 0;
 
-    private static final String SECURE_KEY = "screen_off_udfps_enabled";
+    private static final String SECURE_KEY = Settings.Secure.SCREEN_OFF_UDFPS_ENABLED;
 
     private AmbientDisplayConfiguration mAmbientConfig;
     @UserIdInt
