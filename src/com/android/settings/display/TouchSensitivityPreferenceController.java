@@ -27,7 +27,7 @@ public class TouchSensitivityPreferenceController extends TogglePreferenceContro
 
     // Settings can only set the debug.* property, so we need to persist it
     // in system settings. Match the stock setting name for backup compatibility.
-    private static final String SETTINGS_KEY = "touch_sensitivity_enabled";
+    private static final String SETTINGS_KEY = Settings.Secure.TOUCH_SENSITIVITY_ENABLED;
     private static final String PROP_NAME = "debug.touch_sensitivity_mode";
 
     public TouchSensitivityPreferenceController(Context context, String preferenceKey) {
