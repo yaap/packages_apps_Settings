@@ -93,7 +93,7 @@ public class LinkedVolumesPreferenceController extends AbstractPreferenceControl
             mNotificationVolume.setVisible(false);
         } else {
             mRingVolume.setTitle(mContext.getResources().getString(
-                    R.string.ring_volume_unlinked_option_title));
+                    R.string.separate_ring_volume_option_title));
             mNotificationVolume.setVisible(true);
         }
     }

@@ -93,6 +93,7 @@ android_library {
         "WifiTrackerLib",
         "SettingsLibActivityEmbedding",
         "Settings-change-ids",
+        "SystemUIUnfoldLib",
         "SurfaceFlingerProperties",
     ],
 

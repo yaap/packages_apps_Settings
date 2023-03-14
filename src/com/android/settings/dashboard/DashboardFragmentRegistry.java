@@ -23,6 +23,7 @@ import com.android.settings.LegalSettings;
 import com.android.settings.accounts.AccountDashboardFragment;
 import com.android.settings.accounts.AccountDetailDashboardFragment;
 import com.android.settings.applications.AppDashboardFragment;
+import com.android.settings.communal.CommunalDashboardFragment;
 import com.android.settings.connecteddevice.AdvancedConnectedDeviceDashboardFragment;
 import com.android.settings.connecteddevice.ConnectedDeviceDashboardFragment;
 import com.android.settings.development.DevelopmentSettingsDashboardFragment;
@@ -127,6 +128,8 @@ public class DashboardFragmentRegistry {
                 CategoryKey.CATEGORY_BATTERY_SAVER_SETTINGS);
         PARENT_TO_CATEGORY_KEY_MAP.put(SmartBatterySettings.class.getName(),
                 CategoryKey.CATEGORY_SMART_BATTERY_SETTINGS);
+        PARENT_TO_CATEGORY_KEY_MAP.put(CommunalDashboardFragment.class.getName(),
+                CategoryKey.CATEGORY_COMMUNAL_SETTINGS);
         PARENT_TO_CATEGORY_KEY_MAP.put(YaapSettings.class.getName(),
                 CategoryKey.CATEGORY_SYSTEM_DEVELOPMENT);
 

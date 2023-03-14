@@ -78,7 +78,6 @@ public class DisplaySettings extends DashboardFragment {
         controllers.add(new CameraGesturePreferenceController(context));
         controllers.add(new LiftToWakePreferenceController(context));
         controllers.add(new PocketJudgePreferenceController(context));
-        controllers.add(new ScreenSaverPreferenceController(context));
         controllers.add(new TapToWakePreferenceController(context));
         controllers.add(new VrDisplayPreferenceController(context));
         controllers.add(new ShowOperatorNamePreferenceController(context));
