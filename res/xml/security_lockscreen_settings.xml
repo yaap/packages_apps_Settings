@@ -114,16 +114,20 @@
             settings:keywords="@string/keywords_gesture"
             settings:controller="com.android.settings.gestures.TapScreenGesturePreferenceController" />
 
-        <SwitchPreference
-            android:key="gesture_double_tap_screen"
+        <com.android.settingslib.PrimarySwitchPreference
+            android:key="ambient_display_double_tap"
             android:title="@string/ambient_display_title"
+            android:fragment="com.android.settings.gestures.DoubleTapScreenSettings"
+            settings:searchable="false"
             android:summary="@string/ambient_display_summary"
             settings:keywords="@string/keywords_gesture"
             settings:controller="com.android.settings.gestures.DoubleTapScreenPreferenceController" />
 
-        <SwitchPreference
-            android:key="gesture_pick_up"
+        <com.android.settingslib.PrimarySwitchPreference
+            android:key="ambient_display_pick_up"
             android:title="@string/ambient_display_pickup_title"
+            android:fragment="com.android.settings.gestures.PickupGestureSettings"
+            settings:searchable="false"
             android:summary="@string/ambient_display_pickup_summary"
             settings:keywords="@string/keywords_gesture"
             settings:controller="com.android.settings.gestures.PickupGesturePreferenceController" />
