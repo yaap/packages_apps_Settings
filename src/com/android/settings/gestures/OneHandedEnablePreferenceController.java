@@ -60,6 +60,7 @@ public class OneHandedEnablePreferenceController extends TogglePreferenceControl
     @Override
     public boolean setChecked(boolean isChecked) {
         OneHandedSettingsUtils.setOneHandedModeEnabled(mContext, isChecked);
+        if (mPreference != null) updateState(mPreference);
         return true;
     }
 

@@ -78,6 +78,32 @@ public class DoubleTapScreenPreferenceControllerTest {
     }
 
     @Test
+    public void isSuggestionCompleted_ambientDisplay_falseWhenNotVisited() {
+        when(mAmbientDisplayConfiguration.doubleTapSensorAvailable()).thenReturn(true);
+        // No stored value in shared preferences if not visited yet.
+        final Context context = RuntimeEnvironment.application;
+        final SharedPreferences prefs =
+                new SuggestionFeatureProviderImpl(context).getSharedPrefs(context);
+
+        assertThat(DoubleTapScreenPreferenceController
+                .isSuggestionComplete(mAmbientDisplayConfiguration, prefs)).isFalse();
+    }
+
+    @Test
+    public void isSuggestionCompleted_ambientDisplay_trueWhenVisited() {
+        when(mAmbientDisplayConfiguration.doubleTapSensorAvailable()).thenReturn(false);
+        final Context context = RuntimeEnvironment.application;
+        final SharedPreferences prefs =
+                new SuggestionFeatureProviderImpl(context).getSharedPrefs(context);
+
+        prefs.edit().putBoolean(
+                DoubleTapScreenSettings.PREF_KEY_SUGGESTION_COMPLETE, true).commit();
+
+        assertThat(DoubleTapScreenPreferenceController
+                .isSuggestionComplete(mAmbientDisplayConfiguration, prefs)).isTrue();
+    }
+
+    @Test
     public void getAvailabilityStatus_aodNotSupported_UNSUPPORTED_ON_DEVICE() {
         when(mAmbientDisplayConfiguration.doubleTapSensorAvailable()).thenReturn(false);
         when(mAmbientDisplayConfiguration.ambientDisplayAvailable()).thenReturn(false);

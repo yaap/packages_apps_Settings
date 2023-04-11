@@ -67,18 +67,16 @@
         settings:keywords="@string/keywords_gesture"
         settings:controller="com.android.settings.gestures.TapScreenGesturePreferenceController" />
 
-    <SwitchPreference
-        android:key="gesture_double_tap_screen"
+    <com.android.settingslib.PrimarySwitchPreference
+        android:key="gesture_double_tap_screen_input_summary"
         android:title="@string/ambient_display_title"
-        android:summary="@string/ambient_display_summary"
-        settings:keywords="@string/keywords_gesture"
+        android:fragment="com.android.settings.gestures.DoubleTapScreenSettings"
         settings:controller="com.android.settings.gestures.DoubleTapScreenPreferenceController" />
 
-    <SwitchPreference
-        android:key="gesture_pick_up"
+    <com.android.settingslib.PrimarySwitchPreference
+        android:key="gesture_pick_up_input_summary"
         android:title="@string/ambient_display_pickup_title"
-        android:summary="@string/ambient_display_pickup_summary"
-        settings:keywords="@string/keywords_gesture"
+        android:fragment="com.android.settings.gestures.PickupGestureSettings"
         settings:controller="com.android.settings.gestures.PickupGesturePreferenceController" />
 
     <com.android.settingslib.PrimarySwitchPreference
