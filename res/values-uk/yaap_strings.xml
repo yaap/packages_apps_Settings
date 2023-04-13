@@ -1,0 +1,254 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2023 YAAP
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Top level YASP -->
+    <string name="yaap_settings_title">YASP</string>
+    <string name="yaap_settings_summary">Yet Another Settings Page</string>
+
+    <!-- General -->
+    <string name="copied_to_clipboard">Скопіювано в буфер обміну</string>
+    <string name="longpress_to_clipboard">Затисніть, щоб скопіювати</string>
+
+    <!-- Doze on charge -->
+    <string name="doze_on_charge_title">Завжди увімкнений під час заряджання</string>
+    <string name="doze_on_charge_summary">Не вимикати екран під час заряджання</string>
+
+    <!-- Volume dialog position -->
+    <string name="volume_panel_on_left_title">Панель гучності ліворуч</string>
+    <string name="volume_panel_on_left_summary">Відображати панель гучності з лівого боку екрану</string>
+    <string name="volume_panel_on_left_land_title">Ліва панель в альбомній орієнтації</string>
+    <string name="volume_panel_on_left_land_summary">Панель гучності в альбомній орієнтації ліворуч</string>
+
+    <!-- Volume dialog timeout -->
+    <string name="unit_seconds">Секунд(а/и)</string>
+    <string name="volume_dialog_timeout_title">Тайм-аут панелі гучності</string>
+    <string name="volume_dialog_timeout_summary">Час, через який панель гучності зникає</string>
+
+    <!-- Volume link notification -->
+    <string name="volume_link_notification_title">Об\'єднати гучність дзвінка та повідомлень</string>
+
+    <!-- Vibration patterns -->
+    <string name="vibration_pattern_title">Шаблон вібрації дзвінка</string>
+    <string name="notification_vibration_pattern_title">Шаблон вібрації дзвінка повідомлення</string>
+    <string name="pattern_dzzz_dzzz">дззз-дззз</string>
+    <string name="pattern_dzzz_da">дззз-тук</string>
+    <string name="pattern_mm_mm_mm">мм-мм-мм</string>
+    <string name="pattern_da_da_dzzz">тук-тук-дззз</string>
+    <string name="pattern_da_dzzz_da">тук-дззз-тук</string>
+    <string name="pattern_custom">Налаштувати</string>
+    <string name="custom_vibration_pattern_title">Користувацький шаблон</string>
+    <string name="custom_vibration_pattern_summary">Вручну налаштувати шаблон вібрації</string>
+
+    <!-- Cycle through ringer modes gesture -->
+    <string name="prevent_ringing_option_cycle">Перехід між режимами</string>
+    <string name="prevent_ringing_option_cycle_summary">Увімк. (змінювати режими)</string>
+    <string name="prevent_ringing_option_normal">Normal</string>
+
+    <!-- OTA App -->
+    <string name="update_settings_title">Оновлення YAAP</string>
+    <string name="update_settings_summary">Перевірити доступні оновлення прошивки</string>
+
+    <!-- Radio Info -->
+    <string name="radio_info_title">Информація про мережу</string>
+
+    <!-- String for removal of sensitive info on about, depending on tap -->
+    <string name="device_info_protected_single_press">Натисніть для відображення</string>
+
+    <!-- YAAP Version -->
+    <string name="yaap_version">Версія YAAP</string>
+
+    <!-- QSTile requires unlocking before being accessible -->
+    <string name="qstile_requires_unlocking_title">Важливі плитки в шторці вимагають розблокування</string>
+    <string name="qstile_requires_unlocking_summary">Ці плитки будуть вимагати розблокування перед тим, як їх можна буде використовувати з блокуванням екрану:\nРежим польоту, Інтернет, Bluetooth, Економія трафіку, Режим енергозбереження, Автообертання, NFC, Точка доступу, USB-модем</string>
+
+    <!-- Default getTimeSpentInApp string for Wellbeing to display. [CHAR LIMIT=NONE] -->
+    <string name="duration_less_than_one_minute">Менше 1 хвилини</string>
+    <!-- Summary for Wellbeing screen time usage. [CHAR LIMIT=NONE] -->
+    <string name="screen_time_summary_usage_today">%1$s сьогодні</string>
+
+    <!-- Floating rotation button -->
+    <string name="enable_floating_rotation_button_title">Увімкнути плаваючу кнопку автообертання</string>
+
+    <!-- Power button -->
+    <string name="power_menu_setting_name">Кнопка живлення</string>
+    <string name="power_menu_setting_summary">Жести з кнопкою живлення</string>
+    <string name="torch_power_button_gesture_title">Перемикач ліхтарика при вимкненому екрані</string>
+    <string name="torch_power_button_gesture_none">Вимкнено</string>
+    <string name="torch_power_button_gesture_dt">Подвійне натискання кнопки живлення (повільніша реакція на один дотик)</string>
+    <string name="torch_power_button_gesture_lp">Довге натискання кнопки живлення</string>
+    <string name="quickly_open_camera_disabled">Вимкнено для використання ліхтарика на заблокованому екрані</string>
+
+    <!-- Playback control -->
+    <string name="gesture_playback_control_screen_title">Керування відтворенням</string>
+    <string name="gesture_playback_control_title">При вимкненому екрані довге натискання на кнопки гучності перемикатиме треки</string>
+    <string name="volume_rocker_music_controls_delay_title">Затримка розпізнавання натискання</string>
+    <string name="gesture_playback_control_delay">Затримка</string>
+    <string name="unit_ms">мс</string>
+    <string name="unit_hz">Гц</string>
+    <string name="unit_times">Кількість разів</string>
+
+    <!-- Quick Mute -->
+    <string name="quick_mute_title">Швидке вимкнення звуку</string>
+    <string name="volume_button_quick_mute_category_title">Довге натискання на кнопку зниження гучності відключить відтворюваний звук</string>
+    <string name="volume_button_quick_mute_delay_title">Затримка розпізнавання натискання</string>
+
+    <!-- Gaming macro QS tile -->
+    <string name="gaming_mode_tile_title">Ігровий режим</string>
+    <string name="gaming_mode_tile_summary">Налаштування плитки Ігровий Режим в шторці</string>
+    <string name="gaming_mode_heads_up_title">Спливаючі повідомлення</string>
+    <string name="gaming_mode_heads_up_summary">Вимкнути спливаючі повідомлення</string>
+    <string name="gaming_mode_zen_title">Не турбувати</string>
+    <string name="gaming_mode_zen_summary">Увімкнути режим "Не турбувати"</string>
+    <string name="gaming_mode_ringer_title">Режим дзвінка</string>
+    <string name="gaming_mode_ringer_disabled">Не змінювати</string>
+    <string name="gaming_mode_ringer_vibrate">Вібрація</string>
+    <string name="gaming_mode_ringer_silent">Без звуку</string>
+    <string name="gaming_mode_night_light_title">Нічне підсвічування</string>
+    <string name="gaming_mode_night_light_summary">Вимкнути нічне підсвічування та його автоматичне включення</string>
+    <string name="gaming_mode_battery_schedule_title">Режим енергозбереження</string>
+    <string name="gaming_mode_battery_schedule_summary">Вимкнути режим енергозбереження та його автоматичне включення</string>
+    <string name="gaming_mode_brightness_enabled_title">Автояскравість</string>
+    <string name="gaming_mode_brightness_enabled_summary">Відключить автояскравість</string>
+    <string name="gaming_mode_brightness_title">Встановити яскравість на</string>
+    <string name="gaming_mode_brightness_summary">Залишіть 0, щоб не змінювати</string>
+    <string name="gaming_mode_media_enabled_title">Гучність медіа</string>
+    <string name="gaming_mode_media_enabled_summary">Зміна гучності медіа</string>
+    <string name="gaming_mode_media_title">Встановити гучність на</string>
+    <string name="gaming_mode_desc">Увімкнувши Ігровий Режим, змінить налаштування на ті, що ви вказали вище. У разі відключення він їх поверне назад.</string>
+    <string name="gaming_mode_screen_off_title">Вимкнути після вимкнення екрану</string>
+    <string name="gaming_mode_screen_off_summary">Відключить ігровий режим, коли екран вимикається</string>
+
+    <!-- 3-Button navigation settings -->
+    <string name="button_settings_activity_title">Налаштування навігації за допомогою 3-х кнопок</string>
+    <string name="navigation_bar_inverse_title">Інвертувати макет</string>
+    <string name="navigation_bar_inverse_summary">Змінює місцями "недавні" та "назад"</string>
+    <string name="navbar_layout_title">Макет</string>
+    <string name="navbar_layout_normal">Звичайни</string>
+    <string name="navbar_layout_compact">Компактний</string>
+    <string name="navbar_layout_leftleaning">Правіше</string>
+    <string name="navbar_layout_rightleaning">Лівіше</string>
+
+    <!-- Back gesture height -->
+    <string name="back_height_low_label">Повна</string>
+    <string name="back_height_high_label">Тільки знизу</string>
+    <string name="back_options_dialog_title">Налаштування</string>
+    <string name="back_height_title">Висота жесту "назад"</string>
+    <string name="back_height_message">Висота спрацьовування жесту "назад"</string>
+
+    <!-- Reset auto brightness adjustment -->
+    <string name="reset_auto_brightness_adjustment_title">Скинути підстроювання</string>
+    <string name="reset_auto_brightness_adjustment_summary">Скидає ваше доналаштування автояскравості на стандартну</string>
+    <string name="reset_auto_brightness_adjustment_done">Уподобання автояскравості були скинуті</string>
+
+    <!-- Hotspot -->
+    <string name="wifi_band_24ghz_and_5ghz">2.4 ГГц &amp; 5 ГГц</string>
+    <string name="wifi_band_24ghz_and_6ghz">2.4 ГГц &amp; 6 ГГц</string>
+    <string name="wifi_band_60ghz">60 ГГц</string>
+    <plurals name="wifi_hotspot_auto_off_timeout">
+        <item quantity="other">Вимкнути, якщо немає підключених пристроїв протягом <xliff:g id="DURATION">%1$d</xliff:g> хв</item>
+        <item quantity="one">Вимкнути, якщо немає підключених пристроїв протягом <xliff:g id="DURATION">%1$d</xliff:g> хв</item>
+    </plurals>
+    <string name="wifi_hotspot_auto_off_timeout_never">Ніколи не вимикати точку доступу</string>
+    <string name="wifi_hotspot_client_manager_title">Підключені пристрої</string>
+    <string name="wifi_hotspot_client_manager_summary">Список та налаштування підключених пристроїв та налаштування обмеження їх кількості</string>
+    <string name="wifi_hotspot_client_manager_list_only_summary">Список пристроїв, підключених до точки доступу</string>
+    <string name="wifi_hotspot_client_limit_title">Обмеження підключених пристроїв</string>
+    <plurals name="wifi_hotspot_client_limit_summary">
+        <item quantity="other">До <xliff:g id="device_num">%1$d</xliff:g> пристроїв можна підключити до точки доступу</item>
+        <item quantity="one">До <xliff:g id="device_num">%1$d</xliff:g> пристрою можна підключити до точки доступу</item>
+    </plurals>
+    <string name="wifi_hotspot_blocked_clients_list_title">Заблоковані пристрої</string>
+    <string name="wifi_hotspot_connected_clients_list_title">Підключені пристрої</string>
+    <string name="wifi_hotspot_block_client_dialog_title">Заблокувати пристрій</string>
+    <string name="wifi_hotspot_block_client_dialog_text">Ця дія вимкне \"<xliff:g id="device_name">%1$s</xliff:g>\" і додасть в чорний список</string>
+    <string name="wifi_hotspot_unblock_client_dialog_title">Розблокувати пристрій</string>
+    <string name="wifi_hotspot_unblock_client_dialog_text">Цьому пристрою \"<xliff:g id="device_name">%1$s</xliff:g>\" буде дозволено підключення до точки доступу</string>
+    <string name="wifi_hotspot_client_manager_footer_text">Немає підключених пристроїв. Підключені та заблоковані пристрої відображатимуться тут, коли будуть доступні.</string>
+
+    <!-- Notch: Full screen apps -->
+    <string name="display_cutout_force_fullscreen_title">Повноекранні додатки</string>
+    <string name="display_cutout_force_fullscreen_summary">Змусити програми ігнорувати виріз екрану</string>
+    <string name="display_cutout_force_fullscreen_no_apps">Немає програм</string>
+    <string name="display_cutout_force_fullscreen_restart_app">Перезапустіть програму, щоб застосувати зміни.</string>
+
+    <!-- Black background -->
+    <string name="black_bg_title">Чорний фон</string>
+    <string name="black_bg_summary">Використовувати повністю чорне тло, коли темна тема увімкнена</string>
+
+    <!-- Disable VRR -->
+    <string name="disable_vrr_title">Вимкнути VRR</string>
+    <string name="disable_vrr_summary">Не використовувати динамічну зміну частоти оновлення\nМоже позбавити від мерехтіння</string>
+
+    <!-- Per-channel vibration pattern -->
+    <string name="notification_custom_vibrate_title">Кастомний шаблон вібрації</string>
+    <string name="notification_custom_vibrate_summary">Замінює лише стандартний шаблон\nШаблон, вибраний для програми пріоритетніше</string>
+    <string name="notification_custom_vibrate_slider1">Вібрувати</string>
+    <string name="notification_custom_vibrate_slider2">Пауза на</string>
+
+    <!-- Per-channel torch blinking -->
+    <string name="default_notification_torch_title">Блимаючий ліхтарик</string>
+    <string name="default_notification_torch_summary">Блимати ліхтариком для цього повідомлення</string>
+    <string name="default_notification_torch_slider1">Кількість блимань</string>
+    <string name="default_notification_torch_slider2">Частота блимання</string>
+
+    <!-- Pocket mode -->
+    <string name="proximity_wake_title">Кишеньковий режим</string>
+    <string name="proximity_wake_summary">Перевірити датчик наближення під час розблокування екрану</string>
+
+    <!-- In-call notifications -->
+    <string name="in_call_notifications_title">Повідомлення під час дзвінка</string>
+
+    <!-- NFC sounds -->
+    <string name="nfc_sounds_title">Звук використання NFC</string>
+
+    <!-- Doze enablement -->
+    <string name="doze_enabled_title">Навколишній дисплей</string>
+    <string name="doze_enabled_summary">Чи ввімкнути функціонал "режиму відключення" (Doze)</string>
+
+    <!-- Preference and settings suggestion title text for screen off UDFPS [CHAR LIMIT=60]-->
+    <string name="ambient_display_screen_off_udfps_title">Відбиток на вимкненому екрані</string>
+    <!-- Summary text for screen off UDFPS [CHAR LIMIT=NONE]-->
+    <string name="ambient_display_screen_off_udfps_summary">Дозволяє розблокувати відбиток на вимкненому екрані.\nМоже викликати випадкове увімкнення екрана.</string>
+    
+    <!-- Media player settings -->
+    <string name="media_controls_always_show_time_title">Завжди показувати час</string>
+    <string name="media_controls_always_show_time_summary">Завжди показувати пройдений та загальний час на медіаплеєрі</string>
+    <string name="media_controls_squiggle_title">Прогрес у вигляді хвилі</string>
+    <string name="media_controls_squiggle_summary">Показувати хвилястий індикатор виконання на медіаплеєрі\nДля набрання чинності потрібно перезапуск інтерфейсу.</string>
+
+    <!-- Hotspot extras -->
+    <string name="tethering_allow_vpn_upstreams_title">Дозволити клієнтам використовувати VPN</string>
+    <string name="tethering_allow_vpn_upstreams_summary">Дозволити клієнтам точок доступу використовувати VPN-підключення цього пристрою для вихідного підключення</string>
+
+    <!-- Connectivity check -->
+    <string name="connectivity_check_title">Перевірка підключення до Інтернету</string>
+    <string name="connectivity_check_summary">Кінцеві точки HTTP для перевірки підключення до Інтернету.</string>
+
+    <string name="sandboxed_google_play">Пісочниця Google Play</string>
+    <string name="sandboxed_google_play_work_profile">Пісочниця Google Play (робочий профіль)</string>
+
+    <string name="auto_grant_OTHER_SENSORS_permission_title">Дозволити сенсорам доступ до програм за замовчуванням</string>
+    <string name="auto_grant_OTHER_SENSORS_permission_summary_on">Сенсори — це нестандартний дозвіл, програми можуть працювати зі збоями, якщо він буде відхилений.</string>
+    <string name="auto_grant_OTHER_SENSORS_permission_summary_off">Запит дозволу буде показаний, коли програма спробує отримати доступ до датчиків. Зверніть увагу, що деякі програми, можливо, потрібно буде перезапустити вручну після надання дозволу датчиків.</string>
+
+    <string name="app_info_install_time">Встановлено: %1$s</string>
+    <string name="app_info_update_time">Оновлено: %1$s</string>
+    <string name="storage_scopes">Області зберігання</string>
+
+    <string name="allow_access_to_obb_directory_title">Дозволити доступ до теки Android/obb</string>
+    <string name="allow_access_to_obb_directory_summary">Потрібно для встановлення деяких великих програми (в основному ігри), які використовують файли розширення OBB.</string>
+
+</resources>
