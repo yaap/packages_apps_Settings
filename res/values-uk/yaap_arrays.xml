@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+
+    <!-- WiFi Tethering -->
+    <string-array name="wifi_tether_auto_turn_off_entries">
+        <item>Ніколи</item>
+        <item>30 секунд</item>
+        <item>1 хвилина</item>
+        <item>5 хвилин</item>
+        <item>10 хвилин</item>
+        <item>30 хвилин</item>
+        <item>1 година</item>
+    </string-array>
+
+</resources>
