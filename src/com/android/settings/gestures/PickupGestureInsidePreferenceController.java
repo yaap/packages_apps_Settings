@@ -29,17 +29,13 @@ import com.android.settingslib.core.AbstractPreferenceController;
 import com.android.settingslib.widget.MainSwitchPreference;
 import com.android.settingslib.widget.OnMainSwitchChangeListener;
 
-import com.yasp.settings.preferences.SecureSettingSwitchPreference;
-
 public class PickupGestureInsidePreferenceController extends AbstractPreferenceController
         implements PreferenceControllerMixin, OnMainSwitchChangeListener {
 
     private static final String KEY = "gesture_pick_up";
-    private static final String AMBIENT_KEY = "doze_pick_up_gesture_ambient";
 
     private final Context mContext;
     private MainSwitchPreference mSwitch;
-    private SecureSettingSwitchPreference mAmbientPref;
 
     public PickupGestureInsidePreferenceController(Context context) {
         super(context);
@@ -54,7 +50,6 @@ public class PickupGestureInsidePreferenceController extends AbstractPreferenceC
     @Override
     public void displayPreference(PreferenceScreen screen) {
         super.displayPreference(screen);
-        mAmbientPref = screen.findPreference(AMBIENT_KEY);
         mSwitch = screen.findPreference(getPreferenceKey());
         mSwitch.setOnPreferenceClickListener(preference -> {
             final boolean enabled = Settings.Secure.getInt(mContext.getContentResolver(),
@@ -62,7 +57,6 @@ public class PickupGestureInsidePreferenceController extends AbstractPreferenceC
             Settings.Secure.putInt(mContext.getContentResolver(),
                     Settings.Secure.DOZE_PICK_UP_GESTURE,
                     enabled ? 0 : 1);
-            updateAmbientEnablement(!enabled);
             return true;
         });
         mSwitch.addOnSwitchChangeListener(this);
@@ -73,7 +67,6 @@ public class PickupGestureInsidePreferenceController extends AbstractPreferenceC
         if (mSwitch != null) {
             mSwitch.updateStatus(isChecked);
         }
-        updateAmbientEnablement(isChecked);
     }
 
     @Override
@@ -92,11 +85,5 @@ public class PickupGestureInsidePreferenceController extends AbstractPreferenceC
     public void onSwitchChanged(Switch switchView, boolean isChecked) {
         Settings.Secure.putInt(mContext.getContentResolver(),
                 Settings.Secure.DOZE_PICK_UP_GESTURE, isChecked ? 1 : 0);
-        updateAmbientEnablement(isChecked);
-    }
-
-    private void updateAmbientEnablement(boolean enabled) {
-        if (mAmbientPref == null) return;
-        mAmbientPref.setEnabled(enabled);
     }
 }
