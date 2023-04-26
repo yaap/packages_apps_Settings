@@ -107,10 +107,11 @@
             android:title="@string/doze_on_charge_title"
             android:summary="@string/doze_on_charge_summary" />
 
-        <SwitchPreference
+        <com.android.settingslib.PrimarySwitchPreference
             android:key="gesture_tap"
             android:title="@string/ambient_display_tap_screen_title"
-            android:summary="@string/ambient_display_tap_screen_summary"
+            android:fragment="com.android.settings.gestures.TapScreenGestureSettings"
+            settings:searchable="false"
             settings:keywords="@string/keywords_gesture"
             settings:controller="com.android.settings.gestures.TapScreenGesturePreferenceController" />
 
