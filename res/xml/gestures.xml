@@ -60,11 +60,10 @@
         settings:keywords="@string/keywords_gesture"
         settings:controller="com.android.settings.gestures.ScreenOffUdfpsPreferenceController" />
 
-    <SwitchPreference
+    <com.android.settingslib.PrimarySwitchPreference
         android:key="gesture_tap"
         android:title="@string/ambient_display_tap_screen_title"
-        android:summary="@string/ambient_display_tap_screen_summary"
-        settings:keywords="@string/keywords_gesture"
+        android:fragment="com.android.settings.gestures.TapScreenGestureSettings"
         settings:controller="com.android.settings.gestures.TapScreenGesturePreferenceController" />
 
     <com.android.settingslib.PrimarySwitchPreference
