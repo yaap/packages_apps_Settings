@@ -170,4 +170,87 @@ public class NotificationVolumePreferenceControllerTest {
                 .isTrue();
     }
 
+    @Test
+    public void enableSeparateNotificationConfig_controllerBecomesAvailable() {
+        PreferenceScreen screen = spy(new PreferenceScreen(mContext, null));
+        VolumeSeekBarPreference volumeSeekBarPreference = mock(VolumeSeekBarPreference.class);
+        when(screen.getPreferenceManager()).thenReturn(mPreferenceManager);
+        when(screen.getContext()).thenReturn(mContext);
+        when(mResources.getBoolean(
+                com.android.settings.R.bool.config_show_notification_volume)).thenReturn(true);
+        // block the alternative condition to enable controller
+        when(mTelephonyManager.isVoiceCapable()).thenReturn(true);
+        when(mAudioManager.getRingerModeInternal()).thenReturn(AudioManager.RINGER_MODE_NORMAL);
+
+        DeviceConfig.setProperty(DeviceConfig.NAMESPACE_SYSTEMUI,
+                SystemUiDeviceConfigFlags.VOLUME_SEPARATE_NOTIFICATION, "false", false);
+
+        NotificationVolumePreferenceController controller =
+                new NotificationVolumePreferenceController(mContext);
+        when(screen.findPreference(controller.getPreferenceKey()))
+                .thenReturn(volumeSeekBarPreference);
+
+        // allow the controller to subscribe
+        Shadows.shadowOf((android.app.Application) ApplicationProvider.getApplicationContext())
+                .grantPermissions(READ_DEVICE_CONFIG_PERMISSION);
+        controller.onResume();
+        controller.displayPreference(screen);
+
+        DeviceConfig.setProperty(DeviceConfig.NAMESPACE_SYSTEMUI,
+                SystemUiDeviceConfigFlags.VOLUME_SEPARATE_NOTIFICATION, Boolean.toString(true),
+                false);
+
+        assertThat(controller.getAvailabilityStatus()).isEqualTo(
+                BasePreferenceController.AVAILABLE);
+    }
+
+    @Test
+    public void disableSeparateNotificationConfig_controllerBecomesUnavailable() {
+        PreferenceScreen screen = spy(new PreferenceScreen(mContext, null));
+        VolumeSeekBarPreference volumeSeekBarPreference = mock(VolumeSeekBarPreference.class);
+        when(screen.getPreferenceManager()).thenReturn(mPreferenceManager);
+        when(screen.getContext()).thenReturn(mContext);
+        when(mResources.getBoolean(
+                com.android.settings.R.bool.config_show_notification_volume)).thenReturn(true);
+
+        // block the alternative condition to enable controller
+        when(mTelephonyManager.isVoiceCapable()).thenReturn(true);
+
+        when(mAudioManager.getRingerModeInternal()).thenReturn(AudioManager.RINGER_MODE_NORMAL);
+
+        DeviceConfig.setProperty(DeviceConfig.NAMESPACE_SYSTEMUI,
+                SystemUiDeviceConfigFlags.VOLUME_SEPARATE_NOTIFICATION, "true", false);
+        NotificationVolumePreferenceController controller =
+                new NotificationVolumePreferenceController(mContext);
+
+        when(screen.findPreference(controller.getPreferenceKey()))
+                .thenReturn(volumeSeekBarPreference);
+
+        Shadows.shadowOf((android.app.Application) ApplicationProvider.getApplicationContext())
+                .grantPermissions(READ_DEVICE_CONFIG_PERMISSION);
+        controller.onResume();
+        controller.displayPreference(screen);
+
+        DeviceConfig.setProperty(DeviceConfig.NAMESPACE_SYSTEMUI,
+                SystemUiDeviceConfigFlags.VOLUME_SEPARATE_NOTIFICATION, "false", false);
+
+        assertThat(controller.getAvailabilityStatus()
+                == BasePreferenceController.UNSUPPORTED_ON_DEVICE).isTrue();
+    }
+
+    @Test
+    public void ringerModeSilent_unaliased_getAvailability_returnsDisabled() {
+        when(mResources.getBoolean(
+                com.android.settings.R.bool.config_show_notification_volume)).thenReturn(true);
+        when(mHelper.isSingleVolume()).thenReturn(false);
+
+        when(mAudioManager.getRingerModeInternal()).thenReturn(AudioManager.RINGER_MODE_SILENT);
+
+        DeviceConfig.setProperty(DeviceConfig.NAMESPACE_SYSTEMUI,
+                SystemUiDeviceConfigFlags.VOLUME_SEPARATE_NOTIFICATION, "true", false);
+
+        assertThat(mController.getAvailabilityStatus())
+                .isEqualTo(BasePreferenceController.DISABLED_DEPENDENT_SETTING);
+    }
+
 }
