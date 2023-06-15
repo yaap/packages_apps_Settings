@@ -42,4 +42,10 @@
         android:summary="@string/doze_gesture_ambient_summary"
         android:defaultValue="false" />
 
+    <com.yasp.settings.preferences.SecureSettingSwitchPreference
+        android:key="doze_pick_up_gesture_allow_ambient"
+        android:title="@string/doze_gesture_allow_ambient_title"
+        android:summary="@string/doze_gesture_allow_ambient_summary"
+        android:defaultValue="true" />
+
 </PreferenceScreen>
