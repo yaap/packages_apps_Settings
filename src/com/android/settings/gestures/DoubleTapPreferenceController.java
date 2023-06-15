@@ -36,10 +36,12 @@ public class DoubleTapPreferenceController extends AbstractPreferenceController
 
     private static final String KEY = "gesture_double_tap_screen";
     private static final String AMBIENT_KEY = "doze_double_tap_gesture_ambient";
+    private static final String AOD_KEY = "doze_double_tap_gesture_allow_ambient";
 
     private final Context mContext;
     private MainSwitchPreference mSwitch;
     private SecureSettingSwitchPreference mAmbientPref;
+    private SecureSettingSwitchPreference mAODPref;
 
     public DoubleTapPreferenceController(Context context) {
         super(context);
@@ -55,6 +57,7 @@ public class DoubleTapPreferenceController extends AbstractPreferenceController
     public void displayPreference(PreferenceScreen screen) {
         super.displayPreference(screen);
         mAmbientPref = screen.findPreference(AMBIENT_KEY);
+        mAODPref = screen.findPreference(AOD_KEY);
         mSwitch = screen.findPreference(getPreferenceKey());
         mSwitch.setOnPreferenceClickListener(preference -> {
             final boolean enabled = Settings.Secure.getInt(mContext.getContentResolver(),
@@ -62,7 +65,7 @@ public class DoubleTapPreferenceController extends AbstractPreferenceController
             Settings.Secure.putInt(mContext.getContentResolver(),
                     Settings.Secure.DOZE_DOUBLE_TAP_GESTURE,
                     enabled ? 0 : 1);
-            updateAmbientEnablement(!enabled);
+            updateEnablement(!enabled);
             return true;
         });
         mSwitch.addOnSwitchChangeListener(this);
@@ -73,7 +76,7 @@ public class DoubleTapPreferenceController extends AbstractPreferenceController
         if (mSwitch != null) {
             mSwitch.updateStatus(isChecked);
         }
-        updateAmbientEnablement(isChecked);
+        updateEnablement(isChecked);
     }
 
     @Override
@@ -92,12 +95,12 @@ public class DoubleTapPreferenceController extends AbstractPreferenceController
     public void onSwitchChanged(Switch switchView, boolean isChecked) {
         Settings.Secure.putInt(mContext.getContentResolver(),
                 Settings.Secure.DOZE_DOUBLE_TAP_GESTURE, isChecked ? 1 : 0);
-        updateAmbientEnablement(isChecked);
+        updateEnablement(isChecked);
     }
 
-    private void updateAmbientEnablement(boolean enabled) {
-        if (mAmbientPref == null) return;
-        mAmbientPref.setEnabled(enabled);
+    private void updateEnablement(boolean enabled) {
+        if (mAmbientPref != null) mAmbientPref.setEnabled(enabled);
+        if (mAODPref != null) mAODPref.setEnabled(enabled);
     }
 }
  
