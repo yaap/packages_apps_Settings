@@ -56,6 +56,9 @@ public class SeparateRingVolumePreferenceController extends
         mSilentIconId = R.drawable.ic_ring_volume_off;
 
         updateRingerMode();
+        if (mPreference != null) {
+            mPreference.setVisible(getAvailabilityStatus() == AVAILABLE);
+        }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -86,7 +89,9 @@ public class SeparateRingVolumePreferenceController extends
 
     @Override
     public int getAvailabilityStatus() {
-        return !mHelper.isSingleVolume() ? AVAILABLE : UNSUPPORTED_ON_DEVICE;
+        boolean separateNotification = isSeparateNotificationConfigEnabled();
+        return separateNotification && !mHelper.isSingleVolume()
+                ? AVAILABLE : CONDITIONALLY_UNAVAILABLE;
     }
 
     @Override

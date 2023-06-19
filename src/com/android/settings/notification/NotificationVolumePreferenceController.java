@@ -56,10 +56,12 @@ public class NotificationVolumePreferenceController extends
         mNormalIconId =  R.drawable.ic_notifications;
         mVibrateIconId = R.drawable.ic_volume_ringer_vibrate;
         mSilentIconId = R.drawable.ic_notifications_off_24dp;
+        mSeparateNotification = isSeparateNotificationConfigEnabled();
 
         if (updateRingerMode()) {
             updateEnabledState();
         }
+        updateVisibility();
     }
 
     /**
@@ -78,6 +80,17 @@ public class NotificationVolumePreferenceController extends
         selectPreferenceIconState();
         updateContentDescription();
         updateEnabledState();
+        updateVisibility();
+    }
+
+    private void updateVisibility() {
+        if (mPreference == null) return;
+        int status = getAvailabilityStatus();
+        mPreference.setVisible(status == AVAILABLE
+                || status == DISABLED_DEPENDENT_SETTING);
+        if (status == DISABLED_DEPENDENT_SETTING) {
+            mPreference.setEnabled(false);
+        }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -98,7 +111,7 @@ public class NotificationVolumePreferenceController extends
     public int getAvailabilityStatus() {
         return mContext.getResources().getBoolean(R.bool.config_show_notification_volume)
                 && !mHelper.isSingleVolume() ? (mRingerMode == AudioManager.RINGER_MODE_NORMAL
-                ? AVAILABLE : DISABLED_DEPENDENT_SETTING) : UNSUPPORTED_ON_DEVICE;
+                ? AVAILABLE : DISABLED_DEPENDENT_SETTING) : CONDITIONALLY_UNAVAILABLE;
     }
 
     @Override

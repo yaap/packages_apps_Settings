@@ -56,6 +56,9 @@ public class RingVolumePreferenceController extends
         mSilentIconId = R.drawable.ic_notifications_off_24dp;
 
         updateRingerMode();
+        if (mPreference != null) {
+            mPreference.setVisible(getAvailabilityStatus() == AVAILABLE);
+        }
     }
 
     @OnLifecycleEvent(Lifecycle.Event.ON_RESUME)
@@ -85,7 +88,8 @@ public class RingVolumePreferenceController extends
 
     @Override
     public int getAvailabilityStatus() {
-        return UNSUPPORTED_ON_DEVICE;
+        return !isSeparateNotificationConfigEnabled()
+                ? AVAILABLE : CONDITIONALLY_UNAVAILABLE;
     }
 
     @Override

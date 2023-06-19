@@ -39,6 +39,7 @@ import com.android.settings.core.OnActivityResultListener;
 import com.android.settings.dashboard.DashboardFragment;
 import com.android.settings.search.BaseSearchIndexProvider;
 import com.android.settings.sound.HandsFreeProfileOutputPreferenceController;
+import com.android.settings.sound.SeparateNotificationPreferenceController;
 import com.android.settings.sound.VolumeDialogPositionPreferenceController;
 import com.android.settings.sound.VolumeDialogTimeoutPreferenceController;
 import com.android.settings.widget.PreferenceCategoryController;
@@ -292,7 +293,10 @@ public class SoundSettings extends DashboardFragment implements OnActivityResult
                 new ScreenshotSoundPreferenceController(context, fragment, lifecycle);
         final VolumeDialogPositionPreferenceController volumeDialogPositionPreferenceController =
                 new VolumeDialogPositionPreferenceController(context);
+        final SeparateNotificationPreferenceController separateNotificationPreferenceController =
+                new SeparateNotificationPreferenceController(context);
 
+        controllers.add(separateNotificationPreferenceController);
         controllers.add(volumeDialogPositionPreferenceController);
         controllers.add(volumeDialogTimeoutPreferenceController);
         controllers.add(dialPadTonePreferenceController);
