@@ -57,6 +57,12 @@
         android:defaultValue="false" />
 
     <com.yasp.settings.preferences.SystemSettingSwitchPreference
+        android:key="gaming_mode_bluetooth"
+        android:title="@string/gaming_mode_bluetooth_title"
+        android:summary="@string/gaming_mode_bluetooth_summary"
+        android:defaultValue="false" />
+
+    <com.yasp.settings.preferences.SystemSettingSwitchPreference
         android:key="gaming_mode_brightness_enabled"
         android:title="@string/gaming_mode_brightness_enabled_title"
         android:summary="@string/gaming_mode_brightness_enabled_summary"
