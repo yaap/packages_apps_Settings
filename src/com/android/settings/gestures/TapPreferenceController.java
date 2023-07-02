@@ -17,6 +17,7 @@
 package com.android.settings.gestures;
 
 import android.content.Context;
+import android.hardware.display.AmbientDisplayConfiguration;
 import android.os.SystemProperties;
 import android.provider.Settings;
 import android.widget.Switch;
@@ -40,6 +41,7 @@ public class TapPreferenceController extends AbstractPreferenceController
     private static final String AOD_KEY = "doze_tap_gesture_allow_ambient";
 
     private final Context mContext;
+    private AmbientDisplayConfiguration mAmbientConfig;
     private MainSwitchPreference mSwitch;
     private SecureSettingSwitchPreference mAmbientPref;
     private SecureSettingSwitchPreference mAODPref;
@@ -89,7 +91,7 @@ public class TapPreferenceController extends AbstractPreferenceController
 
     @Override
     public boolean isAvailable() {
-        return true;
+        return getAmbientConfig().tapSensorAvailable();
     }
 
     @Override
@@ -103,5 +105,13 @@ public class TapPreferenceController extends AbstractPreferenceController
     private void updateEnablement(boolean enabled) {
         if (mAmbientPref != null) mAmbientPref.setEnabled(enabled);
         if (mAODPref != null) mAODPref.setEnabled(enabled);
+    }
+
+    private AmbientDisplayConfiguration getAmbientConfig() {
+        if (mAmbientConfig == null) {
+            mAmbientConfig = new AmbientDisplayConfiguration(mContext);
+        }
+
+        return mAmbientConfig;
     }
 }
