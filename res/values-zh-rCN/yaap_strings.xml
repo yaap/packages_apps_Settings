@@ -105,13 +105,15 @@
     <string name="gaming_mode_zen_title">勿扰模式</string>
     <string name="gaming_mode_zen_summary">开启勿扰模式</string>
     <string name="gaming_mode_ringer_title">铃声模式</string>
-    <string name="gaming_mode_ringer_disabled">不改变</string>
+    <string name="gaming_mode_ringer_disabled">默认</string>
     <string name="gaming_mode_ringer_vibrate">振动</string>
     <string name="gaming_mode_ringer_silent">静音</string>
     <string name="gaming_mode_night_light_title">护眼模式</string>
     <string name="gaming_mode_night_light_summary">关闭护眼模式</string>
     <string name="gaming_mode_battery_schedule_title">省电模式</string>
     <string name="gaming_mode_battery_schedule_summary">关闭省电模式</string>
+    <string name="gaming_mode_bluetooth_title">蓝牙</string>
+    <string name="gaming_mode_bluetooth_summary">是否开启蓝牙</string>
     <string name="gaming_mode_brightness_enabled_title">自动亮度</string>
     <string name="gaming_mode_brightness_enabled_summary">关闭自动亮度</string>
     <string name="gaming_mode_brightness_title">亮度设置</string>
@@ -120,7 +122,7 @@
     <string name="gaming_mode_media_enabled_summary">设置媒体音量</string>
     <string name="gaming_mode_media_title">音量设置</string>
     <string name="gaming_mode_desc">打开游戏模式时将会启用上方设置，关闭后将会恢复原本设置</string>
-    <string name="gaming_mode_screen_off_title">息屏关闭</string>
+    <string name="gaming_mode_screen_off_title">息屏时关闭</string>
     <string name="gaming_mode_screen_off_summary">息屏时自动关闭游戏模式</string>
 
     <!-- 3-Button navigation settings -->
