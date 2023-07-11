@@ -258,4 +258,7 @@
     <!-- Screenshot shutter -->
     <string name="screenshot_shutter_sound_title">截图提示音</string>
 
+    <string name="touch_sensitivity_title">触屏优化</string>
+    <string name="touch_sensitivity_summary">开启后将增强屏幕灵敏度</string>
+    
 </resources>
