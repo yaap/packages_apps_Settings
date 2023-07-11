@@ -55,7 +55,7 @@
     <string name="update_settings_summary">检查系统最新版本</string>
 
     <!-- Radio Info -->
-    <string name="radio_info_title">手机信息</string>
+    <string name="radio_info_title">广播信息</string>
 
     <!-- String for removal of sensitive info on about, depending on tap -->
     <string name="device_info_protected_single_press">点击显示</string>
@@ -126,9 +126,9 @@
     <string name="gaming_mode_screen_off_summary">息屏时自动关闭游戏模式</string>
 
     <!-- 3-Button navigation settings -->
-    <string name="button_settings_activity_title">“三按钮”导航</string>
-    <string name="navigation_bar_inverse_title">反向布局</string>
-    <string name="navigation_bar_inverse_summary">交换“返回”和“多任务”的位置</string>
+    <string name="button_settings_activity_title">三按钮导航</string>
+    <string name="navigation_bar_inverse_title">反转按钮</string>
+    <string name="navigation_bar_inverse_summary">交换返回和多任务的位置</string>
     <string name="navbar_layout_title">布局</string>
     <string name="navbar_layout_normal">正常</string>
     <string name="navbar_layout_compact">紧凑</string>
@@ -184,7 +184,7 @@
 
     <!-- Disable VRR -->
     <string name="disable_vrr_title">关闭 VRR</string>
-    <string name="disable_vrr_summary">不使用基于内容的刷新率切换\n将损害电池寿命</string>
+    <string name="disable_vrr_summary">不使用基于内容的刷新率切换\n将加快电量消耗</string>
 
     <!-- Per-channel vibration pattern -->
     <string name="notification_custom_vibrate_title">自定义振动模式</string>
@@ -210,7 +210,7 @@
 
     <!-- Doze enablement -->
     <string name="doze_enabled_title">环境显示</string>
-    <string name="doze_enabled_summary">Whether to enable the doze package functionality</string>
+    <string name="doze_enabled_summary">是否开启环境显示功能</string>
 
     <!-- Preference and settings suggestion title text for screen off UDFPS [CHAR LIMIT=60]-->
     <string name="ambient_display_screen_off_udfps_title">息屏指纹</string>
@@ -231,13 +231,6 @@
     <string name="connectivity_check_title">网络连通性检查</string>
     <string name="connectivity_check_summary">选择用于网络连通性检查的 HTTP 站点</string>
 
-    <string name="sandboxed_google_play">Google Play 沙盒</string>
-    <string name="sandboxed_google_play_work_profile">Google Play 沙盒 (工作资料)</string>
-
-    <string name="auto_grant_OTHER_SENSORS_permission_title">默认允许应用使用传感器权限</string>
-    <string name="auto_grant_OTHER_SENSORS_permission_summary_on">传感器是一个非标准权限，如果它被拒绝，应用程序可能会出现问题</string>
-    <string name="auto_grant_OTHER_SENSORS_permission_summary_off">当一个应用程序尝试使用传感器时，将显示一个权限提示。请注意，在允许使用传感器权限后，一些应用程序可能需要重新启动</string>
-
     <string name="app_info_install_time">安装时间: %1$s</string>
     <string name="app_info_update_time">更新时间: %1$s</string>
     <string name="storage_scopes">分区存储</string>
@@ -245,6 +238,27 @@
     <string name="allow_access_to_obb_directory_title">允许访问 Android/obb 文件夹</string>
     <string name="allow_access_to_obb_directory_summary">在安装一些使用 OBB 扩展文件的大型应用程序（游戏等）时需要</string>
 
+    <!-- Ambient wake toggles -->
+    <string name="doze_gesture_ambient_title">显示环境显示</string>
+    <string name="doze_gesture_ambient_summary">显示环境显示，而不是完全唤醒屏幕</string>
+    <string name="gesture_wake_ambient">显示环境显示</string>
+    <string name="gesture_wake">完全唤醒</string>
+
+    <!-- wake gestures on AOD -->
+    <string name="doze_gesture_allow_ambient_title">允许在环境显示使用</string>
+    <string name="doze_gesture_allow_ambient_summary">允许此手势在环境显示时使用</string>
+
+    <!-- extra dim schedule -->
+    <string name="extra_dim_schedule_title">时间表</string>
+
+    <!-- Separate ring & notification toggle -->
+    <string name="volume_separate_notification_title">分离来电和通知音量</string>
+    <string name="volume_separate_notification_summary">允许单独调整来电和通知音量</string>
+
+    <!-- Screenshot shutter -->
+    <string name="screenshot_shutter_sound_title">截图提示音</string>
+
     <string name="touch_sensitivity_title">触屏优化</string>
     <string name="touch_sensitivity_summary">开启后将增强屏幕灵敏度</string>
+    
 </resources>

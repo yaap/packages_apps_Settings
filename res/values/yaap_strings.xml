@@ -233,4 +233,8 @@
 
     <!-- extra dim schedule -->
     <string name="extra_dim_schedule_title">Schedule</string>
+
+    <!-- Screenshot shutter -->
+    <string name="screenshot_shutter_sound_title">Screenshot sound</string>
+    
 </resources>
