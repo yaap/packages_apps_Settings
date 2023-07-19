@@ -80,7 +80,7 @@ public class TapScreenGesturePreferenceController extends TogglePreferenceContro
         super.updateState(preference);
         final ContentResolver resolver = mContext.getContentResolver();
         final boolean enabled =
-                Settings.Secure.getInt(resolver, SECURE_KEY, 1) == 1;
+                Settings.Secure.getInt(resolver, SECURE_KEY, 0) == 1;
         String summary;
         if (enabled) {
             summary = mContext.getString(R.string.gesture_setting_on) + " ("
