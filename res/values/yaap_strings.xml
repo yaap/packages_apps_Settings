@@ -234,6 +234,10 @@
     <string name="doze_gesture_allow_ambient_title">Allow on Ambient</string>
     <string name="doze_gesture_allow_ambient_summary">Allow this gesture to work on always on and ambient display</string>
 
+    <!-- wake gestures haptics -->
+    <string name="doze_gesture_vibrate_title">Haptic Feedback</string>
+    <string name="doze_gesture_vibrate_summary">Vibrate when this gesture is invoked</string>
+
     <!-- extra dim schedule -->
     <string name="extra_dim_schedule_title">Schedule</string>
 
