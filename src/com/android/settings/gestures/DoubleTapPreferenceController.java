@@ -18,6 +18,7 @@ package com.android.settings.gestures;
 
 import android.content.Context;
 import android.hardware.display.AmbientDisplayConfiguration;
+import android.os.Vibrator;
 import android.provider.Settings;
 import android.widget.Switch;
 
@@ -38,12 +39,16 @@ public class DoubleTapPreferenceController extends AbstractPreferenceController
     private static final String KEY = "gesture_double_tap_screen";
     private static final String AMBIENT_KEY = "doze_double_tap_gesture_ambient";
     private static final String AOD_KEY = "doze_double_tap_gesture_allow_ambient";
+    private static final String VIB_KEY = "doze_double_tap_gesture_vibrate";
 
     private final Context mContext;
     private AmbientDisplayConfiguration mAmbientConfig;
     private MainSwitchPreference mSwitch;
     private SecureSettingSwitchPreference mAmbientPref;
     private SecureSettingSwitchPreference mAODPref;
+    private SecureSettingSwitchPreference mVibPref;
+
+    private boolean mIsVibAvailable;
 
     public DoubleTapPreferenceController(Context context) {
         super(context);
@@ -72,6 +77,11 @@ public class DoubleTapPreferenceController extends AbstractPreferenceController
         });
         mSwitch.addOnSwitchChangeListener(this);
         updateState(mSwitch);
+
+        mVibPref = screen.findPreference(VIB_KEY);
+        final Vibrator vibrator = (Vibrator) mContext.getSystemService(Context.VIBRATOR_SERVICE);
+        mIsVibAvailable = vibrator != null && vibrator.hasVibrator();
+        if (!mIsVibAvailable) mVibPref.setVisible(false);
     }
 
     public void setChecked(boolean isChecked) {
@@ -103,6 +113,7 @@ public class DoubleTapPreferenceController extends AbstractPreferenceController
     private void updateEnablement(boolean enabled) {
         if (mAmbientPref != null) mAmbientPref.setEnabled(enabled);
         if (mAODPref != null) mAODPref.setEnabled(enabled);
+        if (mVibPref != null && mIsVibAvailable) mVibPref.setEnabled(enabled);
     }
 
     private AmbientDisplayConfiguration getAmbientConfig() {
