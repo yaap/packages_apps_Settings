@@ -103,14 +103,14 @@ public class AmbientDisplayAlwaysOnPreferenceControllerTest {
 
     @Test
     public void isChecked_enabled() {
-        when(mConfig.alwaysOnEnabled(anyInt())).thenReturn(true);
+        when(mConfig.alwaysOnEnabledSetting(anyInt())).thenReturn(true);
 
         assertThat(mController.isChecked()).isTrue();
     }
 
     @Test
     public void isChecked_disabled() {
-        when(mConfig.alwaysOnEnabled(anyInt())).thenReturn(false);
+        when(mConfig.alwaysOnEnabledSetting(anyInt())).thenReturn(false);
 
         assertThat(mController.isChecked()).isFalse();
     }

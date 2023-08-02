@@ -70,7 +70,7 @@ public class AlwaysOnDisplaySlice implements CustomSliceable {
 
         final PendingIntent toggleAction = getBroadcastIntent(mContext);
         @ColorInt final int color = Utils.getColorAccentDefaultColor(mContext);
-        final boolean isChecked = mConfig.alwaysOnEnabled(MY_USER);
+        final boolean isChecked = mConfig.alwaysOnEnabledSetting(MY_USER);
 
         return new ListBuilder(mContext, CustomSliceRegistry.ALWAYS_ON_SLICE_URI,
                 ListBuilder.INFINITY)
