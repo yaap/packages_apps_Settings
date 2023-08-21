@@ -248,6 +248,10 @@
     <string name="doze_gesture_allow_ambient_title">允许在环境显示使用</string>
     <string name="doze_gesture_allow_ambient_summary">允许此手势在环境显示时使用</string>
 
+    <!-- wake gestures haptics -->
+    <string name="doze_gesture_vibrate_title">震动反馈</string>
+    <string name="doze_gesture_vibrate_summary">检测到此手势时震动</string>
+
     <!-- extra dim schedule -->
     <string name="extra_dim_schedule_title">时间表</string>
 
