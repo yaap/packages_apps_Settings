@@ -493,6 +493,11 @@
     <string name="notification_torch_slider1">Times to blink</string>
     <string name="notification_torch_slider2">Rate of blink</string>
 
+    <!-- Heads up -->
+    <string name="heads_up_title">Peek notifications</string>
+    <string name="heads_up_summary">Show select notifications as a banner across the top of the screen. AKA Heads up</string>
+    <string name="heads_up_off">Heads up is disabled globally</string>
+
     <!-- Brightness slider -->
     <string name="qs_show_brightness_title">Brightness slider</string>
     <string name="qs_show_brightness_summary">Brightness slider visibility and settings</string>

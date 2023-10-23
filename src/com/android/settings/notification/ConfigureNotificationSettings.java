@@ -26,7 +26,10 @@ import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
+import android.database.ContentObserver;
 import android.os.Bundle;
+import android.os.Looper;
+import android.os.Handler;
 import android.os.UserHandle;
 import android.provider.Settings;
 
@@ -36,6 +39,7 @@ import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.Preference.OnPreferenceChangeListener;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.android.internal.util.yaap.YaapUtils;
 import com.android.settings.R;
@@ -75,6 +79,7 @@ public class ConfigureNotificationSettings extends DashboardFragment implements
     private static final String PREF_FLASH_ON_CALL_DND = "flashlight_on_call_ignore_dnd";
     private static final String PREF_FLASH_ON_CALL_RATE = "flashlight_on_call_rate";
     private static final String KEY_BATT_LIGHT = "battery_light_enabled";
+    private static final String KEY_HEADS_UP = "heads_up_notifications_enabled";
 
     private RingtonePreference mRequestPreference;
 
@@ -84,6 +89,10 @@ public class ConfigureNotificationSettings extends DashboardFragment implements
     private SystemSettingListPreference mFlashOnCall;
     private SystemSettingSwitchPreference mFlashOnCallIgnoreDND;
     private CustomSeekBarPreference mFlashOnCallRate;
+    private SwitchPreferenceCompat mHeadsUp;
+
+    private final HeadsUpObserver mHeadsUpObserver = new HeadsUpObserver();
+    private boolean mHeadsUpSelfChange = false;
 
     @Override
     public int getMetricsCategory() {
@@ -138,6 +147,18 @@ public class ConfigureNotificationSettings extends DashboardFragment implements
             mFlashOnCall.setSummary(mFlashOnCall.getEntries()[value]);
             mFlashOnCall.setOnPreferenceChangeListener(this);
         }
+
+        mHeadsUp = (SwitchPreferenceCompat) findPreference(KEY_HEADS_UP);
+        boolean enabled = Settings.Global.getInt(resolver, KEY_HEADS_UP, 1) == 1;
+        mHeadsUp.setChecked(enabled);
+        mHeadsUp.setOnPreferenceChangeListener(this);
+        mHeadsUpObserver.observe();
+    }
+
+    @Override
+    public void onDestroy() {
+        mHeadsUpObserver.stop();
+        super.onDestroy();
     }
 
     @Override
@@ -232,8 +253,41 @@ public class ConfigureNotificationSettings extends DashboardFragment implements
             Settings.System.putInt(resolver,
                     Settings.System.FLASHLIGHT_ON_CALL_RATE, value);
             return true;
+        } else if (preference == mHeadsUp) {
+            boolean enabled = (Boolean) newValue;
+            mHeadsUpSelfChange = true;
+            Settings.Global.putInt(resolver, KEY_HEADS_UP, enabled ? 1 : 0);
+            return true;
         }
         return false;
+    }
+
+    private class HeadsUpObserver extends ContentObserver {
+        HeadsUpObserver() {
+            super(new Handler(Looper.getMainLooper()));
+        }
+
+        void observe() {
+            getActivity().getContentResolver().registerContentObserver(
+                    Settings.Global.getUriFor(KEY_HEADS_UP),
+                    false, this, UserHandle.USER_ALL);
+        }
+
+        void stop() {
+            getActivity().getContentResolver().unregisterContentObserver(this);
+        }
+
+        @Override
+        public void onChange(boolean selfChange) {
+            if (mHeadsUp == null || selfChange) return; 
+            if (mHeadsUpSelfChange) {
+                mHeadsUpSelfChange = false;
+                return;
+            }
+            final boolean enabled = Settings.Global.getInt(
+                    getActivity().getContentResolver(), KEY_HEADS_UP, 1) == 1;
+            mHeadsUp.setChecked(enabled);
+        }
     }
 
     /**
