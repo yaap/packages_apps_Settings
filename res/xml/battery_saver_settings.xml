@@ -42,6 +42,13 @@
         settings:keywords="@string/keywords_battery_saver_sticky"
         settings:controller="com.android.settings.fuelgauge.batterysaver.BatterySaverStickyPreferenceController"/>
 
+    <Preference
+        android:order="90"
+        android:key="battery_saver_advanced"
+        android:fragment="com.android.settings.fuelgauge.batterysaver.BatterySaverAdvancedSettings"
+        android:title="@string/advanced_apps"
+        android:summary="@string/battery_saver_advanced_settings_summary"/>
+
     <com.android.settingslib.widget.FooterPreference
         android:order="100"
         android:key="battery_saver_footer_preference"

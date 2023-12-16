@@ -107,6 +107,7 @@ import com.android.settings.display.darkmode.DarkModeSettingsFragment;
 import com.android.settings.dream.DreamSettings;
 import com.android.settings.enterprise.EnterprisePrivacySettings;
 import com.android.settings.fuelgauge.AdvancedPowerUsageDetail;
+import com.android.settings.fuelgauge.batterysaver.BatterySaverAdvancedSettings;
 import com.android.settings.fuelgauge.batterysaver.BatterySaverScheduleSettings;
 import com.android.settings.fuelgauge.batterysaver.BatterySaverSettings;
 import com.android.settings.fuelgauge.batteryusage.PowerUsageSummary;
@@ -379,6 +380,7 @@ public class SettingsGateway {
             GamingModeFragment.class.getName(),
             WifiTetherClientManager.class.getName(),
             WirelessDebuggingFragment.class.getName(),
+            BatterySaverAdvancedSettings.class.getName(),
             YaapSettings.class.getName()
     };
 

@@ -269,5 +269,32 @@
     <string name="apm_enhancement_title">Airplane mode enhancement</string>
     <string name="apm_enhancement_summary_on">Remember Bluetooth and WiFi state</string>
     <string name="apm_enhancement_summary_off">Ignore Bluetooth and WiFi state</string>
+
+    <!-- Advanced battery saver -->
+    <string name="battery_saver_advanced_settings_summary">Fine-tune what battery saver affects</string>
+    <string name="category_other_hw_title">Other Hardware</string>
+    <string name="low_power_mode_hbm_title">Disable HBM</string>
+    <string name="low_power_mode_dmd_title">Limit refresh rate</string>
+    <string name="enable_brightness_adjustment_tite">Adjust brightness</string>
+    <string name="adjust_brightness_factor_title">Adjust brightness factor</string>
+    <string name="disable_aod_tite">Disable AOD</string>
+    <string name="enable_night_mode_tite">Enable dark mode</string>
+    <string name="disable_animation_tite">Disable animations</string>
+    <string name="disable_launch_boost_tite">Disable launch boost</string>
+    <string name="enable_quick_doze_tite">Enable quick doze</string>
+    <string name="enable_quick_doze_summary">Immediately doze on screen off</string>
+    <string name="force_all_apps_standby_tite">Force standby</string>
+    <string name="force_all_apps_standby_summary">Force all apps into doze</string>
+    <string name="force_background_check_tite">Force background check</string>
+    <string name="defer_full_backup_tite">Defer full backup</string>
+    <string name="defer_keyvalue_backup_tite">Defer data backup</string>
+    <string name="disable_vibration_tite">Disable vibrations</string>
+    <string name="disable_optional_sensors_tite">Disable optional sensors</string>
+    <string name="location_mode_title">Location mode</string>
+    <string name="location_mode_no_change">No change</string>
+    <string name="location_mode_gps_disabled_when_screen_off">GPS off when screen is off</string>
+    <string name="location_mode_all_disabled_when_screen_off">Off when screen is off</string>
+    <string name="location_mode_foreground_only">Accurate only for foreground app</string>
+    <string name="location_mode_throttle_requests_when_screen_off">Limit requests</string>
     
 </resources>

@@ -95,4 +95,21 @@
         <item>2</item>
         <item>3</item>
     </string-array>
+
+    <!-- Advanced battery saver -->
+    <string-array name="location_mode_entries" translatable="false">
+        <item>@string/location_mode_no_change</item>
+        <item>@string/location_mode_gps_disabled_when_screen_off</item>
+        <item>@string/location_mode_all_disabled_when_screen_off</item>
+        <item>@string/location_mode_foreground_only</item>
+        <item>@string/location_mode_throttle_requests_when_screen_off</item>
+    </string-array>
+
+    <string-array name="location_mode_values" translatable="false">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+    </string-array>
 </resources>
