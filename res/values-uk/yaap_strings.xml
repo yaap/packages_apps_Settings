@@ -237,12 +237,7 @@
     <string name="connectivity_check_title">Перевірка підключення до Інтернету</string>
     <string name="connectivity_check_summary">Кінцеві точки HTTP для перевірки підключення до Інтернету.</string>
 
-    <string name="sandboxed_google_play">Пісочниця Google Play</string>
-    <string name="sandboxed_google_play_work_profile">Пісочниця Google Play (робочий профіль)</string>
 
-    <string name="auto_grant_OTHER_SENSORS_permission_title">Дозволити сенсорам доступ до програм за замовчуванням</string>
-    <string name="auto_grant_OTHER_SENSORS_permission_summary_on">Сенсори — це нестандартний дозвіл, програми можуть працювати зі збоями, якщо він буде відхилений.</string>
-    <string name="auto_grant_OTHER_SENSORS_permission_summary_off">Запит дозволу буде показаний, коли програма спробує отримати доступ до датчиків. Зверніть увагу, що деякі програми, можливо, потрібно буде перезапустити вручну після надання дозволу датчиків.</string>
 
     <string name="app_info_install_time">Встановлено: %1$s</string>
     <string name="app_info_update_time">Оновлено: %1$s</string>

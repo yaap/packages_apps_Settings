@@ -237,12 +237,7 @@
     <string name="connectivity_check_title">Проверка подключения к интернету</string>
     <string name="connectivity_check_summary"> Конечные точки HTTP для проверки подключения к интернету.</string>
 
-    <string name="sandboxed_google_play">Песочница Google Play</string>
-    <string name="sandboxed_google_play_work_profile">Песочница Google Play (рабочий профиль)</string>
 
-    <string name="auto_grant_OTHER_SENSORS_permission_title">Разрешить сенсорам доступ к приложениям по умолчанию</string>
-    <string name="auto_grant_OTHER_SENSORS_permission_summary_on">Сенсоры — это нестандартное разрешение, приложения могут работать со сбоями, если оно будет отклонено.</string>
-    <string name="auto_grant_OTHER_SENSORS_permission_summary_off">Запрос разрешения будет показан, когда приложение попытается получить доступ к датчикам. Обратите внимание, что некоторые приложения, возможно, потребуется перезапустить вручную после предоставления разрешения датчиков.</string>
 
     <string name="app_info_install_time">Установлено: %1$s</string>
     <string name="app_info_update_time">Обновлено: %1$s</string>

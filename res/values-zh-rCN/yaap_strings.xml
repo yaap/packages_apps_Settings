@@ -256,8 +256,6 @@
     <string name="extra_dim_schedule_title">时间表</string>
 
     <!-- Separate ring & notification toggle -->
-    <string name="volume_separate_notification_title">分离来电和通知音量</string>
-    <string name="volume_separate_notification_summary">允许单独调整来电和通知音量</string>
 
     <!-- Screenshot shutter -->
     <string name="screenshot_shutter_sound_title">截图提示音</string>
