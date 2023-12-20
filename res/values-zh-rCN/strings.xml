@@ -1000,6 +1000,10 @@
     <string name="color_mode_option_boosted" msgid="4698797857766774289">"增强色"</string>
     <string name="color_mode_option_saturated" msgid="3413853820158447300">"饱和色"</string>
     <string name="color_mode_option_automatic" msgid="2281217686509980870">"自适应"</string>
+    <string name="color_mode_balance_category">色彩平衡</string>
+    <string name="color_mode_balance_red">红色强度</string>
+    <string name="color_mode_balance_green">绿色强度</string>
+    <string name="color_mode_balance_blue">蓝色强度</string>
     <string name="brightness" msgid="6216871641021779698">"亮度"</string>
     <string name="auto_brightness_title" msgid="4239324728760986697">"自适应亮度"</string>
     <string name="auto_brightness_description" msgid="6807117118142381193">"系统会根据您的环境和活动自动调节屏幕亮度。您可以手动移动滑块，帮助“自适应亮度”功能了解您偏好的亮度。"</string>

@@ -114,6 +114,8 @@
     <string name="gaming_mode_battery_schedule_summary">关闭省电模式</string>
     <string name="gaming_mode_bluetooth_title">蓝牙</string>
     <string name="gaming_mode_bluetooth_summary">是否开启蓝牙</string>
+    <string name="gaming_mode_extra_dim_title">极暗</string>
+    <string name="gaming_mode_extra_dim_summary">是否关闭或定时极暗模式</string>
     <string name="gaming_mode_brightness_enabled_title">自动亮度</string>
     <string name="gaming_mode_brightness_enabled_summary">关闭自动亮度</string>
     <string name="gaming_mode_brightness_title">亮度设置</string>
@@ -260,7 +262,36 @@
     <!-- Screenshot shutter -->
     <string name="screenshot_shutter_sound_title">截图提示音</string>
 
-    <string name="touch_sensitivity_title">触屏优化</string>
-    <string name="touch_sensitivity_summary">开启后将增强屏幕灵敏度</string>
-    
+    <!-- APM Enhancement -->
+    <string name="apm_enhancement_title">飞行模式增强</string>
+    <string name="apm_enhancement_summary_on">记住蓝牙和 WIFI 状态</string>
+    <string name="apm_enhancement_summary_off">忽略蓝牙和 WIFI 状态</string>
+
+    <!-- Advanced battery saver -->
+    <string name="battery_saver_advanced_settings_summary">微调省电模式效果</string>
+    <string name="category_other_hw_title">其他硬件</string>
+    <string name="low_power_mode_hbm_title">关闭高亮度</string>
+    <string name="low_power_mode_dmd_title">限制刷新率</string>
+    <string name="enable_brightness_adjustment_tite">调整亮度</string>
+    <string name="adjust_brightness_factor_title">调整亮度系数</string>
+    <string name="disable_aod_tite">关闭环境显示</string>
+    <string name="enable_night_mode_tite">开启深色模式</string>
+    <string name="disable_animation_tite">关闭动画</string>
+    <string name="disable_launch_boost_tite">关闭启动加速</string>
+    <string name="enable_quick_doze_tite">开启快速睡眠</string>
+    <string name="enable_quick_doze_summary">屏幕关闭后立即睡眠</string>
+    <string name="force_all_apps_standby_tite">强制待机</string>
+    <string name="force_all_apps_standby_summary">强制所有应用睡眠</string>
+    <string name="force_background_check_tite">强制后台检查</string>
+    <string name="defer_full_backup_tite">推迟完整备份</string>
+    <string name="defer_keyvalue_backup_tite">推迟数据备份</string>
+    <string name="disable_vibration_tite">关闭震动</string>
+    <string name="disable_optional_sensors_tite">关闭可选传感器</string>
+    <string name="location_mode_title">位置模式</string>
+    <string name="location_mode_no_change">不更改</string>
+    <string name="location_mode_gps_disabled_when_screen_off">屏幕关闭时 GPS 关闭</string>
+    <string name="location_mode_all_disabled_when_screen_off">屏幕关闭时关闭位置</string>
+    <string name="location_mode_foreground_only">仅对前台应用生效</string>
+    <string name="location_mode_throttle_requests_when_screen_off">限制请求</string>
+
 </resources>
