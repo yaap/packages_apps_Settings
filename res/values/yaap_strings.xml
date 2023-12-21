@@ -290,6 +290,7 @@
     <string name="force_background_check_tite">Force background check</string>
     <string name="defer_full_backup_tite">Defer full backup</string>
     <string name="defer_keyvalue_backup_tite">Defer data backup</string>
+    <string name="enable_datasaver_tite">Enable data saver</string>
     <string name="disable_vibration_tite">Disable vibrations</string>
     <string name="disable_optional_sensors_tite">Disable optional sensors</string>
     <string name="location_mode_title">Location mode</string>
