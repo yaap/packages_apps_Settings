@@ -299,5 +299,9 @@
     <string name="location_mode_all_disabled_when_screen_off">Off when screen is off</string>
     <string name="location_mode_foreground_only">Accurate only for foreground app</string>
     <string name="location_mode_throttle_requests_when_screen_off">Limit requests</string>
+
+    <!-- Enforce DNS for VPN -->
+    <string name="vpn_enforce_dns_title">Disable for VPN</string>
+    <string name="vpn_enforce_dns_summary">Disable the private DNS when connected to a VPN\nWill restore upon disconnecting</string>
     
 </resources>
