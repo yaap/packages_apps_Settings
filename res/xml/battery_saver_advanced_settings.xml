@@ -98,6 +98,11 @@
             android:title="@string/defer_keyvalue_backup_tite"
             android:defaultValue="true" />
 
+        <SwitchPreference
+            android:key="enable_datasaver"
+            android:title="@string/enable_datasaver_tite"
+            android:defaultValue="false" />
+
     </PreferenceCategory>
 
     <PreferenceCategory

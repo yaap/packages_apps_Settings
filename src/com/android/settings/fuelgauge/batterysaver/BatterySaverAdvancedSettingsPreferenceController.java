@@ -50,6 +50,7 @@ public class BatterySaverAdvancedSettingsPreferenceController extends AbstractPr
     private static final String KEY_FORCE_BACKGROUND_CHECK = "force_background_check";
     private static final String KEY_DEFER_FULL_BACKUP = "defer_full_backup";
     private static final String KEY_DEFER_KEYVALUE_BACKUP = "defer_keyvalue_backup";
+    private static final String KEY_ENABLE_DATASAVER = "enable_datasaver";
     private static final String KEY_DISABLE_VIBRATION = "disable_vibration";
     private static final String KEY_DISABLE_OPTIONAL_SENSORS = "disable_optional_sensors";
     private static final String KEY_LOCATION_MODE = "location_mode";
@@ -70,6 +71,7 @@ public class BatterySaverAdvancedSettingsPreferenceController extends AbstractPr
         sDefaultsMap.put(KEY_FORCE_BACKGROUND_CHECK, "true");
         sDefaultsMap.put(KEY_DEFER_FULL_BACKUP, "true");
         sDefaultsMap.put(KEY_DEFER_KEYVALUE_BACKUP, "true");
+        sDefaultsMap.put(KEY_ENABLE_DATASAVER, "false");
         sDefaultsMap.put(KEY_DISABLE_VIBRATION, "false");
         sDefaultsMap.put(KEY_DISABLE_OPTIONAL_SENSORS, "true");
         sDefaultsMap.put(KEY_LOCATION_MODE, "3");
