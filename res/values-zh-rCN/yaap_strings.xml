@@ -312,4 +312,7 @@
     <string name="timeout_summary_10mins">10 分钟</string>
     <string name="timeout_summary_30mins">30 分钟</string>
     <string name="timeout_summary_1hour">1 小时</string>
+
+    <string name="touch_sensitivity_title">触控增强</string>
+    <string name="touch_sensitivity_summary">增强贴膜时的触控体验</string>
 </resources>
