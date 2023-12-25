@@ -273,11 +273,11 @@
     <string name="low_power_mode_hbm_title">关闭高亮度</string>
     <string name="low_power_mode_dmd_title">限制刷新率</string>
     <string name="enable_brightness_adjustment_tite">调整亮度</string>
-    <string name="adjust_brightness_factor_title">调整亮度系数</string>
+    <string name="adjust_brightness_factor_title">调整屏幕亮度</string>
     <string name="disable_aod_tite">关闭环境显示</string>
     <string name="enable_night_mode_tite">开启深色模式</string>
     <string name="disable_animation_tite">关闭动画</string>
-    <string name="disable_launch_boost_tite">关闭启动加速</string>
+    <string name="disable_launch_boost_tite">关闭应用速启</string>
     <string name="enable_quick_doze_tite">开启快速睡眠</string>
     <string name="enable_quick_doze_summary">屏幕关闭后立即睡眠</string>
     <string name="force_all_apps_standby_tite">强制待机</string>
@@ -300,4 +300,16 @@
     <string name="vpn_enforce_dns_title">关闭 DNS</string>
     <string name="vpn_enforce_dns_summary">连接到 VPN 时关闭专用 DNS\n将在断开连接后恢复</string>
 
+    <!-- Bluetooth timeout -->
+    <string name="bluetooth_timeout">蓝牙超时</string>
+    <string name="bluetooth_timeout_summary">若没有设备连接，蓝牙将在 <xliff:g id="timeout_description">%1$s</xliff:g> 分钟后关闭</string>
+    <string name="bluetooth_timeout_summary2">蓝牙不再自动关闭</string>
+    <string name="timeout_summary_never">从不</string>
+    <string name="timeout_summary_30secs">30 秒</string>
+    <string name="timeout_summary_1min">1 分钟</string>
+    <string name="timeout_summary_2mins">2 分钟</string>
+    <string name="timeout_summary_5mins">5 分钟</string>
+    <string name="timeout_summary_10mins">10 分钟</string>
+    <string name="timeout_summary_30mins">30 分钟</string>
+    <string name="timeout_summary_1hour">1 小时</string>
 </resources>
