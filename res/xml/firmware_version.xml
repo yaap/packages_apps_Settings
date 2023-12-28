@@ -21,6 +21,12 @@
     android:title="@string/firmware_version"
     settings:keywords="@string/keywords_android_version">
 
+    <com.android.settingslib.widget.LayoutPreference
+        android:layout="@layout/yaap_logo_layout"
+        android:selectable="false"
+        android:key="yaap_logo"
+        settings:searchable="false" />
+
     <!-- Android version -->
     <Preference
         android:key="os_firmware_version"
