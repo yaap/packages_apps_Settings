@@ -277,7 +277,7 @@
     <string name="disable_aod_tite">关闭环境显示</string>
     <string name="enable_night_mode_tite">开启深色模式</string>
     <string name="disable_animation_tite">关闭动画</string>
-    <string name="disable_launch_boost_tite">关闭应用速启</string>
+    <string name="disable_launch_boost_tite">关闭快速启动</string>
     <string name="enable_quick_doze_tite">开启快速睡眠</string>
     <string name="enable_quick_doze_summary">屏幕关闭后立即睡眠</string>
     <string name="force_all_apps_standby_tite">强制待机</string>
@@ -285,7 +285,7 @@
     <string name="force_background_check_tite">强制后台检查</string>
     <string name="defer_full_backup_tite">推迟完整备份</string>
     <string name="defer_keyvalue_backup_tite">推迟数据备份</string>
-    <string name="enable_datasaver_tite">节省数据流量</string>
+    <string name="enable_datasaver_tite">流量节省程序</string>
     <string name="disable_vibration_tite">关闭震动</string>
     <string name="disable_optional_sensors_tite">关闭可选传感器</string>
     <string name="location_mode_title">位置模式</string>
@@ -303,7 +303,7 @@
     <!-- Bluetooth timeout -->
     <string name="bluetooth_timeout">蓝牙超时</string>
     <string name="bluetooth_timeout_summary">若没有设备连接，蓝牙将在 <xliff:g id="timeout_description">%1$s</xliff:g> 分钟后关闭</string>
-    <string name="bluetooth_timeout_summary2">蓝牙不再自动关闭</string>
+    <string name="bluetooth_timeout_summary2">蓝牙不会自动关闭</string>
     <string name="timeout_summary_never">从不</string>
     <string name="timeout_summary_30secs">30 秒</string>
     <string name="timeout_summary_1min">1 分钟</string>
@@ -314,5 +314,5 @@
     <string name="timeout_summary_1hour">1 小时</string>
 
     <string name="touch_sensitivity_title">触控增强</string>
-    <string name="touch_sensitivity_summary">增强贴膜时的触控体验</string>
+    <string name="touch_sensitivity_summary">增强贴膜后的触控体验</string>
 </resources>
