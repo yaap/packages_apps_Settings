@@ -302,7 +302,7 @@
 
     <!-- Bluetooth timeout -->
     <string name="bluetooth_timeout">蓝牙超时</string>
-    <string name="bluetooth_timeout_summary">若没有设备连接，蓝牙将在 <xliff:g id="timeout_description">%1$s</xliff:g> 分钟后关闭</string>
+    <string name="bluetooth_timeout_summary">若没有设备连接，蓝牙将在 <xliff:g id="timeout_description">%1$s</xliff:g> 后关闭</string>
     <string name="bluetooth_timeout_summary2">蓝牙不会自动关闭</string>
     <string name="timeout_summary_never">从不</string>
     <string name="timeout_summary_30secs">30 秒</string>
@@ -315,4 +315,9 @@
 
     <string name="touch_sensitivity_title">触控增强</string>
     <string name="touch_sensitivity_summary">增强贴膜后的触控体验</string>
+
+    <string name="color_mode_balance_category">色彩平衡</string>
+    <string name="color_mode_balance_red">红色强度</string>
+    <string name="color_mode_balance_green">绿色强度</string>
+    <string name="color_mode_balance_blue">蓝色强度</string>
 </resources>
