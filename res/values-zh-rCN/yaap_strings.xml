@@ -52,7 +52,7 @@
 
     <!-- OTA App -->
     <string name="update_settings_title">YAAP 更新</string>
-    <string name="update_settings_summary">检查系统最新版本</string>
+    <string name="update_settings_summary">检查系统更新</string>
 
     <!-- Radio Info -->
     <string name="radio_info_title">广播信息</string>
@@ -99,7 +99,7 @@
 
     <!-- Gaming macro QS tile -->
     <string name="gaming_mode_tile_title">游戏模式</string>
-    <string name="gaming_mode_tile_summary">游戏模式磁贴设置</string>
+    <string name="gaming_mode_tile_summary">调整游戏模式设置</string>
     <string name="gaming_mode_heads_up_title">浮动通知</string>
     <string name="gaming_mode_heads_up_summary">关闭浮动通知</string>
     <string name="gaming_mode_zen_title">勿扰模式</string>
@@ -181,8 +181,8 @@
     <string name="display_cutout_force_fullscreen_restart_app">重启此应用以生效</string>
 
     <!-- Black background -->
-    <string name="black_bg_title">黑色背景</string>
-    <string name="black_bg_summary">开启深色模式时使用黑色背景</string>
+    <string name="black_bg_title">纯黑背景</string>
+    <string name="black_bg_summary">开启深色模式时使用纯黑背景</string>
 
     <!-- Disable VRR -->
     <string name="disable_vrr_title">关闭 VRR</string>
@@ -257,8 +257,6 @@
     <!-- extra dim schedule -->
     <string name="extra_dim_schedule_title">时间表</string>
 
-    <!-- Separate ring & notification toggle -->
-
     <!-- Screenshot shutter -->
     <string name="screenshot_shutter_sound_title">截图提示音</string>
 
@@ -313,6 +311,14 @@
     <string name="timeout_summary_30mins">30 分钟</string>
     <string name="timeout_summary_1hour">1 小时</string>
 
+    <!-- Volume Steps -->
+    <string name="volume_steps_title">音量步长</string>
+    <string name="volume_steps_summary">调整每个流的音量步长</string>
+    <string name="max_music_volume_title">媒体</string>
+    <string name="max_call_volume_title">通话</string>
+    <string name="max_alarm_volume_title">铃声</string>
+    <string name="steps_unit">步</string>
+
     <string name="touch_sensitivity_title">触控增强</string>
     <string name="touch_sensitivity_summary">增强贴膜后的触控体验</string>
 
@@ -320,4 +326,11 @@
     <string name="color_mode_balance_red">红色强度</string>
     <string name="color_mode_balance_green">绿色强度</string>
     <string name="color_mode_balance_blue">蓝色强度</string>
+
+    <!-- Text shown for the title of the lockdown option -->
+    <string name="lockdown_settings_title">显示锁定选项</string>
+    <!-- Text shown for the description of the lockdown option -->
+    <string name="lockdown_settings_summary">在电源选项中显示锁定选项\n将关闭智能锁、面部解锁、指纹解锁和锁屏通知功能</string>
+    <string name="lockscreen_trivial_controls_summary">未解锁手机时设备控制器依然可用</string>
+    <string name="lockscreen_trivial_controls_setting_toggle">设备控制器</string>
 </resources>
