@@ -41,12 +41,11 @@ public class BatteryDesignCapacityPreferenceController extends BasePreferenceCon
     @Override
     public CharSequence getSummary() {
         Intent batteryIntent = BatteryUtils.getBatteryIntent(mContext);
-        final int designCapacityMicroAh =
+        final int designCapacityUah =
                 batteryIntent.getIntExtra(BatteryManager.EXTRA_DESIGN_CAPACITY, -1);
 
-        if (designCapacityMicroAh != -1) {
-            int designCapacity = designCapacityMicroAh / 1_000;
-
+        if (designCapacityUah != -1) {
+            int designCapacity = designCapacityUah / 1_000;
             return mContext.getString(R.string.battery_design_capacity_summary, designCapacity);
         }
 

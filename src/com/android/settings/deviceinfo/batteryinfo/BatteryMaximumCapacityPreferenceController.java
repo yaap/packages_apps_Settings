@@ -41,18 +41,18 @@ public class BatteryMaximumCapacityPreferenceController extends BasePreferenceCo
     @Override
     public CharSequence getSummary() {
         Intent batteryIntent = BatteryUtils.getBatteryIntent(mContext);
-        final int currentCapacityMicroAh =
-                batteryIntent.getIntExtra(BatteryManager.EXTRA_CURRENT_CAPACITY, -1);
-        final int designCapacityMicroAh =
+        final int maxCapacityUah =
+                batteryIntent.getIntExtra(BatteryManager.EXTRA_MAXIMUM_CAPACITY, -1);
+        final int designCapacityUah =
                 batteryIntent.getIntExtra(BatteryManager.EXTRA_DESIGN_CAPACITY, -1);
 
-        if (currentCapacityMicroAh != -1 && designCapacityMicroAh != -1) {
-            int currentCapacity = currentCapacityMicroAh / 1_000;
-            int designCapacity = designCapacityMicroAh / 1_000;
-            int percentage = (currentCapacity * 100) / designCapacity;
+        if (maxCapacityUah != -1 && designCapacityUah != -1) {
+            int maxCapacity = maxCapacityUah / 1_000;
+            int designCapacity = designCapacityUah / 1_000;
+            int percentage = (maxCapacity * 100) / designCapacity;
 
             return mContext.getString(
-                    R.string.battery_maximum_capacity_summary, currentCapacity, percentage);
+                    R.string.battery_maximum_capacity_summary, maxCapacity, percentage);
         }
 
         return mContext.getString(R.string.battery_maximum_capacity_not_available);
