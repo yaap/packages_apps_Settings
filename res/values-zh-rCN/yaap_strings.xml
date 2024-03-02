@@ -333,4 +333,33 @@
     <string name="lockdown_settings_summary">在电源选项中显示锁定选项\n将关闭智能锁、面部解锁、指纹解锁和锁屏通知功能</string>
     <string name="lockscreen_trivial_controls_summary">未解锁手机时设备控制器依然可用</string>
     <string name="lockscreen_trivial_controls_setting_toggle">设备控制器</string>
+
+    <!-- Battery Info: Technology -->
+    <string name="battery_technology">技术</string>
+    <string name="battery_technology_not_available">不可用</string>
+    <!-- Battery Info: Health -->
+    <string name="battery_health">健康状态</string>
+    <string name="battery_health_good">很好</string>
+    <string name="battery_health_overheat">过热</string>
+    <string name="battery_health_dead">不行了...</string>
+    <string name="battery_health_over_voltage">过压</string>
+    <string name="battery_health_unspecified_failure">未知错误</string>
+    <string name="battery_health_cold">好冷</string>
+    <string name="battery_health_unknown">未知</string>
+    <!-- Battery Info: Temperature -->
+    <string name="battery_temperature">温度</string>
+    <string name="battery_temperature_not_available">不可用</string>
+    <!-- Battery Info: Voltage -->
+    <string name="battery_voltage">电压</string>
+    <string name="battery_voltage_not_available">不可用</string>
+    <!-- Battery Info: Charge Counter -->
+    <string name="battery_charge_counter_summary">%1$d 毫安时</string>
+    <!-- Battery Info: Design Capacity -->
+    <string name="battery_design_capacity">设计容量</string>
+    <string name="battery_design_capacity_summary">%1$d 毫安时</string>
+    <string name="battery_design_capacity_not_available">不可用</string>
+    <!-- Battery Info: Maximum Capacity -->
+    <string name="battery_maximum_capacity">剩余容量</string>
+    <string name="battery_maximum_capacity_summary">%1$d 毫安时 (%2$d%%)</string>
+    <string name="battery_maximum_capacity_not_available">不可用</string>
 </resources>
