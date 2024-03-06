@@ -37,7 +37,7 @@ public class AmbientDisplayCustomPreferenceController extends AbstractPreference
 
     public AmbientDisplayCustomPreferenceController(Context context) {
         super(context);
-        mMetricsFeatureProvider = FeatureFactory.getFactory(context).getMetricsFeatureProvider();
+        mMetricsFeatureProvider = FeatureFactory.getFeatureFactory().getMetricsFeatureProvider();
     }
 
     @Override

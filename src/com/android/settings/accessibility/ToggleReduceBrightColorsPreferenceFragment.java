@@ -40,7 +40,7 @@ import android.view.ViewGroup;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
-import androidx.preference.SwitchPreference;
+import androidx.preference.TwoStatePreference;
 
 import com.android.settings.R;
 import com.android.settings.accessibility.AccessibilityUtil.QuickSettingsTooltipType;
@@ -119,7 +119,7 @@ public class ToggleReduceBrightColorsPreferenceFragment extends ToggleFeaturePre
         getPreferenceScreen().removePreference(intensity);
         intensity.setOrder(mShortcutPreference.getOrder() - 2);
         generalCategory.addPreference(intensity);
-        final SwitchPreference persist = findPreference(KEY_PERSIST);
+        final TwoStatePreference persist = findPreference(KEY_PERSIST);
         getPreferenceScreen().removePreference(persist);
         persist.setOrder(mShortcutPreference.getOrder() - 1);
         generalCategory.addPreference(persist);

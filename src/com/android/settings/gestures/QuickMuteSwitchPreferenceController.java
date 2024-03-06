@@ -18,7 +18,8 @@ package com.android.settings.gestures;
 
 import android.content.Context;
 import android.provider.Settings;
-import android.widget.Switch;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
@@ -27,12 +28,11 @@ import com.android.settings.R;
 import com.android.settings.core.PreferenceControllerMixin;
 import com.android.settingslib.core.AbstractPreferenceController;
 import com.android.settingslib.widget.MainSwitchPreference;
-import com.android.settingslib.widget.OnMainSwitchChangeListener;
 
 import com.yasp.settings.preferences.CustomSeekBarPreference;
 
 public class QuickMuteSwitchPreferenceController extends AbstractPreferenceController
-        implements PreferenceControllerMixin, OnMainSwitchChangeListener {
+        implements PreferenceControllerMixin, OnCheckedChangeListener {
 
     private static final String KEY = "volume_button_quick_mute";
     private static final String DELAY_KEY = "volume_button_quick_mute_delay";
@@ -89,7 +89,7 @@ public class QuickMuteSwitchPreferenceController extends AbstractPreferenceContr
     }
 
     @Override
-    public void onSwitchChanged(Switch switchView, boolean isChecked) {
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         Settings.System.putInt(mContext.getContentResolver(),
                 KEY, isChecked ? 1 : 0);
         updateDelayEnablement(isChecked);

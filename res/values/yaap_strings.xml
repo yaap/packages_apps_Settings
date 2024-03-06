@@ -358,4 +358,7 @@
     <string name="panic_settings_title">Show Panic option</string>
     <!-- Text shown for the description of the panic option -->
     <string name="panic_settings_summary">Display power button option that activates an emergency panic trigger.</string>
+
+    <!-- String for removal of sensitive info on about, depending on tap -->
+    <string name="device_info_protected_single_press">Tap to show info</string>
 </resources>

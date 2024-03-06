@@ -33,27 +33,21 @@
         android:fragment="com.android.settings.gestures.PowerMenuSettings"
         settings:controller="com.android.settings.gestures.PowerMenuPreferenceController" />
 
-    <SwitchPreference
-        android:key="gesture_assist"
-        android:title="@string/assist_gesture_title"
-        settings:keywords="@string/keywords_assist_gesture_launch"
-        settings:controller="com.android.settings.gestures.AssistGestureSettingsPreferenceController" />
-
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:key="gesture_double_twist"
         android:title="@string/double_twist_for_camera_mode_title"
         android:summary="@string/double_twist_for_camera_mode_summary"
         settings:keywords="@string/keywords_gesture"
         settings:controller="com.android.settings.gestures.DoubleTwistPreferenceController" />
 
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:key="gesture_swipe_down_fingerprint"
         android:title="@string/fingerprint_swipe_for_notifications_title"
         android:summary="@string/fingerprint_swipe_for_notifications_summary"
         settings:keywords="@string/keywords_gesture"
         settings:controller="com.android.settings.gestures.SwipeToNotificationPreferenceController" />
 
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:key="gesture_screen_off_udfps"
         android:title="@string/ambient_display_screen_off_udfps_title"
         android:summary="@string/ambient_display_screen_off_udfps_summary"
