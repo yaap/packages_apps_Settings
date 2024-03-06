@@ -20,7 +20,8 @@ import android.content.Context;
 import android.hardware.display.AmbientDisplayConfiguration;
 import android.os.Vibrator;
 import android.provider.Settings;
-import android.widget.Switch;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
@@ -29,12 +30,11 @@ import com.android.settings.R;
 import com.android.settings.core.PreferenceControllerMixin;
 import com.android.settingslib.core.AbstractPreferenceController;
 import com.android.settingslib.widget.MainSwitchPreference;
-import com.android.settingslib.widget.OnMainSwitchChangeListener;
 
 import com.yasp.settings.preferences.SecureSettingSwitchPreference;
 
 public class DoubleTapPreferenceController extends AbstractPreferenceController
-        implements PreferenceControllerMixin, OnMainSwitchChangeListener {
+        implements PreferenceControllerMixin, OnCheckedChangeListener {
 
     private static final String KEY = "gesture_double_tap_screen";
     private static final String AMBIENT_KEY = "doze_double_tap_gesture_ambient";
@@ -104,7 +104,7 @@ public class DoubleTapPreferenceController extends AbstractPreferenceController
     }
 
     @Override
-    public void onSwitchChanged(Switch switchView, boolean isChecked) {
+    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         Settings.Secure.putInt(mContext.getContentResolver(),
                 Settings.Secure.DOZE_DOUBLE_TAP_GESTURE, isChecked ? 1 : 0);
         updateEnablement(isChecked);

@@ -42,9 +42,10 @@
             android:summary="@string/unlock_set_unlock_mode_pattern"
             settings:keywords="@string/keywords_lockscreen" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="visiblepattern_profile"
-            android:title="@string/lockpattern_settings_enable_visible_pattern_title_profile" />
+            android:title="@string/lockpattern_settings_enable_visible_pattern_title_profile"
+            settings:controller="com.android.settings.security.VisiblePatternProfilePreferenceController" />
 
         <com.android.settings.RestrictedListPreference
             android:key="privacy_lock_screen_work_profile_notifications"
@@ -85,7 +86,7 @@
             settings:searchable="false"/>
 
         <!-- Show media on lock screen -->
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="privacy_media_controls_lockscreen"
             android:title="@string/media_controls_lockscreen_title"
             android:summary="@string/media_controls_lockscreen_description"
@@ -97,7 +98,7 @@
              ContentCaptureService implementations defines a custom settings activitiy on its manifest.
              Hence, we show both here, but the controller itself will decide if it's available or not.
         -->
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="content_capture"
             android:title="@string/content_capture"
             android:summary="@string/content_capture_summary"
@@ -118,12 +119,21 @@
         android:key="security_category"
         android:title="@string/security_header" />
 
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:order="210"
         android:key="security_setting_panic_enabled"
         android:title="@string/panic_settings_title"
         android:summary="@string/panic_settings_summary"
         settings:controller="com.android.settings.security.PanicButtonPreferenceController" />
+
+    <Preference
+        android:order="230"
+        android:key="content_protection_preference"
+        android:title="@string/content_protection_preference_title"
+        android:summary="@string/content_protection_preference_summary"
+        android:fragment="com.android.settings.security.ContentProtectionPreferenceFragment"
+        settings:keywords="@string/content_protection_preference_title"
+        settings:controller="com.android.settings.security.ContentProtectionPreferenceController" />
 
     <PreferenceCategory
         android:order="240"
@@ -200,14 +210,6 @@
         android:fragment="com.android.settings.security.ScreenPinningSettings"
         settings:keywords="@string/keywords_app_pinning"
         settings:controller="com.android.settings.security.ScreenPinningPreferenceController" />
-
-    <SwitchPreference
-        android:order="290"
-        android:key="confirm_sim_deletion"
-        android:title="@string/confirm_sim_deletion_title"
-        android:summary="@string/confirm_sim_deletion_description"
-        settings:isPreferenceVisible="@bool/config_show_sim_info"
-        settings:controller="com.android.settings.security.ConfirmSimDeletionPreferenceController" />
 
     <Preference
         android:order="300"

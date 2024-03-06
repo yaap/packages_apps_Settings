@@ -45,8 +45,8 @@ public class PickupGestureSettings extends DashboardFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        SuggestionFeatureProvider suggestionFeatureProvider = FeatureFactory.getFactory(context)
-                .getSuggestionFeatureProvider();
+        SuggestionFeatureProvider suggestionFeatureProvider =
+                FeatureFactory.getFeatureFactory().getSuggestionFeatureProvider();
         SharedPreferences prefs = suggestionFeatureProvider.getSharedPrefs(context);
         prefs.edit().putBoolean(PREF_KEY_SUGGESTION_COMPLETE, true).apply();
     }

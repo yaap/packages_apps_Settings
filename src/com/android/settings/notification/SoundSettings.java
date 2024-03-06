@@ -42,11 +42,11 @@ import com.android.settings.sound.HandsFreeProfileOutputPreferenceController;
 import com.android.settings.sound.VolumeDialogPositionPreferenceController;
 import com.android.settings.sound.VolumeDialogTimeoutPreferenceController;
 import com.android.settings.widget.PreferenceCategoryController;
+import com.android.settings.widget.UpdatableListPreferenceDialogFragment;
 import com.android.settingslib.core.AbstractPreferenceController;
 import com.android.settingslib.core.instrumentation.Instrumentable;
 import com.android.settingslib.core.lifecycle.Lifecycle;
 import com.android.settingslib.search.SearchIndexable;
-import com.android.settingslib.widget.UpdatableListPreferenceDialogFragment;
 
 import java.util.ArrayList;
 import java.util.Arrays;
