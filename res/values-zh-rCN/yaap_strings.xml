@@ -362,4 +362,9 @@
     <string name="battery_maximum_capacity">剩余容量</string>
     <string name="battery_maximum_capacity_summary">%1$d 毫安时 (%2$d%%)</string>
     <string name="battery_maximum_capacity_not_available">不可用</string>
+
+    <!-- Text shown for the title of the panic option -->
+    <string name="panic_settings_title">显示紧急情况选项</string>
+    <!-- Text shown for the description of the panic option -->
+    <string name="panic_settings_summary">在电源菜单显示一个可激活紧急情况的选项</string>
 </resources>
