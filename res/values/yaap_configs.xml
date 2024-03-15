@@ -20,4 +20,10 @@
     <!-- Device specific doze package -->
     <string name="config_customDozePackage" translatable="false"></string>
 
+    <!-- Show battery information -->
+    <bool name="config_show_battery_info" translatable="false">true</bool>
+
+    <!-- Show battery cycle count -->
+    <bool name="config_show_battery_cycle_count" translatable="false">true</bool>
+
 </resources>
