@@ -29,7 +29,7 @@ import android.text.TextUtils;
 import androidx.annotation.VisibleForTesting;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
-import androidx.preference.SwitchPreference;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.android.settings.core.TogglePreferenceController;
 import com.android.settings.R;
@@ -48,7 +48,7 @@ public class DoubleTapPowerPreferenceController extends TogglePreferenceControll
     private static final String PREF_KEY = "gesture_double_tap_power";
     private final String SECURE_KEY = CAMERA_DOUBLE_TAP_POWER_GESTURE_DISABLED;
 
-    private SwitchPreference mPreference;
+    private SwitchPreferenceCompat mPreference;
 
     private final ContentObserver mTorchObserver = new ContentObserver(Handler.getMain()) {
         @Override

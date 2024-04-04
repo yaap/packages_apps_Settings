@@ -32,7 +32,7 @@
             android:title="@string/low_power_mode_dmd_title"
             android:defaultValue="true" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="enable_brightness_adjustment"
             android:title="@string/enable_brightness_adjustment_tite"
             android:defaultValue="false" />
@@ -46,17 +46,17 @@
             settings:defaultValue="50"
             settings:units="%" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="disable_aod"
             android:title="@string/disable_aod_tite"
             android:defaultValue="true" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="enable_night_mode"
             android:title="@string/enable_night_mode_tite"
             android:defaultValue="true" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="disable_animation"
             android:title="@string/disable_animation_tite"
             android:defaultValue="false" />
@@ -66,39 +66,39 @@
     <PreferenceCategory
         android:title="@string/keywords_applications_settings">
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="disable_launch_boost"
             android:title="@string/disable_launch_boost_tite"
             android:defaultValue="true" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="enable_quick_doze"
             android:title="@string/enable_quick_doze_tite"
             android:summary="@string/enable_quick_doze_summary"
             android:defaultValue="true" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="force_all_apps_standby"
             android:title="@string/force_all_apps_standby_tite"
             android:summary="@string/force_all_apps_standby_summary"
             android:defaultValue="true" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="force_background_check"
             android:title="@string/force_background_check_tite"
             android:defaultValue="true" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="defer_full_backup"
             android:title="@string/defer_full_backup_tite"
             android:defaultValue="true" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="defer_keyvalue_backup"
             android:title="@string/defer_keyvalue_backup_tite"
             android:defaultValue="true" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="enable_datasaver"
             android:title="@string/enable_datasaver_tite"
             android:defaultValue="false" />
@@ -108,12 +108,12 @@
     <PreferenceCategory
         android:title="@string/category_other_hw_title">
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="disable_vibration"
             android:title="@string/disable_vibration_tite"
             android:defaultValue="false" />
 
-        <SwitchPreference
+        <SwitchPreferenceCompat
             android:key="disable_optional_sensors"
             android:title="@string/disable_optional_sensors_tite"
             android:defaultValue="true" />

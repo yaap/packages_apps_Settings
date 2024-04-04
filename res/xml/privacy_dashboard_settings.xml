@@ -86,7 +86,7 @@
         settings:controller="com.android.settings.privacy.MicToggleController"/>
 
     <!-- Location indicators -->
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:key="location_indicator_settings"
         android:title="@string/location_indicator_settings_title"
         android:summary="@string/location_indicator_settings_description"

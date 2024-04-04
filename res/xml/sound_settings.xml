@@ -141,13 +141,13 @@
         settings:controller="com.android.settings.sound.MediaControlsParentPreferenceController"
         settings:keywords="@string/keywords_media_controls"/>
 
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:key="volume_panel_on_left"
         android:title="@string/volume_panel_on_left_title"
         android:summary="@string/volume_panel_on_left_summary"
         android:order="-98" />
 
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:key="volume_panel_on_left_land"
         android:title="@string/volume_panel_on_left_land_title"
         android:summary="@string/volume_panel_on_left_land_summary"
@@ -238,7 +238,7 @@
         android:order="-50"/>
 
     <!-- In-call notifications -->
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:key="in_call_notifications"
         android:title="@string/in_call_notifications_title"
         android:order="-47"/>
@@ -268,7 +268,7 @@
         android:order="-30"/>
 
     <!-- NFC sounds -->
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:key="nfc_sounds"
         android:title="@string/nfc_sounds_title"
         android:order="-28"/>

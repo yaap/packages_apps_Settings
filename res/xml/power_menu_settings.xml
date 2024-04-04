@@ -38,7 +38,7 @@
         settings:controller="com.android.settings.gestures.TorchPowerPreferenceController"
     />
 
-    <SwitchPreference
+    <SwitchPreferenceCompat
         android:key="gesture_double_tap_power"
         android:title="@string/double_tap_power_for_camera_title"
         android:summary="@string/double_tap_power_for_camera_summary"

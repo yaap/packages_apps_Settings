@@ -23,7 +23,7 @@ import android.provider.Settings;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
-import androidx.preference.SwitchPreference;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.android.settings.R;
 import com.android.settingslib.core.AbstractPreferenceController;
@@ -41,8 +41,8 @@ public class VolumeDialogPositionPreferenceController extends AbstractPreference
 
     private final boolean mIsDefaultLeft;
 
-    private SwitchPreference mPreference;
-    private SwitchPreference mPreferenceLand;
+    private SwitchPreferenceCompat mPreference;
+    private SwitchPreferenceCompat mPreferenceLand;
 
     public VolumeDialogPositionPreferenceController(Context context) {
         super(context);
@@ -74,8 +74,8 @@ public class VolumeDialogPositionPreferenceController extends AbstractPreference
     @Override
     public void displayPreference(PreferenceScreen screen) {
         super.displayPreference(screen);
-        mPreference = (SwitchPreference) screen.findPreference(KEY);
-        mPreferenceLand = (SwitchPreference) screen.findPreference(KEY_LAND);
+        mPreference = (SwitchPreferenceCompat) screen.findPreference(KEY);
+        mPreferenceLand = (SwitchPreferenceCompat) screen.findPreference(KEY_LAND);
 
         final boolean value = Settings.System.getIntForUser(
                 mContext.getContentResolver(),

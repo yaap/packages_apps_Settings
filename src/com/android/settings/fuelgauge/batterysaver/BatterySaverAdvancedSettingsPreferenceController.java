@@ -21,7 +21,7 @@ import android.provider.Settings;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
-import androidx.preference.SwitchPreference;
+import androidx.preference.SwitchPreferenceCompat;
 
 import com.android.settings.R;
 import com.android.settingslib.core.AbstractPreferenceController;
@@ -56,7 +56,7 @@ public class BatterySaverAdvancedSettingsPreferenceController extends AbstractPr
     private static final String KEY_LOCATION_MODE = "location_mode";
 
     private CustomSeekBarPreference mBrightnessFactor;
-    private SwitchPreference mEnableBrightness;
+    private SwitchPreferenceCompat mEnableBrightness;
 
     private static final Map<String, String> sDefaultsMap = new HashMap<>();
     static {
@@ -89,8 +89,8 @@ public class BatterySaverAdvancedSettingsPreferenceController extends AbstractPr
             final Preference pref = screen.findPreference(key);
             if (pref == null) continue;
             final String val = getValueForKey(key);
-            if (pref instanceof SwitchPreference) {
-                ((SwitchPreference) pref).setChecked(Boolean.valueOf(val));
+            if (pref instanceof SwitchPreferenceCompat) {
+                ((SwitchPreferenceCompat) pref).setChecked(Boolean.valueOf(val));
             } else if (pref instanceof CustomSeekBarPreference) {
                 ((CustomSeekBarPreference) pref).setValue(Math.round(Float.valueOf(val) * 100f));
             } else if (pref instanceof ListPreference) {
@@ -178,7 +178,7 @@ public class BatterySaverAdvancedSettingsPreferenceController extends AbstractPr
         if (KEY_ENABLE_BRIGHTNESS_ADJUSTMENT.equals(key)) {
             mBrightnessFactor.setEnabled((Boolean) newValue);
         }
-        if (pref instanceof SwitchPreference) {
+        if (pref instanceof SwitchPreferenceCompat) {
             setValueForKey(key, ((Boolean) newValue).toString());
         } else if (pref == mBrightnessFactor) {
             setValueForKey(key, String.valueOf(((Integer) newValue) / 100f));
