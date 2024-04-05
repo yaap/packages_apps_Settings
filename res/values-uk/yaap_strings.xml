@@ -61,9 +61,6 @@
     <string name="update_settings_title">Оновлення YAAP</string>
     <string name="update_settings_summary">Перевірити доступні оновлення прошивки</string>
 
-    <!-- Radio Info -->
-    <string name="radio_info_title">Информація про мережу</string>
-
     <!-- String for removal of sensitive info on about, depending on tap -->
     <string name="device_info_protected_single_press">Натисніть для відображення</string>
 

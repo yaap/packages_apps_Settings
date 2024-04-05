@@ -54,9 +54,6 @@
     <string name="update_settings_title">YAAP 更新</string>
     <string name="update_settings_summary">检查系统更新</string>
 
-    <!-- Radio Info -->
-    <string name="radio_info_title">广播信息</string>
-
     <!-- String for removal of sensitive info on about, depending on tap -->
     <string name="device_info_protected_single_press">点击显示</string>
 
