@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2024 Yet Another AOSP Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/quicksettings_title"
+    xmlns:settings="http://schemas.android.com/apk/res/com.android.settings">
+
+    <!-- QS brightness slider -->
+    <com.yasp.settings.preferences.SecureSettingMasterSwitchPreference
+        android:key="qs_show_brightness"
+        android:title="@string/qs_show_brightness_title"
+        android:summary="@string/qs_show_brightness_summary"
+        android:fragment="com.android.settings.system.BrightnessSliderSettings"
+        android:defaultValue="true" />
+
+    <!-- QS Battery estimates -->
+    <com.yasp.settings.preferences.SystemSettingSwitchPreference
+        android:key="qs_show_battery_estimate"
+        android:title="@string/qs_show_battery_estimate_title"
+        android:summaryOn="@string/qs_show_battery_estimate_summary_on"
+        android:summaryOff="@string/qs_show_battery_estimate_summary_off"
+        android:defaultValue="true" />
+
+    <!-- QS footer text toggle -->
+    <com.yasp.settings.preferences.SystemSettingSwitchPreference
+        android:key="qs_footer_text_show"
+        android:title="@string/qs_footer_text_show_title"
+        android:defaultValue="false" />
+
+    <!-- QS footer text string -->
+    <com.yasp.settings.preferences.SystemSettingEditTextPreference
+        android:key="qs_footer_text_string"
+        android:title="@string/qs_footer_text_string_title"
+        android:summary="@string/qs_footer_text_string_summary"
+        android:dependency="qs_footer_text_show"
+        android:defaultValue="YAAP" />
+
+    <!-- Media player in QS -->
+    <com.yasp.settings.preferences.GlobalSettingSwitchPreference
+        android:key="qs_media_controls"
+        android:title="@string/qs_media_controls_title"
+        android:summaryOn="@string/qs_media_controls_summary_on"
+        android:summaryOff="@string/qs_media_controls_summary_off"
+        android:defaultValue="true" />
+
+    <!-- Gaming macro QS tile -->
+    <Preference
+        android:key="gaming_mode_tile"
+        android:title="@string/gaming_mode_tile_title"
+        android:summary="@string/gaming_mode_tile_summary"
+        android:fragment="com.android.settings.gaming.GamingModeFragment" />
+
+</PreferenceScreen>
