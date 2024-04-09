@@ -60,6 +60,14 @@
             android:fragment="com.android.settings.deviceinfo.firmwareversion.FirmwareVersionSettings"
             settings:controller="com.android.settings.deviceinfo.firmwareversion.FirmwareVersionPreferenceController"/>
 
+        <!-- About YAAP -->
+        <Preference
+            android:key="about_category"
+            android:order="8"
+            android:title="@string/about_yaap_title"
+            android:summary="@string/about_yaap_summary"
+            android:fragment="com.android.settings.deviceinfo.AboutYaap" />
+
         <!-- Phone number -->
         <com.android.settings.deviceinfo.PhoneNumberSummaryPreference
             android:key="phone_number"

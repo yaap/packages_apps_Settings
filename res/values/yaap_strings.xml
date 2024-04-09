@@ -361,6 +361,10 @@
     <!-- ETC category -->
     <string name="etc_category_title">ETC</string>
 
+    <!-- About YAAP -->
+    <string name="about_yaap_title">About YAAP</string>
+    <string name="about_yaap_summary">our team, source, telegram group and more</string>
+
     <!-- YASP Import -->
 
     <!-- Categories -->
