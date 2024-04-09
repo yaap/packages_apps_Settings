@@ -85,7 +85,7 @@ public class SwipeToNotificationPreferenceController extends TogglePreferenceCon
 
     @Override
     public int getSliceHighlightMenuRes() {
-        return R.string.menu_key_yasp;
+        return R.string.menu_key_system;
     }
 
 }

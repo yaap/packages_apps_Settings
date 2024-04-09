@@ -125,7 +125,7 @@ public class TapScreenGesturePreferenceController extends TogglePreferenceContro
 
     @Override
     public int getSliceHighlightMenuRes() {
-        return R.string.menu_key_yasp;
+        return R.string.menu_key_system;
     }
 
     @Override

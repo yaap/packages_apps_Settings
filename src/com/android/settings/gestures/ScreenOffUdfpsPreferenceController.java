@@ -86,7 +86,7 @@ public class ScreenOffUdfpsPreferenceController extends TogglePreferenceControll
 
     @Override
     public int getSliceHighlightMenuRes() {
-        return R.string.menu_key_yasp;
+        return R.string.menu_key_system;
     }
 
     private AmbientDisplayConfiguration getAmbientConfig() {

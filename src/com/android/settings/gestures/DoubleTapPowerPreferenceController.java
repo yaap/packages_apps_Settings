@@ -130,6 +130,6 @@ public class DoubleTapPowerPreferenceController extends TogglePreferenceControll
 
     @Override
     public int getSliceHighlightMenuRes() {
-        return R.string.menu_key_yasp;
+        return R.string.menu_key_system;
     }
 }

@@ -14,10 +14,6 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- Top level YASP -->
-    <string name="yaap_settings_title">YASP</string>
-    <string name="yaap_settings_summary">Yet Another Settings Page</string>
-
     <!-- General -->
     <string name="copied_to_clipboard">Copied to clipboard</string>
     <string name="longpress_to_clipboard">Long-press to copy</string>

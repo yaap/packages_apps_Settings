@@ -193,7 +193,6 @@ import com.android.settings.wifi.p2p.WifiP2pSettings;
 import com.android.settings.wifi.savedaccesspoints2.SavedAccessPointsWifiSettings2;
 import com.android.settings.wifi.tether.WifiTetherSettings;
 
-import com.yasp.settings.YaapSettings;
 import ink.kscope.settings.wifi.tether.WifiTetherClientManager;
 
 public class SettingsGateway {
@@ -378,8 +377,7 @@ public class SettingsGateway {
             WifiTetherClientManager.class.getName(),
             WirelessDebuggingFragment.class.getName(),
             BatterySaverAdvancedSettings.class.getName(),
-            VolumeSteps.class.getName(),
-            YaapSettings.class.getName()
+            VolumeSteps.class.getName()
     };
 
     public static final String[] SETTINGS_FOR_RESTRICTED = {
@@ -428,7 +426,6 @@ public class SettingsGateway {
             Settings.NavigationModeSettingsActivity.class.getName(),
             // Others (YAAP Additions)
             Settings.GamingModeActivity.class.getName(),
-            Settings.YAAPSettingsActivity.class.getName(),
             Settings.PreviouslyConnectedDeviceDashboardActivity.class.getName(),
             Settings.WirelessDebuggingActivity.class.getName(),
     };

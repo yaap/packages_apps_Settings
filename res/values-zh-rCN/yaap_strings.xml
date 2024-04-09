@@ -14,9 +14,6 @@
      limitations under the License.
 -->
 <resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
-    <!-- Top level YASP -->
-    <string name="yaap_settings_summary">一起向未来</string>
-
     <!-- General -->
     <string name="copied_to_clipboard">已复制到剪切板</string>
     <string name="longpress_to_clipboard">长按复制</string>
