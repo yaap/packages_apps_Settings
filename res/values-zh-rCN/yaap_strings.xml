@@ -364,4 +364,223 @@
     <string name="panic_settings_title">显示紧急情况选项</string>
     <!-- Text shown for the description of the panic option -->
     <string name="panic_settings_summary">在电源菜单显示一个可激活紧急情况的选项</string>
+
+    <!-- YASP Import -->
+
+    <!-- Categories -->
+    <string name="button_title">按钮</string>
+    <string name="gestures_title">手势</string>
+    <string name="lockscreen_title">锁屏</string>
+    <string name="misc_title">杂项</string>
+    <string name="navbar_title">导航栏</string>
+    <string name="notifications_title">通知</string>
+    <string name="powermenu_title">电源菜单</string>
+    <string name="quicksettings_title">快速设置</string>
+    <string name="recents_title">最近应用</string>
+    <string name="statusbar_title">状态栏</string>
+    <string name="volume_title">音量设置</string>
+    <string name="on_call_flashlight_category">来电闪光</string>
+    <string name="notification_flashlight_category">通知闪光</string>
+
+    <!-- General strings -->
+    <string name="ok">好的</string>
+    <string name="reset">重置</string>
+    <string name="cancel">取消</string>
+    <string name="save">保存</string>
+    <string name="default_string">默认</string>
+    <string name="disabled">已禁用</string>
+    <string name="failure">失败</string>
+
+    <!-- Color Picker -->
+    <string name="dialog_color_picker">颜色选择器</string>
+    <string name="press_color_to_apply">点击下面的颜色应用你的设置</string>
+    <string name="hex_check_button_text">预览</string>
+    <string name="hex_reset_button_text">重置</string>
+    <string name="set">设置</string>
+    <string name="color_default">默认</string>
+    <string name="longpress_info">长按保存</string>
+
+    <!-- Lockscreen battery info indicator  -->
+    <string name="lockscreen_battery_info_title">充电信息</string>
+    <string name="lockscreen_battery_info_summary">充电时在锁屏界面显示温度、类型等信息</string>
+
+    <!-- QS footer text -->
+    <string name="qs_footer_text_show_title">页脚文本</string>
+    <string name="qs_footer_text_string_title">磁贴面板左下方文本</string>
+    <string name="qs_footer_text_string_summary">为空则显示 YAAP</string>
+
+    <!-- About -->
+    <string name="about_title">关于</string>
+    <string name="about_team_category">团队</string>
+    <string name="about_external_category">相关链接</string>
+    <string name="about_dev_title">联合发起人</string>
+    <string name="about_dev2_title">联合发起人</string>
+    <string name="about_dev3_title">成员</string>
+    <string name="maintainer">设备维护者</string>
+    <string name="kernel">内核开发者</string>
+    <string name="about_tg_title">Telegram 群组</string>
+    <string name="about_tg_summary">官方 Telegram 群组</string>
+    <string name="about_git_title">开源地址</string>
+    <string name="about_git_summary">在 GitHub 上查看我们的源代码</string>
+    <string name="about_phone_title">关于手机</string>
+    <string name="about_phone_summary">打开系统关于页面</string>
+    <string name="designer_title">设计师</string>
+
+    <!-- Statusbar network traffic monitor -->
+    <string name="network_traffic_state_title">显示网速</string>
+    <string name="network_traffic_state_summary">显示在</string>
+    <string name="network_traffic_location_title">网速位置</string>
+    <string name="traffic_statusbar">状态栏</string>
+    <string name="traffic_expanded_statusbar">扩展磁贴面板</string>
+    <string name="network_traffic_autohide_threshold_title">自动隐藏阈值</string>
+    <string name="network_traffic_arrow_title">显示箭头</string>
+    <string name="network_traffic_arrow_summary">显示网速箭头</string>
+    <string name="network_traffic_type">显示方式</string>
+    <string name="show_network_traffic_combined">合并（上传+下载）</string>
+    <string name="show_network_traffic_dynamic">动态</string>
+    <string name="show_network_traffic_up">上传</string>
+    <string name="show_network_traffic_down">下载</string>
+    <string name="show_network_traffic_all">同时显示</string>
+    <string name="network_traffic_font_size_title">单向显示时字体的大小</string>
+
+    <!-- Notification headers -->
+    <string name="notification_headers_title">通知标题</string>
+    <string name="notification_headers_summary">在通知阴影中显示标题</string>
+
+    <!-- Screen off FOD -->
+
+    <!-- Incall vibrate options -->
+    <string name="incall_vibration_category">通话震动</string>
+    <string name="incall_vibrate_connect_title">接通时振动</string>
+    <string name="incall_vibrate_call_wait_title">通话等待时震动</string>
+    <string name="incall_vibrate_disconnect_title">挂断时振动</string>
+
+    <!-- Blink flashlight for incoming calls -->
+    <string name="flashlight_on_call_title">来电闪光</string>
+    <string name="flashlight_on_call_disabled">禁用</string>
+    <string name="flashlight_on_call_ringer">响铃时</string>
+    <string name="flashlight_on_call_no_ringer">铃声静音时</string>
+    <string name="flashlight_on_call_silent">完全静音时（无响铃或振动）</string>
+    <string name="flashlight_on_call_always">总是</string>
+    <string name="flashlight_on_call_ignore_dnd_title">忽略免打扰</string>
+    <string name="flashlight_on_call_ignore_dnd_summary">在免打扰模式下是否闪烁</string>
+    <string name="flashlight_on_call_rate_title">闪烁频率</string>
+    <string name="flashlight_on_call_rate_summary">来电时手电筒的闪烁频率</string>
+
+    <!-- Blink flashlight for notifications -->
+    <string name="notification_torch_title">通知闪光</string>
+    <string name="notification_torch_summary">默认所有渠道通知闪烁</string>
+    <string name="notification_torch_slider1">闪烁次数</string>
+    <string name="notification_torch_slider2">闪烁频率</string>
+
+    <!-- Brightness slider -->
+    <string name="qs_show_brightness_title">亮度滑块</string>
+    <string name="qs_show_brightness_summary">亮度滑块可见性和设置</string>
+    <string name="qs_brightness_position_bottom_title">底部亮度滑块</string>
+    <string name="qs_brightness_position_bottom_summary">在磁贴面板底部显示亮度滑块</string>
+    <string name="qs_show_auto_brightness_title">自动亮度按钮</string>
+    <string name="qs_show_auto_brightness_summary">在亮度滑块右侧显示自动亮度按钮</string>
+
+    <!-- AOD Schedule -->
+    <string name="always_on_display_schedule_title">环境显示定时</string>
+    <string name="always_on_display_schedule_sunset">日落</string>
+    <string name="always_on_display_schedule_sunrise">日出</string>
+    <string name="always_on_display_schedule_mixed_sunset">从日落到指定时间段开启</string>
+    <string name="always_on_display_schedule_mixed_sunrise">从日出到指定时间段开启</string>
+
+    <!--Double Tap to Sleep Lockscreen-->
+    <string name="double_tap_sleep_lockscreen_title">双击息屏</string>
+    <string name="double_tap_sleep_lockscreen_summary">双击锁屏界面上任意位置来关闭屏幕</string>
+
+    <!-- Double Tap to Sleep Statusbar -->
+    <string name="double_tap_sleep_gesture_title">双击息屏</string>
+    <string name="double_tap_sleep_gesture_summary">双击状态栏任意位置来关闭屏幕</string>
+
+    <!-- Advanced reboot  -->
+    <string name="advanced_reboot_title">高级重启</string>
+    <string name="advanced_reboot_summary">允许重启到恢复或刷机模式</string>
+
+    <!-- Battery customizations -->
+    <string name="battery_options">电池</string>
+    <string name="battery_style_title">电池样式</string>
+    <string name="battery_style_port">默认</string>
+    <string name="battery_style_circle">环形</string>
+    <string name="battery_style_text">文本</string>
+    <string name="battery_percent_title">显示百分比</string>
+    <string name="battery_percent_summary">总是显示电池百分比</string>
+    <string name="battery_percent_inside_title">在图标内显示百分比</string>
+    <string name="battery_percent_inside_summary">在电池图标内显示电池百分比</string>
+    <string name="show_battery_percent_charging_title">充电时显示百分比</string>
+    <string name="show_battery_percent_charging_summary">充电时强制在图标旁显示百分比</string>
+
+    <!-- Battery light -->
+    <string name="battery_light_settings">充电指示灯</string>
+    <string name="battery_light_enable">启用</string>
+    <string name="battery_light_allow_on_dnd_title">勿扰模式下的充电指示灯</string>
+    <string name="battery_light_low_blinking_title">电量不足时指示灯闪烁</string>
+    <string name="battery_light_cat">充电时指示灯颜色</string>
+    <string name="battery_light_low_color">低电量时</string>
+    <string name="battery_light_medium_color">中电量时</string>
+    <string name="battery_light_full_color">电池快满时</string>
+    <string name="battery_light_reallyfull_color">电池充满时</string>
+
+    <!-- QS media player -->
+    <string name="qs_media_controls_title">媒体播放器</string>
+    <string name="qs_media_controls_summary_on">在磁贴面板中显示媒体播放器\n需要重启系统界面</string>
+    <string name="qs_media_controls_summary_off">将媒体播放器以通知的形式显示\n需要重启系统界面</string>
+
+    <!-- QS Battery estimates -->
+    <string name="qs_show_battery_estimate_title">电量预估</string>
+    <string name="qs_show_battery_estimate_summary_on">在磁贴面板上方显示电池预计可用时间</string>
+    <string name="qs_show_battery_estimate_summary_off">在磁贴面板上方隐藏电池预计可用时间</string>
+
+    <!-- Clock position -->
+    <string name="statusbar_clock_position_title">时间位置</string>
+    <string name="statusbar_clock_position_left">左侧</string>
+    <string name="statusbar_clock_position_center">居中</string>
+    <string name="statusbar_clock_position_right">右侧</string>
+
+    <!-- SystemUI tuner -->
+    <string name="ui_tuner_title">系统界面设置</string>
+
+    <!-- Volume key cursor control  -->
+    <string name="volume_key_cursor_control_title">音量光标控制</string>
+    <string name="volume_key_cursor_control_disabled">禁用</string>
+    <string name="volume_key_cursor_control_left">上键 - 向左, 下键 - 向右</string>
+    <string name="volume_key_cursor_control_right">上键 - 向右, 下键 - 向左</string>
+
+    <!-- Wi-Fi Standard icon -->
+
+    <!-- Privacy indicators -->
+    <string name="location_privacy_indicator_title">位置指示器</string>
+    <string name="location_privacy_indicator_summary_on">在隐私卡片上显示位置权限指示器</string>
+    <string name="location_privacy_indicator_summary_off">在状态栏上显示位置权限指示器</string>
+    <string name="camera_mic_indicator_title">相机与麦克风指示器</string>
+    <string name="camera_mic_indicator_summary">在隐私卡片上显示相机与麦克风权限指示器</string>
+
+    <!-- Monet settings -->
+    <string name="monet_settings_title">主题设置</string>
+    <string name="monet_settings_summary">自定义 Monet 主题</string>
+    <string name="theme_style_title">主题风格</string>
+    <string name="theme_style_tonal_spot">Tonal Spot (默认)</string>
+    <string name="color_source_title">颜色来源</string>
+    <string name="color_source_both">两者 (默认)</string>
+    <string name="color_source_home">主屏幕壁纸</string>
+    <string name="color_source_lock">锁定屏幕壁纸</string>
+    <string name="color_source_preset">预设</string>
+    <string name="accent_color_title">强调色</string>
+    <string name="accent_color_summary">覆盖默认强调色</string>
+    <string name="accent_background_title">背景强调色</string>
+    <string name="accent_background_summary">为背景选择不同的强调色</string>
+    <string name="bg_color_title">背景颜色</string>
+    <string name="bg_color_summary">覆盖默认背景强调色</string>
+    <string name="luminance_factor_title">亮度</string>
+    <string name="luminance_factor_summary">越高的值会使颜色更亮</string>
+    <string name="chroma_factor_title">色度</string>
+    <string name="chroma_factor_summary">越高的值会使颜色饱和度更高</string>
+    <string name="tint_background_title">背景色调</string>
+    <string name="tint_background_summary">使亮度和色度选择也会影响背景颜色</string>
+
+    <!-- Backup Transport selector -->
+    <string name="transport_selector_title">备份方式</string>
 </resources>

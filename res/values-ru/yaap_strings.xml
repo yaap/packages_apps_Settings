@@ -243,4 +243,232 @@
     <string name="allow_access_to_obb_directory_title">Разрешить доступ к папке Android/obb</string>
     <string name="allow_access_to_obb_directory_summary">Требуется для установки некоторых больших приложений (в основном игр), которые используют файлы расширения OBB.</string>
 
+    <!-- YASP Import -->
+
+    <!-- App Title -->
+    <string name="yaap_settings_title">Настройки YAAP</string>
+
+    <!-- Categories -->
+    <string name="button_title">Кнопки</string>
+    <string name="gestures_title">Жесты</string>
+    <string name="lockscreen_title">Экран блокировки</string>
+    <string name="misc_title">Разное</string>
+    <string name="navbar_title">Панель навигации</string>
+    <string name="notifications_title">Уведомления</string>
+    <string name="powermenu_title">Меню выключения</string>
+    <string name="quicksettings_title">Быстрые настройки</string>
+    <string name="recents_title">Последние приложения</string>
+    <string name="statusbar_title">Статус-бар</string>
+    <string name="volume_title">Звук</string>
+    <string name="on_call_flashlight_category">Вспышка при звонке</string>
+    <string name="notification_flashlight_category">Вспышка при уведомлениях</string>
+
+    <!-- General strings -->
+    <string name="ok">Ок</string>
+    <string name="reset">Сбросить</string>
+    <string name="cancel">Отмена</string>
+    <string name="save">Сохранить</string>
+    <string name="default_string">Стандартное значение</string>
+    <string name="disabled">Отключено</string>
+
+    <!-- Color Picker -->
+    <string name="dialog_color_picker">Выбор цвета</string>
+    <string name="press_color_to_apply">Нажмите на получившийся цвет справа, чтобы применить</string>
+    <string name="arrow_right">→</string>
+    <string name="arrow_down">↓</string>
+    <string name="hex">Hex:</string>
+    <string name="hex_check_button_text">Предпросмотр</string>
+    <string name="hex_reset_button_text">Сбросить</string>
+    <string name="set">Выбрать</string>
+    <string name="color_default">Стандартное значение</string>
+    <string name="longpress_info">Удерживайте для сохранения цвета</string>
+
+    <!-- Lockscreen battery info indicator  -->
+    <string name="lockscreen_battery_info_title">Информация о зарядке на экране блокировки</string>
+    <string name="lockscreen_battery_info_summary">Отображать максимальный ток, вольтаж и температуру во время зарядки</string>
+
+    <!-- QS footer text -->
+    <string name="qs_footer_text_show_title">Отображать текст в нижнем колонтитуле быстрых настроек</string>
+    <string name="qs_footer_text_string_title">Собственный текст в нижнем колонтитуле быстрых настроек</string>
+    <string name="qs_footer_text_string_summary">Оставьте пустым для стандартного текста YAAP</string>
+
+    <!-- About -->
+    <string name="about_title">О нас</string>
+    <string name="about_team_category">Участники</string>
+    <string name="about_external_category">Дополнительно</string>
+    <string name="about_dev_title">Co-Lead</string>
+    <string name="about_dev_name">Adhitya Mohan</string>
+    <string name="about_dev2_title">Co-Lead</string>
+    <string name="about_dev2_name">Ido Ben-Hur</string>
+    <string name="about_dev3_title">Member</string>
+    <string name="about_dev3_name">Omkar Chandorkar</string>
+    <string name="maintainer">Сопровождающий устройства</string>
+    <string name="kernel">Разработчик ядра</string>
+    <string name="about_tg_title">Telegram</string>
+    <string name="about_tg_summary">Официальная группа в Telegram</string>
+    <string name="about_git_title">Исходный код</string>
+    <string name="about_git_summary">Исходники проекта на GitHub</string>
+    <string name="about_phone_title">О телефоне</string>
+    <string name="about_phone_summary">Открыть стандартный раздел - О телефоне</string>
+    <string name="designer_title">Дизайнер</string>
+    <string name="designer_name">Ahmed Harhash</string>
+    <string name="designer2_name">The Knight</string>
+
+    <!-- Statusbar network traffic monitor -->
+    <string name="network_traffic_state_title">Скорость сети</string>
+    <string name="network_traffic_state_summary">Отображать</string>
+    <string name="network_traffic_location_title">Расположение</string>
+    <string name="traffic_statusbar">В статус-баре</string>
+    <string name="traffic_expanded_statusbar">В заголовке быстрых настроек</string>
+    <string name="network_traffic_autohide_threshold_title">Порог отображения</string>
+    <string name="network_traffic_arrow_title">Показывать стрелки</string>
+    <string name="network_traffic_arrow_summary">Индикатор загрузки / выгрузки</string>
+    <string name="network_traffic_type">Режим отображения</string>
+    <string name="show_network_traffic_combined">Комбинированный (загрузка + выгрузка)</string>
+    <string name="show_network_traffic_dynamic">Динамический</string>
+    <string name="show_network_traffic_up">Выгрузка</string>
+    <string name="show_network_traffic_down">Загрузка</string>
+    <string name="show_network_traffic_all">Оба</string>
+    <string name="network_traffic_font_size_title">Размер шрифта</string>
+
+    <!-- Notification headers -->
+    <string name="notification_headers_title">Заголовки уведомлений</string>
+    <string name="notification_headers_summary">Отображать разделяющие заголовки категорий уведомлений в шторке</string>
+
+    <!-- Incall vibrate options -->
+    <string name="incall_vibration_category">Вибрация при звонке</string>
+    <string name="incall_vibrate_connect_title">При подключении</string>
+    <string name="incall_vibrate_call_wait_title">При ожидании</string>
+    <string name="incall_vibrate_disconnect_title">При отключении</string>
+
+    <!-- Blink flashlight for incoming calls -->
+    <string name="flashlight_on_call_title">Мигать вспышкой при входящих вызовах</string>
+    <string name="flashlight_on_call_disabled">Отключено</string>
+    <string name="flashlight_on_call_ringer">При звонке</string>
+    <string name="flashlight_on_call_no_ringer">Во время того, как звонок заглушен</string>
+    <string name="flashlight_on_call_silent">Во время полной тишины (без вибрации и звонка)</string>
+    <string name="flashlight_on_call_always">Всегда</string>
+    <string name="flashlight_on_call_ignore_dnd_title">Игнорировать режим "не беспокоить"</string>
+    <string name="flashlight_on_call_ignore_dnd_summary">Использовать вспышку, даже если активен режим "не беспокоить"</string>
+    <string name="flashlight_on_call_rate_title">Частота</string>
+    <string name="flashlight_on_call_rate_summary">Как быстро мигать вспышкой</string>
+
+    <!-- Blink flashlight for notifications -->
+    <string name="notification_torch_title">Мигать фонариком при уведомлении</string>
+    <string name="notification_torch_summary">Стандартные. Существуют настройки для каждого канала уведомлений</string>
+    <string name="notification_torch_slider1">Количество миганий</string>
+    <string name="notification_torch_slider2">Частота миганий</string>
+
+    <!-- Brightness slider -->
+    <string name="qs_show_brightness_title">Яркость</string>
+    <string name="qs_show_brightness_summary">Отображение ползунка яркости и другие настройки</string>
+    <string name="qs_brightness_position_bottom_title">Яркость снизу</string>
+    <string name="qs_brightness_position_bottom_summary">Перенести ползунок яркости вниз быстрых настроек</string>
+    <string name="qs_show_auto_brightness_title">Переключатель автояркости</string>
+    <string name="qs_show_auto_brightness_summary">Отображать рядом с ползунком яркости переключатель режимов автояркости</string>
+
+    <!-- AOD Schedule -->
+    <string name="always_on_display_schedule_title">Расписание Always on Display</string>
+    <string name="always_on_display_schedule_sunset">Закат</string>
+    <string name="always_on_display_schedule_sunrise">Восход</string>
+    <string name="always_on_display_schedule_mixed_sunset">Оставить включённым с заката</string>
+    <string name="always_on_display_schedule_mixed_sunrise">Оставить включённым с восхода</string>
+
+    <!--Double Tap to Sleep Lockscreen-->
+    <string name="double_tap_sleep_lockscreen_title">Выключение двойным нажатием</string>
+    <string name="double_tap_sleep_lockscreen_summary">Нажмите два раза на экран блокировки для отключения экрана</string>
+
+    <!-- Double Tap to Sleep Statusbar -->
+    <string name="double_tap_sleep_gesture_title">Выключение двойным нажатием</string>
+    <string name="double_tap_sleep_gesture_summary">Нажмите два раза на статус-бар для отключения экрана</string>
+
+    <!-- Advanced reboot  -->
+    <string name="advanced_reboot_title">Расширенная перезагрузка</string>
+    <string name="advanced_reboot_summary">Добавить различные варианты перезагрузки в меню выключения</string>
+
+    <!-- Battery customizations -->
+    <string name="battery_options">Батарея</string>
+    <string name="battery_style_title">Стиль значка</string>
+    <string name="battery_style_port">Стандартный</string>
+    <string name="battery_style_circle">Круговой</string>
+    <string name="battery_style_text">Текстовый</string>
+    <string name="battery_percent_title">Проценты</string>
+    <string name="battery_percent_summary">Отображать оставшийся заряд в процентах</string>
+    <string name="battery_percent_inside_title">Проценты внутри</string>
+    <string name="battery_percent_inside_summary">Показывать проценты заряда внутри значка</string>
+    <string name="show_battery_percent_charging_title">Показывать проценты при зарядке</string>
+    <string name="show_battery_percent_charging_summary">Принудительное отображение процента рядом со значком при зарядке</string>
+
+    <!-- Battery light -->
+    <string name="battery_light_settings">Световая индикация во время зарядки</string>
+    <string name="battery_light_enable">Активно</string>
+    <string name="battery_light_allow_on_dnd_title">Игнорировать режим "не беспокоить"</string>
+    <string name="battery_light_low_blinking_title">Световая индикация низкого заряда</string>
+    <string name="battery_light_cat">Цвет световой индикации</string>
+    <string name="battery_light_low_color">Низкий заряд</string>
+    <string name="battery_light_medium_color">Средний заряд</string>
+    <string name="battery_light_full_color">Почти полный заряд</string>
+    <string name="battery_light_reallyfull_color">Полный заряд (100%)</string>
+
+    <!-- QS media player -->
+    <string name="qs_media_controls_title">Плеер</string>
+    <string name="qs_media_controls_summary_on">Плеер в быстрых настройках показан всегда (для применения перезагрузите SystemUI)</string>
+    <string name="qs_media_controls_summary_off">Плеер в быстрых настройках показан только во время использования (для применения перезагрузите SystemUI)</string>
+
+    <!-- QS Battery estimates -->
+    <string name="qs_show_battery_estimate_title">Прогноз батареи</string>
+    <string name="qs_show_battery_estimate_summary_on">Вместо процентов в быстрых настройках показано примерное время полной разрядки (для применения перезагрузите SystemUI)</string>
+    <string name="qs_show_battery_estimate_summary_off">В быстрых настройках не показано примерное время полной разрядки (для применения перезагрузите SystemUI)</string>
+
+    <!-- Clock position -->
+    <string name="statusbar_clock_position_title">Расположение часов</string>
+    <string name="statusbar_clock_position_left">Слева</string>
+    <string name="statusbar_clock_position_center">В центре</string>
+    <string name="statusbar_clock_position_right">Справа</string>
+
+    <!-- SystemUI tuner -->
+    <string name="ui_tuner_title">Изменение SystemUI</string>
+
+    <!-- Volume key cursor control  -->
+    <string name="volume_key_cursor_control_title">Управлять курсором кнопками громкости</string>
+    <string name="volume_key_cursor_control_disabled">Отключено</string>
+    <string name="volume_key_cursor_control_left">вверх - лево, вниз - право</string>
+    <string name="volume_key_cursor_control_right">вверх - право, вниз - лево</string>
+
+    <!-- Wi-Fi Standard icon -->
+
+    <!-- Privacy indicators -->
+    <string name="location_privacy_indicator_title">Индикатор доступа к местоположению</string>
+    <string name="location_privacy_indicator_summary_on">Отображать зеленую точку в островке безопасности</string>
+    <string name="location_privacy_indicator_summary_off">Отображать иконку в статус-баре</string>
+    <string name="camera_mic_indicator_title">Индикатор доступа к камере и микрофону</string>
+    <string name="camera_mic_indicator_summary">Отображать зеленую точку в островке безопасности</string>
+    
+    <!-- Monet settings -->
+    <string name="monet_settings_title">Настройки Monet</string>
+    <string name="monet_settings_summary">Дополнительных настройки для движка тем Monet</string>
+    <string name="theme_style_title">Стиль темы</string>
+    <string name="theme_style_tonal_spot">Тоновое пятно (По умолчанию)</string>
+    <string name="theme_style_vibrant">Яркий</string>
+    <string name="theme_style_expressive">Выразительный</string>
+    <string name="theme_style_spritz">Брызги</string>
+    <string name="theme_style_rainbow">Радуга</string>
+    <string name="theme_style_fruit_salad">Фруктовый салат</string>
+    <string name="color_source_title">Источник цвета</string>
+    <string name="color_source_both">Обои на главном экране и экране блокировки (По умолчанию)</string>
+    <string name="color_source_home">Обои на главном экране</string>
+    <string name="color_source_lock">Обои на экране блокировки</string>
+    <string name="color_source_preset">Вручную</string>
+    <string name="accent_color_title">Акцентный цвет</string>
+    <string name="accent_color_summary">Переопределяет главный цветовой акцент</string>
+    <string name="accent_background_title">Акцент фона</string>
+    <string name="accent_background_summary">Выберете несколько разных цветов для фона</string>
+    <string name="bg_color_title">Цвет фона</string>
+    <string name="bg_color_summary">Переопределяет цветовой акцент для фона</string>
+    <string name="luminance_factor_title">Яркость</string>
+    <string name="luminance_factor_summary">Высокие значения дадут более яркие цвета</string>
+    <string name="chroma_factor_title">Цветность</string>
+    <string name="chroma_factor_summary">Высокие значения дадут более насыщенные цвета</string>
+    <string name="tint_background_title">Оттенок фона</string>
+    <string name="tint_background_summary">Применить настройки Яркости и Цветности так же и для фонового цвета</string>
 </resources>

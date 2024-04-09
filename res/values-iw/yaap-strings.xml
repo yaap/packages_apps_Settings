@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+     Copyright (C) 2017-2019 The PixelDust Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+         http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+<resources xmlns:xliff="urn:oasis:names:tc:xliff:document:1.2">
+    <!-- Categories -->
+    <string name="button_title">כפתורים</string>
+    <string name="gestures_title">מחוות</string>
+    <string name="lockscreen_title">מסך הנעילה</string>
+    <string name="misc_title">אחרים</string>
+    <string name="navbar_title">שורת הניווט</string>
+    <string name="notifications_title">התראות</string>
+    <string name="powermenu_title">תפריט הכיבוי</string>
+    <string name="quicksettings_title">הגדרות מהירות</string>
+    <string name="recents_title">אפלקציות אחרונות</string>
+    <string name="statusbar_title">שורת המצב</string>
+    <string name="volume_title">הגדרות ווליום</string>
+
+    <!-- General strings -->
+    <string name="ok">אישור</string>
+    <string name="reset">אתחול</string>
+    <string name="cancel">ביטול</string>
+    <string name="save">שמור</string>
+    <string name="default_string">ברירת מחדל</string>
+    <string name="disabled">מבוטל</string>
+
+    <!-- Color Picker -->
+    <string name="dialog_color_picker">בורר צבעים</string>
+    <string name="press_color_to_apply">לחץ על הצבע מטה על מנת לבחור אותו</string>
+    <string name="hex_check_button_text">תצוגה מקדימה</string>
+    <string name="hex_reset_button_text">אתחול</string>
+    <string name="set">קבע</string>
+    <string name="color_default">ברירת מחדל</string>
+    <string name="longpress_info">לחץ לחיצה ארוכה על התיבה על מנת לשמור את הצבע</string>
+
+    <!-- Lockscreen battery info indicator  -->
+    <string name="lockscreen_battery_info_title">מידע על הטענה במסך הנעילה</string>
+    <string name="lockscreen_battery_info_summary">הראה מידע אודות מתח, זרם וטמפרטורת סוללה במסך הנעילה</string>
+
+    <!-- QS footer text -->
+    <string name="qs_footer_text_show_title">הצג טקטס בתחתית ההגדרות המהירות</string>
+    <string name="qs_footer_text_string_title">שנה טקטס</string>
+    <string name="qs_footer_text_string_summary">שנה לכלום על מנת לבחור בברירת המחדל YAAP</string>
+
+    <!-- About -->
+    <string name="about_title">אודות</string>
+    <string name="about_team_category">הצוות שלנו</string>
+    <string name="about_external_category">קישורים חיצוניים</string>
+    <string name="about_dev_title">מוביל</string>
+    <string name="about_dev2_title">מוביל</string>
+    <string name="about_dev3_title">חבר</string>
+    <string name="maintainer">מתחזק מכשיר</string>
+    <string name="kernel">מפתח קרנל</string>
+    <string name="about_tg_title">קבוצת טלגרם</string>
+    <string name="about_tg_summary">קבוצה רשמית וגלובלית</string>
+    <string name="about_git_title">קוד מקור</string>
+    <string name="about_git_summary">הצג את קוד המקור שלנו בגיט האב</string>
+    <string name="about_phone_title">אודות המכשיר</string>
+    <string name="about_phone_summary">הצג את עמוד אודות המכשיר של המערכת</string>
+    <string name="designer_title">מעצב</string>
+
+    <!-- Statusbar network traffic monitor -->
+    <string name="network_traffic_state_title">תצוגת תעבורת רשת</string>
+    <string name="network_traffic_state_summary">הצג את תעבורת הרשת בשורת המצב</string>
+    <string name="network_traffic_location_title">מיקום סמליל תעבורת הרשת</string>
+    <string name="traffic_statusbar">שורת המצב</string>
+    <string name="traffic_expanded_statusbar">כותרת מורחבת</string>
+    <string name="network_traffic_autohide_threshold_title">כמות פעילות להסתרה אוטומטית</string>
+    <string name="network_traffic_arrow_title">הצג חיצים</string>
+    <string name="network_traffic_arrow_summary">הצג חיצים המעידים על סוג הפעילות ליד הסמליל</string>
+    <string name="network_traffic_type">בחר סוג פעילות</string>
+    <string name="show_network_traffic_combined">משולב (הורדה + העלאה)</string>
+    <string name="show_network_traffic_dynamic">דינמי</string>
+    <string name="show_network_traffic_up">העלאה</string>
+    <string name="show_network_traffic_down">הורדה</string>
+    <string name="show_network_traffic_all">גם וגם</string>
+    <string name="network_traffic_font_size_title">גודל גופן</string>
+
+    <!-- Notification headers -->
+    <string name="notification_headers_title">כותרות להתראות</string>
+    <string name="notification_headers_summary">הצג כותרות להתראות בחלונית ההתראות</string>
+
+    <!-- Screen off FOD -->
+
+    <!-- Incall vibrate options -->
+    <string name="incall_vibration_category">רטטים בזמן שיחה</string>
+    <string name="incall_vibrate_connect_title">רטט בעת התחברות</string>
+    <string name="incall_vibrate_call_wait_title">רטט בעת שיחה ממתינה</string>
+    <string name="incall_vibrate_disconnect_title">רטט בעת ניתוק</string>
+
+    <!-- Blink flashlight for incoming calls -->
+    <string name="flashlight_on_call_title">הבהב בפנס בעת שיחות נכנסות</string>
+    <string name="flashlight_on_call_disabled">מבוטל</string>
+    <string name="flashlight_on_call_ringer">כאשר מצלצל</string>
+    <string name="flashlight_on_call_no_ringer">כאשר לא מצלצל</string>
+    <string name="flashlight_on_call_silent">כאשר שקט לחלוטין (לא מצלצל ולא רוטט)</string>
+    <string name="flashlight_on_call_always">תמיד</string>
+    <string name="flashlight_on_call_ignore_dnd_title">התעלם ממצב נע לא להפריע</string>
+    <string name="flashlight_on_call_ignore_dnd_summary">האם להבהב גם במצב נע לא להפריע</string>
+    <string name="flashlight_on_call_rate_title">קצב</string>
+    <string name="flashlight_on_call_rate_summary">קצב ההבהוב בפנס</string>
+
+    <!-- Brightness slider -->
+    <string name="qs_show_brightness_title">מחוון הבהירות</string>
+    <string name="qs_show_brightness_summary">נראות והגדרות נוספות</string>
+    <string name="qs_brightness_position_bottom_title">מחוון בהירות תחתון</string>
+    <string name="qs_brightness_position_bottom_summary">הראה את מחוון הבהירות בתחתית ההגדרות המהירות</string>
+    <string name="qs_show_auto_brightness_title">סמליל בהירות אוטומטית</string>
+    <string name="qs_show_auto_brightness_summary">הראה סמליל להפעת \ כיבוי הבהירות האוטומטית ליד מחוון הבהירות</string>
+
+    <!-- AOD Schedule -->
+    <string name="always_on_display_schedule_title">לוח זמנים לתצוגה דולקת תמיד</string>
+    <string name="always_on_display_schedule_sunset">שקיעה</string>
+    <string name="always_on_display_schedule_sunrise">זריחה</string>
+    <string name="always_on_display_schedule_mixed_sunset">הדלק משקיעה עד זמן נבחר</string>
+    <string name="always_on_display_schedule_mixed_sunrise">הדלק מזמן נבחר עד זריחה</string>
+
+    <!--Double Tap to Sleep Lockscreen-->
+    <string name="double_tap_sleep_lockscreen_title">נגיעה כפלה כדי לישון</string>
+    <string name="double_tap_sleep_lockscreen_summary">גע פעמיים בכל מקום על מסך הנעילה על מנת לכבות את המסך</string>
+
+    <!-- Double Tap to Sleep Statusbar -->
+    <string name="double_tap_sleep_gesture_title">נגיעה כפלה כדי לישון</string>
+    <string name="double_tap_sleep_gesture_summary">גע פעמיים בכל מקום על שורת המצב על מנת לכבות את המסך</string>
+
+    <!-- Torch Power button gestures -->
+    <string name="torch_power_button_gesture_title">הפעל פנס כאשר כבוי</string>
+    <string name="torch_power_button_gesture_none">מבוטל</string>
+    <string name="torch_power_button_gesture_dt">לחיצה כםולה על כפתור הנעילה (מבטל את המחווה לפתיחת המצלמה)</string>
+    <string name="torch_power_button_gesture_lp">לחיצה ארוכה על כפתור הנעילה</string>
+
+    <!-- Volume keys control music playback -->
+
+    <!-- Advanced reboot  -->
+    <string name="advanced_reboot_title">אתחול מורכב</string>
+    <string name="advanced_reboot_summary">אשפר אתחול למצב recovery ו bootloader</string>
+
+    <!-- Gaming macro QS tile -->
+    <string name="gaming_mode_tile_title">מאקרו למשחקים</string>
+    <string name="gaming_mode_tile_summary">הגדרות עבור אריח מאקור למשחקים בהגדרות המהירות</string>
+    <string name="gaming_mode_heads_up_title">Heads Up</string>
+    <string name="gaming_mode_heads_up_summary">האם לבטל קפיצה של התרעות בראש המסך</string>
+    <string name="gaming_mode_zen_title">מצב נא לא להפריע</string>
+    <string name="gaming_mode_zen_summary">האם להפעיל מצב נא לא להריע</string>
+    <string name="gaming_mode_brightness_enabled_title">בהירות אוטומטית</string>
+    <string name="gaming_mode_brightness_enabled_summary">האם לבטל בהירות אוטומטית</string>
+    <string name="gaming_mode_media_enabled_title">ווליום</string>
+    <string name="gaming_mode_media_enabled_summary">האם לקבוע ווליום</string>
+    <string name="gaming_mode_media_title">קבע ווליום ל</string>
+    <string name="gaming_mode_desc">אריח המאקרו יבצע את השינויים שבחרתם מעלה ויחזיר אותם לקדמותם כאשר יכובה</string>
+    <string name="gaming_mode_screen_off_title">כבה בעת כיבוי המסך</string>
+    <string name="gaming_mode_screen_off_summary">המאקרו יכבה עם כיבוי המסך</string>
+
+    <!-- Monet engine -->
+    <string name="chroma_factor_title">צבעוניות</string>
+
+    <!-- Battery customizations -->
+    <string name="battery_options">סוללה</string>
+    <string name="battery_style_title">סגנון סוללה</string>
+    <string name="battery_style_port">פורטרט</string>
+    <string name="battery_style_circle">עיגול</string>
+    <string name="battery_style_text">טקסט</string>
+    <string name="battery_percent_title">הצג אחוזים</string>
+    <string name="battery_percent_summary">תמיד הצג את האחוזים עם הסמליל</string>
+    <string name="battery_percent_inside_title">הצג אחוזים בפנים</string>
+    <string name="battery_percent_inside_summary">הצג אחוזים בתוך הסמליל</string>
+
+    <!-- Battery light -->
+    <string name="battery_light_settings">אור טעינה</string>
+    <string name="battery_light_enable">אפשר</string>
+    <string name="battery_light_allow_on_dnd_title">אור טעינה במצב נא לא להפריע</string>
+    <string name="battery_light_low_blinking_title">הבהב כאשר הסוללה נמוכה</string>
+    <string name="battery_light_cat">אפשר כאשר בטעינה</string>
+    <string name="battery_light_low_color">סוללה נמוכה</string>
+    <string name="battery_light_medium_color">סוללה בינונית</string>
+    <string name="battery_light_full_color">סוללה כמעט מלאה</string>
+    <string name="battery_light_reallyfull_color">סוללה מלאה (100)</string>
+
+    <!-- Pulse notifications lightning -->
+
+    <!-- Combined signal icons in status bar -->
+
+
+    <!-- QS media player -->
+    <string name="qs_media_controls_title">נגן מדיה</string>
+    <string name="qs_media_controls_summary_on">הצג את נגן המדיה בהגדרות המהירות\nדורש אתחול על מנת לעבוד</string>
+    <string name="qs_media_controls_summary_off">הצג את נגן המדיה כהתראה\nדורש אתחול על מנת לעבוד</string>
+
+    <!-- QS Battery estimates -->
+    <string name="qs_show_battery_estimate_title">שיערוך סוללה</string>
+    <string name="qs_show_battery_estimate_summary_on">הצג שיערוך זמן סוללה נותר בהגדרות המהירות</string>
+    <string name="qs_show_battery_estimate_summary_off">התסר שיערוך זמן סוללה נותר בהגדרות המהירות</string>
+
+    <!-- Location privacy indicator -->
+    <string name="location_privacy_indicator_title">אינדיקטור גישה למיקום</string>
+    <string name="location_privacy_indicator_summary_on">הראה בחלונית הפרטיות\nדורש אתחול על מנת לעבוד</string>
+    <string name="location_privacy_indicator_summary_off">הראה בסמלילי שורת המצב\nדורש אתחול על מנת לעבוד</string>
+
+    <!-- Clock position -->
+    <string name="statusbar_clock_position_title">מיקום שעון</string>
+    <string name="statusbar_clock_position_left">שמאל</string>
+    <string name="statusbar_clock_position_center">מרכז</string>
+    <string name="statusbar_clock_position_right">ימין</string>
+
+</resources>

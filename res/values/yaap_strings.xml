@@ -361,4 +361,248 @@
 
     <!-- String for removal of sensitive info on about, depending on tap -->
     <string name="device_info_protected_single_press">Tap to show info</string>
+
+    <!-- YASP Import -->
+
+    <!-- Categories -->
+    <string name="button_title">Buttons</string>
+    <string name="gestures_title">Gestures</string>
+    <string name="lockscreen_title">Lock screen</string>
+    <string name="misc_title">Miscellaneous</string>
+    <string name="navbar_title">Navigation bar</string>
+    <string name="notifications_title">Notifications</string>
+    <string name="powermenu_title">Power menu</string>
+    <string name="quicksettings_title">Quick Settings</string>
+    <string name="recents_title">Recents apps</string>
+    <string name="statusbar_title">Status bar</string>
+    <string name="volume_title">Volume Settings</string>
+    <string name="on_call_flashlight_category">Flashlight on call</string>
+    <string name="notification_flashlight_category">Flashlight on notifications</string>
+
+    <!-- General strings -->
+    <string name="ok">OK</string>
+    <string name="reset">Reset</string>
+    <string name="cancel">Cancel</string>
+    <string name="save">Save</string>
+    <string name="default_string">Default</string>
+    <string name="disabled">Disabled</string>
+    <string name="failure">Failure</string>
+
+    <!-- Color Picker -->
+    <string name="dialog_color_picker">Color Picker</string>
+    <string name="press_color_to_apply">Press on color below to apply</string>
+    <string name="arrow_right">→</string>
+    <string name="arrow_down">↓</string>
+    <string name="hex">Hex:</string>
+    <string name="hex_hint" translatable="false">#FFDDDDDD</string>
+    <string name="hex_check_button_text">PREVIEW</string>
+    <string name="hex_reset_button_text">RESET</string>
+    <string name="set">Set</string>
+    <string name="color_default">Default</string>
+    <string name="color_right_arrow" translatable="false">"→"</string>
+    <string name="color_down_arrow" translatable="false">"↓"</string>
+    <string name="longpress_info">Longpress box to save color</string>
+
+    <!-- Lockscreen battery info indicator  -->
+    <string name="lockscreen_battery_info_title">Lockscreen charging info</string>
+    <string name="lockscreen_battery_info_summary">Display negotiated charger max current and voltage and battery temperature on lockscreen while charging</string>
+
+    <!-- QS footer text -->
+    <string name="qs_footer_text_show_title">Show QS footer text</string>
+    <string name="qs_footer_text_string_title">Customize footer text</string>
+    <string name="qs_footer_text_string_summary">Set to empty for default YAAP</string>
+
+    <!-- About -->
+    <string name="about_title">About</string>
+    <string name="about_team_category">Our Team</string>
+    <string name="about_external_category">External Links</string>
+    <string name="about_dev_title">Co-Lead</string>
+    <string name="about_dev_name">Adhitya Mohan</string>
+    <string name="about_dev_git" translatable="false">https://github.com/poad42</string>
+    <string name="about_dev2_title">Co-Lead</string>
+    <string name="about_dev2_name">Ido Ben-Hur</string>
+    <string name="about_dev2_git" translatable="false">https://github.com/idoybh</string>
+    <string name="about_dev3_title">Member</string>
+    <string name="about_dev3_name">Omkar Chandorkar</string>
+    <string name="about_dev3_git" translatable="false">https://github.com/gotenksIN</string>
+    <string name="maintainer">Device Maintainer</string>
+    <string name="maintainer_name" translatable="false"></string>
+    <string name="maintainer_telegram" translatable="false"></string>
+    <string name="kernel">Kernel Developer</string>
+    <string name="kernel_name" translatable="false"></string>
+    <string name="kernel_telegram" translatable="false"></string>
+    <string name="about_tg_title">Telegram Group</string>
+    <string name="about_tg_summary">Official, Global Telegram Group</string>
+    <string name="about_tg_link" translatable="false">https://t.me/yaapcommon</string>
+    <string name="about_git_title">Source Code</string>
+    <string name="about_git_summary">View our source on GitHub</string>
+    <string name="about_git_link" translatable="false">https://github.com/yaap</string>
+    <string name="about_phone_title">About Phone</string>
+    <string name="about_phone_summary">Open the system\'s about page</string>
+    <string name="designer_title">Designer</string>
+    <string name="designer_name">Ahmed Harhash</string>
+    <string name="designer_tg" translatable="false">https://t.me/Lacentix</string>
+    <string name="designer2_name">The Knight</string>
+    <string name="designer2_tg" translatable="false">https://t.me/i_TheKnight</string>
+
+    <!-- Statusbar network traffic monitor -->
+    <string name="network_traffic_state_title">Network traffic display</string>
+    <string name="network_traffic_state_summary">Showing on</string>
+    <string name="network_traffic_location_title">Network traffic location</string>
+    <string name="traffic_statusbar">Statusbar</string>
+    <string name="traffic_expanded_statusbar">Expanded QS header</string>
+    <string name="network_traffic_autohide_threshold_title">Net activity autohide threshold</string>
+    <string name="network_traffic_arrow_title">Show arrows</string>
+    <string name="network_traffic_arrow_summary">Show the network traffic indicator arrows</string>
+    <string name="network_traffic_type">Select net activity type</string>
+    <string name="show_network_traffic_combined">Combined (Upload + Download)</string>
+    <string name="show_network_traffic_dynamic">Dynamic</string>
+    <string name="show_network_traffic_up">Upload</string>
+    <string name="show_network_traffic_down">Download</string>
+    <string name="show_network_traffic_all">Both</string>
+    <string name="network_traffic_font_size_title">Single net font size</string>
+
+    <!-- Notification headers -->
+    <string name="notification_headers_title">Notification Headers</string>
+    <string name="notification_headers_summary">Show headers in the notification shade</string>
+
+    <!-- Incall vibrate options -->
+    <string name="incall_vibration_category">In-call vibration options</string>
+    <string name="incall_vibrate_connect_title">Vibrate on connect</string>
+    <string name="incall_vibrate_call_wait_title">Vibrate on call waiting</string>
+    <string name="incall_vibrate_disconnect_title">Vibrate on disconnect</string>
+
+    <!-- Blink flashlight for incoming calls -->
+    <string name="flashlight_on_call_title">Blink Flashlight for incoming call</string>
+    <string name="flashlight_on_call_disabled">Disabled</string>
+    <string name="flashlight_on_call_ringer">When ringing</string>
+    <string name="flashlight_on_call_no_ringer">When ringer is silent</string>
+    <string name="flashlight_on_call_silent">When entirely silent (no ringer or vibrator)</string>
+    <string name="flashlight_on_call_always">Always</string>
+    <string name="flashlight_on_call_ignore_dnd_title">Ignore DND</string>
+    <string name="flashlight_on_call_ignore_dnd_summary">Whether to flash when in Do Not Disturb mode</string>
+    <string name="flashlight_on_call_rate_title">Rate</string>
+    <string name="flashlight_on_call_rate_summary">Flashlight on call blink rate</string>
+
+    <!-- Blink flashlight for notifications -->
+    <string name="notification_torch_title">Blink flashlight for notifications</string>
+    <string name="notification_torch_summary">By default. Per channel settings exist</string>
+    <string name="notification_torch_slider1">Times to blink</string>
+    <string name="notification_torch_slider2">Rate of blink</string>
+
+    <!-- Brightness slider -->
+    <string name="qs_show_brightness_title">Brightness slider</string>
+    <string name="qs_show_brightness_summary">Brightness slider visibility and settings</string>
+    <string name="qs_brightness_position_bottom_title">Bottom brightness slider</string>
+    <string name="qs_brightness_position_bottom_summary">Show the brightness slider on the bottom of QS</string>
+    <string name="qs_show_auto_brightness_title">Auto brightness icon</string>
+    <string name="qs_show_auto_brightness_summary">Show an auto brightness toggle near the brightness slider</string>
+
+    <!-- AOD Schedule -->
+    <string name="always_on_display_schedule_title">Always on display schedule</string>
+    <string name="always_on_display_schedule_sunset">Sunset</string>
+    <string name="always_on_display_schedule_sunrise">Sunrise</string>
+    <string name="always_on_display_schedule_mixed_sunset">Turns on from sunset till a time</string>
+    <string name="always_on_display_schedule_mixed_sunrise">Turns on from a time till sunrise</string>
+
+    <!--Double Tap to Sleep Lockscreen-->
+    <string name="double_tap_sleep_lockscreen_title">Double tap to sleep</string>
+    <string name="double_tap_sleep_lockscreen_summary">Double tap anywhere on the lockscreen to sleep</string>
+
+    <!-- Double Tap to Sleep Statusbar -->
+    <string name="double_tap_sleep_gesture_title">Double-tap to sleep</string>
+    <string name="double_tap_sleep_gesture_summary">Double-tap anywhere on the status bar to put the device to sleep</string>
+
+    <!-- Advanced reboot  -->
+    <string name="advanced_reboot_title">Advanced reboot</string>
+    <string name="advanced_reboot_summary">Allow rebooting to recovery and bootloader</string>
+
+    <!-- Battery customizations -->
+    <string name="battery_options">Battery</string>
+    <string name="battery_style_title">Battery Style</string>
+    <string name="battery_style_port">Portrait</string>
+    <string name="battery_style_circle">Circle</string>
+    <string name="battery_style_text">Text</string>
+    <string name="battery_percent_title">Show percent</string>
+    <string name="battery_percent_summary">Always show the battery percent with the icon</string>
+    <string name="battery_percent_inside_title">Show percent inside</string>
+    <string name="battery_percent_inside_summary">Show percent inside the icon</string>
+    <string name="show_battery_percent_charging_title">Show percent when charging</string>
+    <string name="show_battery_percent_charging_summary">Enforce showing the percent next to the icon when charging</string>
+
+    <!-- Battery light -->
+    <string name="battery_light_settings">Battery charging light</string>
+    <string name="battery_light_enable">Enable</string>
+    <string name="battery_light_allow_on_dnd_title">Battery light in Do Not Disturb mode</string>
+    <string name="battery_light_low_blinking_title">Blinking light on low battery</string>
+    <string name="battery_light_cat">Battery light color when charging</string>
+    <string name="battery_light_low_color">Low battery</string>
+    <string name="battery_light_medium_color">Medium battery</string>
+    <string name="battery_light_full_color">Almost full battery</string>
+    <string name="battery_light_reallyfull_color">Full (100) battery</string>
+
+
+    <!-- QS media player -->
+    <string name="qs_media_controls_title">Media player</string>
+    <string name="qs_media_controls_summary_on">Show media player in QS\nRequires a SystemUI restart</string>
+    <string name="qs_media_controls_summary_off">Show media player as a notification\nRequires a SystemUI restart</string>
+
+    <!-- QS Battery estimates -->
+    <string name="qs_show_battery_estimate_title">Battery estimates</string>
+    <string name="qs_show_battery_estimate_summary_on">Show battery estimates in QS</string>
+    <string name="qs_show_battery_estimate_summary_off">Hide battery estimates in QS</string>
+
+    <!-- Clock position -->
+    <string name="statusbar_clock_position_title">Clock position</string>
+    <string name="statusbar_clock_position_left">Left</string>
+    <string name="statusbar_clock_position_center">Center</string>
+    <string name="statusbar_clock_position_right">Right</string>
+
+    <!-- SystemUI tuner -->
+    <string name="ui_tuner_title">SystemUI tuner</string>
+
+    <!-- Volume key cursor control  -->
+    <string name="volume_key_cursor_control_title">Volume cursor control</string>
+    <string name="volume_key_cursor_control_disabled">Disabled</string>
+    <string name="volume_key_cursor_control_left">up - left, down - right</string>
+    <string name="volume_key_cursor_control_right">up - right, down - left</string>
+
+    <!-- Privacy indicators -->
+    <string name="location_privacy_indicator_title">Location access indicator</string>
+    <string name="location_privacy_indicator_summary_on">Show location in the privacy chip</string>
+    <string name="location_privacy_indicator_summary_off">Show location in status bar icons</string>
+    <string name="camera_mic_indicator_title">Camera and microphone indicators</string>
+    <string name="camera_mic_indicator_summary">Show camera and microphone in the privacy chip</string>
+
+    <!-- Monet settings -->
+    <string name="monet_settings_title">Theming settings</string>
+    <string name="monet_settings_summary">A few extra settings to customize monet engine</string>
+    <string name="theme_style_title">Theme style</string>
+    <string name="theme_style_tonal_spot">Tonal Spot (Default)</string>
+    <string name="theme_style_vibrant">Vibrant</string>
+    <string name="theme_style_expressive">Expressive</string>
+    <string name="theme_style_spritz">Spritz</string>
+    <string name="theme_style_rainbow">Rainbow</string>
+    <string name="theme_style_fruit_salad">Fruit Salad</string>
+    <string name="theme_style_monochromatic">Monochromatic</string>
+    <string name="color_source_title">Color source</string>
+    <string name="color_source_both">Both (Default)</string>
+    <string name="color_source_home">Home wallpaper</string>
+    <string name="color_source_lock">Lock wallpaper</string>
+    <string name="color_source_preset">Preset</string>
+    <string name="accent_color_title">Accent Color</string>
+    <string name="accent_color_summary">Override default accent color</string>
+    <string name="accent_background_title">Accent background</string>
+    <string name="accent_background_summary">Choose a different accent color for background</string>
+    <string name="bg_color_title">Background Color</string>
+    <string name="bg_color_summary">Override default background accent color</string>
+    <string name="luminance_factor_title">Luminance</string>
+    <string name="luminance_factor_summary">Higher values produce brighter colors</string>
+    <string name="chroma_factor_title">Chroma</string>
+    <string name="chroma_factor_summary">Higher values produce stronger colors</string>
+    <string name="tint_background_title">Tint Background</string>
+    <string name="tint_background_summary">Make Luminance and Chroma selection affect background colors as well</string>
+
+    <!-- Backup Transport selector -->
+    <string name="transport_selector_title">Backup Transport</string>
 </resources>

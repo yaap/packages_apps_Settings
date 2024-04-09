@@ -243,4 +243,234 @@
     <string name="allow_access_to_obb_directory_title">Дозволити доступ до теки Android/obb</string>
     <string name="allow_access_to_obb_directory_summary">Потрібно для встановлення деяких великих програми (в основному ігри), які використовують файли розширення OBB.</string>
 
+    <!-- YASP Import -->
+
+    <!-- App Title -->
+    <string name="yaap_settings_title">Налаштування YAAP</string>
+
+    <!-- Categories -->
+    <string name="button_title">Кнопки</string>
+    <string name="gestures_title">Жести</string>
+    <string name="lockscreen_title">Екран блокування</string>
+    <string name="misc_title">Різне</string>
+    <string name="navbar_title">Панель навігації</string>
+    <string name="notifications_title">Повідомлення</string>
+    <string name="powermenu_title">Меню живлення</string>
+    <string name="quicksettings_title">Швидкі налаштування</string>
+    <string name="recents_title">Недавні додатки</string>
+    <string name="statusbar_title">Статус-бар</string>
+    <string name="volume_title">Звук</string>
+    <string name="on_call_flashlight_category">Спалах при дзвінку</string>
+    <string name="notification_flashlight_category">Спалах при повідомленнях</string>
+
+    <!-- General strings -->
+    <string name="ok">Ок</string>
+    <string name="reset">Скинути</string>
+    <string name="cancel">Відміна</string>
+    <string name="save">Зберегти</string>
+    <string name="default_string">Стандартне значення</string>
+    <string name="disabled">Відключено</string>
+
+    <!-- Color Picker -->
+    <string name="dialog_color_picker">Вибір кольору</string>
+    <string name="press_color_to_apply">Натисніть на колір праворуч, щоб застосувати</string>
+    <string name="arrow_right">→</string>
+    <string name="arrow_down">↓</string>
+    <string name="hex">Hex:</string>
+    <string name="hex_check_button_text">Передогляд</string>
+    <string name="hex_reset_button_text">Скинути</string>
+    <string name="set">Обрати</string>
+    <string name="color_default">Стандартне значення</string>
+    <string name="longpress_info">Утримуйте для збереження кольору</string>
+
+    <!-- Lockscreen battery info indicator  -->
+    <string name="lockscreen_battery_info_title">Інформація про заряджання на екрані блокування</string>
+    <string name="lockscreen_battery_info_summary">Відображати максимальний струм, вольтаж та температуру під час заряджання</string>
+
+    <!-- QS footer text -->
+    <string name="qs_footer_text_show_title">Відображати текст у нижньому колонтитулі швидких налаштувань</string>
+    <string name="qs_footer_text_string_title">Власний текст у нижньому колонтитулі швидких налаштувань</string>
+    <string name="qs_footer_text_string_summary">Залишіть пустим для стандартного тексту YAAP</string>
+
+    <!-- About -->
+    <string name="about_title">Про нас</string>
+    <string name="about_team_category">Учасники</string>
+    <string name="about_external_category">Додатково</string>
+    <string name="about_dev_title">Co-Lead</string>
+    <string name="about_dev_name">Adhitya Mohan</string>
+    <string name="about_dev2_title">Co-Lead</string>
+    <string name="about_dev2_name">Ido Ben-Hur</string>
+    <string name="about_dev3_title">Member</string>
+    <string name="about_dev3_name">Omkar Chandorkar</string>
+    <string name="maintainer">Device Maintainer</string>
+    <string name="kernel">Розробник ядра</string>
+    <string name="about_tg_title">Telegram</string>
+    <string name="about_tg_summary">Офіційна група в Telegram</string>
+    <string name="about_git_title">Source Code</string>
+    <string name="about_git_summary">Відкритий код проекту на GitHub</string>
+    <string name="about_phone_title">Про телефон</string>
+    <string name="about_phone_summary">Відкрити стандартний розділ - Про телефон</string>
+    <string name="designer_title">Дизайнер</string>
+    <string name="designer_name">Ahmed Harhash</string>
+    <string name="designer2_name">The Knight</string>
+
+    <!-- Statusbar network traffic monitor -->
+    <string name="network_traffic_state_title">Швидкість мережі</string>
+    <string name="network_traffic_state_summary">Відображати</string>
+    <string name="network_traffic_location_title">Розташування</string>
+    <string name="traffic_statusbar">В статус-барі</string>
+    <string name="traffic_expanded_statusbar">В заголовку швидких налаштувань</string>
+    <string name="network_traffic_autohide_threshold_title">Поріг відображення</string>
+    <string name="network_traffic_arrow_title">Показувати стрілки</string>
+    <string name="network_traffic_arrow_summary">Індикатор завантаження / вивантаження</string>
+    <string name="network_traffic_type">Режим відображення</string>
+    <string name="show_network_traffic_combined">Комбінований (завантаження + розвантаження)</string>
+    <string name="show_network_traffic_dynamic">Динамічний</string>
+    <string name="show_network_traffic_up">Вивантаження</string>
+    <string name="show_network_traffic_down">Завантаження</string>
+    <string name="show_network_traffic_all">Все</string>
+    <string name="network_traffic_font_size_title">Розмір шрифту</string>
+
+    <!-- Notification headers -->
+    <string name="notification_headers_title">Заголовки повідомлень</string>
+    <string name="notification_headers_summary">Відображати розділові заголовки категорій повідомлень у шторці</string>
+
+    <!-- Screen off FOD -->
+
+    <!-- Incall vibrate options -->
+    <string name="incall_vibration_category">Вібрація під час дзвінка</string>
+    <string name="incall_vibrate_connect_title">При підключенні</string>
+    <string name="incall_vibrate_call_wait_title">При очікуванні</string>
+    <string name="incall_vibrate_disconnect_title">При відключенні</string>
+
+    <!-- Blink flashlight for incoming calls -->
+    <string name="flashlight_on_call_title">Блимати ліхтариком під час вхідних викликів</string>
+    <string name="flashlight_on_call_disabled">Відключено</string>
+    <string name="flashlight_on_call_ringer">При дзвінку</string>
+    <string name="flashlight_on_call_no_ringer">Під час того, як дзвінок заглушено</string>
+    <string name="flashlight_on_call_silent">Під час повної тиші (без вібрації та дзвінка)</string>
+    <string name="flashlight_on_call_always">Завжди</string>
+    <string name="flashlight_on_call_ignore_dnd_title">Ігнорувати режим "Не турбувати"</string>
+    <string name="flashlight_on_call_ignore_dnd_summary">Використовувати спалах, навіть якщо активний режим "Не турбувати"</string>
+    <string name="flashlight_on_call_rate_title">Частота</string>
+    <string name="flashlight_on_call_rate_summary">Як швидко блимати спалахом</string>
+
+    <!-- Blink flashlight for notifications -->
+    <string name="notification_torch_title">Блимати ліхтариком при повідомленні</string>
+    <string name="notification_torch_summary">Стандартні. Існують налаштування для кожного каналу повідомлень</string>
+    <string name="notification_torch_slider1">Кількість блимань</string>
+    <string name="notification_torch_slider2">Частота блимань</string>
+
+    <!-- Brightness slider -->
+    <string name="qs_show_brightness_title">Яскравість</string>
+    <string name="qs_show_brightness_summary">Відображення повзунка яскравості та інших параметрів</string>
+    <string name="qs_brightness_position_bottom_title">Яскравість знизу</string>
+    <string name="qs_brightness_position_bottom_summary">Перенести повзунок яскравості вниз швидких налаштувань</string>
+    <string name="qs_show_auto_brightness_title">Перемикач автояскравості</string>
+    <string name="qs_show_auto_brightness_summary">Відображати поруч із повзунком яскравості перемикач режимів автояскравості</string>
+
+    <!-- AOD Schedule -->
+    <string name="always_on_display_schedule_title">Розклад Always On Display</string>
+    <string name="always_on_display_schedule_sunset">Захід сонця</string>
+    <string name="always_on_display_schedule_sunrise">Схід сонця</string>
+    <string name="always_on_display_schedule_mixed_sunset">Залишити включеним із заходу сонця</string>
+    <string name="always_on_display_schedule_mixed_sunrise">Залишити включеним зі сходу сонця</string>
+
+    <!--Double Tap to Sleep Lockscreen-->
+    <string name="double_tap_sleep_lockscreen_title">Вимкнення подвійним натисканням</string>
+    <string name="double_tap_sleep_lockscreen_summary">Натисніть двічі на екран блокування, щоб вимкнути екран</string>
+
+    <!-- Double Tap to Sleep Statusbar -->
+    <string name="double_tap_sleep_gesture_title">Вимкнення подвійним натисканням</string>
+    <string name="double_tap_sleep_gesture_summary">Натисніть двічі на статус-бар, щоб вимкнути екран</string>
+
+    <!-- Advanced reboot  -->
+    <string name="advanced_reboot_title">Розширене перезавантаження</string>
+    <string name="advanced_reboot_summary">Додати різні варіанти перезавантаження в меню вимкнення</string>
+
+    <!-- Battery customizations -->
+    <string name="battery_options">Батарея</string>
+    <string name="battery_style_title">Стиль значка</string>
+    <string name="battery_style_port">Стандартний</string>
+    <string name="battery_style_circle">Круговий</string>
+    <string name="battery_style_text">Текстовий</string>
+    <string name="battery_percent_title">Відсотки</string>
+    <string name="battery_percent_summary">Відображати залишковий заряд у відсотках</string>
+    <string name="battery_percent_inside_title">Відсотки всередині</string>
+    <string name="battery_percent_inside_summary">Відображати відсотки заряду всередині значка</string>
+    <string name="show_battery_percent_charging_title">Відсотки під час заряджання</string>
+    <string name="show_battery_percent_charging_summary">Відображати відсотки біля значка під час заряджання</string>
+	
+    <!-- Battery light -->
+    <string name="battery_light_settings">Світлова індикація під час заряджання</string>
+    <string name="battery_light_enable">Активно</string>
+    <string name="battery_light_allow_on_dnd_title">Ігнорувати режим "Не турбувати"</string>
+    <string name="battery_light_low_blinking_title">Світлова індикація низького заряду</string>
+    <string name="battery_light_cat">Колір світлової індикації</string>
+    <string name="battery_light_low_color">Низький заряд</string>
+    <string name="battery_light_medium_color">Середній заряд</string>
+    <string name="battery_light_full_color">Майже повний заряд</string>
+    <string name="battery_light_reallyfull_color">Повний заряд (100%)</string>
+
+    <!-- QS media player -->
+    <string name="qs_media_controls_title">Плеєр</string>
+    <string name="qs_media_controls_summary_on">Плеєр в швидких налаштуваннях показаний завжди (для застосування перезавантажте SystemUI)</string>
+    <string name="qs_media_controls_summary_off">Плеєр в швидких налаштуваннях показаний лише під час використання (для застосування перезавантажте SystemUI)</string>
+
+    <!-- QS Battery estimates -->
+    <string name="qs_show_battery_estimate_title">Прогноз батареї</string>
+    <string name="qs_show_battery_estimate_summary_on">Замість відсотків у швидких налаштуваннях показано приблизно час повної розрядки (для застосування перезавантажте SystemUI)</string>
+    <string name="qs_show_battery_estimate_summary_off">В швидких налаштуваннях не показано приблизний час повної розрядки (для застосування перезавантажте SystemUI)</string>
+
+    <!-- Clock position -->
+    <string name="statusbar_clock_position_title">Розташування годинника</string>
+    <string name="statusbar_clock_position_left">Зліва</string>
+    <string name="statusbar_clock_position_center">В центрі</string>
+    <string name="statusbar_clock_position_right">Справа</string>
+
+    <!-- SystemUI tuner -->
+    <string name="ui_tuner_title">Зміна SystemUI</string>
+
+    <!-- Volume key cursor control  -->
+    <string name="volume_key_cursor_control_title">Керувати курсором клавішами гучності</string>
+    <string name="volume_key_cursor_control_disabled">Відключено</string>
+    <string name="volume_key_cursor_control_left">вгору - ліворуч, вниз - праворуч</string>
+    <string name="volume_key_cursor_control_right">вгору - право, вниз - ліво</string>
+
+    <!-- Wi-Fi Standard icon -->
+
+    <!-- Privacy indicators -->
+    <string name="location_privacy_indicator_title">Індикатор доступу до місцеположення</string>
+    <string name="location_privacy_indicator_summary_on">Відображати зелену крапку в острові безпеки</string>
+    <string name="location_privacy_indicator_summary_off">Відображати іконку у статус-барі</string>
+    <string name="camera_mic_indicator_title">Індикатор доступу до камери та мікрофону</string>
+    <string name="camera_mic_indicator_summary">Відображати зелену крапку в острові безпеки</string>
+    
+    <!-- Monet settings -->
+    <string name="monet_settings_title">Налаштування Monet</string>
+    <string name="monet_settings_summary">Додаткові налаштування для двигуна тем Monet</string>
+    <string name="theme_style_title">Стиль теми</string>
+    <string name="theme_style_tonal_spot">Тонова пляма (За замовчуванням)</string>
+    <string name="theme_style_vibrant">Яскрава</string>
+    <string name="theme_style_expressive">Виразна</string>
+    <string name="theme_style_spritz">Бризки</string>
+    <string name="theme_style_rainbow">Веселка</string>
+    <string name="theme_style_fruit_salad">Фруктовий салат</string>
+    <string name="color_source_title">Джерело кольору</string>
+    <string name="color_source_both">Шпалери на головному екрані та екрані блокування (За замовчуванням)</string>
+    <string name="color_source_home">Шпалери на головному екрані</string>
+    <string name="color_source_lock">Шпалери на екрані блокування</string>
+    <string name="color_source_preset">Вручну</string>
+    <string name="accent_color_title">Акцентний колір</string>
+    <string name="accent_color_summary">Перевизначає головний колірний акцент</string>
+    <string name="accent_background_title">Акцент фону</string>
+    <string name="accent_background_summary">Виберіть кілька різних кольорів для фону</string>
+    <string name="bg_color_title">Колір фону</string>
+    <string name="bg_color_summary">Перевизначає колірний акцент для фону</string>
+    <string name="luminance_factor_title">Яскравість</string>
+    <string name="luminance_factor_summary">Високі значення дадуть яскравіші кольори</string>
+    <string name="chroma_factor_title">Кольоровість</string>
+    <string name="chroma_factor_summary">Високі значення дадуть більш насичені кольори</string>
+    <string name="tint_background_title">Відтінок фону</string>
+    <string name="tint_background_summary">Застосувати налаштування Яскравості та Кольоровості так само і для фонового кольору</string>
 </resources>
