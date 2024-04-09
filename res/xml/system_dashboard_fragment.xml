@@ -128,6 +128,14 @@
         android:order="-44"
         android:fragment="com.android.settings.system.StatusBarSettings"/>
 
+    <!-- YASP Misc -->
+    <Preference
+        android:key="misc_category"
+        android:order="-42"
+        android:title="@string/misc_title"
+        android:fragment="com.android.settings.system.MiscSettings"
+        android:icon="@drawable/ic_settings_miscs"/>
+
     <com.android.settings.spa.preference.ComposePreference
         android:key="developer_options"
         android:order="-40"
