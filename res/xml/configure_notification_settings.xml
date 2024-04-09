@@ -148,35 +148,43 @@
                 android:targetClass="com.android.cellbroadcastreceiver.CellBroadcastSettings"/>
         </com.android.settingslib.RestrictedPreference>
 
+        <!-- YASP Notification headers -->
+        <com.yasp.settings.preferences.SystemSettingSwitchPreference
+            android:key="notification_headers"
+            android:order="21"
+            android:title="@string/notification_headers_title"
+            android:summary="@string/notification_headers_summary"
+            android:defaultValue="true" />
+
         <SwitchPreferenceCompat
              android:key="silent_icons"
-             android:order="21"
+             android:order="22"
              android:title="@string/silent_notifications_status_bar"
              settings:controller="com.android.settings.notification.SilentStatusBarPreferenceController"/>
 
         <SwitchPreferenceCompat
             android:key="show_snooze_options"
-            android:order="22"
+            android:order="23"
             android:title="@string/snooze_options_title"
             settings:controller="com.android.settings.notification.SnoozeNotificationPreferenceController" />
 
         <!-- Notification badging -->
         <SwitchPreferenceCompat
             android:key="notification_badging"
-            android:order="23"
+            android:order="24"
             android:title="@string/notification_badging_title"
             settings:controller="com.android.settings.notification.BadgingNotificationPreferenceController"/>
 
         <!-- Pulse notification light, on devices that support it -->
         <SwitchPreferenceCompat
             android:key="notification_pulse"
-            android:order="24"
+            android:order="25"
             android:title="@string/notification_pulse_title"
             settings:controller="com.android.settings.notification.PulseNotificationPreferenceController"/>
 
         <SwitchPreferenceCompat
             android:key="notification_assistant"
-            android:order="25"
+            android:order="26"
             android:title="@string/notification_assistant_title"
             android:summary="@string/notification_assistant_summary"
             settings:controller="com.android.settings.notification.NotificationAssistantPreferenceController"/>
@@ -184,9 +192,66 @@
         <Preference
             android:fragment="com.android.settings.notification.PoliteNotificationsPreferenceFragment"
             android:key="polite_notifications_preference"
-            android:order="26"
+            android:order="27"
             android:persistent="false"
             android:title="@string/notification_polite_title"
             settings:controller="com.android.settings.notification.PoliteNotificationsPreferenceController" />
+    </PreferenceCategory>
+
+    <!-- YASP Import -->
+    <PreferenceCategory
+        android:key="on_call_flashlight_category"
+        android:title="@string/on_call_flashlight_category">
+
+        <com.yasp.settings.preferences.SystemSettingListPreference
+            android:key="flashlight_on_call"
+            android:order="28"
+            android:title="@string/flashlight_on_call_title"
+            android:entries="@array/flashlight_on_call_entries"
+            android:entryValues="@array/flashlight_on_call_values"
+            android:defaultValue="0" />
+
+        <com.yasp.settings.preferences.SystemSettingSwitchPreference
+            android:key="flashlight_on_call_ignore_dnd"
+            android:order="29"
+            android:title="@string/flashlight_on_call_ignore_dnd_title"
+            android:summary="@string/flashlight_on_call_ignore_dnd_summary"
+            android:defaultValue="false" />
+
+        <com.yasp.settings.preferences.CustomSeekBarPreference
+            android:key="flashlight_on_call_rate"
+            android:order="30"
+            android:title="@string/flashlight_on_call_rate_title"
+            android:summary="@string/flashlight_on_call_rate_summary"
+            android:max="5"
+            settings:min="1"
+            settings:defaultValue="1"
+            settings:units="@string/unit_hz" />
+
+    </PreferenceCategory>
+
+    <!-- YASP Import -->
+    <PreferenceCategory
+        android:key="incall_vib_options"
+        android:title="@string/incall_vibration_category" >
+
+        <com.yasp.settings.preferences.SystemSettingSwitchPreference
+            android:key="vibrate_on_connect"
+            android:order="31"
+            android:title="@string/incall_vibrate_connect_title"
+            android:defaultValue="false" />
+
+        <com.yasp.settings.preferences.SystemSettingSwitchPreference
+            android:key="vibrate_on_callwaiting"
+            android:order="32"
+            android:title="@string/incall_vibrate_call_wait_title"
+            android:defaultValue="false" />
+
+        <com.yasp.settings.preferences.SystemSettingSwitchPreference
+            android:key="vibrate_on_disconnect"
+            android:order="33"
+            android:title="@string/incall_vibrate_disconnect_title"
+            android:defaultValue="false" />
+
     </PreferenceCategory>
 </PreferenceScreen>
