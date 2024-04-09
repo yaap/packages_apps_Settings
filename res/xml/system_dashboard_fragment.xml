@@ -112,6 +112,14 @@
         android:fragment="com.android.settings.users.UserSettings"
         settings:controller="com.android.settings.users.MultiUserPreferenceController"/>
 
+    <!-- YASP Statusbar -->
+    <Preference
+        android:key="status_bar_settings"
+        android:title="@string/statusbar_title"
+        android:icon="@drawable/ic_settings_statusbar"
+        android:order="-44"
+        android:fragment="com.android.settings.system.StatusBarSettings"/>
+
     <com.android.settings.spa.preference.ComposePreference
         android:key="developer_options"
         android:order="-40"
