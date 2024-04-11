@@ -138,6 +138,7 @@ import com.android.settings.location.WifiScanningFragment;
 import com.android.settings.network.MobileNetworkListFragment;
 import com.android.settings.network.NetworkDashboardFragment;
 import com.android.settings.network.NetworkProviderSettings;
+import com.android.settings.network.PrivateDnsSettings;
 import com.android.settings.network.apn.ApnEditor;
 import com.android.settings.network.apn.ApnSettings;
 import com.android.settings.network.telephony.MobileNetworkSettings;
@@ -377,7 +378,8 @@ public class SettingsGateway {
             WifiTetherClientManager.class.getName(),
             WirelessDebuggingFragment.class.getName(),
             BatterySaverAdvancedSettings.class.getName(),
-            VolumeSteps.class.getName()
+            VolumeSteps.class.getName(),
+            PrivateDnsSettings.class.getName(),
     };
 
     public static final String[] SETTINGS_FOR_RESTRICTED = {
@@ -428,5 +430,6 @@ public class SettingsGateway {
             Settings.GamingModeActivity.class.getName(),
             Settings.PreviouslyConnectedDeviceDashboardActivity.class.getName(),
             Settings.WirelessDebuggingActivity.class.getName(),
+            Settings.PrivateDnsSettingsActivity.class.getName(),
     };
 }
