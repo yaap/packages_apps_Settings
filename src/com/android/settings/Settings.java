@@ -489,4 +489,6 @@ public class Settings extends SettingsActivity {
     public static class YAAPSettingsActivity extends SettingsActivity { /* empty */ }
 
     public static class GamingModeActivity extends SettingsActivity { /* empty */ }
+
+    public static class RunningServicesDevActivity extends SettingsActivity { /* empty */ }
 }
