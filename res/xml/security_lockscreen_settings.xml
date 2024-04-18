@@ -92,6 +92,42 @@
             android:title="@string/lockscreen_double_line_clock_setting_toggle"
             android:summary="@string/lockscreen_double_line_clock_summary"
             settings:controller="com.android.settings.display.LockscreenClockPreferenceController" />
+
+        <Preference
+            android:title="@string/weather_settings_title"
+            android:summary="@string/weather_settings_summary">
+            <intent
+                android:action="android.intent.action.MAIN"
+                android:targetPackage="org.omnirom.omnijaws"
+                android:targetClass="org.omnirom.omnijaws.SettingsActivity" />
+        </Preference>
+
+        <com.yasp.settings.preferences.SystemSettingSwitchPreference
+            android:key="lockscreen_weather_enabled"
+            android:defaultValue="false"
+            android:title="@string/lockscreen_weather_title"
+            android:summary="@string/lockscreen_weather_summary" />
+
+        <com.yasp.settings.preferences.SystemSettingSwitchPreference
+            android:key="lockscreen_weather_location"
+            android:defaultValue="false"
+            android:title="@string/lockscreen_weather_location_title"
+            android:summary="@string/lockscreen_weather_location_summary"
+            android:dependency="lockscreen_weather_enabled" />
+
+        <com.yasp.settings.preferences.SystemSettingSwitchPreference
+            android:key="lockscreen_weather_text"
+            android:title="@string/lockscreen_weather_text_title"
+            android:summary="@string/lockscreen_weather_text_summary"
+            android:defaultValue="true"
+            android:dependency="lockscreen_weather_enabled" />
+
+        <!--<com.yasp.settings.preferences.SystemSettingSwitchPreference
+            android:key="lockscreen_weather_style"
+            android:title="@string/lockscreen_weather_style_title"
+            android:summary="@string/lockscreen_weather_style_summary"
+            android:dependency="lockscreen_weather_enabled" />-->
+
     </PreferenceCategory>
 
     <PreferenceCategory
