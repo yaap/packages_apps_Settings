@@ -18,6 +18,8 @@ package com.android.settings.security;
 
 import static android.app.admin.DevicePolicyResources.Strings.Settings.WORK_PROFILE_LOCKED_NOTIFICATION_TITLE;
 import static android.app.admin.DevicePolicyResources.Strings.Settings.WORK_PROFILE_NOTIFICATIONS_SECTION_HEADER;
+import static android.provider.Settings.System.LOCKSCREEN_WEATHER_PROVIDER_DEFAULT;
+import static android.provider.Settings.System.LOCKSCREEN_WEATHER_PROVIDER_OMNI;
 
 import android.app.settings.SettingsEnums;
 import android.content.Context;
@@ -30,6 +32,8 @@ import android.os.Looper;
 import android.provider.Settings;
 
 import androidx.annotation.VisibleForTesting;
+import androidx.preference.Preference;
+import androidx.preference.PreferenceScreen;
 
 import com.android.settings.R;
 import com.android.settings.dashboard.DashboardFragment;
@@ -46,6 +50,9 @@ import com.android.settings.security.screenlock.LockScreenPreferenceController;
 import com.android.settingslib.core.AbstractPreferenceController;
 import com.android.settingslib.core.lifecycle.Lifecycle;
 import com.android.settingslib.search.SearchIndexable;
+
+import com.yasp.settings.preferences.SystemSettingListPreference;
+import com.yasp.settings.preferences.SystemSettingSwitchPreference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -73,11 +80,19 @@ public class LockscreenDashboardFragment extends DashboardFragment
     static final String KEY_ADD_USER_FROM_LOCK_SCREEN =
             "security_lockscreen_add_users_when_locked";
 
+    private static final String KEY_WEATHER_PROVIDER = "lockscreen_weather_provider";
+    private static final String KEY_WEATHER_PREFS = "lockscreen_weather_prefs";
+    private static final String KEY_WEATHER_LOCATION = "lockscreen_weather_location";
+    private static final String KEY_WEATHER_TEXT = "lockscreen_weather_text";
 
     private AmbientDisplayConfiguration mConfig;
     private OwnerInfoPreferenceController mOwnerInfoPreferenceController;
     @VisibleForTesting
     ContentObserver mControlsContentObserver;
+
+    private Preference mWeatherPrefs;
+    private SystemSettingSwitchPreference mWeatherLocation;
+    private SystemSettingSwitchPreference mWeatherText;
 
     @Override
     public int getMetricsCategory() {
@@ -97,6 +112,29 @@ public class LockscreenDashboardFragment extends DashboardFragment
                 R.string.locked_work_profile_notification_title);
         replaceEnterpriseStringTitle("security_setting_lock_screen_notif_work_header",
                 WORK_PROFILE_NOTIFICATIONS_SECTION_HEADER, R.string.profile_section_header);
+
+        PreferenceScreen screen = getPreferenceScreen();
+        mWeatherPrefs = screen.findPreference(KEY_WEATHER_PREFS);
+        mWeatherLocation = screen.findPreference(KEY_WEATHER_LOCATION);
+        mWeatherText = screen.findPreference(KEY_WEATHER_TEXT);
+        SystemSettingListPreference weatherProvider = screen.findPreference(KEY_WEATHER_PROVIDER);
+        final int provider = Settings.System.getInt(
+                getContentResolver(), KEY_WEATHER_PROVIDER, LOCKSCREEN_WEATHER_PROVIDER_DEFAULT);
+        weatherProvider.setValueIndex(provider);
+        weatherProvider.setSummary(weatherProvider.getEntries()[provider]);
+        updateWeatherEnablement(provider);
+        weatherProvider.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
+            @Override
+            public boolean onPreferenceChange(Preference preference, Object newValue) {
+                if (preference != weatherProvider) return false;
+                final int value = Integer.parseInt((String) newValue);
+                Settings.System.putInt(getContentResolver(),
+                        KEY_WEATHER_PROVIDER, value);
+                weatherProvider.setSummary(weatherProvider.getEntries()[value]);
+                updateWeatherEnablement(value);
+                return true;
+            }
+        });
     }
 
     @Override
@@ -164,6 +202,13 @@ public class LockscreenDashboardFragment extends DashboardFragment
         if (mOwnerInfoPreferenceController != null) {
             mOwnerInfoPreferenceController.updateSummary();
         }
+    }
+
+    private void updateWeatherEnablement(int provider) {
+        final boolean enabled = provider == LOCKSCREEN_WEATHER_PROVIDER_OMNI;
+        mWeatherPrefs.setVisible(enabled);
+        mWeatherLocation.setVisible(enabled);
+        mWeatherText.setVisible(enabled);
     }
 
     private AmbientDisplayConfiguration getConfig(Context context) {
