@@ -56,6 +56,20 @@
         android:summaryOff="@string/qs_media_controls_summary_off"
         android:defaultValue="true" />
 
+    <!-- QS WiFi auto on -->
+    <com.yasp.settings.preferences.SystemSettingSwitchPreference
+        android:key="qs_wifi_auto_on"
+        android:title="@string/qs_wifi_auto_on_title"
+        android:summary="@string/qs_wifi_auto_on_summary"
+        android:defaultValue="false" />
+
+    <!-- QS Bluetooth auto on -->
+    <com.yasp.settings.preferences.SystemSettingSwitchPreference
+        android:key="qs_bt_auto_on"
+        android:title="@string/qs_bt_auto_on_title"
+        android:summary="@string/qs_bt_auto_on_summary"
+        android:defaultValue="false" />
+
     <!-- Gaming macro QS tile -->
     <Preference
         android:key="gaming_mode_tile"
