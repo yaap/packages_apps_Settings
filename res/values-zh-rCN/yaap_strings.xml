@@ -580,4 +580,29 @@
 
     <!-- Backup Transport selector -->
     <string name="transport_selector_title">备份方式</string>
+    <!-- Weather -->
+    <string name="weather_settings_title">天气设置</string>
+    <string name="weather_settings_summary">设置图标包和天气服务</string>
+    <string name="lockscreen_weather_category">天气</string>
+    <string name="lockscreen_weather_title">天气提供商</string>
+    <string name="lockscreen_weather_enabled_info">需要开启天气服务</string>
+    <string name="lockscreen_weather_location_title">当前位置</string>
+    <string name="lockscreen_weather_location_summary">显示当前天气位置</string>
+    <string name="lockscreen_weather_text_title">当前状况</string>
+    <string name="lockscreen_weather_text_summary">显示当前天气状况摘要</string>
+    <string name="lockscreen_weather_style_title">显示样式</string>
+    <string name="lockscreen_weather_style_summary">将天气显示为单独的一行</string>
+    <string name="lockscreen_weather_provider_none">无</string>
+    <string name="lockscreen_weather_provider_default">Google (默认)</string>
+    <string name="lockscreen_weather_provider_omni">OmniJaws</string>
+
+    <!-- QS WiFi / Bluetooth auto on -->
+    <string name="qs_wifi_auto_on_title">快速开启 WiFi</string>
+    <string name="qs_wifi_auto_on_summary">按下互联网磁贴时自动开启 WiFi</string>
+    <string name="qs_bt_auto_on_title">快速开启蓝牙</string>
+    <string name="qs_bt_auto_on_summary">按下蓝牙磁贴时自动开启蓝牙</string>
+
+    <!-- Unlimit screenrecord -->
+    <string name="unlimit_screenrecord_title">无限屏幕录制</string>
+    <string name="unlimit_screenrecord_summary">移除 15GB 的文件大小限制\n可能会占用更多空间</string>
 </resources>
