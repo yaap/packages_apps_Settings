@@ -470,6 +470,11 @@
     <string name="notification_torch_slider1">闪烁次数</string>
     <string name="notification_torch_slider2">闪烁频率</string>
 
+    <!-- Heads up -->
+    <string name="heads_up_title">浮动通知</string>
+    <string name="heads_up_summary">将选定的通知显示在屏幕上方</string>
+    <string name="heads_up_off">浮动通知已全局禁用</string>
+
     <!-- Brightness slider -->
     <string name="qs_show_brightness_title">亮度滑块</string>
     <string name="qs_show_brightness_summary">亮度滑块可见性和设置</string>
