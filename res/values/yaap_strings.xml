@@ -626,6 +626,9 @@
     <string name="lockscreen_weather_text_summary">Display current weather condition summary</string>
     <string name="lockscreen_weather_style_title">Pixel style</string>
     <string name="lockscreen_weather_style_summary">Display weather as separate row</string>
+    <string name="lockscreen_weather_click_updates_title">Tap to update</string>
+    <string name="lockscreen_weather_click_updates_summary_on">Tapping on the weather updates it</string>
+    <string name="lockscreen_weather_click_updates_summary_off">Tapping on the weather launches the app</string>
     <string name="lockscreen_weather_provider_none">None</string>
     <string name="lockscreen_weather_provider_default">Google (default)</string>
     <string name="lockscreen_weather_provider_omni">OmniJaws</string>
