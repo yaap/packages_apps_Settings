@@ -3344,6 +3344,26 @@
             <meta-data android:name="com.android.settings.icon_tintable" android:value="true" />
         </activity>
 
+        <activity android:name=".security.DuressPasswordMainActivity"
+            android:excludeFromRecents="true"
+            android:theme="@style/GlifTheme.Light"
+            android:permission="android.permission.MANAGE_SAFETY_CENTER"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="com.android.settings.DURESS_PASSWORD_SETTINGS" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <meta-data android:name="com.android.settings.HIGHLIGHT_MENU_KEY"
+                       android:value="@string/menu_key_safety_center"/>
+        </activity>
+
+        <activity android:name=".security.DuressPasswordSetupActivity"
+            android:excludeFromRecents="true"
+            android:theme="@style/GlifTheme.Light"
+            android:exported="false" />
+
         <activity android:name=".biometrics.fingerprint.FingerprintEnrollSuggestionActivity"
             android:exported="true"
             android:icon="@drawable/ic_suggestion_fingerprint">

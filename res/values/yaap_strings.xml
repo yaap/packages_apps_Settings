@@ -914,4 +914,33 @@
     <string name="esim_power_dialog_cancel">Cancel</string>
     <string name="esim_power_dialog_disable">Disable</string>
     <string name="esim_power_dialog_enable">Enable</string>
+
+
+    <!-- Duress wipe -->
+    <string name="duress_pwd_pref_title">Duress password</string>
+    <string name="duress_pwd_description">"Duress password can be entered instead of the user password in any place that asks for it, such as the lock screen of any user and any user or work profile password prompt.
+
+Submitting the duress password will immediately make the storage contents permanently inaccessible, delete all eSIMs and then power off the device. Android will remain installed.
+
+Duress PIN works the same way duress password does."</string>
+    <string name="duress_pwd_enter_pin">Enter duress PIN</string>
+    <string name="duress_pwd_confirm_pin">Confirm duress PIN</string>
+    <string name="duress_pwd_enter_password">Enter duress password</string>
+    <string name="duress_pwd_confirm_password">Confirm duress password</string>
+    <string name="duress_pwd_action_add">Add duress PIN and password</string>
+    <string name="duress_pwd_add_button">Add</string>
+    <string name="duress_pwd_toast_added">Added duress PIN and password</string>
+    <string name="duress_pwd_toast_updated">Updated duress PIN and password</string>
+    <string name="duress_pwd_update_button">Update</string>
+    <string name="duress_pwd_cancel_button">Cancel</string>
+    <string name="duress_pwd_proceed_button">Proceed</string>
+    <string name="duress_pwd_delete_button">Delete</string>
+    <string name="duress_pwd_action_update">Update duress PIN and password</string>
+    <string name="duress_pwd_action_delete">Delete duress PIN and password</string>
+    <string name="duress_pwd_action_delete_confirmation">Delete duress PIN and password?</string>
+    <string name="duress_pwd_save_warning_title">WARNING</string>
+    <string name="duress_pwd_save_warning_text">"Submitting the duress PIN/password instead of the user PIN/password <b>will immediately make the storage contents permanently inaccessible</b> and will delete all eSIMs."</string>
+    <string name="duress_pwd_save_error">Duress PIN and password were not saved.\n\nDetails:\n%1$s</string>
+    <string name="duress_pwd_delete_error">Duress PIN and password were not deleted.\n\nDetails:\n%1$s</string>
+    <string name="duress_pwd_error_dialog_dismiss">Dismiss</string>
 </resources>
