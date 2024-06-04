@@ -220,7 +220,7 @@
     <string name="media_controls_always_show_time_title"> Всегда показывать время</string>
     <string name="media_controls_always_show_time_summary">Всегда показывать пройденное и общее время на медиаплеере</string>
     <string name="media_controls_squiggle_title">Прогресс в виде волны</string>
-    <string name="media_controls_squiggle_summary">Показывать волнистый, раздражающий, бесполезный, похожий на сперму и отвлекающий индикатор выполнения на медиаплеере\nДля вступления в силу требуется перезапуск интерфейса.</string>
+    <string name="media_controls_squiggle_summary">Показывать волнистый, раздражающий, бесполезный, похожий на сперму и отвлекающий индикатор выполнения на медиаплеере</string>
 
     <!-- Hotspot extras -->
     <string name="tethering_allow_vpn_upstreams_title">Разрешить клиентам использовать VPN</string>

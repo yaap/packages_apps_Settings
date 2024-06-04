@@ -217,7 +217,7 @@
     <string name="media_controls_always_show_time_title">始终显示时间</string>
     <string name="media_controls_always_show_time_summary">始终在媒体播放器上显示已播放和总时间</string>
     <string name="media_controls_squiggle_title">波浪进度条</string>
-    <string name="media_controls_squiggle_summary">在媒体播放器上显示一个扭曲的、恼人的、无用的、看起来像精子的和令人分心的进度条 \n重启系统界面后生效</string>
+    <string name="media_controls_squiggle_summary">在媒体播放器上显示一个扭曲的、恼人的、无用的、看起来像精子的和令人分心的进度条</string>
 
     <!-- Hotspot extras -->
     <string name="tethering_allow_vpn_upstreams_title">允许客户端使用 VPN</string>

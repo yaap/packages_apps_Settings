@@ -220,7 +220,7 @@
     <string name="media_controls_always_show_time_title">Завжди показувати час</string>
     <string name="media_controls_always_show_time_summary">Завжди показувати пройдений та загальний час на медіаплеєрі</string>
     <string name="media_controls_squiggle_title">Прогрес у вигляді хвилі</string>
-    <string name="media_controls_squiggle_summary">Показувати хвилястий індикатор виконання на медіаплеєрі\nДля набрання чинності потрібно перезапуск інтерфейсу.</string>
+    <string name="media_controls_squiggle_summary">Показувати хвилястий індикатор виконання на медіаплеєрі</string>
 
     <!-- Hotspot extras -->
     <string name="tethering_allow_vpn_upstreams_title">Дозволити клієнтам використовувати VPN</string>
