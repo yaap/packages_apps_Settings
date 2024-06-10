@@ -646,4 +646,8 @@
     <!-- Unlimit screenrecord -->
     <string name="unlimit_screenrecord_title">Unlimit screenrecord</string>
     <string name="unlimit_screenrecord_summary">Remove the 15GiB file size limit\nMay result in a larger than needed output file</string>
+
+    <!-- Block wallpaper dimming -->
+    <string name="block_wallpaper_dimming_title">Ignore wallpaper dimming requests</string>
+    <string name="block_wallpaper_dimming_summary">Blocks all apps from setting the wallpaper dim\nForces dim to 0</string>
 </resources>

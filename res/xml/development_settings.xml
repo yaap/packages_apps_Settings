@@ -747,6 +747,12 @@
             android:title="@string/enable_notes_role_title"
             android:summary="@string/enable_notes_role_summary" />
 
+        <com.yasp.settings.preferences.SystemSettingSwitchPreference
+            android:key="block_wallpaper_dimming"
+            android:title="@string/block_wallpaper_dimming_title"
+            android:summary="@string/block_wallpaper_dimming_summary"
+            android:defaultValue="false" />
+
         <Preference
             android:key="quarantined_apps"
             android:title="@string/quarantined_apps_title"
