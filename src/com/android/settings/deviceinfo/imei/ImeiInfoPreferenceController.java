@@ -33,7 +33,6 @@ import androidx.preference.PreferenceScreen;
 
 import com.android.settings.R;
 import com.android.settings.core.BasePreferenceController;
-import com.android.settings.deviceinfo.PhoneNumberSummaryPreference;
 import com.android.settings.deviceinfo.simstatus.SlotSimStatus;
 import com.android.settings.network.SubscriptionUtil;
 import com.android.settingslib.Utils;
@@ -103,6 +102,7 @@ public class ImeiInfoPreferenceController extends BasePreferenceController {
             multiImeiPreference.setKey(DEFAULT_KEY + (1 + simSlotNumber));
             multiImeiPreference.setEnabled(true);
             multiImeiPreference.setCopyingEnabled(true);
+
             category.addPreference(multiImeiPreference);
        }
     }
@@ -147,6 +147,10 @@ public class ImeiInfoPreferenceController extends BasePreferenceController {
 
     @VisibleForTesting
     protected void updatePreference(Preference preference, int simSlot) {
+        if (simSlot < 0) {
+            preference.setVisible(false);
+            return;
+        }
         preference.setTitle(getTitle(simSlot));
         preference.setSummary(getSummary(simSlot));
     }
@@ -192,6 +196,6 @@ public class ImeiInfoPreferenceController extends BasePreferenceController {
 
     @VisibleForTesting
     Preference createNewPreference(Context context) {
-        return new PhoneNumberSummaryPreference(context);
+        return new Preference(context);
     }
 }

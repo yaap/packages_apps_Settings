@@ -325,7 +325,6 @@
     <string name="lockdown_settings_title">显示锁定选项</string>
     <!-- Text shown for the description of the lockdown option -->
     <string name="lockdown_settings_summary">在电源选项中显示锁定选项\n将关闭智能锁、面部解锁、指纹解锁和锁屏通知功能</string>
-    <string name="lockscreen_trivial_controls_summary">未解锁手机时设备控制器依然可用</string>
     <string name="lockscreen_trivial_controls_setting_toggle">设备控制器</string>
 
     <!-- Battery Info: Technology -->
