@@ -650,4 +650,10 @@
     <!-- Block wallpaper dimming -->
     <string name="block_wallpaper_dimming_title">Ignore wallpaper dimming requests</string>
     <string name="block_wallpaper_dimming_summary">Blocks all apps from setting the wallpaper dim\nForces dim to 0</string>
+
+    <!-- Slider haptics -->
+    <string name="volume_panel_haptics_title">Volume panel haptics</string>
+    <string name="volume_panel_haptics_summary">Whether to enable volume panel haptic feedbacks</string>
+    <string name="brightness_slider_haptics_title">Haptic feedback</string>
+    <string name="brightness_slider_haptics_summary">Whether to enable haptic feedbacks when changing the brightness</string>
 </resources>

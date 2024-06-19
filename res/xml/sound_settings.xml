@@ -153,6 +153,13 @@
         android:summary="@string/volume_panel_on_left_land_summary"
         android:order="-97" />
 
+    <!-- Volume dialog haptics -->
+    <com.yasp.settings.preferences.SystemSettingSwitchPreference
+        android:key="volume_panel_haptics"
+        android:title="@string/volume_panel_haptics_title"
+        android:summary="@string/volume_panel_haptics_summary"
+        android:defaultValue="true" />
+
     <!-- Volume dialog timeout -->
     <com.yasp.settings.preferences.CustomSeekBarPreference
         android:key="volume_dialog_timeout"
