@@ -15,6 +15,13 @@
  */
 package com.android.settings.system;
 
+import android.content.Context;
+import android.os.Bundle;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+
+import androidx.preference.Preference;
+
 import com.android.internal.logging.nano.MetricsProto;
 import com.android.settings.dashboard.DashboardFragment;
 import com.android.settings.R;
@@ -25,6 +32,17 @@ import com.android.settingslib.search.SearchIndexable;
 public class BrightnessSliderSettings extends DashboardFragment {
 
     private static final String TAG = "BrightnessSliderSettings";
+    private static final String SLIDER_HAPTICS_KEY = "brightness_slider_haptics";
+
+    @Override
+    public void onCreate(Bundle icicle) {
+        super.onCreate(icicle);
+
+        if (!isSliderHapticsSupported()) {
+            Preference sliderHaptics = findPreference(SLIDER_HAPTICS_KEY);
+            if (sliderHaptics != null) sliderHaptics.setVisible(false);
+        }
+    }
 
     @Override
     protected int getPreferenceScreenResId() {
@@ -39,6 +57,24 @@ public class BrightnessSliderSettings extends DashboardFragment {
     @Override
     protected String getLogTag() {
         return TAG;
+    }
+
+    private boolean isSliderHapticsSupported() {
+        Vibrator vibrator = (Vibrator) getContext().getSystemService(Context.VIBRATOR_SERVICE);
+        if (vibrator == null || !vibrator.hasVibrator()) {
+            return false; // device has no vibrator
+        }
+        if (vibrator.areAllPrimitivesSupported(
+                VibrationEffect.Composition.PRIMITIVE_LOW_TICK,
+                VibrationEffect.Composition.PRIMITIVE_CLICK)) {
+            return true; // device supports primitives
+        }
+        int max = getContext().getResources().getInteger(
+                com.android.internal.R.integer.config_sliderVibFallbackDuration);
+        if (max <= 0) {
+            return false; // fallbacks are not set
+        }
+        return true; // does not support primitives but fallbacks are set
     }
 
     public static final BaseSearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
