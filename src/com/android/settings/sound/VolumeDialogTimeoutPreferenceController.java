@@ -31,7 +31,7 @@ import com.yasp.settings.preferences.CustomSeekBarPreference;
 public class VolumeDialogTimeoutPreferenceController extends AbstractPreferenceController
         implements Preference.OnPreferenceChangeListener {
 
-    private static final String KEY = "volume_dialog_timeout";
+    private static final String KEY = "volume_dialog_dismiss_timeout";
 
     private CustomSeekBarPreference mDialogTimeoutSeekBar;
 
@@ -53,14 +53,15 @@ public class VolumeDialogTimeoutPreferenceController extends AbstractPreferenceC
     public void displayPreference(PreferenceScreen screen) {
         super.displayPreference(screen);
         mDialogTimeoutSeekBar = (CustomSeekBarPreference) screen.findPreference(KEY);
-        mDialogTimeoutSeekBar.setValue(Settings.System.getInt(
-                mContext.getContentResolver(), KEY, 5));
+        mDialogTimeoutSeekBar.setValue(Settings.Secure.getInt(
+                mContext.getContentResolver(), KEY, 3000) / 1000 /* ms to sec */);
         mDialogTimeoutSeekBar.setOnPreferenceChangeListener(this);
     }
 
     @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
-        Settings.System.putInt(mContext.getContentResolver(), KEY, (Integer) newValue);
+        Settings.Secure.putInt(mContext.getContentResolver(), KEY,
+                (Integer) newValue * 1000 /* sec to ms */);
         return true;
     }
 }

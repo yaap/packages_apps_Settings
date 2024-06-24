@@ -158,17 +158,18 @@
         android:key="volume_panel_haptics"
         android:title="@string/volume_panel_haptics_title"
         android:summary="@string/volume_panel_haptics_summary"
-        android:defaultValue="true" />
+        android:defaultValue="true"
+        android:order="-95" />
 
     <!-- Volume dialog timeout -->
     <com.yasp.settings.preferences.CustomSeekBarPreference
-        android:key="volume_dialog_timeout"
+        android:key="volume_dialog_dismiss_timeout"
         android:title="@string/volume_dialog_timeout_title"
         android:summary="@string/volume_dialog_timeout_summary"
-        android:order="-95"
+        android:order="-92"
         android:max="7"
         android:min="1"
-        settings:defaultValue="3"
+        android:defaultValue="3"
         settings:units="@string/unit_seconds" />
 
     <!-- Also vibration -->
