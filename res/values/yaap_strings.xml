@@ -115,6 +115,8 @@
     <string name="gaming_mode_night_light_summary">Whether to disable Night Light and schedule</string>
     <string name="gaming_mode_battery_schedule_title">Battery Saver</string>
     <string name="gaming_mode_battery_schedule_summary">Whether to disable battery saver and schedule</string>
+    <string name="gaming_mode_power_title">Power Mode</string>
+    <string name="gaming_mode_power_summary">Whether to enable gaming power profile</string>
     <string name="gaming_mode_bluetooth_title">Bluetooth</string>
     <string name="gaming_mode_bluetooth_summary">Whether to enable bluetooth</string>
     <string name="gaming_mode_extra_dim_title">Extra Dim</string>
