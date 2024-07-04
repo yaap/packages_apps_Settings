@@ -131,6 +131,8 @@
     <string name="gaming_mode_desc">Gaming macro will toggle the settings you chose above. All of the toggled settings will be saved and toggled back once you disable Gaming Macro</string>
     <string name="gaming_mode_screen_off_title">Screen off deactivates</string>
     <string name="gaming_mode_screen_off_summary">Deactivate gaming macro when the screen turns off</string>
+    <string name="gaming_mode_battery_saver_disables_title">Battery Saver deactivates</string>
+    <string name="gaming_mode_battery_saver_disables_summary">Deactivate gaming macro when battery saver activates</string>
 
     <!-- 3-Button navigation settings -->
     <string name="button_settings_activity_title">3-Button Navigation Settings</string>
