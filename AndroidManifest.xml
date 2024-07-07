@@ -144,8 +144,6 @@
     <uses-permission android:name="android.permission.RESTART_PHONE_PROCESS" />
     <uses-permission android:name="android.permission.MANAGE_ENHANCED_CONFIRMATION_STATES" />
     <uses-permission android:name="com.google.android.settings.intelligence.BATTERY_DATA"/>
-    <uses-permission android:name="com.google.android.settings.routines.ROUTINES_ACTIONS"/>
-    <permission android:name="com.google.android.settings.routines.ROUTINES_ACTIONS" android:protectionLevel="normal|signature|system"/>
 
     <application
             android:name=".SettingsApplication"
@@ -5221,13 +5219,6 @@
             <meta-data android:name="com.android.settings.FRAGMENT_CLASS"
                        android:value="com.android.settings.applications.RunningServices" />
         </activity>
-
-        <receiver android:name="com.google.android.settings.routines.RoutinesActionBroadcastReceiver"
-                  android:permission="com.google.android.settings.routines.ROUTINES_ACTIONS" android:exported="true">
-            <intent-filter>
-                <action android:name="com.google.android.settings.routines.RoutinesActionBroadcastReceiver.RINGER_MODE_SILENCE_ACTION"/>
-            </intent-filter>
-        </receiver>
 
         <!-- This is the longest AndroidManifest.xml ever. -->
     </application>
