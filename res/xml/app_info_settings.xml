@@ -197,6 +197,13 @@
             settings:searchable="false"
             settings:controller="com.android.settings.applications.appinfo.LongBackgroundTasksDetailsPreferenceController" />
 
+        <SwitchPreferenceCompat
+            android:key="gaming_macro_switch"
+            android:title="@string/gaming_mode_tile_title"
+            android:summary="@string/gaming_macro_switch_summary"
+            settings:controller=
+                "com.android.settings.applications.appinfo.GamingMacroAppSwitchPreferenceController" />
+
     </PreferenceCategory>
 
     <!-- App installer info -->

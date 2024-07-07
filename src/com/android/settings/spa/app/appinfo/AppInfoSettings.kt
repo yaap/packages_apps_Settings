@@ -173,6 +173,7 @@ private fun AppInfoSettings(packageInfoPresenter: PackageInfoPresenter) {
             if (Flags.enablePerformBackupTasksInSettings()) {
                 BackupTasksAppsListProvider.InfoPageEntryItem(app)
             }
+            GameMacroSwitchPreference(app)
         }
 
         Category(title = stringResource(R.string.app_install_details_group_title)) {

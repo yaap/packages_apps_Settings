@@ -120,4 +120,10 @@
         android:persistent="false"
         android:clickable="false"
         android:summary="@string/gaming_mode_desc" />
+
+    <Preference
+        android:icon="@drawable/ic_info_outline_24dp"
+        android:persistent="false"
+        android:clickable="false"
+        android:summary="@string/gaming_mode_desc_auto" />
 </PreferenceScreen>

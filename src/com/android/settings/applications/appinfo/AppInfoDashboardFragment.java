@@ -221,10 +221,15 @@ public class AppInfoDashboardFragment extends DashboardFragment
         longBackgroundTasks.setPackageName(packageName);
         longBackgroundTasks.setParentFragment(this);
 
+        final GamingMacroAppSwitchPreferenceController gamingMacro =
+                use(GamingMacroAppSwitchPreferenceController.class);
+        gamingMacro.setPackageName(packageName);
+        gamingMacro.setParentFragment(this);
+
         final AdvancedAppInfoPreferenceCategoryController advancedAppInfo =
                 use(AdvancedAppInfoPreferenceCategoryController.class);
         advancedAppInfo.setChildren(Arrays.asList(writeSystemSettings, drawOverlay, pip,
-                externalSource, acrossProfiles, alarmsAndReminders, longBackgroundTasks));
+                externalSource, acrossProfiles, alarmsAndReminders, longBackgroundTasks, gamingMacro));
         advancedAppInfo.setAppEntry(mAppEntry);
 
         final AppLocalePreferenceController appLocale =
