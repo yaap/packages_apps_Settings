@@ -37,6 +37,8 @@ public class WifiTetherSSIDPreferenceController extends WifiTetherBasePreference
 
     private static final String TAG = "WifiTetherSsidPref";
     private static final String PREF_KEY = "wifi_tether_network_name";
+    private static final String WIFI_SHARING_KEY_ALIAS = "wifi_sharing_auth_key";
+    private static final int MAX_UNLOCK_SECONDS = 60;
     @VisibleForTesting
     static final String DEFAULT_SSID = "AndroidAP";
 
@@ -123,15 +125,22 @@ public class WifiTetherSSIDPreferenceController extends WifiTetherBasePreference
     }
 
     private void shareHotspotNetwork(Intent intent) {
-        WifiDppUtils.showLockScreen(mContext, () -> {
-            mMetricsFeatureProvider.action(SettingsEnums.PAGE_UNKNOWN,
+        if (WifiDppUtils.isUnlockedWithinSeconds(WIFI_SHARING_KEY_ALIAS, MAX_UNLOCK_SECONDS)) {
+            // skip the auth dialog if unlocked last minute
+            launchWifiDppConfiguratorActivity(intent);
+            return;
+        }
+        WifiDppUtils.showLockScreen(mContext, () -> launchWifiDppConfiguratorActivity(intent));
+    }
+
+    private void launchWifiDppConfiguratorActivity(Intent intent) {
+        mMetricsFeatureProvider.action(SettingsEnums.PAGE_UNKNOWN,
                     SettingsEnums.ACTION_SETTINGS_SHARE_WIFI_HOTSPOT_QR_CODE,
                     SettingsEnums.SETTINGS_WIFI_DPP_CONFIGURATOR,
                     /* key */ null,
                     /* value */ Integer.MIN_VALUE);
 
-            mContext.startActivity(intent);
-        });
+        mContext.startActivity(intent);
     }
 
     @VisibleForTesting
