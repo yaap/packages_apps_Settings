@@ -1,7 +1,5 @@
 /*
- * Copyright (C) 2017 The Android Open Source Project
- * Copyright (C) 2017 The LineageOS Project
- * Copyright (C) 2022-2024 Yet Another AOSP Project
+ * Copyright (C) 2024 Yet Another AOSP Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.android.settings.system;
+package com.android.settings.deviceinfo.firmwareversion;
 
 import android.content.Context;
 import android.content.pm.ActivityInfo;
@@ -23,14 +21,12 @@ import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.ApplicationInfoFlags;
 import android.content.pm.PackageManager.PackageInfoFlags;
 
-import androidx.preference.Preference;
-
 import com.android.settings.R;
 import com.android.settings.core.BasePreferenceController;
 
-public class UpdatePreferenceController extends BasePreferenceController {
+public class YAAPChangelogPreferenceController extends BasePreferenceController {
 
-    public UpdatePreferenceController(Context context, String preferenceKey) {
+    public YAAPChangelogPreferenceController(Context context, String preferenceKey) {
         super(context, preferenceKey);
     }
 
@@ -45,7 +41,7 @@ public class UpdatePreferenceController extends BasePreferenceController {
                     ApplicationInfoFlags.of(PackageManager.MATCH_SYSTEM_ONLY)).enabled)
                 return UNSUPPORTED_ON_DEVICE;
 
-            String activityStr = mContext.getString(R.string.update_activity);
+            String activityStr = mContext.getString(R.string.changelog_activity);
             if (activityStr == null || activityStr.isEmpty())
                 return UNSUPPORTED_ON_DEVICE;
 

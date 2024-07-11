@@ -86,4 +86,15 @@
         settings:enableCopying="true"
         settings:controller="com.android.settings.deviceinfo.firmwareversion.SimpleBuildNumberPreferenceController"/>
 
+    <!-- Changelog -->
+    <Preference
+        android:key="yaap_changelog"
+        android:title="@string/yaap_changelog_title"
+        android:summary="@string/yaap_changelog_summary"
+        settings:controller="com.android.settings.deviceinfo.firmwareversion.YAAPChangelogPreferenceController">
+        <intent android:action="android.intent.action.MAIN"
+                android:targetPackage="@string/update_package"
+                android:targetClass="@string/changelog_activity" />
+    </Preference>
+
 </PreferenceScreen>
