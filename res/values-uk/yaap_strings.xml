@@ -250,7 +250,7 @@
     <string name="doze_gesture_allow_ambient_summary">Дозвольте цьому жесту завжди працювати і на Ambient Display</string>
 
     <!-- wake gestures haptics -->
-    <string name="doze_gesture_vibrate_title">Тактильний зворотний зв'язок</string>
+    <string name="doze_gesture_vibrate_title">Тактильний зворотний зв\'язок</string>
     <string name="doze_gesture_vibrate_summary">Вібрувати під час виклику цього жесту</string>
 
     <!-- extra dim schedule -->
@@ -261,7 +261,7 @@
 
     <!-- APM Enhancement -->
     <string name="apm_enhancement_title">Покращення режиму польоту</string>
-    <string name="apm_enhancement_summary_on">Запам'ятати стан Bluetooth і WiFi</string>
+    <string name="apm_enhancement_summary_on">Запам\'ятати стан Bluetooth і WiFi</string>
     <string name="apm_enhancement_summary_off">Ігнорувати стан Bluetooth і WiFi</string>
 
     <!-- Advanced battery saver -->
@@ -321,7 +321,7 @@
     <string name="battery_technology">Технологія</string>
 	
     <!-- Battery Info: Health -->
-    <string name="battery_health">Здоров/'я</string>
+    <string name="battery_health">Здоров/\'я</string>
     <string name="battery_health_good">Добре</string>
     <string name="battery_health_overheat">Перегрівання</string>
     <string name="battery_health_dead">Мертвий</string>
