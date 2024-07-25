@@ -57,11 +57,12 @@
     <string name="update_settings_title">Оновлення YAAP</string>
     <string name="update_settings_summary">Перевірити доступні оновлення прошивки</string>
 
-    <!-- String for removal of sensitive info on about, depending on tap -->
-    <string name="device_info_protected_single_press">Натисніть для відображення</string>
-
     <!-- YAAP Version -->
     <string name="yaap_version">Версія YAAP</string>
+	
+    <!-- YAAP Changelog -->
+    <string name="yaap_changelog_title">Список змін</string>
+    <string name="yaap_changelog_summary">Показати список останніх змін і версію YAAP</string>
 
     <!-- QSTile requires unlocking before being accessible -->
     <string name="qstile_requires_unlocking_title">Важливі плитки в шторці вимагають розблокування</string>
@@ -113,6 +114,11 @@
     <string name="gaming_mode_night_light_summary">Вимкнути нічне підсвічування та його автоматичне включення</string>
     <string name="gaming_mode_battery_schedule_title">Режим енергозбереження</string>
     <string name="gaming_mode_battery_schedule_summary">Вимкнути режим енергозбереження та його автоматичне включення</string>
+    <string name="gaming_mode_power_title">Режим потужності</string>
+    <string name="gaming_mode_power_summary">Чи вмикати ігровий профіль потужності</string>
+    <string name="gaming_mode_bluetooth_summary">Чи вмикати Bluetooth</string>
+    <string name="gaming_mode_extra_dim_title">Додаткове затемнення</string>
+    <string name="gaming_mode_extra_dim_summary">Чи вимкнути додаткове затемнення та розклад</string>
     <string name="gaming_mode_brightness_enabled_title">Автояскравість</string>
     <string name="gaming_mode_brightness_enabled_summary">Відключить автояскравість</string>
     <string name="gaming_mode_brightness_title">Встановити яскравість на</string>
@@ -121,8 +127,12 @@
     <string name="gaming_mode_media_enabled_summary">Зміна гучності медіа</string>
     <string name="gaming_mode_media_title">Встановити гучність на</string>
     <string name="gaming_mode_desc">Увімкнувши Ігровий Режим, змінить налаштування на ті, що ви вказали вище. У разі відключення він їх поверне назад.</string>
+    <string name="gaming_mode_desc_auto">Якщо ви хочете автоматично запускати це для програми, перейдіть до налаштувань інформації про цю програму та ввімкніть перемикач \"Gaming Macro\"</string>
     <string name="gaming_mode_screen_off_title">Вимкнути після вимкнення екрану</string>
     <string name="gaming_mode_screen_off_summary">Відключить ігровий режим, коли екран вимикається</string>
+    <string name="gaming_mode_battery_saver_disables_title">Енергозбереження</string>
+    <string name="gaming_mode_battery_saver_disables_summary">Вимкнення Gaming Macro коли енергозбереження активується </string>
+    <string name="gaming_macro_switch_summary">Активація Gaming Macro для цієї програми</string>
 
     <!-- 3-Button navigation settings -->
     <string name="button_settings_activity_title">Налаштування навігації за допомогою 3-х кнопок</string>
@@ -219,8 +229,130 @@
     <!-- Media player settings -->
     <string name="media_controls_always_show_time_title">Завжди показувати час</string>
     <string name="media_controls_always_show_time_summary">Завжди показувати пройдений та загальний час на медіаплеєрі</string>
+    <string name="media_controls_time_as_next_title">Час як наступний / попередній</string>
+    <string name="media_controls_time_as_next_summary">Приховувати наступні/попередні кнопки та використовувати для цього завжди показаний час</string>
     <string name="media_controls_squiggle_title">Прогрес у вигляді хвилі</string>
     <string name="media_controls_squiggle_summary">Показувати хвилястий індикатор виконання на медіаплеєрі</string>
+    <string name="media_controls_actions_title">Ліміт настроюваних дій</string>
+    <string name="media_controls_actions_summary">Максимальна кількість кнопок, яку програми можуть додавати до програвача</string>
+	
+    <!-- Ambient wake toggles -->
+    <string name="doze_gesture_ambient_title">Показувати Ambient</string>
+    <string name="doze_gesture_ambient_summary">Показувати Ambient Display замість повного виведення екрана з режиму сну</string>
+    <string name="gesture_wake_ambient">Показувати Ambient</string>
+    <string name="gesture_wake">Повне прокидання</string>
+
+    <!-- wake gestures on AOD -->
+    <string name="doze_gesture_allow_ambient_title">Дозволити на Ambient</string>
+    <string name="doze_gesture_allow_ambient_summary">Дозвольте цьому жесту завжди працювати і на Ambient Display</string>
+
+    <!-- wake gestures haptics -->
+    <string name="doze_gesture_vibrate_title">Тактильний зворотний зв\'язок</string>
+    <string name="doze_gesture_vibrate_summary">Вібрувати під час виклику цього жесту</string>
+
+    <!-- extra dim schedule -->
+    <string name="extra_dim_schedule_title">Розклад</string>
+
+    <!-- Screenshot shutter -->
+    <string name="screenshot_shutter_sound_title">Звук скриншота</string>
+
+    <!-- APM Enhancement -->
+    <string name="apm_enhancement_title">Покращення режиму польоту</string>
+    <string name="apm_enhancement_summary_on">Запам\'ятати стан Bluetooth і WiFi</string>
+    <string name="apm_enhancement_summary_off">Ігнорувати стан Bluetooth і WiFi</string>
+
+    <!-- Advanced battery saver -->
+    <string name="battery_saver_advanced_settings_summary">Точне налаштування режиму економії заряду акумулятора</string>
+    <string name="category_other_hw_title">Інше апаратне забезпечення</string>
+    <string name="low_power_mode_hbm_title">Вимкнення HBM</string>
+    <string name="low_power_mode_dmd_title">Кількість кадрів в секунду</string>
+    <string name="enable_brightness_adjustment_tite">Покращити яскравість</string>
+    <string name="adjust_brightness_factor_title">Відрегулюйте коефіцієнт яскравості</string>
+    <string name="disable_aod_tite">Вимкнути AOD</string>
+    <string name="enable_night_mode_tite">Увімкнути темний режим</string>
+    <string name="disable_animation_tite">Вимкнути анімації</string>
+    <string name="disable_launch_boost_tite">Disable launch boost</string>
+    <string name="enable_quick_doze_tite">Увімкнути quick doze</string>
+    <string name="enable_quick_doze_summary">Негайно дрімати на вимкненому екрані</string>
+    <string name="force_all_apps_standby_tite">Примусовий режим очікування</string>
+    <string name="force_all_apps_standby_summary">Примусово перевести всі програми в сплячий режим</string>
+    <string name="force_background_check_tite">Примусова перевірка фону</string>
+    <string name="defer_full_backup_tite">Відкласти повне резервне копіювання</string>
+    <string name="defer_keyvalue_backup_tite">Відкласти резервне копіювання даних користувацьких даних</string>
+    <string name="enable_datasaver_tite">Увімкнути заощадження даних</string>
+    <string name="disable_vibration_tite">Вимкніть вібрацію</string>
+    <string name="disable_optional_sensors_tite">Вимкнути додаткові датчики</string>
+    <string name="location_mode_title">Режим розташування</string>
+    <string name="location_mode_no_change">Не змінювати</string>
+    <string name="location_mode_gps_disabled_when_screen_off">Вимкнення GPS в режимі сну</string>
+    <string name="location_mode_all_disabled_when_screen_off">Вимкнено, коли екран вимкнено</string>
+    <string name="location_mode_foreground_only">Точний лише для програми на передньому плані</string>
+    <string name="location_mode_throttle_requests_when_screen_off">Обмеження запитів</string>
+
+    <!-- Enforce DNS for VPN -->
+    <string name="vpn_enforce_dns_title">Вимкнути для VPN</string>
+    <string name="vpn_enforce_dns_summary">Вимкніть приватний DNS під час підключення до VPN\nВідновиться після відключення</string>
+    
+    <!-- Bluetooth timeout -->
+    <string name="bluetooth_timeout">Bluetooth таймаут</string>
+    <string name="bluetooth_timeout_summary">Bluetooth вимкнеться через <xliff:g id="timeout_description">%1$s</xliff:g> якщо не підключено жодного пристрою</string>
+    <string name="bluetooth_timeout_summary2">Не вимикати Bluetooth автоматично</string>
+    <string name="timeout_summary_never">Ніколи</string>
+    <string name="timeout_summary_30secs">30 секунд</string>
+    <string name="timeout_summary_1min">1 хвилина</string>
+    <string name="timeout_summary_2mins">2 хвилини</string>
+    <string name="timeout_summary_5mins">5 хвилин</string>
+    <string name="timeout_summary_10mins">10 хвилин</string>
+    <string name="timeout_summary_30mins">30 хвилин</string>
+    <string name="timeout_summary_1hour">1 година</string>
+
+    <!-- Volume Steps -->
+    <string name="volume_steps_title">Панель гучності</string>
+    <string name="volume_steps_summary">Контролюйте деталізацію кожного потоку</string>
+    <string name="max_music_volume_title">Медіа</string>
+    <string name="max_call_volume_title">Дзвінки</string>
+    <string name="max_alarm_volume_title">Будильник</string>
+    <string name="steps_unit">кроки</string>
+
+    <!-- Battery Info: Technology -->
+    <string name="battery_technology">Технологія</string>
+	
+    <!-- Battery Info: Health -->
+    <string name="battery_health">Здоров/\'я</string>
+    <string name="battery_health_good">Добре</string>
+    <string name="battery_health_overheat">Перегрівання</string>
+    <string name="battery_health_dead">Мертвий</string>
+    <string name="battery_health_over_voltage">Перенапруга</string>
+    <string name="battery_health_unspecified_failure">Невизначена помилка</string>
+    <string name="battery_health_cold">Холодний</string>
+    <string name="battery_health_unknown">Невідомо</string>
+    <!-- Battery Info: Temperature -->
+    <string name="battery_temperature">Температура</string>
+    <!-- Battery Info: Voltage -->
+    <string name="battery_voltage">Вольтаж</string>
+    <!-- Battery Info: Charge Counter -->
+    <string name="battery_charge_counter_summary">%1$d mAh</string>
+    <!-- Battery Info: Design Capacity -->
+    <string name="battery_design_capacity">Проектна ємність</string>
+    <string name="battery_design_capacity_summary">%1$d mAh</string>
+    <!-- Battery Info: Maximum Capacity -->
+    <string name="battery_maximum_capacity">Максимальна ємність</string>
+    <string name="battery_maximum_capacity_summary">%1$d mAh (%2$d%%)</string>
+
+    <!-- Text shown for the title of the panic option -->
+    <string name="panic_settings_title">Показати опцію «Паніка»</string>
+    <!-- Text shown for the description of the panic option -->
+    <string name="panic_settings_summary">Опція кнопки живлення на дисплеї, яка активує тригер екстреної паніки.</string>
+
+    <!-- String for removal of sensitive info on about, depending on tap -->
+    <string name="device_info_protected_single_press">Торкніться, щоб показати інформацію</string>
+
+    <!-- ETC category -->
+    <string name="etc_category_title">Інше</string>
+
+    <!-- About YAAP -->
+    <string name="about_yaap_title">Про YAAP</string>
+    <string name="about_yaap_summary">наша команда, відкритий код, група Telegram тощо</string>
 
     <!-- Hotspot extras -->
     <string name="tethering_allow_vpn_upstreams_title">Дозволити клієнтам використовувати VPN</string>
@@ -229,8 +361,6 @@
     <!-- Connectivity check -->
     <string name="connectivity_check_title">Перевірка підключення до Інтернету</string>
     <string name="connectivity_check_summary">Кінцеві точки HTTP для перевірки підключення до Інтернету.</string>
-
-
 
     <string name="app_info_install_time">Встановлено: %1$s</string>
     <string name="app_info_update_time">Оновлено: %1$s</string>
