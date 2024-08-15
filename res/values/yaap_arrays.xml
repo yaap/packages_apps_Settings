@@ -83,8 +83,8 @@
 
     <!-- Connectivity check -->
     <string-array name="connectivity_check_entries">
-        <item>GrapheneOS</item>
         <item>Standard (Google)</item>
+        <item>GrapheneOS</item>
         <item>USTC (China)</item>
         <item>Disabled</item>
     </string-array>

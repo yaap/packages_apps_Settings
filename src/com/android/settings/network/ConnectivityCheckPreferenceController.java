@@ -38,7 +38,9 @@ import com.android.settings.core.PreferenceControllerMixin;
 import com.android.settingslib.RestrictedLockUtilsInternal;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ConnectivityCheckPreferenceController extends BasePreferenceController
         implements PreferenceControllerMixin, Preference.OnPreferenceChangeListener {
@@ -51,32 +53,32 @@ public class ConnectivityCheckPreferenceController extends BasePreferenceControl
     private static final int OTHER_FALLBACK_INDEX = 3;
 
     // imported defaults from AOSP NetworkStack
-    private static final String[] DEFAULT_PORTAL = {
-        "https://www.google.com/generate_204",
-        "http://connectivitycheck.gstatic.com/generate_204",
-        "http://www.google.com/gen_204",
-        "http://play.googleapis.com/generate_204"
-    };
+    private static final HashMap<Integer, String> DEFAULT_PORTAL = new HashMap<>(Map.of(
+        HTTPS_INDEX, "https://www.google.com/generate_204",
+        HTTP_INDEX, "http://connectivitycheck.gstatic.com/generate_204",
+        FALLBACK_INDEX, "http://www.google.com/gen_204",
+        OTHER_FALLBACK_INDEX, "http://play.googleapis.com/generate_204"
+    ));
 
-    private static final String[] GRAPHENEOS_PORTAL = {
-        "https://connectivitycheck.grapheneos.network/generate_204",
-        "http://connectivitycheck.grapheneos.network/generate_204",
-        "http://grapheneos.online/gen_204",
-        "http://grapheneos.online/generate_204"
-    };
+    private static final HashMap<Integer, String> GRAPHENEOS_PORTAL = new HashMap<>(Map.of(
+        HTTPS_INDEX, "https://connectivitycheck.grapheneos.network/generate_204",
+        HTTP_INDEX, "http://connectivitycheck.grapheneos.network/generate_204",
+        FALLBACK_INDEX, "http://grapheneos.online/gen_204",
+        OTHER_FALLBACK_INDEX, "http://grapheneos.online/generate_204"
+    ));
 
     // 204 servers for chinese users
-    private static final String[] CHINA_PORTAL = {
-        "https://204.ustclug.org",
-        "http://204.ustclug.org",
-        "http://connect.rom.miui.com/generate_204",
-        "http://wifi.vivo.com.cn/generate_204"
-    };
+    private static final HashMap<Integer, String> CHINA_PORTAL = new HashMap<>(Map.of(
+        HTTPS_INDEX, "https://204.ustclug.org",
+        HTTP_INDEX, "http://204.ustclug.org",
+        FALLBACK_INDEX, "http://connect.rom.miui.com/generate_204",
+        OTHER_FALLBACK_INDEX, "http://wifi.vivo.com.cn/generate_204"
+    ));
 
     // These values should match the preference's entry values by index
-    private static final ArrayList<String[]> PORTAL_BY_INDEX = new ArrayList<>(List.of(
-        GRAPHENEOS_PORTAL,
+    private static final ArrayList<HashMap<Integer, String>> PORTAL_BY_INDEX = new ArrayList<>(List.of(
         DEFAULT_PORTAL,
+        GRAPHENEOS_PORTAL,
         CHINA_PORTAL
     ));
 
@@ -118,30 +120,30 @@ public class ConnectivityCheckPreferenceController extends BasePreferenceControl
 
         final String value = Settings.Global.getString(mContext.getContentResolver(),
                 Settings.Global.CAPTIVE_PORTAL_HTTP_URL);
-        int index = -1;
-        for (int i = 0; i < PORTAL_BY_INDEX.size(); i++) {
-            if (PORTAL_BY_INDEX.get(i)[HTTP_INDEX].equals(value)) {
+        int index = 0;
+        for (int i = 1; i < PORTAL_BY_INDEX.size(); i++) {
+            if (PORTAL_BY_INDEX.get(i).get(HTTP_INDEX).equals(value)) {
                 index = i;
                 break;
             }
         }
-        mPreference.setValueIndex(index != -1 ? index : PORTAL_BY_INDEX.size());
+        mPreference.setValueIndex(index);
     }
 
     private void setCaptivePortalURLs(int mode) {
         final ContentResolver resolver = mContext.getContentResolver();
 
         final boolean enabled = mode < PORTAL_BY_INDEX.size();
-        final String[] portal = enabled ? PORTAL_BY_INDEX.get(mode) : null;
-        String https = DEFAULT_PORTAL[HTTPS_INDEX];
-        String http = DEFAULT_PORTAL[HTTP_INDEX];
-        String fallback = DEFAULT_PORTAL[FALLBACK_INDEX];
-        String anotherFallback = DEFAULT_PORTAL[OTHER_FALLBACK_INDEX];
+        final HashMap<Integer, String> portal = enabled ? PORTAL_BY_INDEX.get(mode) : null;
+        String https = DEFAULT_PORTAL.get(HTTPS_INDEX);
+        String http = DEFAULT_PORTAL.get(HTTP_INDEX);
+        String fallback = DEFAULT_PORTAL.get(FALLBACK_INDEX);
+        String anotherFallback = DEFAULT_PORTAL.get(OTHER_FALLBACK_INDEX);
         if (enabled) {
-            https = portal[HTTPS_INDEX];
-            http = portal[HTTP_INDEX];
-            fallback = portal[FALLBACK_INDEX];
-            anotherFallback = portal[OTHER_FALLBACK_INDEX];
+            https = portal.get(HTTPS_INDEX);
+            http = portal.get(HTTP_INDEX);
+            fallback = portal.get(FALLBACK_INDEX);
+            anotherFallback = portal.get(OTHER_FALLBACK_INDEX);
         }
 
         Settings.Global.putString(resolver,
