@@ -470,6 +470,9 @@
     <string name="traffic_statusbar">Statusbar</string>
     <string name="traffic_expanded_statusbar">Expanded QS header</string>
     <string name="network_traffic_autohide_threshold_title">Net activity autohide threshold</string>
+    <string name="network_traffic_limit_mb_title">Threshold in MB/s</string>
+    <string name="network_traffic_limit_mb_summary_on">Set the threshold in MB/s</string>
+    <string name="network_traffic_limit_mb_summary_off">Set the threshold in KB/s</string>
     <string name="network_traffic_arrow_title">Show arrows</string>
     <string name="network_traffic_arrow_summary">Show the network traffic indicator arrows</string>
     <string name="network_traffic_type">Select net activity type</string>
@@ -479,6 +482,8 @@
     <string name="show_network_traffic_down">Download</string>
     <string name="show_network_traffic_all">Both</string>
     <string name="network_traffic_font_size_title">Single net font size</string>
+    <string name="unit_kbps">KB/s</string>
+    <string name="unit_mbps">MB/s</string>
 
     <!-- Notification headers -->
     <string name="notification_headers_title">Notification Headers</string>

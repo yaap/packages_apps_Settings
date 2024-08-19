@@ -28,6 +28,7 @@ import android.util.Log;
 import android.view.View;
 
 import androidx.preference.ListPreference;
+import androidx.preference.SwitchPreferenceCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceGroup;
 import androidx.preference.PreferenceScreen;
@@ -55,10 +56,12 @@ public class NetTrafficMonSettings extends DashboardFragment implements
     private static final String TAG = "NetTrafficMonSettings";
     private static final String NETWORK_TRAFFIC_FONT_SIZE  = "network_traffic_font_size";
     private static final String NETWORK_TRAFFIC_LOCATION = "network_traffic_location";
+    private static final String NETWORK_TRAFFIC_LIMIT_MB = "network_traffic_limit_mb";
     private static final String NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD = "network_traffic_autohide_threshold";
     private static final String NETWORK_TRAFFIC_ARROW = "network_traffic_arrow";
 
     private ListPreference mNetTrafficLocation;
+    private SwitchPreferenceCompat mThresholdMb;
     private CustomSeekBarPreference mThreshold;
     private SystemSettingSwitchPreference mShowArrows;
     private ListPreference mNetTrafficType;
@@ -73,8 +76,7 @@ public class NetTrafficMonSettings extends DashboardFragment implements
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
 
-        PreferenceScreen prefSet = getPreferenceScreen();
-        final ContentResolver resolver = getActivity().getContentResolver();
+        final ContentResolver resolver = getContentResolver();
 
         int type = Settings.System.getIntForUser(resolver,
                 Settings.System.NETWORK_TRAFFIC_TYPE, 0, UserHandle.USER_CURRENT);
@@ -99,8 +101,18 @@ public class NetTrafficMonSettings extends DashboardFragment implements
         mThreshold = (CustomSeekBarPreference) findPreference(NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD);
         int value = Settings.System.getIntForUser(resolver,
                 Settings.System.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD, 1, UserHandle.USER_CURRENT);
+        boolean isMB = value > mThreshold.getMax();
+        if (isMB) {
+            value /= 1000;
+            mThreshold.setUnits(getString(R.string.unit_mbps));
+        }
         mThreshold.setValue(value);
         mThreshold.setOnPreferenceChangeListener(this);
+
+        mThresholdMb = (SwitchPreferenceCompat) findPreference(NETWORK_TRAFFIC_LIMIT_MB);
+        mThresholdMb.setChecked(isMB);
+        mThresholdMb.setOnPreferenceChangeListener(this);
+
         mShowArrows = (SystemSettingSwitchPreference) findPreference(NETWORK_TRAFFIC_ARROW);
     }
 
@@ -109,7 +121,7 @@ public class NetTrafficMonSettings extends DashboardFragment implements
         if (preference == mNetTrafficLocation) {
             int location = Integer.valueOf((String) objValue);
             // 0=sb; 1=expanded sb; 2 = both
-            Settings.System.putIntForUser(getActivity().getContentResolver(),
+            Settings.System.putIntForUser(getContentResolver(),
                     Settings.System.NETWORK_TRAFFIC_VIEW_LOCATION, location, UserHandle.USER_CURRENT);
             int index = mNetTrafficLocation.findIndexOfValue((String) objValue);
             mNetTrafficLocation.setSummary(mNetTrafficLocation.getEntries()[index]);
@@ -117,9 +129,14 @@ public class NetTrafficMonSettings extends DashboardFragment implements
             return true;
         } else if (preference == mThreshold) {
             int val = (Integer) objValue;
+            if (mThresholdMb.isChecked()) val *= 1000;
             Settings.System.putIntForUser(getContentResolver(),
                     Settings.System.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD, val,
                     UserHandle.USER_CURRENT);
+            return true;
+        } else if (preference == mThresholdMb) {
+            boolean val = (Boolean) objValue;
+            setLimitInMb(val);
             return true;
         } else if (preference == mNetTrafficType) {
             int val = Integer.valueOf((String) objValue);
@@ -129,13 +146,23 @@ public class NetTrafficMonSettings extends DashboardFragment implements
             int index = mNetTrafficType.findIndexOfValue((String) objValue);
             mNetTrafficType.setSummary(mNetTrafficType.getEntries()[index]);
             return true;
-        }  else if (preference == mNetTrafficSize) {
+        } else if (preference == mNetTrafficSize) {
             int width = (Integer) objValue;
-            Settings.System.putInt(getActivity().getContentResolver(),
+            Settings.System.putInt(getContentResolver(),
                     Settings.System.NETWORK_TRAFFIC_FONT_SIZE, width);
             return true;
         }
         return false;
+    }
+
+    private void setLimitInMb(boolean value) {
+        mThreshold.setUnits(getString(value ?
+                R.string.unit_mbps : R.string.unit_kbps));
+        int limit = mThreshold.getValue();
+        if (value) limit *= 1000;
+        Settings.System.putIntForUser(getContentResolver(),
+                Settings.System.NETWORK_TRAFFIC_AUTOHIDE_THRESHOLD, limit,
+                UserHandle.USER_CURRENT);
     }
 
     @Override
