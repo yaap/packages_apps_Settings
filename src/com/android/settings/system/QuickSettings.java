@@ -85,6 +85,16 @@ public class QuickSettings extends DashboardFragment implements
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        if (mBrightnessSlider == null) return;
+        final boolean enabled = Settings.Secure.getInt(
+                getActivity().getContentResolver(),
+                BRIGHTNESS_SLIDER, 1) == 1;
+        mBrightnessSlider.setChecked(enabled);
+    }
+
+    @Override
     public boolean onPreferenceChange(Preference preference, Object newValue) {
         ContentResolver resolver = getActivity().getContentResolver();
         if (preference == mFooterString) {

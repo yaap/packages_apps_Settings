@@ -19,28 +19,66 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.provider.Settings;
+import android.widget.CompoundButton;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import androidx.preference.Preference;
+import androidx.preference.PreferenceScreen;
 
 import com.android.internal.logging.nano.MetricsProto;
 import com.android.settings.dashboard.DashboardFragment;
 import com.android.settings.R;
 import com.android.settings.search.BaseSearchIndexProvider;
 import com.android.settingslib.search.SearchIndexable;
+import com.android.settingslib.widget.MainSwitchPreference;
 
 @SearchIndexable
 public class BrightnessSliderSettings extends DashboardFragment {
 
     private static final String TAG = "BrightnessSliderSettings";
+    private static final String KEY_MASTER = "qs_show_brightness";
     private static final String SLIDER_HAPTICS_KEY = "brightness_slider_haptics";
+
+    private MainSwitchPreference mMasterSwitch;
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
 
+        mMasterSwitch = findPreference(KEY_MASTER);
+        boolean enabled = Settings.Secure.getInt(
+                getContentResolver(), KEY_MASTER, 1) == 1;
+        mMasterSwitch.setChecked(enabled);
+        mMasterSwitch.addOnSwitchChangeListener(new OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                Settings.Secure.putInt(getContentResolver(),
+                        KEY_MASTER, isChecked ? 1 : 0);
+                updateMasterEnablement(isChecked);
+            }
+        });
+        updateMasterEnablement();
+
         if (!isSliderHapticsSupported()) {
             Preference sliderHaptics = findPreference(SLIDER_HAPTICS_KEY);
             if (sliderHaptics != null) sliderHaptics.setVisible(false);
+        }
+    }
+
+    private void updateMasterEnablement() {
+        final boolean enabled = Settings.Secure.getInt(
+                getContentResolver(), KEY_MASTER, 1) == 1;
+        updateMasterEnablement(enabled);
+    }
+
+    private void updateMasterEnablement(boolean enabled) {
+        final PreferenceScreen screen = getPreferenceScreen();
+        for (int i = 0; i < screen.getPreferenceCount(); i++) {
+            Preference pref = screen.getPreference(i);
+            if (KEY_MASTER.equals(pref.getKey()))
+                continue;
+            pref.setEnabled(enabled);
         }
     }
 

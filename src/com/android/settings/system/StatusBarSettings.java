@@ -144,6 +144,7 @@ public class StatusBarSettings extends DashboardFragment implements
     public void onResume() {
         super.onResume();
         updateNetTrafficSummary();
+        updateNetTrafficValue();
     }
 
     @Override
@@ -220,6 +221,14 @@ public class StatusBarSettings extends DashboardFragment implements
                     + " " + getActivity().getString(resid);
         }
         mNetTrafficState.setSummary(summary);
+    }
+
+    private void updateNetTrafficValue() {
+        if (mNetTrafficState == null) return;
+        boolean enabled = Settings.System.getInt(
+                getActivity().getContentResolver(),
+                NETWORK_TRAFFIC_STATE, 0) == 1;
+        mNetTrafficState.setChecked(enabled);
     }
 
     private void updatePercentEnablement(boolean enabled) {

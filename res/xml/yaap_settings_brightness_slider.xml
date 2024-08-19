@@ -15,6 +15,10 @@
     android:title="@string/qs_show_brightness_title"
     xmlns:settings="http://schemas.android.com/apk/res/com.android.settings">
 
+    <com.android.settingslib.widget.MainSwitchPreference
+        android:key="qs_show_brightness"
+        android:title="@string/qs_show_brightness_title" />
+
     <com.yasp.settings.preferences.SecureSettingSwitchPreference
         android:key="qs_brightness_position_bottom"
         android:title="@string/qs_brightness_position_bottom_title"
