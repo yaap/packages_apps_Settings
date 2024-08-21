@@ -77,6 +77,12 @@
         android:defaultValue="false" />
 
     <com.yasp.settings.preferences.SystemSettingSwitchPreference
+        android:key="gaming_mode_three_finger"
+        android:title="@string/gaming_mode_three_finger_title"
+        android:summary="@string/gaming_mode_three_finger_summary"
+        android:defaultValue="false" />
+
+    <com.yasp.settings.preferences.SystemSettingSwitchPreference
         android:key="gaming_mode_extra_dim"
         android:title="@string/gaming_mode_extra_dim_title"
         android:summary="@string/gaming_mode_extra_dim_summary"

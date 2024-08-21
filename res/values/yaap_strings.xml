@@ -124,6 +124,8 @@
     <string name="gaming_mode_power_summary">Whether to enable gaming power profile</string>
     <string name="gaming_mode_bluetooth_title">Bluetooth</string>
     <string name="gaming_mode_bluetooth_summary">Whether to enable bluetooth</string>
+    <string name="gaming_mode_three_finger_title">Swipe to screenshot</string>
+    <string name="gaming_mode_three_finger_summary">Whether to disable three finger swipe to screenshot gesture</string>
     <string name="gaming_mode_extra_dim_title">Extra Dim</string>
     <string name="gaming_mode_extra_dim_summary">Whether to disable extra dim and schedule</string>
     <string name="gaming_mode_brightness_enabled_title">Auto Brightness</string>
