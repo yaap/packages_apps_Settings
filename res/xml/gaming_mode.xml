@@ -19,107 +19,132 @@
     android:key="gaming_mode"
     android:title="@string/gaming_mode_tile_title">
 
-    <com.yasp.settings.preferences.SystemSettingSwitchPreference
-        android:key="gaming_mode_screen_off"
-        android:title="@string/gaming_mode_screen_off_title"
-        android:summary="@string/gaming_mode_screen_off_summary"
-        android:defaultValue="false" />
+    <PreferenceCategory
+        android:title="@string/gaming_mode_category_behavior">
 
-    <com.yasp.settings.preferences.SystemSettingSwitchPreference
-        android:key="gaming_mode_battery_saver_disables"
-        android:title="@string/gaming_mode_battery_saver_disables_title"
-        android:summary="@string/gaming_mode_battery_saver_disables_summary"
-        android:dependency="gaming_mode_battery_schedule"
-        android:defaultValue="false" />
+        <com.yasp.settings.preferences.SystemSettingSwitchPreference
+            android:key="gaming_mode_screen_off"
+            android:title="@string/gaming_mode_screen_off_title"
+            android:summary="@string/gaming_mode_screen_off_summary"
+            android:defaultValue="false" />
 
-    <com.yasp.settings.preferences.SystemSettingSwitchPreference
-        android:key="gaming_mode_heads_up"
-        android:title="@string/gaming_mode_heads_up_title"
-        android:summary="@string/gaming_mode_heads_up_summary"
-        android:defaultValue="true" />
+        <com.yasp.settings.preferences.SystemSettingSwitchPreference
+            android:key="gaming_mode_battery_saver_disables"
+            android:title="@string/gaming_mode_battery_saver_disables_title"
+            android:summary="@string/gaming_mode_battery_saver_disables_summary"
+            android:dependency="gaming_mode_battery_schedule"
+            android:defaultValue="false" />
 
-    <com.yasp.settings.preferences.SystemSettingSwitchPreference
-        android:key="gaming_mode_zen"
-        android:title="@string/gaming_mode_zen_title"
-        android:summary="@string/gaming_mode_zen_summary"
-        android:defaultValue="false" />
+    </PreferenceCategory>
 
-    <com.yasp.settings.preferences.SystemSettingListPreference
-        android:key="gaming_mode_ringer"
-        android:title="@string/gaming_mode_ringer_title"
-        android:entries="@array/gaming_mode_ringer_entries"
-        android:entryValues="@array/gaming_mode_ringer_values"
-        android:defaultValue="0" />
+    <PreferenceCategory
+        android:title="@string/gaming_mode_category_notifications">
 
-    <com.yasp.settings.preferences.SystemSettingSwitchPreference
-        android:key="gaming_mode_night_light"
-        android:title="@string/gaming_mode_night_light_title"
-        android:summary="@string/gaming_mode_night_light_summary"
-        android:defaultValue="false" />
+        <com.yasp.settings.preferences.SystemSettingSwitchPreference
+            android:key="gaming_mode_heads_up"
+            android:title="@string/gaming_mode_heads_up_title"
+            android:summary="@string/gaming_mode_heads_up_summary"
+            android:defaultValue="true" />
 
-    <com.yasp.settings.preferences.SystemSettingSwitchPreference
-        android:key="gaming_mode_battery_schedule"
-        android:title="@string/gaming_mode_battery_schedule_title"
-        android:summary="@string/gaming_mode_battery_schedule_summary"
-        android:disableDependentsState="true"
-        android:defaultValue="false" />
+        <com.yasp.settings.preferences.SystemSettingSwitchPreference
+            android:key="gaming_mode_zen"
+            android:title="@string/gaming_mode_zen_title"
+            android:summary="@string/gaming_mode_zen_summary"
+            android:defaultValue="false" />
 
-    <com.yasp.settings.preferences.SystemSettingSwitchPreference
-        android:key="gaming_mode_power"
-        android:title="@string/gaming_mode_power_title"
-        android:summary="@string/gaming_mode_power_summary"
-        android:defaultValue="true" />
+        <com.yasp.settings.preferences.SystemSettingListPreference
+            android:key="gaming_mode_ringer"
+            android:title="@string/gaming_mode_ringer_title"
+            android:entries="@array/gaming_mode_ringer_entries"
+            android:entryValues="@array/gaming_mode_ringer_values"
+            android:defaultValue="0" />
 
-    <com.yasp.settings.preferences.SystemSettingSwitchPreference
-        android:key="gaming_mode_bluetooth"
-        android:title="@string/gaming_mode_bluetooth_title"
-        android:summary="@string/gaming_mode_bluetooth_summary"
-        android:defaultValue="false" />
+        <com.yasp.settings.preferences.SystemSettingSwitchPreference
+            android:key="gaming_mode_media_enabled"
+            android:title="@string/gaming_mode_media_enabled_title"
+            android:summary="@string/gaming_mode_media_enabled_summary"
+            android:defaultValue="false" />
 
-    <com.yasp.settings.preferences.SystemSettingSwitchPreference
-        android:key="gaming_mode_three_finger"
-        android:title="@string/gaming_mode_three_finger_title"
-        android:summary="@string/gaming_mode_three_finger_summary"
-        android:defaultValue="false" />
+        <com.yasp.settings.preferences.CustomSeekBarPreference
+            android:key="gaming_mode_media"
+            android:title="@string/gaming_mode_media_title"
+            android:dependency="gaming_mode_media_enabled"
+            android:max="100"
+            settings:min="0"
+            settings:defaultValue="80"
+            settings:interval="5"
+            settings:units="%" />
 
-    <com.yasp.settings.preferences.SystemSettingSwitchPreference
-        android:key="gaming_mode_extra_dim"
-        android:title="@string/gaming_mode_extra_dim_title"
-        android:summary="@string/gaming_mode_extra_dim_summary"
-        android:defaultValue="false" />
+    </PreferenceCategory>
 
-    <com.yasp.settings.preferences.SystemSettingSwitchPreference
-        android:key="gaming_mode_brightness_enabled"
-        android:title="@string/gaming_mode_brightness_enabled_title"
-        android:summary="@string/gaming_mode_brightness_enabled_summary"
-        android:defaultValue="false" />
+    <PreferenceCategory
+        android:title="@string/gaming_mode_category_display">
 
-    <com.yasp.settings.preferences.CustomSeekBarPreference
-        android:key="gaming_mode_brightness"
-        android:title="@string/gaming_mode_brightness_title"
-        android:summary="@string/gaming_mode_brightness_summary"
-        android:dependency="gaming_mode_brightness_enabled"
-        android:max="100"
-        settings:min="0"
-        settings:defaultValue="80"
-        settings:interval="1"
-        settings:units="%" />
+        <com.yasp.settings.preferences.SystemSettingSwitchPreference
+            android:key="gaming_mode_night_light"
+            android:title="@string/gaming_mode_night_light_title"
+            android:summary="@string/gaming_mode_night_light_summary"
+            android:defaultValue="false" />
 
-    <com.yasp.settings.preferences.SystemSettingSwitchPreference
-        android:key="gaming_mode_media_enabled"
-        android:title="@string/gaming_mode_media_enabled_title"
-        android:summary="@string/gaming_mode_media_enabled_summary"
-        android:defaultValue="false" />
+        <com.yasp.settings.preferences.SystemSettingSwitchPreference
+            android:key="gaming_mode_extra_dim"
+            android:title="@string/gaming_mode_extra_dim_title"
+            android:summary="@string/gaming_mode_extra_dim_summary"
+            android:defaultValue="false" />
 
-    <com.yasp.settings.preferences.CustomSeekBarPreference
-        android:key="gaming_mode_media"
-        android:title="@string/gaming_mode_media_title"
-        android:dependency="gaming_mode_media_enabled"
-        android:max="100"
-        settings:min="0"
-        settings:defaultValue="80"
-        settings:interval="5"
-        settings:units="%" />
+        <com.yasp.settings.preferences.SystemSettingSwitchPreference
+            android:key="gaming_mode_brightness_enabled"
+            android:title="@string/gaming_mode_brightness_enabled_title"
+            android:summary="@string/gaming_mode_brightness_enabled_summary"
+            android:defaultValue="false" />
+
+        <com.yasp.settings.preferences.CustomSeekBarPreference
+            android:key="gaming_mode_brightness"
+            android:title="@string/gaming_mode_brightness_title"
+            android:summary="@string/gaming_mode_brightness_summary"
+            android:dependency="gaming_mode_brightness_enabled"
+            android:max="100"
+            settings:min="0"
+            settings:defaultValue="80"
+            settings:interval="1"
+            settings:units="%" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/gaming_mode_category_power">
+
+        <com.yasp.settings.preferences.SystemSettingSwitchPreference
+            android:key="gaming_mode_battery_schedule"
+            android:title="@string/gaming_mode_battery_schedule_title"
+            android:summary="@string/gaming_mode_battery_schedule_summary"
+            android:disableDependentsState="true"
+            android:defaultValue="false" />
+
+        <com.yasp.settings.preferences.SystemSettingSwitchPreference
+            android:key="gaming_mode_power"
+            android:title="@string/gaming_mode_power_title"
+            android:summary="@string/gaming_mode_power_summary"
+            android:defaultValue="true" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="@string/gaming_mode_category_other">
+
+        <com.yasp.settings.preferences.SystemSettingSwitchPreference
+            android:key="gaming_mode_bluetooth"
+            android:title="@string/gaming_mode_bluetooth_title"
+            android:summary="@string/gaming_mode_bluetooth_summary"
+            android:defaultValue="false" />
+
+        <com.yasp.settings.preferences.SystemSettingSwitchPreference
+            android:key="gaming_mode_three_finger"
+            android:title="@string/gaming_mode_three_finger_title"
+            android:summary="@string/gaming_mode_three_finger_summary"
+            android:defaultValue="false" />
+
+    </PreferenceCategory>
 
     <Preference
         android:icon="@drawable/ic_info_outline_24dp"

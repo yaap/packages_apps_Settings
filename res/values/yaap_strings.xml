@@ -142,6 +142,11 @@
     <string name="gaming_mode_battery_saver_disables_title">Battery Saver deactivates</string>
     <string name="gaming_mode_battery_saver_disables_summary">Deactivate gaming macro when battery saver activates</string>
     <string name="gaming_macro_switch_summary">Activate gaming macro for this app</string>
+    <string name="gaming_mode_category_behavior">@string/notification_importance_title</string>
+    <string name="gaming_mode_category_notifications">Notifications &amp; Volume</string>
+    <string name="gaming_mode_category_display">@string/display_settings</string>
+    <string name="gaming_mode_category_power">Power</string>
+    <string name="gaming_mode_category_other">@string/notification_channels_other</string>
 
     <!-- 3-Button navigation settings -->
     <string name="button_settings_activity_title">3-Button Navigation Settings</string>
