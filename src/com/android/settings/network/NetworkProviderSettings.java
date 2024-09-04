@@ -107,8 +107,6 @@ import java.util.Optional;
 
 /**
  * UI for Mobile network and Wi-Fi network settings.
- *
- * TODO(b/167474581): Define the intent android.settings.NETWORK_PROVIDER_SETTINGS in Settings.java.
  */
 @SearchIndexable
 public class NetworkProviderSettings extends RestrictedSettingsFragment
@@ -116,9 +114,6 @@ public class NetworkProviderSettings extends RestrictedSettingsFragment
         WifiDialog2.WifiDialog2Listener, DialogInterface.OnDismissListener,
         AirplaneModeEnabler.OnAirplaneModeChangedListener, InternetUpdater.InternetChangeListener,
         MobileDataEnabledListener.Client {
-
-    public static final String ACTION_NETWORK_PROVIDER_SETTINGS =
-            "android.settings.NETWORK_PROVIDER_SETTINGS";
 
     private static final String TAG = "NetworkProviderSettings";
     // IDs of context menu
@@ -322,6 +317,12 @@ public class NetworkProviderSettings extends RestrictedSettingsFragment
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
+        final Context context = getContext();
+        if (context != null && !context.getResources().getBoolean(
+                R.bool.config_show_internet_settings)) {
+            finish();
+            return;
+        }
         mAirplaneModeEnabler = new AirplaneModeEnabler(getContext(), this);
         mDataStateListener = new MobileDataEnabledListener(getContext(), this);
 
@@ -521,10 +522,6 @@ public class NetworkProviderSettings extends RestrictedSettingsFragment
 
         if (intent.hasExtra(EXTRA_START_CONNECT_SSID)) {
             mOpenSsid = intent.getStringExtra(EXTRA_START_CONNECT_SSID);
-        }
-
-        if (mNetworkMobileProviderController != null) {
-            mNetworkMobileProviderController.setWifiPickerTrackerHelper(mWifiPickerTrackerHelper);
         }
 
         requireActivity().addMenuProvider(mMenuProvider);

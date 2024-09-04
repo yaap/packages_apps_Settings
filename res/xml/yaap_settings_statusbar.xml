@@ -47,15 +47,6 @@
         android:summary="@string/camera_mic_indicator_summary"
         android:defaultValue="true" />
 
-    <!-- Clock position -->
-    <com.yasp.settings.preferences.SystemSettingListPreference
-        android:key="statusbar_clock_position"
-        android:title="@string/statusbar_clock_position_title"
-        android:dialogTitle="@string/statusbar_clock_position_title"
-        android:entries="@array/statusbar_clock_position_entries"
-        android:entryValues="@array/statusbar_clock_position_values"
-        android:persistent="false" />
-
     <PreferenceCategory
         android:title="@string/battery_options">
 

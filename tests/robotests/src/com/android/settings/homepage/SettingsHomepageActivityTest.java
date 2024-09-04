@@ -24,6 +24,7 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.eq;
@@ -39,6 +40,11 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.UserHandle;
+import android.platform.test.annotations.DisableFlags;
+import android.platform.test.flag.junit.SetFlagsRule;
+import android.provider.Settings;
+import android.util.ArraySet;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
@@ -49,12 +55,14 @@ import androidx.test.core.app.ApplicationProvider;
 
 import com.android.settings.R;
 import com.android.settings.dashboard.suggestions.SuggestionFeatureProviderImpl;
+import com.android.settings.flags.Flags;
 import com.android.settings.testutils.shadow.ShadowActivityEmbeddingUtils;
 import com.android.settings.testutils.shadow.ShadowPasswordUtils;
 import com.android.settings.testutils.shadow.ShadowUserManager;
 import com.android.settingslib.core.lifecycle.HideNonSystemOverlayMixin;
 
 import org.junit.After;
+import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -71,6 +79,8 @@ import org.robolectric.shadow.api.Shadow;
 import org.robolectric.shadows.ShadowActivityManager;
 import org.robolectric.util.ReflectionHelpers;
 
+import java.util.Set;
+
 @RunWith(RobolectricTestRunner.class)
 @Config(shadows = {
         ShadowUserManager.class,
@@ -80,10 +90,29 @@ import org.robolectric.util.ReflectionHelpers;
 public class SettingsHomepageActivityTest {
     @Rule
     public final MockitoRule mMockitoRule = MockitoJUnit.rule();
+    @Rule
+    public final SetFlagsRule mSetFlagsRule = new SetFlagsRule();
+
+    @Before
+    public void setup() {
+        Settings.Global.putInt(ApplicationProvider.getApplicationContext().getContentResolver(),
+                Settings.Global.DEVICE_PROVISIONED, 1);
+    }
 
     @After
     public void tearDown() {
         ShadowPasswordUtils.reset();
+    }
+
+    @Test
+    public void launch_deviceUnprovisioned_finish() {
+        Settings.Global.putInt(ApplicationProvider.getApplicationContext().getContentResolver(),
+                Settings.Global.DEVICE_PROVISIONED, 0);
+
+        SettingsHomepageActivity activity = Robolectric.buildActivity(
+                SettingsHomepageActivity.class).create().get();
+
+        assertThat(activity.isFinishing()).isTrue();
     }
 
     @Test
@@ -96,6 +125,7 @@ public class SettingsHomepageActivityTest {
     }
 
     @Test
+    @DisableFlags(Flags.FLAG_HOMEPAGE_REVAMP)
     public void launch_configDisabled_shouldHideAvatar() {
         final SettingsHomepageActivity activity = Robolectric.buildActivity(
                 SettingsHomepageActivity.class).create().get();
@@ -106,6 +136,7 @@ public class SettingsHomepageActivityTest {
 
     @Test
     @Config(qualifiers = "mcc999")
+    @DisableFlags(Flags.FLAG_HOMEPAGE_REVAMP)
     public void launch_configEnabled_shouldShowAvatar() {
         final SettingsHomepageActivity activity = Robolectric.buildActivity(
                 SettingsHomepageActivity.class).create().get();
@@ -116,6 +147,7 @@ public class SettingsHomepageActivityTest {
 
     @Test
     @Config(qualifiers = "mcc999")
+    @DisableFlags(Flags.FLAG_HOMEPAGE_REVAMP)
     public void launch_LowRamDevice_shouldHideAvatar() {
         final ShadowActivityManager activityManager = Shadow.extract(
                 ApplicationProvider.getApplicationContext().getSystemService(
@@ -224,25 +256,88 @@ public class SettingsHomepageActivityTest {
     }
 
     @Test
-    public void onCreate_notTaskRoot_shouldFinishActivity() {
+    public void onCreate_TaskRoot_shouldNotFinish() {
+        SettingsHomepageActivity activity =
+                spy(Robolectric.buildActivity(SettingsHomepageActivity.class).get());
+        doReturn(true).when(activity).isTaskRoot();
+
+        activity.onCreate(/* savedInstanceState= */ null);
+
+        verify(activity, never()).finish();
+    }
+
+    @Test
+    public void onCreate_notTaskRoot_shouldRestartActivity() {
         SettingsHomepageActivity activity =
                 spy(Robolectric.buildActivity(SettingsHomepageActivity.class).get());
         doReturn(false).when(activity).isTaskRoot();
 
-        activity.onCreate(/* savedInstanceState */ null);
+        activity.onCreate(/* savedInstanceState= */ null);
 
         verify(activity).finish();
+        verify(activity).startActivity(any(Intent.class));
     }
 
     @Test
-    public void onCreate_singleTaskActivity_shouldNotFinishActivity() {
+    public void onCreate_notTaskRoot_flagNewTask_shouldOnlyFinish() {
         SettingsHomepageActivity activity =
-                spy(Robolectric.buildActivity(DeepLinkHomepageActivity.class).get());
+                spy(Robolectric.buildActivity(SettingsHomepageActivity.class,
+                        new Intent().addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)).get());
         doReturn(false).when(activity).isTaskRoot();
 
-        activity.onCreate(/* savedInstanceState */ null);
+        activity.onCreate(/* savedInstanceState= */ null);
+
+        verify(activity).finish();
+        verify(activity, never()).startActivity(any(Intent.class));
+    }
+
+    @Test
+    @Config(shadows = ShadowActivityEmbeddingUtils.class)
+    public void onCreate_eligibleProfile_shouldNotRestartActivity() {
+        ShadowActivityEmbeddingUtils.setIsEmbeddingActivityEnabled(true);
+        SettingsHomepageActivity activity =
+                spy(Robolectric.buildActivity(SettingsHomepageActivity.class).get());
+        doReturn(0).when(activity).getUserId();
+        doReturn(true).when(activity).isTaskRoot();
+
+        activity.onCreate(/* savedInstanceState= */ null);
 
         verify(activity, never()).finish();
+        verify(activity, never()).startActivityAsUser(any(Intent.class), any(UserHandle.class));
+    }
+
+    @Test
+    @Config(shadows = ShadowActivityEmbeddingUtils.class)
+    public void onCreate_managedProfile_shouldRestartActivity() {
+        ShadowActivityEmbeddingUtils.setIsEmbeddingActivityEnabled(true);
+        SettingsHomepageActivity activity =
+                spy(Robolectric.buildActivity(SettingsHomepageActivity.class).get());
+        final Set<Integer> profileIds = new ArraySet<>();
+        profileIds.add(10);
+        ShadowUserManager.getShadow().setManagedProfiles(profileIds);
+        doReturn(10).when(activity).getUserId();
+        doReturn(true).when(activity).isTaskRoot();
+
+        activity.onCreate(/* savedInstanceState= */ null);
+
+        verify(activity).finish();
+        verify(activity).startActivityAsUser(any(Intent.class), any(UserHandle.class));
+    }
+
+    @Test
+    @Config(shadows = ShadowActivityEmbeddingUtils.class)
+    public void onCreate_privateProfile_shouldRestartActivity() {
+        ShadowActivityEmbeddingUtils.setIsEmbeddingActivityEnabled(true);
+        SettingsHomepageActivity activity =
+                spy(Robolectric.buildActivity(SettingsHomepageActivity.class).get());
+        ShadowUserManager.getShadow().setPrivateProfile(11, "private", 0);
+        doReturn(11).when(activity).getUserId();
+        doReturn(true).when(activity).isTaskRoot();
+
+        activity.onCreate(/* savedInstanceState= */ null);
+
+        verify(activity).finish();
+        verify(activity).startActivityAsUser(any(Intent.class), any(UserHandle.class));
     }
 
     /** This test is for large screen devices Activity embedding. */
@@ -251,10 +346,10 @@ public class SettingsHomepageActivityTest {
     public void onCreate_flagClearTop_shouldInitRules() {
         ShadowActivityEmbeddingUtils.setIsEmbeddingActivityEnabled(true);
         SettingsHomepageActivity activity =
-                spy(Robolectric.buildActivity(SettingsHomepageActivity.class).get());
-        doReturn(new Intent().setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)).when(activity).getIntent();
+                spy(Robolectric.buildActivity(SettingsHomepageActivity.class,
+                        new Intent().setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)).get());
 
-        activity.onCreate(/* savedInstanceState */ null);
+        activity.onCreate(/* savedInstanceState= */ null);
 
         verify(activity).initSplitPairRules();
     }
@@ -281,12 +376,12 @@ public class SettingsHomepageActivityTest {
 
     @Test
     public void getInitialReferrer_hasReferrerExtra_returnGivenReferrer() {
-        SettingsHomepageActivity activity =
-                spy(Robolectric.buildActivity(SettingsHomepageActivity.class).get());
-        doReturn(activity.getPackageName()).when(activity).getCurrentReferrer();
         String referrer = "com.abc";
-        activity.setIntent(new Intent().putExtra(SettingsHomepageActivity.EXTRA_INITIAL_REFERRER,
-                referrer));
+        SettingsHomepageActivity activity =
+                spy(Robolectric.buildActivity(SettingsHomepageActivity.class,
+                        new Intent().putExtra(SettingsHomepageActivity.EXTRA_INITIAL_REFERRER,
+                                referrer)).get());
+        doReturn(activity.getPackageName()).when(activity).getCurrentReferrer();
 
         assertEquals(activity.getInitialReferrer(), referrer);
     }
@@ -296,8 +391,8 @@ public class SettingsHomepageActivityTest {
         String referrer = "com.abc";
         Uri uri = new Uri.Builder().scheme("android-app").authority(referrer).build();
         SettingsHomepageActivity activity =
-                spy(Robolectric.buildActivity(SettingsHomepageActivity.class).get());
-        activity.setIntent(new Intent().putExtra(Intent.EXTRA_REFERRER, uri));
+                spy(Robolectric.buildActivity(SettingsHomepageActivity.class,
+                        new Intent().putExtra(Intent.EXTRA_REFERRER, uri)).get());
 
         assertNotEquals(activity.getCurrentReferrer(), referrer);
     }
@@ -306,8 +401,8 @@ public class SettingsHomepageActivityTest {
     public void getCurrentReferrer_hasReferrerNameExtra_shouldNotEqual() {
         String referrer = "com.abc";
         SettingsHomepageActivity activity =
-                spy(Robolectric.buildActivity(SettingsHomepageActivity.class).get());
-        activity.setIntent(new Intent().putExtra(Intent.EXTRA_REFERRER_NAME, referrer));
+                spy(Robolectric.buildActivity(SettingsHomepageActivity.class,
+                        new Intent().putExtra(Intent.EXTRA_REFERRER_NAME, referrer)).get());
 
         assertNotEquals(activity.getCurrentReferrer(), referrer);
     }

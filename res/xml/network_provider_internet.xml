@@ -117,6 +117,13 @@
         android:order="25"
         settings:controller="com.android.settings.network.AdaptiveConnectivityPreferenceController"/>
 
+    <Preference
+        android:key="cellular_security_network_internet"
+        android:title="@string/cellular_security_title"
+        android:summary="@string/cellular_security_summary"
+        android:order="27"
+        settings:controller="com.android.settings.network.CellularSecurityPreferenceController"/>
+
     <ListPreference
         android:key="connectivity_check_settings"
         android:title="@string/connectivity_check_title"

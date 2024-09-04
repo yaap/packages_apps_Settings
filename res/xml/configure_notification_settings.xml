@@ -16,7 +16,8 @@
 
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
                   xmlns:settings="http://schemas.android.com/apk/res-auto"
-                  android:title="@string/configure_notification_settings">
+                  android:title="@string/configure_notification_settings"
+                  android:key="configure_notification_settings">
 
     <PreferenceCategory
         android:key="general_notifications_category"
@@ -108,11 +109,26 @@
     </PreferenceCategory>
 
     <PreferenceCategory
+        android:key="sync_across_devices"
+        android:title="@string/sync_across_devices_title"
+        settings:controller="com.android.settings.notification.syncacrossdevices.SyncAcrossDevicesPreferenceController"/>
+
+    <PreferenceCategory
         android:key="advanced_section_header"
         android:title="@string/advanced_section_header">
+
+        <!--Adaptive Notifications-->
+        <Preference
+            android:fragment="com.android.settings.notification.PoliteNotificationsPreferenceFragment"
+            android:key="polite_notifications_preference"
+            android:order="17"
+            android:persistent="false"
+            android:title="@string/notification_polite_title"
+            settings:controller="com.android.settings.notification.PoliteNotificationsPreferenceController" />
+
         <com.android.settingslib.RestrictedPreference
             android:key="zen_mode_notifications"
-            android:order="5"
+            android:order="18"
             android:title="@string/zen_mode_settings_title"
             settings:useAdminDisabledSummary="true"
             android:fragment="com.android.settings.notification.zen.ZenModeSettings"
@@ -121,7 +137,7 @@
 
         <SwitchPreferenceCompat
             android:key="lock_screen_show_only_unseen_notifs"
-            android:order="10"
+            android:order="23"
             android:title="@string/unseen_notifs_lock_screen"
             android:summary="@string/unseen_notifs_lock_screen_summary"
             settings:controller="com.android.settings.notification.ShowOnlyUnseenNotificationsOnLockscreenPreferenceController"
@@ -130,7 +146,7 @@
         <Preference
             android:fragment="com.android.settings.accessibility.FlashNotificationsPreferenceFragment"
             android:key="flash_notifications_preference"
-            android:order="15"
+            android:order="27"
             android:persistent="false"
             android:title="@string/flash_notifications_title"
             settings:searchable="false"
@@ -138,7 +154,7 @@
 
         <com.android.settingslib.RestrictedPreference
             android:key="app_and_notif_cell_broadcast_settings"
-            android:order="20"
+            android:order="32"
             android:title="@string/cell_broadcast_settings"
             settings:useAdminDisabledSummary="true">
             <intent
@@ -150,7 +166,7 @@
         <!-- YASP Heads up -->
         <SwitchPreferenceCompat
             android:key="heads_up_notifications_enabled"
-            android:order="25"
+            android:order="37"
             android:title="@string/heads_up_title"
             android:summary="@string/heads_up_summary"
             android:defaultValue="true" />
@@ -158,51 +174,44 @@
         <!-- YASP Notification headers -->
         <com.yasp.settings.preferences.SystemSettingSwitchPreference
             android:key="notification_headers"
-            android:order="30"
+            android:order="43"
             android:title="@string/notification_headers_title"
             android:summary="@string/notification_headers_summary"
             android:defaultValue="true" />
 
         <SwitchPreferenceCompat
              android:key="silent_icons"
-             android:order="35"
+             android:order="48"
              android:title="@string/silent_notifications_status_bar"
              settings:controller="com.android.settings.notification.SilentStatusBarPreferenceController"/>
 
         <SwitchPreferenceCompat
             android:key="show_snooze_options"
-            android:order="40"
+            android:order="53"
             android:title="@string/snooze_options_title"
             settings:controller="com.android.settings.notification.SnoozeNotificationPreferenceController" />
 
         <!-- Notification badging -->
         <SwitchPreferenceCompat
             android:key="notification_badging"
-            android:order="45"
+            android:order="58"
             android:title="@string/notification_badging_title"
             settings:controller="com.android.settings.notification.BadgingNotificationPreferenceController"/>
 
         <!-- Pulse notification light, on devices that support it -->
         <SwitchPreferenceCompat
             android:key="notification_pulse"
-            android:order="50"
+            android:order="63"
             android:title="@string/notification_pulse_title"
             settings:controller="com.android.settings.notification.PulseNotificationPreferenceController"/>
 
         <SwitchPreferenceCompat
             android:key="notification_assistant"
-            android:order="55"
+            android:order="68"
             android:title="@string/notification_assistant_title"
             android:summary="@string/notification_assistant_summary"
             settings:controller="com.android.settings.notification.NotificationAssistantPreferenceController"/>
 
-        <Preference
-            android:fragment="com.android.settings.notification.PoliteNotificationsPreferenceFragment"
-            android:key="polite_notifications_preference"
-            android:order="60"
-            android:persistent="false"
-            android:title="@string/notification_polite_title"
-            settings:controller="com.android.settings.notification.PoliteNotificationsPreferenceController" />
     </PreferenceCategory>
 
     <!-- YASP Import -->
@@ -212,7 +221,7 @@
 
         <com.yasp.settings.preferences.SystemSettingListPreference
             android:key="flashlight_on_call"
-            android:order="65"
+            android:order="73"
             android:title="@string/flashlight_on_call_title"
             android:entries="@array/flashlight_on_call_entries"
             android:entryValues="@array/flashlight_on_call_values"
@@ -220,14 +229,14 @@
 
         <com.yasp.settings.preferences.SystemSettingSwitchPreference
             android:key="flashlight_on_call_ignore_dnd"
-            android:order="70"
+            android:order="78"
             android:title="@string/flashlight_on_call_ignore_dnd_title"
             android:summary="@string/flashlight_on_call_ignore_dnd_summary"
             android:defaultValue="false" />
 
         <com.yasp.settings.preferences.CustomSeekBarPreference
             android:key="flashlight_on_call_rate"
-            android:order="75"
+            android:order="83"
             android:title="@string/flashlight_on_call_rate_title"
             android:summary="@string/flashlight_on_call_rate_summary"
             android:max="5"
@@ -244,19 +253,19 @@
 
         <com.yasp.settings.preferences.SystemSettingSwitchPreference
             android:key="vibrate_on_connect"
-            android:order="80"
+            android:order="88"
             android:title="@string/incall_vibrate_connect_title"
             android:defaultValue="false" />
 
         <com.yasp.settings.preferences.SystemSettingSwitchPreference
             android:key="vibrate_on_callwaiting"
-            android:order="85"
+            android:order="93"
             android:title="@string/incall_vibrate_call_wait_title"
             android:defaultValue="false" />
 
         <com.yasp.settings.preferences.SystemSettingSwitchPreference
             android:key="vibrate_on_disconnect"
-            android:order="90"
+            android:order="98"
             android:title="@string/incall_vibrate_disconnect_title"
             android:defaultValue="false" />
 

@@ -235,19 +235,6 @@
         <item>3</item>
     </string-array>
 
-    <!-- Clock position -->
-    <string-array name="statusbar_clock_position_entries">
-        <item>@string/statusbar_clock_position_left</item>
-        <item>@string/statusbar_clock_position_center</item>
-        <item>@string/statusbar_clock_position_right</item>
-    </string-array>
-
-    <string-array name="statusbar_clock_position_values" translatable="false">
-        <item>0</item>
-        <item>1</item>
-        <item>2</item>
-    </string-array>
-
     <!-- Volume key cursor control  -->
     <string-array name="volume_key_cursor_control_entries">
         <item>@string/volume_key_cursor_control_disabled</item>
@@ -307,4 +294,5 @@
         <item>1</item>
         <item>2</item>
     </string-array>
+
 </resources>

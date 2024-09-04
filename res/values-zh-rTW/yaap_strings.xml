@@ -187,10 +187,6 @@
     <string name="qs_show_battery_estimate_summary_off">在快速設定上隱藏電量預估可用時間</string>
 
     <!-- Clock position -->
-    <string name="statusbar_clock_position_title">時鐘位置</string>
-    <string name="statusbar_clock_position_left">左側</string>
-    <string name="statusbar_clock_position_center">置中</string>
-    <string name="statusbar_clock_position_right">右側</string>
 
     <!-- SystemUI tuner -->
     <string name="ui_tuner_title">系統使用者介面調整精靈</string>

@@ -209,9 +209,5 @@
     <string name="location_privacy_indicator_summary_off">הראה בסמלילי שורת המצב\nדורש אתחול על מנת לעבוד</string>
 
     <!-- Clock position -->
-    <string name="statusbar_clock_position_title">מיקום שעון</string>
-    <string name="statusbar_clock_position_left">שמאל</string>
-    <string name="statusbar_clock_position_center">מרכז</string>
-    <string name="statusbar_clock_position_right">ימין</string>
 
 </resources>
