@@ -21,16 +21,19 @@
     <com.android.settingslib.widget.LayoutPreference
         android:layout="@layout/yaap_logo_layout"
         android:selectable="false"
-        android:key="yaap_logo" />
+        android:key="yaap_logo"
+        android:order="-100" />
 
     <PreferenceCategory
         android:key="about_team"
-        android:title="@string/about_team_category">
+        android:title="@string/about_team_category"
+        android:order="0">
 
         <Preference
             android:key="dev_pref"
             android:title="@string/about_dev_name"
-            android:summary="@string/about_dev_title">
+            android:summary="@string/about_dev_title"
+            android:order="5">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="@string/about_dev_git"/>
@@ -39,7 +42,8 @@
         <Preference
             android:key="dev2_pref"
             android:title="@string/about_dev2_name"
-            android:summary="@string/about_dev2_title">
+            android:summary="@string/about_dev2_title"
+            android:order="6">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="@string/about_dev2_git"/>
@@ -48,36 +52,42 @@
         <Preference
             android:key="dev3_pref"
             android:title="@string/about_dev3_name"
-            android:summary="@string/about_dev3_title">
+            android:summary="@string/about_dev3_title"
+            android:order="7">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="@string/about_dev3_git"/>
         </Preference>
 
-        <Preference
+        <!-- maintainers dynamically added here - starts at order=10 -->
+
+        <!-- <Preference
             android:key="maintainer"
             android:title="@string/maintainer_name"
             android:summary="@string/maintainer"
-            settings:enableCopying="true" >
+            settings:enableCopying="false" >
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="@string/maintainer_telegram"/>
-        </Preference>
+        </Preference> -->
 
-        <Preference
+        <!-- kernel devs dynamically added here -->
+
+        <!-- <Preference
             android:key="kernel"
             android:title="@string/kernel_name"
             android:summary="@string/kernel"
-            settings:enableCopying="true" >
+            settings:enableCopying="false">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="@string/kernel_telegram"/>
-        </Preference>
+        </Preference> -->
 
         <Preference
             android:key="designer_pref"
             android:title="@string/designer_name"
-            android:summary="@string/designer_title">
+            android:summary="@string/designer_title"
+            android:order="100">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="@string/designer_tg"/>
@@ -86,7 +96,8 @@
         <Preference
             android:key="designer2_pref"
             android:title="@string/designer2_name"
-            android:summary="@string/designer_title">
+            android:summary="@string/designer_title"
+            android:order="101">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="@string/designer2_tg"/>
@@ -96,12 +107,14 @@
 
     <PreferenceCategory
         android:key="about_external"
-        android:title="@string/about_external_category">
+        android:title="@string/about_external_category"
+        android:order="110">
 
         <Preference
             android:key="tg_pref"
             android:title="@string/about_tg_title"
-            android:summary="@string/about_tg_summary">
+            android:summary="@string/about_tg_summary"
+            android:order="115">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="@string/about_tg_link"/>
@@ -110,7 +123,8 @@
         <Preference
             android:key="git_pref"
             android:title="@string/about_git_title"
-            android:summary="@string/about_git_summary">
+            android:summary="@string/about_git_summary"
+            android:order="120">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="@string/about_git_link"/>

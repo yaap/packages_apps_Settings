@@ -17,10 +17,13 @@ package com.android.settings.deviceinfo;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Resources;
+import android.net.Uri;
 import android.os.Bundle;
 import android.provider.Settings;
 import android.util.Log;
+import android.webkit.URLUtil;
 
 import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
@@ -44,8 +47,6 @@ import java.util.Map;
 public class AboutYaap extends DashboardFragment {
 
     private static final String TAG = "AboutYaap";
-    private static final String PREF_MAINTAINER = "maintainer";
-    private static final String PREF_KERNEL = "kernel";
 
     @Override
     protected int getPreferenceScreenResId() {
@@ -58,21 +59,52 @@ public class AboutYaap extends DashboardFragment {
 
         final Resources res = getResources();
         final ContentResolver resolver = getActivity().getContentResolver();
-        final PreferenceScreen prefScreen = getPreferenceScreen();
 
-        Preference maintainerName = (Preference) findPreference(PREF_MAINTAINER);
-        if (maintainerName.getTitle().equals("")) {
-            maintainerName.setVisible(false);
-        } else if (res.getString(R.string.maintainer_telegram).equals("")) {
-            maintainerName.setEnabled(false);
+        // starting from 10 (inclusive) and end at order 100 at max
+        int order = 10;
+
+        // adding maintainers
+        final String maintainers[] = res.getString(R.string.maintainer_name).split(",");
+        final String maintainerLinks[] = res.getString(R.string.maintainer_telegram).split(",");
+        for (int i = 0; i < maintainers.length && order < 100; i++) {
+            final String name = maintainers[i];
+            final String link = i < maintainerLinks.length ? maintainerLinks[i] : "";
+            if (name == null || name.isEmpty())
+                continue;
+            addMaintainerPref(name, link, order++);
         }
 
-        Preference kernelName = (Preference) findPreference(PREF_KERNEL);
-        if (kernelName.getTitle().equals("")) {
-            kernelName.setVisible(false);
-        } else if (res.getString(R.string.kernel_telegram).equals("")) {
-            kernelName.setEnabled(false);
+        // adding kernel devs
+        final String kernels[] = res.getString(R.string.kernel_name).split(",");
+        final String kernelLinks[] = res.getString(R.string.kernel_telegram).split(",");
+        for (int i = 0; i < kernels.length && order < 100; i++) {
+            final String name = kernels[i];
+            final String link = i < kernelLinks.length ? kernelLinks[i] : "";
+            if (name == null || name.isEmpty())
+                continue;
+            addMaintainerPref(name, link, true, order++);
         }
+    }
+
+    private void addMaintainerPref(String name, String link, int order) {
+        addMaintainerPref(name, link, false, order);
+    }
+
+    private void addMaintainerPref(String name, String link, boolean kernel, int order) {
+        final String sum = getResources().getString(
+                kernel ? R.string.kernel : R.string.maintainer);
+        Preference pref = new Preference(getContext());
+        pref.setTitle(name);
+        pref.setSummary(sum);
+        pref.setOrder(order);
+        pref.setCopyingEnabled(false);
+        if (link != null && !link.isEmpty() &&
+                URLUtil.isValidUrl(link) && URLUtil.isHttpsUrl(link)) {
+            final Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(link));
+            pref.setIntent(intent);
+        }
+        getPreferenceScreen().addPreference(pref);
     }
 
     @Override
