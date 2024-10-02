@@ -47,6 +47,14 @@
         android:summary="@string/camera_mic_indicator_summary"
         android:defaultValue="true" />
 
+    <!-- SystemUI tuner -->
+    <Preference
+        android:key="statusbar_tuner"
+        android:title="@string/statusbar_icons_title"
+        android:summary="@string/statusbar_icons_summary">
+        <intent android:action="com.android.settings.action.STATUS_BAR_TUNER"/>
+    </Preference>
+
     <PreferenceCategory
         android:title="@string/battery_options">
 

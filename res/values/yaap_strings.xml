@@ -687,4 +687,8 @@
     <!-- Long press navbar to search -->
     <string name="navbar_long_press_gesture_title">Long press to search</string>
     <string name="navbar_long_press_gesture_summary">Long press the gesture bar to analyze the screen with lens</string>
+
+    <!-- SystemUI tuner -->
+    <string name="statusbar_icons_title">Icons</string>
+    <string name="statusbar_icons_summary">Customize icons and icon behavior</string>
 </resources>

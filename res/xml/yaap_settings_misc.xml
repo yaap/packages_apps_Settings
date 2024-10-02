@@ -31,11 +31,4 @@
         android:title="@string/transport_selector_title"
         android:defaultValue="0" />
 
-    <!-- SystemUI tuner -->
-    <Preference
-        android:key="ui_tuner"
-        android:title="@string/ui_tuner_title">
-        <intent android:action="com.android.settings.action.UI_TUNER"/>
-    </Preference>
-
 </PreferenceScreen>
