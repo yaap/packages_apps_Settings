@@ -60,6 +60,12 @@
         android:min="0"
         android:defaultValue="5" />
 
+    <SwitchPreferenceCompat
+        android:key="media_controls_ripple"
+        android:title="@string/media_controls_ripple_title"
+        android:summary="@string/media_controls_ripple_summary"
+        app:controller="com.android.settings.sound.MediaControlsRippleController" />
+
     <com.yasp.settings.preferences.SecureSettingSwitchPreference
         android:key="media_controls_squiggle"
         android:title="@string/media_controls_squiggle_title"
