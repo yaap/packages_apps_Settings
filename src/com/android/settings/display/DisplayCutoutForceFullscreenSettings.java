@@ -17,96 +17,79 @@
 
 package com.android.settings.display;
 
-import android.app.ActivityManager;
-import android.annotation.Nullable;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.SectionIndexer;
-import android.widget.Switch;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.preference.Preference;
+import androidx.preference.SwitchPreferenceCompat;
+
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
-
-import com.android.settingslib.applications.ApplicationsState;
-
+import com.android.internal.util.custom.cutout.CutoutFullscreenController;
+import com.android.settings.dashboard.DashboardFragment;
+import com.android.settings.search.BaseSearchIndexProvider;
 import com.android.settings.R;
-import com.android.settings.SettingsPreferenceFragment;
+import com.android.settingslib.applications.ApplicationsState;
+import com.android.settingslib.search.Indexable;
+import com.android.settingslib.search.SearchIndexable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.android.internal.util.custom.cutout.CutoutFullscreenController;
-
-public class DisplayCutoutForceFullscreenSettings extends SettingsPreferenceFragment
+@SearchIndexable
+public class DisplayCutoutForceFullscreenSettings extends DashboardFragment
         implements ApplicationsState.Callbacks {
 
-    private AllPackagesAdapter mAllPackagesAdapter;
+    private static final String TAG = "DisplayCutoutForceFullscreenSettings";
+    private static final String[] HIDE_APPS = {
+            "com.android.settings", "com.android.documentsui",
+            "com.android.fmradio", "com.caf.fmradio", "com.android.stk",
+            "com.google.android.calculator", "com.google.android.calendar",
+            "com.google.android.deskclock", "com.google.android.contacts",
+            "com.google.android.apps.messaging", "com.google.android.googlequicksearchbox",
+            "com.android.vending", "com.google.android.dialer",
+            "com.google.android.apps.wallpaper", "com.google.android.as"
+        };
+
     private ApplicationsState mApplicationsState;
     private ApplicationsState.Session mSession;
     private ActivityFilter mActivityFilter;
-
     private CutoutFullscreenController mCutoutForceFullscreenSettings;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public int getMetricsCategory() {
+        return MetricsEvent.DISPLAY_CUTOUT_FORCE_FULLSCREEN;
+    }
 
+    @Override
+    protected int getPreferenceScreenResId() {
+        return R.xml.display_cutout_force_fullscreen_settings;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
         mApplicationsState = ApplicationsState.getInstance(getActivity().getApplication());
         mSession = mApplicationsState.newSession(this);
         mSession.onResume();
         mActivityFilter = new ActivityFilter(getActivity().getPackageManager());
-        mAllPackagesAdapter = new AllPackagesAdapter(getActivity());
-
-        mCutoutForceFullscreenSettings = new CutoutFullscreenController(getContext());
-    }
-
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        getActivity().getActionBar().setTitle(R.string.display_cutout_force_fullscreen_title);
-        return inflater.inflate(R.layout.cutout_force_fullscreen_layout, container, false);
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-    }
-
-    @Override
-    public void onViewCreated(final View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        ListView userListView = view.findViewById(R.id.user_list_view);
-        userListView.setAdapter(mAllPackagesAdapter);
-        userListView.setEmptyView(view.findViewById(R.id.user_list_empty_view));
+        mCutoutForceFullscreenSettings = new CutoutFullscreenController(context);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
         rebuild();
     }
 
     @Override
     public void onDestroy() {
-        super.onDestroy();
-
         mSession.onPause();
         mSession.onDestroy();
+        super.onDestroy();
     }
 
     @Override
@@ -118,8 +101,7 @@ public class DisplayCutoutForceFullscreenSettings extends SettingsPreferenceFrag
     @Override
     public void onRebuildComplete(ArrayList<ApplicationsState.AppEntry> entries) {
         if (entries != null) {
-            handleAppEntries(entries);
-            mAllPackagesAdapter.notifyDataSetChanged();
+            addAllAppPrefs(entries);
         }
     }
 
@@ -143,171 +125,32 @@ public class DisplayCutoutForceFullscreenSettings extends SettingsPreferenceFrag
     @Override
     public void onRunningStateChanged(boolean running) {}
 
-    private void handleAppEntries(List<ApplicationsState.AppEntry> entries) {
-        final ArrayList<String> sections = new ArrayList<String>();
-        final ArrayList<Integer> positions = new ArrayList<Integer>();
-        final PackageManager pm = getPackageManager();
-        String lastSectionIndex = null;
-        int offset = 0;
-
-        for (int i = 0; i < entries.size(); i++) {
-            final ApplicationInfo info = entries.get(i).info;
-            final String label = (String) info.loadLabel(pm);
-            final String sectionIndex;
-
-            if (!info.enabled) {
-                sectionIndex = "--"; // XXX
-            } else if (TextUtils.isEmpty(label)) {
-                sectionIndex = "";
-            } else {
-                sectionIndex = label.substring(0, 1).toUpperCase();
-            }
-
-            if (lastSectionIndex == null ||
-                    !TextUtils.equals(sectionIndex, lastSectionIndex)) {
-                sections.add(sectionIndex);
-                positions.add(offset);
-                lastSectionIndex = sectionIndex;
-            }
-
-            offset++;
-        }
-
-        mAllPackagesAdapter.setEntries(entries, sections, positions);
-    }
-
     private void rebuild() {
         mSession.rebuild(mActivityFilter, ApplicationsState.ALPHA_COMPARATOR);
     }
 
-    private class AllPackagesAdapter extends BaseAdapter
-            implements SectionIndexer {
-
-        private final LayoutInflater mInflater;
-        private List<ApplicationsState.AppEntry> mEntries = new ArrayList<>();
-        private String[] mSections;
-        private int[] mPositions;
-
-        public AllPackagesAdapter(Context context) {
-            mInflater = LayoutInflater.from(context);
-            mActivityFilter = new ActivityFilter(context.getPackageManager());
-        }
-
-        @Override
-        public int getCount() {
-            return mEntries.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return mEntries.get(position);
-        }
-
-        @Override
-        public boolean hasStableIds() {
-            return true;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return mEntries.get(position).id;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            ApplicationsState.AppEntry entry = mEntries.get(position);
-            ViewHolder holder;
-
-            if (convertView == null) {
-                holder = new ViewHolder(mInflater.inflate(
-                        R.layout.cutout_force_fullscreen_list_item, parent, false));
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-
-            if (entry == null) {
-                return holder.rootView;
-            }
-
-            holder.title.setText(entry.label);
+    private void addAllAppPrefs(List<ApplicationsState.AppEntry> entries) {
+        getPreferenceScreen().removeAll();
+        for (ApplicationsState.AppEntry entry : entries) {
+            final String packageName = entry.info.packageName;
             mApplicationsState.ensureIcon(entry);
-            holder.icon.setImageDrawable(entry.icon);
-            holder.state.setTag(entry);
-            holder.state.setChecked(mCutoutForceFullscreenSettings.shouldForceCutoutFullscreen(entry.info.packageName));
-            holder.state.setOnCheckedChangeListener((buttonView, isChecked) -> {
-                final ApplicationsState.AppEntry appEntry =
-                        (ApplicationsState.AppEntry) buttonView.getTag();
-
-                if (isChecked) {
-                    mCutoutForceFullscreenSettings.addApp(appEntry.info.packageName);
+            SwitchPreferenceCompat pref = new SwitchPreferenceCompat(getContext());
+            pref.setTitle(entry.label);
+            pref.setIcon(entry.icon);
+            pref.setChecked(mCutoutForceFullscreenSettings.shouldForceCutoutFullscreen(packageName));
+            pref.setOnPreferenceChangeListener((preference, newValue) -> {
+                final boolean value = (Boolean) newValue;
+                if (value) {
+                    mCutoutForceFullscreenSettings.addApp(packageName);
                 } else {
-                    mCutoutForceFullscreenSettings.removeApp(appEntry.info.packageName);
+                    mCutoutForceFullscreenSettings.removeApp(packageName);
                 }
                 Toast.makeText(getActivity(),
-                    getActivity().getString(R.string.display_cutout_force_fullscreen_restart_app),
-                    Toast.LENGTH_SHORT).show();
+                        getActivity().getString(R.string.display_cutout_force_fullscreen_restart_app),
+                        Toast.LENGTH_SHORT).show();
+                return true;
             });
-            return holder.rootView;
-        }
-
-        private void setEntries(List<ApplicationsState.AppEntry> entries,
-                List<String> sections, List<Integer> positions) {
-            mEntries = entries;
-            mSections = sections.toArray(new String[0]);
-            mPositions = new int[positions.size()];
-            for (int i = 0; i < positions.size(); i++) {
-                mPositions[i] = positions.get(i);
-            }
-            notifyDataSetChanged();
-        }
-
-        @Override
-        public int getPositionForSection(int section) {
-            if (section < 0 || section >= mSections.length) {
-                return -1;
-            }
-
-            return mPositions[section];
-        }
-
-        @Override
-        public int getSectionForPosition(int position) {
-            if (position < 0 || position >= getCount()) {
-                return -1;
-            }
-
-            final int index = Arrays.binarySearch(mPositions, position);
-
-            /*
-             * Consider this example: section positions are 0, 3, 5; the supplied
-             * position is 4. The section corresponding to position 4 starts at
-             * position 3, so the expected return value is 1. Binary search will not
-             * find 4 in the array and thus will return -insertPosition-1, i.e. -3.
-             * To get from that number to the expected value of 1 we need to negate
-             * and subtract 2.
-             */
-            return index >= 0 ? index : -index - 2;
-        }
-
-        @Override
-        public Object[] getSections() {
-            return mSections;
-        }
-    }
-
-    private static class ViewHolder {
-        private final TextView title;
-        private final ImageView icon;
-        private final Switch state;
-        private final View rootView;
-
-        private ViewHolder(View view) {
-            this.title = view.findViewById(R.id.app_name);
-            this.icon = view.findViewById(R.id.app_icon);
-            this.state = view.findViewById(R.id.state);
-            this.rootView = view;
-
-            view.setTag(this);
+            getPreferenceScreen().addPreference(pref);
         }
     }
 
@@ -338,28 +181,18 @@ public class DisplayCutoutForceFullscreenSettings extends SettingsPreferenceFrag
         @Override
         public void init() {}
 
-        private final String[] hideApps = {"com.android.settings", "com.android.documentsui",
-            "com.android.fmradio", "com.caf.fmradio", "com.android.stk",
-            "com.google.android.calculator", "com.google.android.calendar",
-            "com.google.android.deskclock", "com.google.android.contacts",
-            "com.google.android.apps.messaging", "com.google.android.googlequicksearchbox",
-            "com.android.vending", "com.google.android.dialer",
-            "com.google.android.apps.wallpaper", "com.google.android.as"};
-
         @Override
         public boolean filterApp(ApplicationsState.AppEntry entry) {
-            boolean show = !mAllPackagesAdapter.mEntries.contains(entry.info.packageName);
-            if (show) {
-                synchronized (mLauncherResolveInfoList) {
-                    show = mLauncherResolveInfoList.contains(entry.info.packageName) && !Arrays.asList(hideApps).contains(entry.info.packageName);
-                }
-            }
-            return show;
+            return mLauncherResolveInfoList.contains(entry.info.packageName)
+                    && !Arrays.asList(HIDE_APPS).contains(entry.info.packageName);
         }
     }
 
     @Override
-    public int getMetricsCategory() {
-        return MetricsEvent.DISPLAY_CUTOUT_FORCE_FULLSCREEN;
+    protected String getLogTag() {
+        return TAG;
     }
+
+    public static final Indexable.SearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
+            new BaseSearchIndexProvider(R.xml.display_cutout_force_fullscreen_settings);
 }
