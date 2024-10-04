@@ -16,7 +16,7 @@
 
 package com.android.settings.sound;
 
-import static android.provider.Settings.Secure.MEDIA_CONTROLS_RIPPLE;
+import static android.provider.Settings.Secure.MEDIA_CONTROLS_TURBULENCE;
 
 import android.content.Context;
 import android.provider.Settings;
@@ -27,22 +27,22 @@ import com.android.settings.R;
 import com.android.settings.core.TogglePreferenceController;
 
 /**
- * Toggle for media controls ripple effect
+ * Toggle for media controls turbulence effect
 */
-public class MediaControlsRippleController extends TogglePreferenceController {
+public class MediaControlsTurbulenceController extends TogglePreferenceController {
 
     private final boolean mEnabledByDefault;
 
-    public MediaControlsRippleController(Context context, String key) {
+    public MediaControlsTurbulenceController(Context context, String key) {
         super(context, key);
         mEnabledByDefault = context.getResources().getBoolean(
-                com.android.internal.R.bool.config_mediaControlsRippleByDefault);
+                com.android.internal.R.bool.config_mediaControlsTurbulenceByDefault);
     }
 
     @Override
     public boolean isChecked() {
         int val = Settings.Secure.getInt(mContext.getContentResolver(),
-                MEDIA_CONTROLS_RIPPLE, mEnabledByDefault ? 1 : 0);
+                MEDIA_CONTROLS_TURBULENCE, mEnabledByDefault ? 1 : 0);
         return val == 1;
     }
 
@@ -50,7 +50,7 @@ public class MediaControlsRippleController extends TogglePreferenceController {
     public boolean setChecked(boolean isChecked) {
         int val = isChecked ? 1 : 0;
         return Settings.Secure.putInt(mContext.getContentResolver(),
-                MEDIA_CONTROLS_RIPPLE, val);
+                MEDIA_CONTROLS_TURBULENCE, val);
     }
 
     @Override

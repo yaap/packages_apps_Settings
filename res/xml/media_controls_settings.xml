@@ -63,8 +63,12 @@
     <SwitchPreferenceCompat
         android:key="media_controls_ripple"
         android:title="@string/media_controls_ripple_title"
-        android:summary="@string/media_controls_ripple_summary"
         app:controller="com.android.settings.sound.MediaControlsRippleController" />
+
+    <SwitchPreferenceCompat
+        android:key="media_controls_turbulence"
+        android:title="@string/media_controls_turbulence_title"
+        app:controller="com.android.settings.sound.MediaControlsTurbulenceController" />
 
     <com.yasp.settings.preferences.SecureSettingSwitchPreference
         android:key="media_controls_squiggle"
