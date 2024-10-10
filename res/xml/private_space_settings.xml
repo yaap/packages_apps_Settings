@@ -46,7 +46,7 @@
 
     </PreferenceCategory>
 
-    <PreferenceCategory
+    <!-- <PreferenceCategory
         android:title="@string/private_space_category_hide">
 
         <Preference
@@ -56,7 +56,7 @@
             settings:controller="com.android.settings.privatespace.HidePrivateSpaceSummaryController"
             settings:searchable="false" />
 
-    </PreferenceCategory>
+    </PreferenceCategory> -->
 
     <PreferenceCategory
         android:title="@string/private_space_category_system">
