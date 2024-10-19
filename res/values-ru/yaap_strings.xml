@@ -417,6 +417,10 @@
     <string name="qs_show_battery_estimate_summary_off">В быстрых настройках не показано примерное время полной разрядки (для применения перезагрузите SystemUI)</string>
 
     <!-- Clock position -->
+    <string name="statusbar_clock_position_title">Расположение часов</string>
+    <string name="statusbar_clock_position_left">Слева</string>
+    <string name="statusbar_clock_position_center">В центре</string>
+    <string name="statusbar_clock_position_right">Справа</string>
 
     <!-- SystemUI tuner -->
     <string name="ui_tuner_title">Изменение SystemUI</string>

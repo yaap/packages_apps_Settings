@@ -593,6 +593,10 @@
     <string name="qs_show_battery_estimate_summary_off">Hide battery estimates in QS</string>
 
     <!-- Clock position -->
+    <string name="statusbar_clock_position_title">Clock position</string>
+    <string name="statusbar_clock_position_left">Left</string>
+    <string name="statusbar_clock_position_center">Center</string>
+    <string name="statusbar_clock_position_right">Right</string>
 
     <!-- SystemUI tuner -->
     <string name="ui_tuner_title">SystemUI tuner</string>
