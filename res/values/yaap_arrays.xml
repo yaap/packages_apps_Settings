@@ -85,7 +85,7 @@
     <string-array name="connectivity_check_entries">
         <item>Standard (Google)</item>
         <item>GrapheneOS</item>
-        <item>USTC (China)</item>
+        <item>MIUI (China)</item>
         <item>Disabled</item>
     </string-array>
 

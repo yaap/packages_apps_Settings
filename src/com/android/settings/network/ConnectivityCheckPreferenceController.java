@@ -67,11 +67,11 @@ public class ConnectivityCheckPreferenceController extends BasePreferenceControl
         OTHER_FALLBACK_INDEX, "http://grapheneos.online/generate_204"
     ));
 
-    // 204 servers for chinese users
+    // 204 servers for Chinese users
     private static final HashMap<Integer, String> CHINA_PORTAL = new HashMap<>(Map.of(
-        HTTPS_INDEX, "https://204.ustclug.org",
-        HTTP_INDEX, "http://204.ustclug.org",
-        FALLBACK_INDEX, "http://connect.rom.miui.com/generate_204",
+        HTTPS_INDEX, "https://connect.rom.miui.com/generate_204",
+        HTTP_INDEX, "http://connect.rom.miui.com/generate_204",
+        FALLBACK_INDEX, "http://connectivitycheck.platform.hicloud.com/generate_204",
         OTHER_FALLBACK_INDEX, "http://wifi.vivo.com.cn/generate_204"
     ));
 
