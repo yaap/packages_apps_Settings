@@ -34,6 +34,47 @@ import org.junit.runner.RunWith;
 
 @RunWith(AndroidJUnit4.class)
 public class SaveAndFinishWorkerTest {
+    // Unsure if this is still passing as unit tests are failing to run.
+    @Test
+    public void saveAndVerifyInBackground_returnCredentialsTrue_returnsCredentials() {
+        int userId = 0;
+        var chosenCredential = LockscreenCredential.createPassword("1234");
+        var currentCredential = LockscreenCredential.createNone();
+        var worker = new SaveAndFinishWorker();
+        var lpu = mock(LockPatternUtils.class);
+
+        when(lpu.setLockCredential(chosenCredential, currentCredential, userId)).thenReturn(true);
+
+        worker.setReturnCredentials(true);
+        worker.prepare(lpu, chosenCredential, currentCredential, userId);
+        var result = worker.saveAndVerifyInBackground();
+
+        verify(lpu).setLockCredential(chosenCredential, currentCredential, userId);
+        assertThat(result.first).isTrue();
+        assertThat(result.second.getParcelableExtra(
+                ChooseLockSettingsHelper.EXTRA_KEY_PASSWORD, LockscreenCredential.class))
+                .isEqualTo(chosenCredential);
+    }
+
+    // Unsure if this is still passing as unit tests are failing to run.
+    @Test
+    public void saveAndVerifyInBackground_returnCredentialsFalse_notReturnCredentials() {
+        int userId = 0;
+        var chosenCredential = LockscreenCredential.createPassword("1234");
+        var currentCredential = LockscreenCredential.createNone();
+        var worker = new SaveAndFinishWorker();
+        var lpu = mock(LockPatternUtils.class);
+
+        when(lpu.setLockCredential(chosenCredential, currentCredential, userId)).thenReturn(true);
+
+        worker.prepare(lpu, chosenCredential, currentCredential, userId);
+        var result = worker.saveAndVerifyInBackground();
+
+        verify(lpu).setLockCredential(chosenCredential, currentCredential, userId);
+        assertThat(result.first).isTrue();
+        assertThat(result.second).isNull();
+    }
+
     @Test
     public void testSetRequestWriteRepairModePassword_setLockCredentialFail() {
         int userId = 0;
