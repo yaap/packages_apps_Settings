@@ -65,13 +65,10 @@ public class AccessibilitySettingsForSetupWizard extends DashboardFragment
     private static final String SELECT_TO_SPEAK_PREFERENCE = "select_to_speak_preference";
 
     // Package names and service names used to identify screen reader and SelectToSpeak services.
-    @VisibleForTesting
-    static final String SCREEN_READER_PACKAGE_NAME = "com.google.android.marvin.talkback";
+    private String mScreenReaderPackageName;
     @VisibleForTesting
     static final String SCREEN_READER_SERVICE_NAME =
             "com.google.android.marvin.talkback.TalkBackService";
-    @VisibleForTesting
-    static final String SELECT_TO_SPEAK_PACKAGE_NAME = "com.google.android.marvin.talkback";
     @VisibleForTesting
     static final String SELECT_TO_SPEAK_SERVICE_NAME =
             "com.google.android.accessibility.selecttospeak.SelectToSpeakService";
@@ -123,15 +120,16 @@ public class AccessibilitySettingsForSetupWizard extends DashboardFragment
         mDisplayMagnificationPreference = findPreference(DISPLAY_MAGNIFICATION_PREFERENCE);
         mScreenReaderPreference = findPreference(SCREEN_READER_PREFERENCE);
         mSelectToSpeakPreference = findPreference(SELECT_TO_SPEAK_PREFERENCE);
+	mScreenReaderPackageName = getContext().getString(R.string.config_screenReaderPackage);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         updateAccessibilityServicePreference(mScreenReaderPreference,
-                SCREEN_READER_PACKAGE_NAME, SCREEN_READER_SERVICE_NAME);
+                mScreenReaderPackageName, SCREEN_READER_SERVICE_NAME);
         updateAccessibilityServicePreference(mSelectToSpeakPreference,
-                SELECT_TO_SPEAK_PACKAGE_NAME, SELECT_TO_SPEAK_SERVICE_NAME);
+                mScreenReaderPackageName, SELECT_TO_SPEAK_SERVICE_NAME);
     }
 
     @Override

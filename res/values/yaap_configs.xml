@@ -35,4 +35,7 @@
     <!-- Hide disable VRR option -->
     <bool name="config_disableVrrSetting" translatable="false">false</bool>
 
+    <!-- Screen reader package name -->
+    <string name="config_screenReaderPackage" translatable="false">com.google.android.marvin.talkback</string>
+
 </resources>
