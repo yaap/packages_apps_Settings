@@ -22,8 +22,8 @@
     android:title="@string/color_mode_title">
 
     <PreferenceCategory
-        android:key="color_balance_category"
-        android:title="@string/color_mode_balance_category"
+        android:key="advanced_category"
+        android:title="@string/color_mode_advanced_category"
         android:order="100">
 
         <com.yasp.settings.preferences.CustomSeekBarPreference
@@ -52,6 +52,32 @@
             settings:interval="1"
             settings:keywords="@string/keywords_color_balance"
             settings:controller="com.android.settings.display.ColorBalancePreferenceController" />
+
+        <com.yasp.settings.preferences.CustomSeekBarPreference
+            android:key="color_saturation"
+            android:title="@string/color_saturation_title"
+            android:persistent="false"
+            android:max="200"
+            settings:min="0"
+            settings:defaultValue="100"
+            settings:interval="1"
+            settings:units="%"
+            settings:continuousUpdates="true"
+            settings:keywords="@string/keywords_color_saturation"
+            settings:controller="com.android.settings.display.ColorSaturationPreferenceController" />
+
+        <com.yasp.settings.preferences.CustomSeekBarPreference
+            android:key="color_temperature"
+            android:title="@string/color_temperature_title"
+            android:persistent="false"
+            android:max="9000"
+            settings:min="3000"
+            settings:defaultValue="6500"
+            settings:interval="100"
+            settings:units="K"
+            settings:continuousUpdates="true"
+            settings:keywords="@string/keywords_color_temperature"
+            settings:controller="com.android.settings.display.ColorTemperaturePreferenceController" />
 
     </PreferenceCategory>
 

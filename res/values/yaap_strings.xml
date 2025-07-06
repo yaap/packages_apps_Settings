@@ -786,6 +786,12 @@
     <string name="edge_grip_suppression_title">Edge grip suppression width</string>
     <string name="edge_grip_suppression_summary">0 disables edge grip suppression; 1-5 adjusts the curved-edge width</string>
 
+    <!-- Color mode advanced controls -->
+    <string name="color_mode_advanced_category">Advanced controls</string>
+    <string name="color_temperature_title">Color temperature</string>
+    <string name="color_saturation_title">Saturation</string>
+    <string name="keywords_color_saturation">color, saturation, vivid, muted, LiveDisplay</string>
+
     <!-- Ltpo features -->
     <string name="ltpo_features_title">Enable LTPO features</string>
     <string name="ltpo_features_summary">Enables device-specific adaptive idle and frame rate features for improving efficiency</string>
