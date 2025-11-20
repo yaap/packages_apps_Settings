@@ -43,4 +43,6 @@
     <!-- Uses the legacy UDFPS enrollment UI with side text instead of a footer button. -->
     <bool name="config_useLegacyUdfpsUi" translatable="false">false</bool>
 
+    <!-- Whether eSIM power control is supported on this device -->
+    <bool name="config_supportEsimPowerControl">false</bool>
 </resources>

@@ -73,6 +73,13 @@
         android:order="0"
         android:defaultValue="true" />
 
+    <SwitchPreferenceCompat
+        android:key="esim_power_disable"
+        android:title="@string/esim_power_disable_title"
+        android:summary="@string/esim_power_disable_summary"
+        android:icon="@drawable/ic_esim_icon"
+        settings:controller="com.android.settings.network.EsimPowerPreferenceController" />
+
     <com.android.settingslib.RestrictedPreference
         android:fragment="com.android.settings.network.tether.TetherSettings"
         android:key="tether_settings"
