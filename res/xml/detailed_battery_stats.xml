@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2026 VoltageOS
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<PreferenceScreen
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:settings="http://schemas.android.com/apk/res-auto"
+    android:key="detailed_battery_stats_screen"
+    android:title="@string/detailed_battery_stats_title"
+    settings:keywords="@string/keywords_battery_usage">
+
+    <Preference
+        android:key="prev_session_header"
+        android:title="@string/battery_stats_prev_session"
+        android:summary="@string/battery_stats_tap_expand" />
+    <PreferenceCategory
+        android:key="prev_session_stats"
+        settings:isPreferenceVisible="false">
+        <Preference
+            android:key="prev_session_screen_on"
+            android:title="@string/battery_stats_prev_screen_on"
+            android:selectable="false" />
+        <Preference
+            android:key="prev_session_screen_off"
+            android:title="@string/battery_stats_prev_screen_off"
+            android:selectable="false" />
+        <Preference
+            android:key="prev_session_recorded_at"
+            android:title="@string/battery_stats_prev_recorded_at"
+            android:selectable="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="screen_on_stats"
+        android:title="@string/battery_stats_screen_on">
+        <Preference
+            android:key="screen_on_duration"
+            android:title="@string/battery_stats_duration"
+            android:selectable="false" />
+        <Preference
+            android:key="screen_on_drain"
+            android:title="@string/battery_stats_battery_drained"
+            android:selectable="false" />
+        <Preference
+            android:key="screen_on_drain_rate"
+            android:title="@string/battery_stats_active_drain"
+            android:selectable="false" />
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:key="screen_off_stats"
+        android:title="@string/battery_stats_screen_off">
+        <Preference
+            android:key="screen_off_duration"
+            android:title="@string/battery_stats_duration"
+            android:selectable="false" />
+        <Preference
+            android:key="screen_off_drain"
+            android:title="@string/battery_stats_battery_drained"
+            android:selectable="false" />
+        <Preference
+            android:key="screen_off_deep_sleep"
+            android:title="@string/battery_stats_deep_sleep"
+            android:selectable="false" />
+        <Preference
+            android:key="screen_off_awake"
+            android:title="@string/battery_stats_awake"
+            android:selectable="false" />
+        <Preference
+            android:key="screen_off_drain_rate"
+            android:title="@string/battery_stats_idle_drain"
+            android:selectable="false" />
+    </PreferenceCategory>
+
+    <Preference
+        android:key="component_power_header"
+        android:title="@string/battery_stats_components_estimated_power"
+        android:summary="@string/battery_stats_tap_expand" />
+    <PreferenceCategory
+        android:key="component_power_stats"
+        settings:isPreferenceVisible="false" />
+
+    <Preference
+        android:key="kernel_wakeup_header"
+        android:title="@string/battery_stats_kernel_wakeups"
+        android:summary="@string/battery_stats_tap_expand" />
+    <PreferenceCategory
+        android:key="kernel_wakeup_stats"
+        settings:isPreferenceVisible="false" />
+
+    <Preference
+        android:key="uid_wakelock_header"
+        android:title="@string/battery_stats_userspace_wakelocks"
+        android:summary="@string/battery_stats_tap_expand" />
+    <PreferenceCategory
+        android:key="uid_wakelock_stats"
+        settings:isPreferenceVisible="false" />
+
+    <Preference
+        android:key="uid_alarm_header"
+        android:title="@string/battery_stats_alarm_wakeups_title"
+        android:summary="@string/battery_stats_tap_expand" />
+    <PreferenceCategory
+        android:key="uid_alarm_stats"
+        settings:isPreferenceVisible="false" />
+
+    <Preference
+        android:key="wakeup_reason_header"
+        android:title="@string/battery_stats_wakeup_reasons"
+        android:summary="@string/battery_stats_tap_expand" />
+    <PreferenceCategory
+        android:key="wakeup_reason_stats"
+        settings:isPreferenceVisible="false" />
+
+    <Preference
+        android:key="raw_stats_header"
+        android:title="@string/battery_stats_raw_since_last_charge"
+        android:summary="@string/battery_stats_tap_expand" />
+    <PreferenceCategory
+        android:key="raw_stats"
+        settings:isPreferenceVisible="false">
+        <Preference
+            android:key="learned_capacity"
+            android:title="@string/battery_stats_learned_capacity"
+            android:selectable="false" />
+        <Preference
+            android:key="estimated_capacity"
+            android:title="@string/battery_stats_estimated_capacity"
+            android:selectable="false" />
+        <Preference
+            android:key="time_on_battery"
+            android:title="@string/battery_stats_time_on_battery"
+            android:selectable="false" />
+        <Preference
+            android:key="battery_uptime"
+            android:title="@string/battery_stats_uptime"
+            android:selectable="false" />
+    </PreferenceCategory>
+
+    <Preference
+        android:key="suspend_stats_header"
+        android:title="@string/battery_stats_suspend_stats"
+        android:summary="@string/battery_stats_tap_expand" />
+    <PreferenceCategory
+        android:key="suspend_stats"
+        settings:isPreferenceVisible="false">
+        <Preference
+            android:key="suspend_attempts"
+            android:title="@string/battery_stats_suspend_attempts"
+            android:selectable="false" />
+        <Preference
+            android:key="suspend_time"
+            android:title="@string/battery_stats_suspend_time"
+            android:selectable="false" />
+        <Preference
+            android:key="suspend_overhead"
+            android:title="@string/battery_stats_suspend_overhead"
+            android:selectable="false" />
+        <Preference
+            android:key="suspend_sleep_time"
+            android:title="@string/battery_stats_sleep_time"
+            android:selectable="false" />
+    </PreferenceCategory>
+</PreferenceScreen>

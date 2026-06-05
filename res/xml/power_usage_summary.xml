@@ -54,6 +54,13 @@
             settings:keywords="@string/keywords_battery_usage" />
 
         <Preference
+            android:fragment="com.android.settings.fuelgauge.batteryusage.DetailedBatteryStats"
+            android:key="detailed_battery_stats"
+            android:title="@string/detailed_battery_stats_title"
+            android:summary="@string/detailed_battery_stats_summary"
+            settings:keywords="@string/keywords_battery_usage" />
+
+        <Preference
             android:fragment="com.android.settings.fuelgauge.batterysaver.BatterySaverSettings"
             android:key="battery_saver_summary"
             android:title="@string/battery_saver"

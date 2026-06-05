@@ -845,4 +845,60 @@
 
     <!-- Ramping ringer page title -->
     <string name="ramping_ringer_title">Ramping ringer</string>
+
+    <!-- battery stats -->
+    <string name="detailed_battery_stats_title">Detailed battery stats</string>
+    <string name="detailed_battery_stats_summary">Screen, sleep, wakeup, and suspend stats</string>
+    <string name="battery_stats_screen_on">Screen on</string>
+    <string name="battery_stats_screen_off">Screen off</string>
+    <string name="battery_stats_duration">Duration</string>
+    <string name="battery_stats_battery_drained">Battery drained</string>
+    <string name="battery_stats_active_drain">Active drain</string>
+    <string name="battery_stats_idle_drain">Idle drain</string>
+    <string name="battery_stats_deep_sleep">Deep sleep</string>
+    <string name="battery_stats_awake">Awake</string>
+    <string name="battery_stats_components_estimated_power">Components estimated power use</string>
+    <string name="battery_stats_kernel_wakeups">Kernel wakeup sources</string>
+    <string name="battery_stats_raw_since_last_charge">Raw stats since last charge</string>
+    <string name="battery_stats_learned_capacity">Last learned battery capacity</string>
+    <string name="battery_stats_estimated_capacity">Estimated battery capacity</string>
+    <string name="battery_stats_time_on_battery">Time on battery</string>
+    <string name="battery_stats_uptime">Uptime</string>
+    <string name="battery_stats_suspend_stats">System suspend stats</string>
+    <string name="battery_stats_suspend_attempts">Suspend attempts</string>
+    <string name="battery_stats_suspend_time">Time suspended</string>
+    <string name="battery_stats_suspend_overhead">Suspend overhead</string>
+    <string name="battery_stats_sleep_time">Sleep wait time</string>
+    <string name="battery_stats_unavailable">Unavailable</string>
+    <string name="battery_stats_no_data">No data reported</string>
+    <string name="battery_stats_percent"><xliff:g id="percent" example="65">%1$d</xliff:g>%%</string>
+    <string name="battery_stats_time_percent"><xliff:g id="duration" example="12 hr 38 min">%1$s</xliff:g> (<xliff:g id="percent" example="85.6%">%2$s</xliff:g>)</string>
+    <string name="battery_stats_drain_rate"><xliff:g id="rate" example="1.49">%1$.2f</xliff:g>%% per hour</string>
+    <string name="battery_stats_capacity_mah"><xliff:g id="capacity" example="5000">%1$d</xliff:g> mAh</string>
+    <string name="battery_stats_power_mah"><xliff:g id="power" example="42.1">%1$.1f</xliff:g> mAh</string>
+    <string name="battery_stats_count_time"><xliff:g id="count" example="42">%1$d</xliff:g> times, <xliff:g id="duration" example="3 min 2 sec">%2$s</xliff:g></string>
+    <string name="battery_stats_suspend_summary"><xliff:g id="attempts" example="120">%1$d</xliff:g> attempts, <xliff:g id="failed" example="3">%2$d</xliff:g> failed, <xliff:g id="short" example="8">%3$d</xliff:g> short</string>
+    <string name="battery_stats_userspace_wakelocks">Userspace wakelocks</string>
+    <string name="battery_stats_alarm_wakeups_title">Alarm wakeups</string>
+    <string name="battery_stats_wakeup_reasons">Wakeup reasons</string>
+    <string name="battery_stats_wakelock_summary"><xliff:g id="duration" example="3 min 2 sec">%1$s</xliff:g> hold, <xliff:g id="count" example="42">%2$d</xliff:g> acquires</string>
+    <string name="battery_stats_alarm_wakeups"><xliff:g id="count" example="17">%1$d</xliff:g> wakeups</string>
+    <string name="battery_stats_tap_expand">Tap to expand</string>
+    <string name="battery_stats_tap_collapse">Tap to collapse</string>
+    <string name="battery_stats_header_summary"><xliff:g id="total">%1$s</xliff:g> · <xliff:g id="hint">%2$s</xliff:g></string>
+    <string name="battery_stats_components_total"><xliff:g id="mah">%1$.1f</xliff:g> mAh total</string>
+    <string name="battery_stats_kernel_total"><xliff:g id="count">%1$d</xliff:g> wakeups, <xliff:g id="time">%2$s</xliff:g></string>
+    <string name="battery_stats_wakelocks_total"><xliff:g id="count">%1$d</xliff:g> wakelocks, <xliff:g id="time">%2$s</xliff:g> held</string>
+    <string name="battery_stats_alarms_total"><xliff:g id="count">%1$d</xliff:g> alarms, <xliff:g id="wakeups">%2$d</xliff:g> wakeups</string>
+    <string name="battery_stats_reasons_total"><xliff:g id="count">%1$d</xliff:g> reasons, <xliff:g id="wakeups">%2$d</xliff:g> wakeups</string>
+    <string name="battery_stats_raw_total"><xliff:g id="mah">%1$d</xliff:g> mAh est. capacity</string>
+    <string name="battery_stats_reset">Reset stats</string>
+    <string name="battery_stats_reset_confirm">Clear all collected battery and wakeup statistics? This cannot be undone.</string>
+    <string name="battery_stats_prev_session">Previous session</string>
+    <string name="battery_stats_prev_session_none">Reset stats to record a session snapshot</string>
+    <string name="battery_stats_prev_screen_on">Screen on</string>
+    <string name="battery_stats_prev_screen_off">Screen off</string>
+    <string name="battery_stats_prev_recorded_at">Recorded at</string>
+    <string name="battery_stats_session_row"><xliff:g id="duration" example="4 hr 12 min">%1$s</xliff:g>, <xliff:g id="drain" example="32%% (1 420 mAh)">%2$s</xliff:g></string>
+    <string name="battery_stats_drain_pct_mah"><xliff:g id="pct" example="32">%1$d</xliff:g>%% (<xliff:g id="mah" example="1420">%2$d</xliff:g> mAh)</string>
 </resources>
