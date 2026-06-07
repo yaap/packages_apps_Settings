@@ -901,4 +901,8 @@
     <string name="battery_stats_prev_recorded_at">Recorded at</string>
     <string name="battery_stats_session_row"><xliff:g id="duration" example="4 hr 12 min">%1$s</xliff:g>, <xliff:g id="drain" example="32%% (1 420 mAh)">%2$s</xliff:g></string>
     <string name="battery_stats_drain_pct_mah"><xliff:g id="pct" example="32">%1$d</xliff:g>%% (<xliff:g id="mah" example="1420">%2$d</xliff:g> mAh)</string>
+    <string name="battery_info_notif_setting_title">Battery stats notification</string>
+    <string name="battery_info_notif_setting_summary">Show a persistent notification with realtime current, temperature, and screen on/off discharge stats</string>
+    <string name="battery_info_monitor_enable">Enable battery monitor notification</string>
+    <string name="battery_info_monitor_disable">Disable battery monitor notification</string>
 </resources>

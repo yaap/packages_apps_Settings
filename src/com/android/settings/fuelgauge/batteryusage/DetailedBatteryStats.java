@@ -31,6 +31,7 @@ import android.os.SuspendStats;
 import android.os.UidAlarmStats;
 import android.os.UidWakelockStats;
 import android.os.WakeupSourceStats;
+import android.provider.Settings;
 import android.util.ArrayMap;
 import android.util.Log;
 
@@ -64,6 +65,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class DetailedBatteryStats extends DashboardFragment {
     private static final String TAG = "DetailedBatteryStats";
     private static final int MENU_RESET_STATS = 1;
+    private static final int MENU_BATTERY_MONITOR = 2;
     private static final String SESSION_PREFS = "detailed_battery_session";
     private static final String PREF_SCREEN_ON_MS       = "prev_screen_on_ms";
     private static final String PREF_SCREEN_ON_PCT      = "prev_screen_on_pct";
@@ -129,6 +131,22 @@ public class DetailedBatteryStats extends DashboardFragment {
             menu.add(android.view.Menu.NONE, MENU_RESET_STATS,
                     android.view.Menu.NONE, R.string.battery_stats_reset)
                     .setShowAsAction(android.view.MenuItem.SHOW_AS_ACTION_NEVER);
+            final boolean monitorEnabled = isBatteryMonitorEnabled();
+            menu.add(android.view.Menu.NONE, MENU_BATTERY_MONITOR,
+                    android.view.Menu.NONE, monitorEnabled
+                            ? R.string.battery_info_monitor_disable
+                            : R.string.battery_info_monitor_enable)
+                    .setShowAsAction(android.view.MenuItem.SHOW_AS_ACTION_NEVER);
+        }
+
+        @Override
+        public void onPrepareMenu(@NonNull android.view.Menu menu) {
+            final android.view.MenuItem item = menu.findItem(MENU_BATTERY_MONITOR);
+            if (item != null) {
+                item.setTitle(isBatteryMonitorEnabled()
+                        ? R.string.battery_info_monitor_disable
+                        : R.string.battery_info_monitor_enable);
+            }
         }
 
         @Override
@@ -152,6 +170,14 @@ public class DetailedBatteryStats extends DashboardFragment {
                                 }))
                         .setNegativeButton(android.R.string.cancel, null)
                         .show();
+                return true;
+            }
+            if (item.getItemId() == MENU_BATTERY_MONITOR) {
+                final boolean nowEnabled = !isBatteryMonitorEnabled();
+                Settings.System.putInt(
+                        requireContext().getContentResolver(),
+                        Settings.System.BATTERY_INFO_NOTIFICATION,
+                        nowEnabled ? 1 : 0);
                 return true;
             }
             return false;
@@ -777,6 +803,12 @@ public class DetailedBatteryStats extends DashboardFragment {
             if (part.length() > 1) title.append(part.substring(1));
         }
         return title.toString();
+    }
+
+
+    private boolean isBatteryMonitorEnabled() {
+        return Settings.System.getInt(requireContext().getContentResolver(),
+                Settings.System.BATTERY_INFO_NOTIFICATION, 0) == 1;
     }
 
     public static final BaseSearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
