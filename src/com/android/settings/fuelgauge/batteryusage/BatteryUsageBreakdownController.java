@@ -460,6 +460,7 @@ public class BatteryUsageBreakdownController extends BasePreferenceController
                         entry.isSystemEntry(),
                         entry.mForegroundUsageTimeInMs,
                         entry.mBackgroundUsageTimeInMs + entry.mForegroundServiceUsageTimeInMs,
-                        entry.mScreenOnTimeInMs));
+                        entry.mScreenOnTimeInMs,
+                        entry.getPackageName()));
     }
 }
