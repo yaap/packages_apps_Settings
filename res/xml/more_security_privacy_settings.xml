@@ -146,6 +146,17 @@
         settings:controller="com.android.settings.security.PanicButtonPreferenceController" />
 
     <Preference
+        android:order="220"
+        android:key="duress_password"
+        android:title="@string/duress_pwd_pref_title"
+        android:summary="@string/duress_pwd_description"
+        settings:controller="com.android.settings.security.DuressPasswordPreferenceController">
+        <intent
+            android:action="com.android.settings.DURESS_PASSWORD_SETTINGS"
+            android:targetPackage="com.android.settings" />
+    </Preference>
+
+    <Preference
         android:order="230"
         android:key="content_protection_preference"
         android:title="@string/content_protection_preference_title"
