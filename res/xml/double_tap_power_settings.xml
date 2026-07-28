@@ -18,6 +18,7 @@
 <PreferenceScreen
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:settings="http://schemas.android.com/apk/res-auto"
+    android:key="api_double_tap_power_screen"
     android:title="@string/double_tap_power_title">
     <com.android.settingslib.widget.IllustrationPreference
         android:key="gesture_double_tap_power_video"
@@ -26,7 +27,7 @@
         settings:controller="com.android.settings.gestures.DoubleTapPowerIllustrationPreferenceController"/>
 
     <com.android.settingslib.widget.MainSwitchPreference
-        android:key="gesture_double_tap_power_enabled_main_switch"
+        android:key="double_tap_power_button_gesture_enabled"
         android:title="@string/double_tap_power_enabled"
         settings:keywords="@string/keywords_double_tap_power"
         settings:controller="com.android.settings.gestures.DoubleTapPowerMainSwitchPreferenceController"/>
@@ -40,6 +41,7 @@
         <com.android.settingslib.widget.SelectorWithWidgetPreference
             android:key="gesture_double_power_tap_wallet"
             android:title="@string/double_tap_power_wallet_action_title"
+            android:enabled="false"
             settings:keywords="@string/keywords_double_tap_power_wallet_action"
             settings:controller="com.android.settings.gestures.DoubleTapPowerForWalletPreferenceController"/>
     </PreferenceCategory>

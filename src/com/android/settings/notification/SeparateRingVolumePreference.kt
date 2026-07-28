@@ -49,8 +49,10 @@ import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.NoOpKeyedObservable
 import com.android.settingslib.datastore.Permissions
 import com.android.settingslib.datastore.and
+import com.android.settingslib.metadata.HERO_SET
 import com.android.settingslib.metadata.IntRangeValuePreference
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceIconProvider
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
@@ -76,17 +78,28 @@ class SeparateRingVolumePreference(private val audioHelper: AudioHelper) :
     override val key: String
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.separate_ring_volume_purpose
+
     override val title: Int
         get() = R.string.separate_ring_volume_option_title
 
     override val preferenceActionMetrics: Int
         get() = ACTION_RING_VOLUME
 
-    override fun tags(context: Context) = arrayOf(KEY_RING_VOLUME)
+    override fun tags(context: Context) = arrayOf(KEY_RING_VOLUME, HERO_SET)
 
     override fun getIcon(context: Context) = context.getIconRes()
 
+    override val availabilityDescription = "The device must support separate volume controls."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
+
     override fun isAvailable(context: Context) = !audioHelper.isSingleVolume
+
+    override fun getEnabledDescription(): String = "This setting must not be restricted by a device administrator."
+
+    override fun getEnabledStability() = PreconditionStability.UNSTABLE
 
     override fun isEnabled(context: Context) = super<PreferenceRestrictionMixin>.isEnabled(context)
 
@@ -121,6 +134,8 @@ class SeparateRingVolumePreference(private val audioHelper: AudioHelper) :
 
     override fun getWritePermit(context: Context, value: Int?, callingPid: Int, callingUid: Int) =
         ReadWritePermit.ALLOW
+
+    override val supportsWrite = true
 
     override val sensitivityLevel
         get() = SensitivityLevel.NO_SENSITIVITY

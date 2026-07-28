@@ -31,19 +31,27 @@ import com.android.settings.dashboard.profileselector.ProfileSelectFragment
 import com.android.settings.flags.Flags
 import com.android.settingslib.applications.RecentAppOpsAccess
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
 import com.android.settingslib.metadata.PreferenceTitleProvider
 import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.preferenceHierarchy
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 import com.android.settingslib.utils.StringUtil
 import kotlinx.coroutines.CoroutineScope
 
 @ProvidePreferenceScreen(RecentLocationAccessScreen.KEY)
-open class RecentLocationAccessScreen: PreferenceScreenMixin, PreferenceAvailabilityProvider {
+open class RecentLocationAccessScreen : PreferenceScreenMixin, PreferenceAvailabilityProvider {
+    override fun tags(context: Context) =
+        arrayOf(APP_FUNCTION_UNCATEGORIZED, TAG_DEVICE_STATE_SCREEN)
 
     override val key: String
         get() = KEY
+
+    // TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.device_state_all_recent_location_access_purpose
 
     override val title: Int
         get() = R.string.location_category_recent_location_access
@@ -53,9 +61,11 @@ open class RecentLocationAccessScreen: PreferenceScreenMixin, PreferenceAvailabi
 
     override fun getMetricsCategory() = SettingsEnums.LOCATION_RECENT_ACCESS_ALL
 
-    override fun tags(context: Context) = arrayOf(TAG_DEVICE_STATE_SCREEN)
+    override fun isFlagEnabled(context: Context) = Flags.catalystMigration26q2()
 
-    override fun isFlagEnabled(context: Context) = Flags.catalystLocationSettings()
+    override val availabilityDescription = "Location must be enabled."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
 
     override fun isAvailable(context: Context) = LocationEnabler(context, null, null).isEnabled(
         Settings.Secure.getInt(
@@ -94,10 +104,13 @@ open class RecentLocationAccessScreen: PreferenceScreenMixin, PreferenceAvailabi
 private class LocationAccessAppPreference(
     private val access: RecentAppOpsAccess.Access,
     private val index: Int
-): PreferenceMetadata, PreferenceTitleProvider, PreferenceSummaryProvider {
+) : PreferenceMetadata, PreferenceTitleProvider, PreferenceSummaryProvider {
 
     override val key: String
         get() = "recent_app_location_access_$index"
+
+    override val purpose: Int
+        get() = R.string.recent_app_location_access_purpose
 
     override fun getTitle(context: Context): CharSequence? = access.label
 

@@ -51,6 +51,7 @@ import android.net.wifi.SoftApConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.UserManager;
+import android.platform.test.annotations.DisableFlags;
 import android.platform.test.flag.junit.SetFlagsRule;
 import android.widget.TextView;
 
@@ -208,6 +209,18 @@ public class WifiTetherSettingsTest {
         mSettings.onCreate(null);
 
         assertThat(mSettings.mWifiTetherViewModel).isNull();
+    }
+
+    @Test
+    @DisableFlags({com.android.settings.flags.Flags.FLAG_ENABLE_WIFI_MULTIUSER,
+            com.android.settings.connectivity.Flags.FLAG_WIFI_MULTIUSER})
+    @Config(shadows = ShadowRestrictedDashboardFragment.class)
+    public void onCreate_isNotMultiUser_setIfOnlyAvailableForAdmins() {
+        when(mWifiRestriction.isHotspotAvailable(mContext)).thenReturn(false);
+
+        mSettings.onCreate(null);
+
+        verify(mSettings).setIfOnlyAvailableForAdmins(true);
     }
 
     @Test

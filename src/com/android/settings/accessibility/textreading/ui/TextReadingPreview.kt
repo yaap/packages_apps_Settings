@@ -26,9 +26,11 @@ import com.android.settings.accessibility.textreading.data.DisplaySize
 import com.android.settings.accessibility.textreading.data.FontSize
 import com.android.settings.display.PreviewPagerAdapter
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceMetadata
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.preference.PreferenceBinding
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.collect
@@ -46,9 +48,14 @@ internal class TextReadingPreview(
     override val key: String
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.preview_purpose
+
     private var previewPagerAdapter: PreviewPagerAdapter? = null
     private val displaySize: Flow<DisplaySize> by lazy { displaySizeProvider.invoke() }
     private val fontSize: Flow<FontSize> by lazy { fontSizeProvider.invoke() }
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
 
     override fun createWidget(context: Context) =
         TextReadingPreviewPreference(context, /* attrs= */ null).apply { isSelectable = false }
@@ -176,6 +183,10 @@ internal class TextReadingPreview(
             config
         }
     }
+
+    override val availabilityDescription = UI_ONLY_PREFERENCE
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context): Boolean {
         // TODO(b/428700479): Preview preference is hidden in non default displays as preview is

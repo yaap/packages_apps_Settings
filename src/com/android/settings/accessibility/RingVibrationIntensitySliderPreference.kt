@@ -19,6 +19,8 @@ import android.content.Context
 import android.os.VibrationAttributes
 import android.provider.Settings
 import com.android.settings.R
+import com.android.settingslib.metadata.HERO_SET
+import com.android.settingslib.metadata.SensitivityLevel
 
 /** Accessibility settings for ring vibration, using an intensity slider. */
 // LINT.IfChange
@@ -26,11 +28,17 @@ class RingVibrationIntensitySliderPreference(context: Context) :
     VibrationIntensitySliderPreference(
         context = context,
         key = KEY,
+        purpose = R.string.ring_vibration_intensity_purpose,
         vibrationUsage = VibrationAttributes.USAGE_RINGTONE,
         title = R.string.accessibility_ring_vibration_title,
     ) {
     override val keywords: Int
         get() = R.string.keywords_ring_vibration
+
+    override val sensitivityLevel: Int
+        get() = SensitivityLevel.NO_SENSITIVITY
+
+    override fun tags(context: Context) = arrayOf(HERO_SET)
 
     companion object {
         const val KEY = Settings.System.RING_VIBRATION_INTENSITY

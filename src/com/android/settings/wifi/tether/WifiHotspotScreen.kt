@@ -53,6 +53,7 @@ import com.android.settingslib.datastore.KeyedObserver
 import com.android.settingslib.datastore.Permissions
 import com.android.settingslib.metadata.BooleanValuePreference
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceChangeReason
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
@@ -60,6 +61,7 @@ import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.ReadWritePermit
 import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.metadata.preferenceHierarchy
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_MOBILE_DATA
 import com.android.settingslib.wifi.WifiUtils.Companion.getWifiTetherSummaryForConnectedDevices
 import kotlinx.coroutines.CoroutineScope
 
@@ -73,12 +75,17 @@ open class WifiHotspotScreen(context: Context) :
     PreferenceAvailabilityProvider,
     PreferenceSummaryProvider,
     PreferenceRestrictionMixin {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_MOBILE_DATA, KEY_WIFI_HOTSPOT)
 
     private val wifiHotspotStore =
         WifiHotspotStore(context, DataSaverMainSwitchPreference.createDataStore(context))
 
     override val key: String
         get() = KEY
+
+    // TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.wifi_tether_purpose
 
     override val title: Int
         get() = R.string.wifi_hotspot_checkbox_text
@@ -108,12 +115,14 @@ open class WifiHotspotScreen(context: Context) :
     override val preferenceActionMetrics: Int
         get() = ACTION_WIFI_HOTSPOT
 
-    override fun tags(context: Context) = arrayOf(KEY_WIFI_HOTSPOT)
+    override val availabilityDescription = "The device must support wifi hotspot."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context) =
         canShowWifiHotspot(context) &&
-                TetherUtil.isTetherAvailable(context) &&
-                !Utils.isMonkeyRunning()
+            TetherUtil.isTetherAvailable(context) &&
+            !Utils.isMonkeyRunning()
 
     override fun getSummary(context: Context): CharSequence? =
         when (context.wifiApState) {
@@ -140,9 +149,13 @@ open class WifiHotspotScreen(context: Context) :
                 }
         }
 
+    override fun getEnabledDescription(): String = "Data saver must be turned off and this setting must not be restricted by a device administrator."
+
+    override fun getEnabledStability() = PreconditionStability.UNSTABLE
+
     override fun isEnabled(context: Context) =
         wifiHotspotStore.dataSaverStore.getBoolean(DATA_SAVER_KEY) != true &&
-                super<PreferenceRestrictionMixin>.isEnabled(context)
+            super<PreferenceRestrictionMixin>.isEnabled(context)
 
     override val restrictionKeys
         get() = arrayOf(UserManager.DISALLOW_WIFI_TETHERING)
@@ -159,8 +172,10 @@ open class WifiHotspotScreen(context: Context) :
     override fun getWritePermit(context: Context, callingPid: Int, callingUid: Int) =
         ReadWritePermit.ALLOW
 
+    override val supportsWrite = true
+
     override val sensitivityLevel
-        get() = SensitivityLevel.HIGH_SENSITIVITY
+        get() = SensitivityLevel.MUST_PROVIDE_UNDO
 
     override fun storage(context: Context): KeyValueStore = wifiHotspotStore
 
@@ -186,7 +201,7 @@ open class WifiHotspotScreen(context: Context) :
             val wifiApState = context.wifiApState
             val value =
                 wifiApState == WifiManager.WIFI_AP_STATE_ENABLING ||
-                        wifiApState == WifiManager.WIFI_AP_STATE_ENABLED
+                    wifiApState == WifiManager.WIFI_AP_STATE_ENABLED
             return value as T?
         }
 

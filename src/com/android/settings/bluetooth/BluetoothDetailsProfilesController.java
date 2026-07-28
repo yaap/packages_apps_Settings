@@ -17,6 +17,8 @@
 package com.android.settings.bluetooth;
 
 import static android.bluetooth.BluetoothDevice.METADATA_MODEL_NAME;
+import static android.bluetooth.BluetoothProfile.CONNECTION_POLICY_UNKNOWN;
+import static android.content.pm.PackageManager.FEATURE_PC;
 
 import android.app.settings.SettingsEnums;
 import android.bluetooth.BluetoothDevice;
@@ -29,14 +31,13 @@ import android.util.Log;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.preference.Preference;
-import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceFragmentCompat;
+import androidx.preference.PreferenceGroup;
 import androidx.preference.PreferenceScreen;
 import androidx.preference.SwitchPreferenceCompat;
 import androidx.preference.TwoStatePreference;
 
 import com.android.settings.R;
-import com.android.settings.flags.Flags;
 import com.android.settings.overlay.FeatureFactory;
 import com.android.settingslib.bluetooth.A2dpProfile;
 import com.android.settingslib.bluetooth.BluetoothUtils;
@@ -46,8 +47,10 @@ import com.android.settingslib.bluetooth.LeAudioProfile;
 import com.android.settingslib.bluetooth.LocalBluetoothManager;
 import com.android.settingslib.bluetooth.LocalBluetoothProfile;
 import com.android.settingslib.bluetooth.LocalBluetoothProfileManager;
+import com.android.settingslib.bluetooth.MapClientProfile;
 import com.android.settingslib.bluetooth.MapProfile;
 import com.android.settingslib.bluetooth.PanProfile;
+import com.android.settingslib.bluetooth.PbapClientProfile;
 import com.android.settingslib.bluetooth.PbapServerProfile;
 import com.android.settingslib.core.lifecycle.Lifecycle;
 import com.android.settingslib.utils.ThreadUtils;
@@ -103,7 +106,7 @@ public class BluetoothDetailsProfilesController extends BluetoothDetailsControll
     private boolean mHasExtraSpace;
 
     @VisibleForTesting
-    PreferenceCategory mProfilesContainer;
+    PreferenceGroup mProfilesContainer;
 
     public BluetoothDetailsProfilesController(
             Context context,
@@ -129,14 +132,7 @@ public class BluetoothDetailsProfilesController extends BluetoothDetailsControll
 
     @Override
     protected void init(PreferenceScreen screen) {
-        mProfilesContainer = (PreferenceCategory) screen.findPreference(getPreferenceKey());
-        if (Flags.enableBluetoothSettingsExpressiveDesign()) {
-            mProfilesContainer.setLayoutResource(
-                    com.android.settingslib.widget.category.R.layout
-                            .settingslib_expressive_untitled_preference_category);
-        } else {
-            mProfilesContainer.setLayoutResource(R.layout.preference_bluetooth_profile_category);
-        }
+        mProfilesContainer = screen.findPreference(getPreferenceKey());
         // Call refresh here even though it will get called later in onResume, to avoid the
         // list of switches appearing to "pop" into the page.
         refresh();
@@ -203,7 +199,7 @@ public class BluetoothDetailsProfilesController extends BluetoothDetailsControll
 
         if (profile instanceof LeAudioProfile) {
             boolean showLeAudioToggle = mIsLeAudioToggleEnabled;
-            if (Flags.hideLeAudioToggleForLeAudioOnlyDevice() && mIsLeAudioOnlyDevice) {
+            if (mIsLeAudioOnlyDevice) {
                 showLeAudioToggle = false;
                 Log.d(
                         TAG,
@@ -364,6 +360,20 @@ public class BluetoothDetailsProfilesController extends BluetoothDetailsControll
             result.add(mapProfile);
         }
 
+        // On desktop, only show PBAP/MAP client toggles if explicitly set by 1p apps.
+        if (mContext.getPackageManager().hasSystemFeature(FEATURE_PC)) {
+            final PbapClientProfile pcp = mManager.getProfileManager().getPbapClientProfile();
+            if (pcp != null && result.contains(pcp)
+                    && pcp.getConnectionPolicy(device) == CONNECTION_POLICY_UNKNOWN) {
+                result.remove(pcp);
+            }
+            final MapClientProfile mcp = mManager.getProfileManager().getMapClientProfile();
+            if (mcp != null && result.contains(mcp)
+                    && mcp.getConnectionPolicy(device) == CONNECTION_POLICY_UNKNOWN) {
+                result.remove(mcp);
+            }
+        }
+
         // Removes phone calls & media audio toggles for dual mode devices
         boolean leAudioSupported = result.contains(
                 mManager.getProfileManager().getLeAudioProfile());
@@ -386,9 +396,7 @@ public class BluetoothDetailsProfilesController extends BluetoothDetailsControll
                 result.remove(mManager.getProfileManager().getLeAudioProfile());
             }
         }
-        if (leAudioSupported && !classicAudioSupported && !hearingAidSupported) {
-            mIsLeAudioOnlyDevice = true;
-        }
+        mIsLeAudioOnlyDevice = leAudioSupported && !classicAudioSupported && !hearingAidSupported;
         Log.d(TAG, "getProfiles:Map:" + mProfileDeviceMap);
         return result;
     }
@@ -557,23 +565,6 @@ public class BluetoothDetailsProfilesController extends BluetoothDetailsControll
             }
         }
 
-        if (!Flags.enableBluetoothSettingsExpressiveDesign()) {
-            Preference preference = mProfilesContainer.findPreference(KEY_BOTTOM_PREFERENCE);
-            if (preference == null) {
-                preference = new Preference(mContext);
-                if (mHasExtraSpace) {
-                    preference.setLayoutResource(R.layout.preference_bluetooth_profile_category);
-                } else {
-                    preference.setLayoutResource(R.layout.preference_category_bluetooth_no_padding);
-                }
-                preference.setEnabled(false);
-                preference.setKey(KEY_BOTTOM_PREFERENCE);
-                preference.setOrder(ORDINAL);
-                preference.setSelectable(false);
-                mProfilesContainer.addPreference(preference);
-            }
-        }
-
         Set<String> additionalInvisibleProfiles = mAdditionalInvisibleProfiles.get();
         HashSet<String> combinedInvisibleProfiles = new HashSet<>(mInvisibleProfiles);
         if (additionalInvisibleProfiles != null) {
@@ -587,6 +578,7 @@ public class BluetoothDetailsProfilesController extends BluetoothDetailsControll
             hasVisibleProfile = hasVisibleProfile || pref.isVisible();
         }
         mProfilesContainer.setVisible(hasVisibleProfile);
+        Utils.updateVisibilityAccordingToChildren(mProfilesContainer.getParent());
     }
 
     @Override

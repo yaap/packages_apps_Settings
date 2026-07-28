@@ -131,6 +131,8 @@ import com.android.settings.gestures.OneHandedSettings;
 import com.android.settings.gestures.PickupGestureSettings;
 import com.android.settings.gestures.PowerMenuSettings;
 import com.android.settings.gestures.SystemNavigationGestureSettings;
+import com.android.settings.input.gamecontroller.GameControllerFragment;
+import com.android.settings.input.gamecontroller.GameControllerListFragment;
 import com.android.settings.inputmethod.AvailableVirtualKeyboardFragment;
 import com.android.settings.inputmethod.KeyboardSettings;
 import com.android.settings.inputmethod.ModifierKeysSettings;
@@ -141,7 +143,6 @@ import com.android.settings.inputmethod.TouchpadAndMouseSettings;
 import com.android.settings.inputmethod.UserDictionaryList;
 import com.android.settings.inputmethod.UserDictionarySettings;
 import com.android.settings.language.LanguageAndRegionSettings;
-import com.android.settings.language.LanguageSettings;
 import com.android.settings.localepicker.AppLocalePickerFragment;
 import com.android.settings.localepicker.LocaleListEditor;
 import com.android.settings.localepicker.SystemLocalePickerFragment;
@@ -159,7 +160,6 @@ import com.android.settings.network.telephony.MobileNetworkSettings;
 import com.android.settings.network.telephony.NetworkSelectSettings;
 import com.android.settings.network.telephony.satellite.SatelliteSetting;
 import com.android.settings.network.tether.TetherSettings;
-import com.android.settings.nfc.PaymentSettings;
 import com.android.settings.notification.BubbleNotificationSettings;
 import com.android.settings.notification.BundlePreferenceFragment;
 import com.android.settings.notification.ConfigureNotificationSettings;
@@ -193,10 +193,10 @@ import com.android.settings.regionalpreferences.FirstDayOfWeekItemFragment;
 import com.android.settings.regionalpreferences.MeasurementSystemItemFragment;
 import com.android.settings.regionalpreferences.NumberingSystemLocaleListFragment;
 import com.android.settings.regionalpreferences.RegionPickerFragment;
-import com.android.settings.regionalpreferences.RegionalPreferencesEntriesFragment;
 import com.android.settings.regionalpreferences.TemperatureUnitFragment;
 import com.android.settings.safetycenter.MoreSecurityPrivacyFragment;
 import com.android.settings.safetycenter.ui.SafetyCenterFragment;
+import com.android.settings.safetycenter.ui.SafetyCenterQsFragment;
 import com.android.settings.security.ContentProtectionPreferenceFragment;
 import com.android.settings.security.LockscreenDashboardFragment;
 import com.android.settings.security.MemtagPage;
@@ -253,8 +253,9 @@ public class SettingsGateway {
             LocaleListEditor.class.getName(),
             LanguageAndRegionSettings.class.getName(),
             AvailableVirtualKeyboardFragment.class.getName(),
-            LanguageSettings.class.getName(),
             KeyboardSettings.class.getName(),
+            GameControllerFragment.class.getName(),
+            GameControllerListFragment.class.getName(),
             ModifierKeysSettings.class.getName(),
             NewKeyboardLayoutEnabledLocalesFragment.class.getName(),
             TouchpadAndMouseSettings.class.getName(),
@@ -323,7 +324,6 @@ public class SettingsGateway {
             PrintSettingsFragment.class.getName(),
             PrintJobSettingsFragment.class.getName(),
             TrustedCredentialsSettings.class.getName(),
-            PaymentSettings.class.getName(),
             PhysicalKeyboardFragment.class.getName(),
             SoundSettings.class.getName(),
             ConversationListSettings.class.getName(),
@@ -407,7 +407,6 @@ public class SettingsGateway {
             ColorContrastFragment.class.getName(),
             LongBackgroundTasksDetails.class.getName(),
             RegionPickerFragment.class.getName(),
-            RegionalPreferencesEntriesFragment.class.getName(),
             TemperatureUnitFragment.class.getName(),
             FirstDayOfWeekItemFragment.class.getName(),
             MeasurementSystemItemFragment.class.getName(),
@@ -435,6 +434,7 @@ public class SettingsGateway {
             SupervisionDashboardFragment.class.getName(),
             SummarizationPreferenceFragment.class.getName(),
             SafetyCenterFragment.class.getName(),
+            SafetyCenterQsFragment.class.getName(),
             GamingModeFragment.class.getName(),
             WifiTetherClientManager.class.getName(),
             AdbWirelessDebuggingFragment.class.getName(),
@@ -480,7 +480,6 @@ public class SettingsGateway {
             Settings.AdaptiveBrightnessActivity.class.getName(),
             // Home page > Security & screen lock
             Settings.LocationSettingsActivity.class.getName(),
-            Settings.LanguageSettingsActivity.class.getName(),
             Settings.LanguageAndRegionSettingsActivity.class.getName(),
             Settings.KeyboardSettingsActivity.class.getName(),
             Settings.DateTimeSettingsActivity.class.getName(),

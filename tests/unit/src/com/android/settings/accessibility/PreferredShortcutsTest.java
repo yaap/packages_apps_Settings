@@ -16,9 +16,12 @@
 
 package com.android.settings.accessibility;
 
+import static android.view.WindowManagerPolicyConstants.NAV_BAR_MODE_3BUTTON;
+
 import static com.android.internal.accessibility.AccessibilityShortcutController.COLOR_INVERSION_COMPONENT_NAME;
 import static com.android.internal.accessibility.AccessibilityShortcutController.DALTONIZER_COMPONENT_NAME;
 import static com.android.internal.accessibility.AccessibilityShortcutController.MAGNIFICATION_CONTROLLER_NAME;
+import static com.android.internal.accessibility.common.ShortcutConstants.UserShortcutType.GESTURE;
 import static com.android.internal.accessibility.common.ShortcutConstants.UserShortcutType.SOFTWARE;
 
 import static com.google.common.truth.Truth.assertThat;
@@ -26,6 +29,9 @@ import static com.google.common.truth.Truth.assertThat;
 import android.content.ComponentName;
 import android.content.ContentResolver;
 import android.content.Context;
+import android.platform.test.annotations.DisableFlags;
+import android.platform.test.annotations.EnableFlags;
+import android.platform.test.flag.junit.SetFlagsRule;
 import android.provider.Settings;
 
 import androidx.test.core.app.ApplicationProvider;
@@ -34,9 +40,11 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import com.android.internal.accessibility.common.ShortcutConstants;
 import com.android.internal.accessibility.common.ShortcutConstants.UserShortcutType;
 import com.android.internal.accessibility.util.ShortcutUtils;
+import com.android.server.accessibility.Flags;
 
 import org.junit.AfterClass;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -45,6 +53,8 @@ import java.util.Set;
 /** Tests for {@link PreferredShortcuts} */
 @RunWith(AndroidJUnit4.class)
 public class PreferredShortcutsTest {
+    @Rule
+    public SetFlagsRule setFlagsRule = new SetFlagsRule();
 
     private static final String PACKAGE_NAME_1 = "com.test1.example";
     private static final String CLASS_NAME_1 = PACKAGE_NAME_1 + ".test1";
@@ -126,10 +136,8 @@ public class PreferredShortcutsTest {
         PreferredShortcuts.saveUserShortcutType(mContext,
                 new PreferredShortcut(MAGNIFICATION_CONTROLLER_NAME, expectedShortcutTypes));
 
-
         PreferredShortcuts.updatePreferredShortcutsFromSettings(mContext,
                 Set.of(MAGNIFICATION_CONTROLLER_NAME));
-
 
         assertThat(
                 PreferredShortcuts.retrieveUserShortcutType(
@@ -201,9 +209,73 @@ public class PreferredShortcutsTest {
                 .isEqualTo(UserShortcutType.HARDWARE);
     }
 
+    @DisableFlags(Flags.FLAG_ENABLE_KEY_GESTURE_SHORTCUT_SETTINGS)
+    @Test
+    public void retrieveUserShortcutType_keyboardPreferred_flagOff_returnSpecifiedDefault() {
+        String target = COMPONENT_NAME_1.flattenToString();
+        final PreferredShortcut shortcut = new PreferredShortcut(
+                COMPONENT_NAME_1.flattenToString(),
+                UserShortcutType.KEY_GESTURE);
+        PreferredShortcuts.saveUserShortcutType(mContext, shortcut);
+
+        assertThat(PreferredShortcuts.retrieveUserShortcutType(mContext, target,
+                UserShortcutType.SOFTWARE))
+                .isEqualTo(UserShortcutType.SOFTWARE);
+    }
+
+    @DisableFlags(Flags.FLAG_ENABLE_KEY_GESTURE_SHORTCUT_SETTINGS)
+    @Test
+    public void retrieveUserShortcutType_keyboardHardwarePreferred_flagOff_returnHardware() {
+        String target = COMPONENT_NAME_1.flattenToString();
+        final PreferredShortcut shortcut1 = new PreferredShortcut(
+                COMPONENT_NAME_1.flattenToString(),
+                UserShortcutType.KEY_GESTURE);
+        PreferredShortcuts.saveUserShortcutType(mContext, shortcut1);
+        final PreferredShortcut shortcut2 = new PreferredShortcut(
+                COMPONENT_NAME_1.flattenToString(),
+                UserShortcutType.HARDWARE);
+        PreferredShortcuts.saveUserShortcutType(mContext, shortcut2);
+
+        assertThat(PreferredShortcuts.retrieveUserShortcutType(mContext, target,
+                UserShortcutType.SOFTWARE))
+                .isEqualTo(UserShortcutType.HARDWARE);
+    }
+
+    @DisableFlags(com.android.settings.accessibility.Flags
+            .FLAG_PREFERRED_SHORTCUT_FILTERS_NAVIGATION_MODE)
+    @Test
+    public void retrieveUserShortcutType_preferGesture_buttonNav_flagOff_returnsGesture() {
+        String target = COMPONENT_NAME_1.flattenToString();
+        final PreferredShortcut shortcut = new PreferredShortcut(target, GESTURE);
+        PreferredShortcuts.saveUserShortcutType(mContext, shortcut);
+
+        Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                Settings.Secure.NAVIGATION_MODE, NAV_BAR_MODE_3BUTTON, mContext.getUserId());
+
+        assertThat(PreferredShortcuts.retrieveUserShortcutType(mContext, target, GESTURE))
+                .isEqualTo(GESTURE);
+    }
+
+    @EnableFlags(com.android.settings.accessibility.Flags
+            .FLAG_PREFERRED_SHORTCUT_FILTERS_NAVIGATION_MODE)
+    @Test
+    public void retrieveUserShortcutType_preferGesture_buttonNav_returnsSoftware() {
+        String target = COMPONENT_NAME_1.flattenToString();
+        final PreferredShortcut shortcut = new PreferredShortcut(target, GESTURE);
+        PreferredShortcuts.saveUserShortcutType(mContext, shortcut);
+
+        Settings.Secure.putIntForUser(mContext.getContentResolver(),
+                Settings.Secure.NAVIGATION_MODE, NAV_BAR_MODE_3BUTTON, mContext.getUserId());
+
+        assertThat(PreferredShortcuts.retrieveUserShortcutType(mContext, target, GESTURE))
+                .isEqualTo(SOFTWARE);
+    }
+
     private static void clearShortcuts() {
         Settings.Secure.putString(sContentResolver,
                 Settings.Secure.ACCESSIBILITY_BUTTON_TARGETS, "");
+        Settings.Secure.putString(sContentResolver,
+                Settings.Secure.ACCESSIBILITY_KEY_GESTURE_TARGETS, "");
         Settings.Secure.putString(sContentResolver,
                 Settings.Secure.ACCESSIBILITY_SHORTCUT_TARGET_SERVICE, "");
         Settings.Secure.putString(sContentResolver,
@@ -211,10 +283,6 @@ public class PreferredShortcutsTest {
         Settings.Secure.putInt(
                 sContentResolver,
                 Settings.Secure.ACCESSIBILITY_DISPLAY_MAGNIFICATION_ENABLED,
-                AccessibilityUtil.State.OFF);
-        Settings.Secure.putInt(
-                sContentResolver,
-                Settings.Secure.ACCESSIBILITY_MAGNIFICATION_TWO_FINGER_TRIPLE_TAP_ENABLED,
                 AccessibilityUtil.State.OFF);
 
         PreferredShortcuts.clearPreferredShortcuts(ApplicationProvider.getApplicationContext());

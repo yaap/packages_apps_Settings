@@ -34,6 +34,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+// LINT.IfChange
 @SearchIndexable
 public class PickupGestureSettings extends DashboardFragment {
 
@@ -87,3 +88,4 @@ public class PickupGestureSettings extends DashboardFragment {
             new BaseSearchIndexProvider(R.xml.pick_up_gesture_settings);
 
 }
+// LINT.ThenChange(PickupGestureApiScreen.kt)

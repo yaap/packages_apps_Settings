@@ -23,9 +23,9 @@ import com.android.internal.R.bool.config_dozeSupportsAodWallpaper
 import com.android.settings.R
 import com.android.settingslib.datastore.SettingsSecureStore
 import com.android.settingslib.metadata.PreferenceMetadata
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.preference.PreferenceBinding
 import com.android.settingslib.widget.IllustrationPreference
-import com.android.systemui.shared.Flags.ambientAod
 
 class AmbientDisplayIllustration(context: Context) : PreferenceMetadata, PreferenceBinding {
 
@@ -36,8 +36,13 @@ class AmbientDisplayIllustration(context: Context) : PreferenceMetadata, Prefere
     override val key: String
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.ambient_display_illustration_purpose
+
     override val indexable
         get() = false
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
 
     override fun createWidget(context: Context) = IllustrationPreference(context)
 
@@ -70,6 +75,6 @@ class AmbientDisplayIllustration(context: Context) : PreferenceMetadata, Prefere
         const val KEY = "ambient_display_illustration"
 
         private val Context.isAmbientWallpaperOptionsAvailable: Boolean
-            get() = ambientAod() && resources.getBoolean(config_dozeSupportsAodWallpaper)
+            get() = resources.getBoolean(config_dozeSupportsAodWallpaper)
     }
 }

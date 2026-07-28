@@ -23,12 +23,17 @@ import android.telephony.euicc.EuiccManager
 import androidx.preference.Preference
 import com.android.settings.R
 import com.android.settings.Utils
+import com.android.settings.deviceinfo.PhoneNumberUtil
+import com.android.settingslib.datastore.KeyValueStore
+import com.android.settingslib.metadata.PersistentPreference
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
 import com.android.settingslib.metadata.PreferenceTitleProvider
+import com.android.settingslib.metadata.SensitivityLevel
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.preference.PreferenceBinding
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -38,6 +43,7 @@ import kotlinx.coroutines.withContext
 /** Preference to show EID information. */
 // LINT.IfChange
 class SimEidPreference(private val context: Context) :
+    PersistentPreference<String>,
     PreferenceMetadata,
     PreferenceBinding,
     PreferenceAvailabilityProvider,
@@ -51,12 +57,27 @@ class SimEidPreference(private val context: Context) :
     override val key
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.eid_info_purpose
+
+    override val availabilityDescription =
+        "The user must be an admin user and the device must be mobile data capable or voice capable. " +
+            "The device must also have an EID."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
+
     override fun isAvailable(context: Context): Boolean =
         context.applicationContext.getSystemService(UserManager::class.java)?.isAdminUser == true &&
             (Utils.isMobileDataCapable(context) || Utils.isVoiceCapable(context)) &&
             eidMetadata?.eid?.isNotEmpty() == true
 
     override fun getTitle(context: Context): CharSequence? = eidMetadata.getTitle(context)
+
+    override val supportsWrite = false
+
+    override val valueType = String::class.javaObjectType
+
+    override fun storage(context: Context): KeyValueStore = createSummaryStorage(context, key)
 
     override fun getSummary(context: Context): CharSequence? =
         context.getString(R.string.device_info_protected_single_press)
@@ -105,6 +126,9 @@ class SimEidPreference(private val context: Context) :
         }
         return null
     }
+
+    override val sensitivityLevel
+        get() = SensitivityLevel.DO_NOT_EXPOSE
 
     private fun getEidMetadataWithAssociatedSlotId(): EidMetadata? {
         val subscriptionManager =

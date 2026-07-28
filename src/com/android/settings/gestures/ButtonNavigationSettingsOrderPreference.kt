@@ -25,6 +25,7 @@ import com.android.settingslib.metadata.BooleanValuePreference
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ReadWritePermit
 import com.android.settingslib.metadata.SensitivityLevel
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.preference.BooleanValuePreferenceBinding
 import com.android.settingslib.preference.forEachRecursively
 
@@ -53,6 +54,10 @@ sealed class ButtonNavigationSettingsOrderPreference(
 
     override fun storage(context: Context): KeyValueStore = store
 
+    // TODO(b/496489797): Remove UI ONLY tag after System > Navigation mode > Navigation Mode radio
+    // is migrated
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
+
     override fun onRadioButtonClicked(source: ButtonNavigationSettingsOrderRadioButton) {
         source.parent?.forEachRecursively {
             if (it is ButtonNavigationSettingsOrderRadioButton) {
@@ -67,6 +72,8 @@ sealed class ButtonNavigationSettingsOrderPreference(
     override fun getWritePermit(context: Context, callingPid: Int, callingUid: Int) =
         ReadWritePermit.ALLOW
 
+    override val supportsWrite = true
+
     override fun getReadPermissions(context: Context): Permissions? =
         ButtonNavigationSettingsOrderStore.readPermissions
 
@@ -75,12 +82,17 @@ sealed class ButtonNavigationSettingsOrderPreference(
 
     override val sensitivityLevel
         get() = SensitivityLevel.NO_SENSITIVITY
+
+    override val indexable: Boolean = false
 }
 
 class DefaultButtonNavigationSettingsOrderPreference(store: ButtonNavigationSettingsOrderStore) :
     ButtonNavigationSettingsOrderPreference(store) {
     override val key
         get() = KEY
+
+    override val purpose: Int
+        get() = R.string.navbar_order_preference_default_purpose
 
     override val icons
         get() =
@@ -107,6 +119,9 @@ class ReverseButtonNavigationSettingsOrderPreference(store: ButtonNavigationSett
     ButtonNavigationSettingsOrderPreference(store) {
     override val key
         get() = KEY
+
+    override val purpose: Int
+        get() = R.string.navbar_order_preference_reverse_purpose
 
     override val icons
         get() =

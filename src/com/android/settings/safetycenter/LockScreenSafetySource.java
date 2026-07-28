@@ -28,7 +28,6 @@ import android.safetycenter.SafetyEvent;
 import android.safetycenter.SafetySourceData;
 import android.safetycenter.SafetySourceIssue;
 import android.safetycenter.SafetySourceStatus;
-import android.safetycenter.SafetySourceStatus.IconAction;
 
 import com.android.settings.R;
 import com.android.settings.flags.Flags;
@@ -45,7 +44,6 @@ public final class LockScreenSafetySource {
     public static final String SET_SCREEN_LOCK_ACTION_ID = "SetScreenLockAction";
 
     private static final int REQUEST_CODE_SCREEN_LOCK = 1;
-    private static final int REQUEST_CODE_SCREEN_LOCK_SETTINGS = 2;
 
     private LockScreenSafetySource() {}
 
@@ -70,19 +68,14 @@ public final class LockScreenSafetySource {
             return;
         }
 
-        final int userId = UserHandle.myUserId();
-        final RestrictedLockUtils.EnforcedAdmin admin =
-                RestrictedLockUtilsInternal.checkIfPasswordQualityIsSet(context, userId);
         final PendingIntent pendingIntent =
                 createPendingIntent(
                         context,
                         screenLockPreferenceDetailsUtils.getLaunchChooseLockGenericFragmentIntent(
                                 SettingsEnums.SAFETY_CENTER),
                         REQUEST_CODE_SCREEN_LOCK);
-        final IconAction gearMenuIconAction =
-                createGearMenuIconAction(context, screenLockPreferenceDetailsUtils);
-        final boolean lockScreenAllowedByAdmin =
-                !screenLockPreferenceDetailsUtils.isPasswordQualityManaged(userId, admin);
+        final boolean lockScreenAllowedByAdmin = isLockScreenAllowedByAdmin(context,
+                screenLockPreferenceDetailsUtils);
         final boolean isLockPatternSecure = screenLockPreferenceDetailsUtils.isLockPatternSecure();
         final int severityLevel =
                 lockScreenAllowedByAdmin
@@ -100,7 +93,6 @@ public final class LockScreenSafetySource {
                                 severityLevel)
                         .setPendingIntent(lockScreenAllowedByAdmin ? pendingIntent : null)
                         .setEnabled(lockScreenAllowedByAdmin)
-                        .setIconAction(lockScreenAllowedByAdmin ? gearMenuIconAction : null)
                         .build();
         final SafetySourceData.Builder safetySourceDataBuilder =
                 new SafetySourceData.Builder().setStatus(status);
@@ -111,6 +103,19 @@ public final class LockScreenSafetySource {
 
         SafetyCenterManagerWrapper.get()
                 .setSafetySourceData(context, SAFETY_SOURCE_ID, safetySourceData, safetyEvent);
+    }
+
+    private static boolean isLockScreenAllowedByAdmin(Context context,
+            ScreenLockPreferenceDetailsUtils screenLockPreferenceDetailsUtils) {
+        final int userId = UserHandle.myUserId();
+        if (android.app.admin.flags.Flags.policyTransparencyRefactorEnabled()) {
+            return screenLockPreferenceDetailsUtils.getPasswordQualityManagedEnforcingAdmin(userId)
+                    == null;
+        } else {
+            final RestrictedLockUtils.EnforcedAdmin admin =
+                    RestrictedLockUtilsInternal.checkIfPasswordQualityIsSet(context, userId);
+            return !screenLockPreferenceDetailsUtils.isPasswordQualityManaged(userId, admin);
+        }
     }
 
     private static String getScreenLockSummary(
@@ -137,19 +142,6 @@ public final class LockScreenSafetySource {
         }
     }
 
-    private static IconAction createGearMenuIconAction(
-            Context context, ScreenLockPreferenceDetailsUtils screenLockPreferenceDetailsUtils) {
-        return screenLockPreferenceDetailsUtils.shouldShowGearMenu()
-                ? new IconAction(
-                        IconAction.ICON_TYPE_GEAR,
-                        createPendingIntent(
-                                context,
-                                screenLockPreferenceDetailsUtils.getLaunchScreenLockSettingsIntent(
-                                        SettingsEnums.SAFETY_CENTER),
-                                REQUEST_CODE_SCREEN_LOCK_SETTINGS))
-                : null;
-    }
-
     private static PendingIntent createPendingIntent(
             Context context, Intent intent, int requestCode) {
         return PendingIntent.getActivity(
@@ -158,6 +150,15 @@ public final class LockScreenSafetySource {
 
     private static SafetySourceIssue createNoScreenLockIssue(
             Context context, PendingIntent pendingIntent) {
+        boolean isPatternSupported = !context.getResources().getBoolean(
+                R.bool.config_hide_pattern_security_option);
+        String notificationText = context.getString(isPatternSupported
+                ? R.string.no_screen_lock_issue_notification_text
+                : R.string.no_screen_lock_issue_notification_text_without_pattern);
+        String issueSummary = context.getString(isPatternSupported
+                ? R.string.no_screen_lock_issue_summary
+                : R.string.no_screen_lock_issue_summary_without_pattern);
+
         final SafetySourceIssue.Action action =
                 new SafetySourceIssue.Action.Builder(
                                 SET_SCREEN_LOCK_ACTION_ID,
@@ -168,12 +169,12 @@ public final class LockScreenSafetySource {
         final SafetySourceIssue.Notification customNotification =
                 new SafetySourceIssue.Notification.Builder(
                                 context.getString(R.string.no_screen_lock_issue_notification_title),
-                                context.getString(R.string.no_screen_lock_issue_notification_text))
+                                notificationText)
                         .build();
         return new SafetySourceIssue.Builder(
                         NO_SCREEN_LOCK_ISSUE_ID,
                         context.getString(R.string.no_screen_lock_issue_title),
-                        context.getString(R.string.no_screen_lock_issue_summary),
+                        issueSummary,
                         SafetySourceData.SEVERITY_LEVEL_RECOMMENDATION,
                         NO_SCREEN_LOCK_ISSUE_TYPE_ID)
                 .setIssueCategory(SafetySourceIssue.ISSUE_CATEGORY_DEVICE)

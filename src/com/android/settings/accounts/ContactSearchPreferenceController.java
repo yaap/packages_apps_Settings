@@ -15,6 +15,10 @@ package com.android.settings.accounts;
 
 import static android.provider.Settings.Secure.MANAGED_PROFILE_CONTACT_REMOTE_SEARCH;
 
+import android.app.admin.DevicePolicyIdentifiers;
+import android.app.admin.DevicePolicyManager;
+import android.app.admin.EnforcingAdmin;
+import android.app.admin.PolicyEnforcementInfo;
 import android.content.Context;
 import android.os.UserHandle;
 import android.os.UserManager;
@@ -28,12 +32,16 @@ import androidx.preference.PreferenceScreen;
 import com.android.settings.R;
 import com.android.settings.Utils;
 import com.android.settings.core.TogglePreferenceController;
+import com.android.settings.flags.Flags;
 import com.android.settings.slices.SliceData;
 import com.android.settingslib.RestrictedLockUtils;
 import com.android.settingslib.RestrictedLockUtilsInternal;
 import com.android.settingslib.RestrictedSwitchPreference;
 
 import org.jetbrains.annotations.NotNull;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ContactSearchPreferenceController extends TogglePreferenceController implements
         Preference.OnPreferenceChangeListener, DefaultLifecycleObserver,
@@ -62,10 +70,38 @@ public class ContactSearchPreferenceController extends TogglePreferenceControlle
             pref.setChecked(isChecked());
             pref.setEnabled(!mQuietModeEnabler.isQuietModeEnabled());
             if (mManagedUser != null) {
-                final RestrictedLockUtils.EnforcedAdmin enforcedAdmin =
-                        RestrictedLockUtilsInternal.checkIfRemoteContactSearchDisallowed(
-                                mContext, mManagedUser.getIdentifier());
-                pref.setDisabledByAdmin(enforcedAdmin);
+                if (android.app.admin.flags.Flags.policyTransparencyRefactorEnabled()) {
+                    DevicePolicyManager dpm = mContext.getSystemService(DevicePolicyManager.class);
+                    if (dpm == null) {
+                        return;
+                    }
+                    // This preference is controlled by two admin policies so we need to combine
+                    // both.
+                    List<EnforcingAdmin> contactAccessAdmins = dpm.getEnforcingAdminsForPolicy(
+                            DevicePolicyIdentifiers.MANAGED_PROFILE_CONTACTS_ACCESS_POLICY,
+                            mManagedUser.getIdentifier()).getAllAdmins();
+                    List<EnforcingAdmin> callerIdAccessAdmins = dpm.getEnforcingAdminsForPolicy(
+                            DevicePolicyIdentifiers.MANAGED_PROFILE_CALLER_ID_ACCESS_POLICY,
+                            mManagedUser.getIdentifier()).getAllAdmins();
+                    // Combined list may contain duplicate elements, but it's not important here.
+                    List<EnforcingAdmin> combinedAdmins = new ArrayList<>(contactAccessAdmins);
+                    combinedAdmins.addAll(callerIdAccessAdmins);
+                    PolicyEnforcementInfo combinedPolicyEnforcement = new PolicyEnforcementInfo(
+                            combinedAdmins);
+                    if (!combinedAdmins.isEmpty()
+                            && !combinedPolicyEnforcement.isOnlyEnforcedBySystem()) {
+                        pref.setDisabledByAdmin(
+                                combinedPolicyEnforcement.getMostImportantEnforcingAdmin());
+                    }
+                } else {
+                    // TODO(b/414733570): Remove RestrictedLockUtilsInternal
+                    //  .checkIfRemoteContactSearchDisallowed method as part of clean-up as the
+                    //  only call-site is here.
+                    final RestrictedLockUtils.EnforcedAdmin enforcedAdmin =
+                            RestrictedLockUtilsInternal.checkIfRemoteContactSearchDisallowed(
+                                    mContext, mManagedUser.getIdentifier());
+                    pref.setDisabledByAdmin(enforcedAdmin);
+                }
             }
         }
     }
@@ -122,6 +158,7 @@ public class ContactSearchPreferenceController extends TogglePreferenceControlle
 
     @Override
     public int getSliceHighlightMenuRes() {
-        return R.string.menu_key_accounts;
+        return Flags.enableAccountsAndBackupScreen() ? R.string.menu_key_accounts_and_backup
+            : R.string.menu_key_accounts;
     }
 }

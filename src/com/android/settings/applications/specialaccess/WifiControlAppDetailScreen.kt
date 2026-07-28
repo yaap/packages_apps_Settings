@@ -16,24 +16,29 @@
 
 package com.android.settings.applications.specialaccess
 
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import android.Manifest.permission.CHANGE_WIFI_STATE
 import android.Manifest.permission.NETWORK_SETTINGS
 import android.app.AppOpsManager
 import android.app.settings.SettingsEnums
+import android.content.ComponentName
 import android.content.Context
+import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.os.Bundle
 import androidx.core.net.toUri
 import com.android.settings.R
-import com.android.settings.Settings.ChangeWifiStateActivity
 import com.android.settings.applications.CatalystAppListFragment.Companion.DEFAULT_SHOW_SYSTEM
 import com.android.settings.applications.getPackageInfoWithPermissions
 import com.android.settings.applications.isPermissionRequested
 import com.android.settings.flags.Flags
 import com.android.settings.utils.highlightPreference
-import com.android.settings.utils.makeLaunchIntent
+import com.android.settingslib.metadata.CatalystFlagProviderFactory
+import com.android.settingslib.metadata.KeyParametersSchema
+import com.android.settingslib.metadata.ParameterizedPreferenceScreenArgumentsFactory
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ProvidePreferenceScreen
+import com.android.settingslib.metadata.ValidatedKeyParameters
 
 /**
  * The app detail catalyst screen for "Wi-Fi control" special app access.
@@ -41,11 +46,27 @@ import com.android.settingslib.metadata.ProvidePreferenceScreen
  * This screen is accessible from: Settings > Apps > Special app access > Wi-Fi control > [app name]
  */
 @ProvidePreferenceScreen(WifiControlAppDetailScreen.KEY, parameterized = true)
-open class WifiControlAppDetailScreen(context: Context, arguments: Bundle) :
-    SpecialAccessAppDetailScreen(context, arguments) {
+open class WifiControlAppDetailScreen : SpecialAccessAppDetailScreen {
+
+    @Deprecated(
+        "This constructor will be removed once the catalyst framework stops passing the arguments as a bundle. Use the other constructor instead."
+    )
+    constructor(context: Context, arguments: Bundle) : super(context, arguments)
+
+    constructor(
+        context: Context,
+        keyArguments: ValidatedKeyParameters,
+    ) : super(context, keyArguments)
 
     override val key
         get() = KEY
+
+    override val keyParametersSchema: KeyParametersSchema
+        get() = parametersSchema
+
+    //TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.special_access_wifi_control_app_detail_purpose
 
     override val bindingKey
         get() = "$KEY-$packageName"
@@ -65,7 +86,12 @@ open class WifiControlAppDetailScreen(context: Context, arguments: Bundle) :
     override val footerPreferenceTitle
         get() = R.string.change_wifi_state_app_detail_summary
 
+    override val availabilityDescription =
+        "The app must be enabled, and must have requested change wifi state permission."
+
     // Edge case: what if the app's change wifi state permission is revoked/granted
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
     override fun isAvailable(context: Context) =
         super.isAvailable(context) && wifiStateControlFilter(context, packageInfo?.applicationInfo)
 
@@ -80,18 +106,41 @@ open class WifiControlAppDetailScreen(context: Context, arguments: Bundle) :
         }
 
     override fun getLaunchIntent(context: Context, metadata: PreferenceMetadata?) =
-        makeLaunchIntent(context, ChangeWifiStateActivity::class.java, metadata?.key).apply {
+        Intent().apply {
+            component =
+                ComponentName(
+                    "com.android.settings",
+                    "com.android.settings.WifiControlAppDetailIntent",
+                )
             data = "package:$packageName".toUri()
-            highlightPreference(arguments, metadata?.bindingKey)
+            if (CatalystFlagProviderFactory.catalystUseKeyParameters()) {
+                highlightPreference(keyParameters!!, metadata?.bindingKey)
+            } else {
+                highlightPreference(arguments!!, metadata?.bindingKey)
+            }
         }
 
-    companion object {
+    companion object :
+        ParameterizedPreferenceScreenArgumentsFactory by SpecialAccessAppDetailScreen.Companion {
         const val KEY = "special_access_wifi_control_app_detail"
         const val BROADER_PERMISSION = NETWORK_SETTINGS
         const val PERMISSION = CHANGE_WIFI_STATE
 
-        @JvmStatic fun parameters(context: Context) = parameters(context, DEFAULT_SHOW_SYSTEM)
+        @JvmStatic
+        override fun keyParameters(context: Context) = keyParameters(context, DEFAULT_SHOW_SYSTEM)
 
+        fun keyParameters(context: Context, showSystemApp: Boolean) =
+            keyParameters(context, showSystemApp, ::wifiStateControlFilter)
+
+        @JvmStatic
+        @Deprecated(
+            "This method will be removed once the catalyst framework stops passing the arguments as a bundle. Use keyParameters instead."
+        )
+        fun parameters(context: Context) = parameters(context, DEFAULT_SHOW_SYSTEM)
+
+        @Deprecated(
+            "This method will be removed once the catalyst framework stops passing the arguments as a bundle. Use keyParameters instead."
+        )
         fun parameters(context: Context, showSystemApp: Boolean) =
             parameters(context, showSystemApp, ::wifiStateControlFilter)
 

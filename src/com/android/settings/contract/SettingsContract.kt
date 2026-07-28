@@ -114,6 +114,9 @@ const val KEY_NOTIFICATION_VOLUME = "notification_volume"
 /** Contract key for the "Alarm volume" setting. */
 const val KEY_ALARM_VOLUME = "alarm_volume"
 
+/** Contract key for the "Assistant volume" setting. */
+const val KEY_ASSISTANT_VOLUME = "assistant_volume"
+
 /**
  * Contract key for the "Dial pad tones" setting, identical to
  * [android.provider.Settings.System.DTMF_TONE_WHEN_DIALING].
@@ -140,3 +143,6 @@ const val KEY_PIN_MEDIA_PLAYER = "pin_media_player"
 
 /** Contract key for the "Show media on lock screen. */
 const val KEY_SHOW_MEDIA_ON_LOCK_SCREEN = "show_media_on_lock_screen"
+
+/** Contract key for the "Power button ends call" settings. */
+const val KEY_POWER_BUTTON_ENDS_CALL = "incall_power_button_behavior"

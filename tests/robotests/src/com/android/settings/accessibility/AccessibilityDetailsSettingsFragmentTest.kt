@@ -26,8 +26,8 @@ import android.view.accessibility.AccessibilityManager
 import androidx.test.core.app.ApplicationProvider
 import com.android.internal.accessibility.AccessibilityShortcutController
 import com.android.settings.SettingsActivity
+import com.android.settings.accessibility.a11yservice.A11yServicePreferenceFragment
 import com.android.settings.accessibility.data.AccessibilityRepositoryProvider
-import com.android.settings.accessibility.detail.a11yservice.A11yServicePreferenceFragment
 import com.android.settings.accessibility.screenmagnification.ui.MagnificationPreferenceFragment
 import com.android.settings.testutils.AccessibilityTestUtils
 import com.android.settings.testutils.shadow.ShadowAccessibilityManager
@@ -73,6 +73,7 @@ class AccessibilityDetailsSettingsFragmentTest {
     @After
     fun cleanUp() {
         AccessibilityRepositoryProvider.resetInstanceForTesting()
+        ShadowRestrictedLockUtilsInternal.reset()
     }
 
     @Test
@@ -118,6 +119,17 @@ class AccessibilityDetailsSettingsFragmentTest {
         intent.putExtra(Intent.EXTRA_COMPONENT_NAME, A11Y_SERVICE_COMPONENT.flattenToString())
         val dpm = context.getSystemService(DevicePolicyManager::class.java)
         (shadowOf(dpm) as ShadowDevicePolicyManager).setPermittedAccessibilityServices(listOf())
+
+        startFragment(intent)
+
+        assertStartActivityWithExpectedFragment(AccessibilitySettings::class.java.getName())
+    }
+
+    @Test
+    fun onCreate_extraComponentNameIsEcmRestricted_launchAccessibilitySettings() {
+        val intent = Intent()
+        intent.putExtra(Intent.EXTRA_COMPONENT_NAME, A11Y_SERVICE_COMPONENT.flattenToString())
+        ShadowRestrictedLockUtilsInternal.setEcmRestrictedPkgs(PACKAGE_NAME)
 
         startFragment(intent)
 

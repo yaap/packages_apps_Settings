@@ -19,19 +19,24 @@ package com.android.settings.supervision
 import android.app.Application
 import android.app.admin.DevicePolicyManager
 import android.app.role.RoleManager
+import android.app.supervision.flags.Flags
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager.COMPONENT_ENABLED_STATE_DISABLED
 import android.content.pm.PackageManager.DONT_KILL_APP
+import android.platform.test.annotations.DisableFlags
+import android.platform.test.annotations.EnableFlags
+import android.platform.test.flag.junit.SetFlagsRule
 import androidx.lifecycle.Lifecycle
 import androidx.test.core.app.ActivityScenario
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.android.settings.supervision.SupervisionDashboardActivity.Companion.INTERSTITIAL_REDIRECT_ACTION
-import com.android.settings.supervision.SupervisionHelper.INSTALL_SUPERVISION_APP_ACTION
+import com.android.settings.supervision.SupervisionSessionController.Companion.SUPERVISION_AUTH_SESSION_KEY
 import com.android.settings.supervision.ipc.SupervisionMessengerClient
+import com.android.settings.supervision.shared.SupervisionHelper.INSTALL_SUPERVISION_APP_ACTION
 import com.android.settings.testutils.shadow.SettingsShadowResources
 import com.android.settingslib.ipc.MessengerServiceRule
 import com.google.common.truth.Truth.assertThat
@@ -63,6 +68,7 @@ class SupervisionDashboardActivityTest {
             as ShadowDevicePolicyManager
     private val mockRoleManager = mock<RoleManager>()
 
+    @get:Rule val setFlagsRule = SetFlagsRule()
     @get:Rule
     val serviceRule =
         MessengerServiceRule<SupervisionMessengerClient>(
@@ -71,6 +77,7 @@ class SupervisionDashboardActivityTest {
 
     @Before
     fun setup() {
+        SupervisionSessionController.instance = null
         Shadow.extract<ShadowContextImpl>((context as Application).baseContext).apply {
             setSystemService(Context.ROLE_SERVICE, mockRoleManager)
         }
@@ -124,6 +131,7 @@ class SupervisionDashboardActivityTest {
     }
 
     @Test
+    @DisableFlags(Flags.FLAG_ENABLE_SUPERVISION_SETTINGS_UI_UPDATES)
     fun supervisionRoleHolderExists_redirectIntentResolved_redirect() = runTest {
         mockRoleManager.stub {
             on { getRoleHolders(any()) } doReturn listOf(TEST_SUPERVISION_PACKAGE)
@@ -139,6 +147,7 @@ class SupervisionDashboardActivityTest {
     }
 
     @Test
+    @DisableFlags(Flags.FLAG_ENABLE_SUPERVISION_SETTINGS_UI_UPDATES)
     fun supervisionPackageIsProfileOwner_redirectIntentResolved_redirect() = runTest {
         shadowDpm.setProfileOwner(ComponentName.unflattenFromString(DEFAULT_SUPERVISION_COMPONENT))
         setUpRedirectActivityComponent(DEFAULT_SUPERVISION_PACKAGE, INTERSTITIAL_REDIRECT_ACTION)
@@ -220,6 +229,32 @@ class SupervisionDashboardActivityTest {
         }
     }
 
+    @Test
+    @EnableFlags(Flags.FLAG_ENABLE_SUPERVISION_SETTINGS_SESSION_UPDATES)
+    fun onDestroy_isFinishing_unregistersSession() = runTest {
+        val activityScenario = ActivityScenario.launch(SupervisionDashboardActivity::class.java)
+        val sessionsRepository = SupervisionSessionController.getInstance(context)
+
+        sessionsRepository.startSession(TASK_ID, SUPERVISION_AUTH_SESSION_KEY)
+        assertThat(sessionsRepository.isSessionActive(SUPERVISION_AUTH_SESSION_KEY)).isTrue()
+        activityScenario.moveToState(Lifecycle.State.DESTROYED)
+
+        assertThat(sessionsRepository.isSessionActive(SUPERVISION_AUTH_SESSION_KEY)).isFalse()
+    }
+
+    @Test
+    @DisableFlags(Flags.FLAG_ENABLE_SUPERVISION_SETTINGS_SESSION_UPDATES)
+    fun onDestroy_isFinishing_sessionIsActive() = runTest {
+        val activityScenario = ActivityScenario.launch(SupervisionDashboardActivity::class.java)
+        val sessionsRepository = SupervisionSessionController.getInstance(context)
+
+        sessionsRepository.startSession(TASK_ID, SUPERVISION_AUTH_SESSION_KEY)
+        assertThat(sessionsRepository.isSessionActive(SUPERVISION_AUTH_SESSION_KEY)).isTrue()
+        activityScenario.moveToState(Lifecycle.State.DESTROYED)
+
+        assertThat(sessionsRepository.isSessionActive(SUPERVISION_AUTH_SESSION_KEY)).isTrue()
+    }
+
     private fun setUpMessengerServiceComponent(disabled: Boolean) {
         val serviceComponentName =
             ComponentName(TEST_SUPERVISION_PACKAGE, TEST_SUPERVISION_MESSENGER_SERVICE)
@@ -265,5 +300,6 @@ class SupervisionDashboardActivityTest {
         const val DEFAULT_SUPERVISION_COMPONENT =
             "com.android.supervision.default/.ProfileOwnerReceiver"
         const val DEFAULT_SUPERVISION_PACKAGE = "com.android.supervision.default"
+        const val TASK_ID = 100
     }
 }

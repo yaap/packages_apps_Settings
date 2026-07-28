@@ -25,6 +25,8 @@ import com.android.settings.contract.TAG_DEVICE_STATE_SCREEN
 import com.android.settings.flags.Flags
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ProvidePreferenceScreen
+import com.android.settingslib.metadata.SensitivityLevel
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 
 /**
  * Catalyst screen to display the list of special apps with "All files access" permission.
@@ -33,9 +35,14 @@ import com.android.settingslib.metadata.ProvidePreferenceScreen
  */
 @ProvidePreferenceScreen(AllFilesAccessAppListScreen.KEY)
 open class AllFilesAccessAppListScreen : SpecialAccessAppListScreen() {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED, TAG_DEVICE_STATE_SCREEN)
 
     override val key: String
         get() = KEY
+
+    //TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.special_access_all_files_access_app_list_purpose
 
     override val title: Int
         get() = R.string.manage_external_storage_title
@@ -44,7 +51,6 @@ open class AllFilesAccessAppListScreen : SpecialAccessAppListScreen() {
 
     override fun isFlagEnabled(context: Context) = Flags.deeplinkApps25q4()
 
-    override fun tags(context: Context) = arrayOf(TAG_DEVICE_STATE_SCREEN)
 
     override fun getLaunchIntent(context: Context, metadata: PreferenceMetadata?) =
         if (metadata == null) Intent(ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION) else null
@@ -52,8 +58,17 @@ open class AllFilesAccessAppListScreen : SpecialAccessAppListScreen() {
     override val appDetailScreenKey: String
         get() = AllFilesAccessAppDetailScreen.KEY
 
+    override val sensitivityLevel = SensitivityLevel.DO_NOT_EXPOSE
+
+    @Deprecated(
+        message =
+            "This method will be removed once the catalyst framework stops passing the arguments as a bundle. Use appDetailKeyParameters instead."
+    )
     override fun appDetailParameters(context: Context, hierarchyType: Boolean) =
         AllFilesAccessAppDetailScreen.parameters(context, hierarchyType)
+
+    override fun appDetailKeyParameters(context: Context, hierarchyType: Boolean) =
+        AllFilesAccessAppDetailScreen.keyParameters(context, hierarchyType)
 
     companion object {
         const val KEY = "special_access_all_files_access_app_list"

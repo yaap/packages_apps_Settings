@@ -19,6 +19,7 @@ package com.android.settings.network.telephony
 import android.app.settings.SettingsEnums
 import android.content.Context
 import android.content.Intent
+import android.media.audio.Flags as AudioFlags
 import android.os.Bundle
 import android.os.UserManager
 import android.provider.Settings
@@ -27,19 +28,28 @@ import androidx.fragment.app.Fragment
 import com.android.settings.R
 import com.android.settings.Settings.MobileNetworkActivity
 import com.android.settings.core.PreferenceScreenMixin
+import com.android.settings.datausage.BillingCycleScreen
 import com.android.settings.datausage.DataUsageListScreen
-import com.android.settings.flags.Flags
 import com.android.settings.network.SubscriptionUtil
 import com.android.settings.network.apn.ApnSettings
 import com.android.settings.network.apn.ApnSettingsScreen
 import com.android.settings.restriction.PreferenceRestrictionMixin
+import com.android.settings.utils.getSubId
 import com.android.settings.utils.makeLaunchIntent
+import com.android.settings.utils.putSubId
+import com.android.settingslib.metadata.CatalystFlagProviderFactory
+import com.android.settingslib.metadata.KeyParametersSchema
+import com.android.settingslib.metadata.ParameterizedPreferenceScreenArgumentsFactory
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceIndexableProvider
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceTitleProvider
 import com.android.settingslib.metadata.ProvidePreferenceScreen
+import com.android.settingslib.metadata.ValidatedKeyParameters
 import com.android.settingslib.metadata.preferenceHierarchy
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_MOBILE_DATA
+import com.android.settingslib.metadata.preferencesapi.types.SubscriptionId
 import com.android.settingslib.widget.UntitledPreferenceCategoryMetadata
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -49,18 +59,44 @@ import kotlinx.coroutines.flow.map
 /** Preference screen for Network & Internet > SIMs > [SIM] */
 // LINT.IfChange
 @ProvidePreferenceScreen(MobileNetworkScreen.KEY, parameterized = true)
-open class MobileNetworkScreen(override val arguments: Bundle) :
+open class MobileNetworkScreen
+private constructor(
+    @Deprecated(
+        "This property will be removed once the catalyst framework stops passing the arguments as a bundle. Use the keyParameters instead."
+    )
+    final override val arguments: Bundle?,
+    final override val keyParameters: ValidatedKeyParameters?,
+) :
     PreferenceScreenMixin,
     PreferenceAvailabilityProvider,
     PreferenceTitleProvider,
     PreferenceIndexableProvider,
     PreferenceRestrictionMixin {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_MOBILE_DATA)
 
-    private val subId =
-        arguments.getInt(Settings.EXTRA_SUB_ID, SubscriptionManager.INVALID_SUBSCRIPTION_ID)
+    private val subId: Int =
+        if (CatalystFlagProviderFactory.catalystUseKeyParameters()) {
+            keyParameters!![Settings.EXTRA_SUB_ID]?.toIntOrNull()
+                ?: SubscriptionManager.INVALID_SUBSCRIPTION_ID
+        } else {
+            arguments!!.getSubId(Settings.EXTRA_SUB_ID, SubscriptionManager.INVALID_SUBSCRIPTION_ID)
+        }
+
+    @Deprecated(
+        "This constructor will be removed once the catalyst framework stops passing the arguments as a bundle. Use the other constructor instead."
+    )
+    constructor(args: Bundle) : this(args, null)
+
+    constructor(keyParameters: ValidatedKeyParameters) : this(null, keyParameters)
 
     override val key: String
         get() = KEY
+
+    override val keyParametersSchema: KeyParametersSchema
+        get() = parametersSchema
+
+    override val purpose: Int
+        get() = R.string.mobile_network_pref_screen_purpose
 
     override val bindingKey
         get() = "$KEY-$subId"
@@ -75,10 +111,12 @@ open class MobileNetworkScreen(override val arguments: Bundle) :
 
     override fun getMetricsCategory() = SettingsEnums.MOBILE_NETWORK
 
+    override val availabilityDescription = "The subscription id must be valid."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
+
     override fun isAvailable(context: Context): Boolean =
         SubscriptionManager.isValidSubscriptionId(subId)
-
-    override fun isFlagEnabled(context: Context): Boolean = Flags.deeplinkNetworkAndInternet25q4()
 
     override fun fragmentClass(): Class<out Fragment>? = MobileNetworkSettings::class.java
 
@@ -86,32 +124,63 @@ open class MobileNetworkScreen(override val arguments: Bundle) :
 
     override fun getPreferenceHierarchy(context: Context, coroutineScope: CoroutineScope) =
         preferenceHierarchy(context) {
-            if (Flags.deeplinkNetworkAndInternet25q4()) {
-                +MobileNetworkMainSwitchPreference(context, subId) order +0
-                val data = MobileNetworkData(context, coroutineScope, subId)
-                +EnabledStateUntitledCategory(subId) += {
-                    +MobileNetworkDataUsagePreference(context, coroutineScope, subId)
-                    +MobileNetworkSpnPreference(context, subId)
-                    +MobileNetworkPhoneNumberPreference(data)
-                    +EnabledNetworkModePreference(data)
-                    +MobileNetworkImeiPreference(context, subId)
-                    +(DataUsageListScreen.KEY args arguments)
-                    +UntitledPreferenceCategoryMetadata("apn_and_protection_container") += {
-                        val bundle = Bundle(1).also { it.putInt(ApnSettings.SUB_ID, subId) }
-                        +(ApnSettingsScreen.KEY args bundle)
-                    }
+            +MobileNetworkMainSwitchPreference(context, subId, coroutineScope) order +0
+            val data = MobileNetworkData(context, coroutineScope, subId)
+            +EnabledStateUntitledCategory(subId) += {
+                +MobileNetworkDataUsagePreference(context, coroutineScope, subId)
+                +MobileNetworkSpnPreference(context, subId)
+                +MobileNetworkPhoneNumberPreference(data)
+                +EnabledNetworkModePreference(data)
+                +MobileNetworkImeiPreference(data)
+                if (AudioFlags.supportPerPhoneAccountRingtone()) {
+                    +SimRingtonePreference(context, subId) order 110
                 }
+                if (CatalystFlagProviderFactory.catalystUseKeyParameters()) {
+                    +(DataUsageListScreen.KEY withParameters keyParameters!!)
+                } else {
+                    +(DataUsageListScreen.KEY args arguments!!)
+                }
+                if (CatalystFlagProviderFactory.catalystUseKeyParameters()) {
+                    +(BillingCycleScreen.KEY withParameters keyParameters!!) order 115
+                } else {
+                    +(BillingCycleScreen.KEY args arguments!!) order 115
+                }
+                +UntitledPreferenceCategoryMetadata(
+                    "apn_and_protection_container",
+                    R.string.mobile_network_apn_and_protection_purpose,
+                ) +=
+                    {
+                        if (CatalystFlagProviderFactory.catalystUseKeyParameters()) {
+                            val newParameters =
+                                ApnSettingsScreen.parametersSchema.prepare(
+                                    ApnSettings.SUB_ID to subId.toString()
+                                )
+                            +(ApnSettingsScreen.KEY withParameters newParameters)
+                        } else {
+                            val bundle = Bundle(1).also { it.putSubId(ApnSettings.SUB_ID, subId) }
+                            +(ApnSettingsScreen.KEY args bundle)
+                        }
+                    }
             }
         }
 
     override fun getLaunchIntent(context: Context, metadata: PreferenceMetadata?): Intent? {
         val intent =
-            makeLaunchIntent(
-                context,
-                MobileNetworkActivity::class.java,
-                arguments,
-                metadata?.bindingKey,
-            )
+            if (CatalystFlagProviderFactory.catalystUseKeyParameters()) {
+                makeLaunchIntent(
+                    context,
+                    MobileNetworkActivity::class.java,
+                    keyParameters!!,
+                    metadata?.bindingKey,
+                )
+            } else {
+                makeLaunchIntent(
+                    context,
+                    MobileNetworkActivity::class.java,
+                    arguments!!,
+                    metadata?.bindingKey,
+                )
+            }
         intent.putExtra(Settings.EXTRA_SUB_ID, subId)
         return intent
     }
@@ -124,6 +193,10 @@ open class MobileNetworkScreen(override val arguments: Bundle) :
 
     override fun isEnabled(context: Context) = super<PreferenceRestrictionMixin>.isEnabled(context)
 
+    override fun getEnabledDescription() = "There must be no restrictions on configuring mobile networks imposed by device administrators."
+
+    override fun getEnabledStability() = PreconditionStability.UNSTABLE
+
     override fun isIndexable(context: Context) =
         // Shoudln't be indexable on ARC (Android on Chrome OS) and this seems to be the way to
         // detect that. See https://stackoverflow.com/a/44868935 or isArc() implementation in
@@ -131,12 +204,29 @@ open class MobileNetworkScreen(override val arguments: Bundle) :
         !(context.packageManager.hasSystemFeature("org.chromium.arc") ||
             context.packageManager.hasSystemFeature("org.chromium.arc.device_management"))
 
-    companion object {
+    companion object : ParameterizedPreferenceScreenArgumentsFactory {
         const val KEY = "mobile_network_pref_screen"
 
         @JvmStatic
+        override val parametersSchema = KeyParametersSchema {
+            parameter(Settings.EXTRA_SUB_ID, "The subscription ID", type = SubscriptionId)
+        }
+
+        @JvmStatic
+        override fun keyParameters(context: Context): Flow<ValidatedKeyParameters> {
+            // TODO (b/457649430): when the catalyst framework stops passing the arguments as a
+            // bundle: replace the parameters(context) call to the actual implementation,
+            // or make this function the primary implementation and the legacy parameters() should
+            // call this one.
+            return parameters(context).map { bundle -> parametersSchema.prepare(bundle) }
+        }
+
+        @Deprecated(
+            "This method will be removed once the catalyst framework stops passing the arguments as a bundle. Use keyParameters instead."
+        )
+        @JvmStatic
         fun parameters(context: Context): Flow<Bundle> {
-            fun Int.toArguments() = Bundle(1).also { it.putInt(Settings.EXTRA_SUB_ID, this) }
+            fun Int.toArguments() = Bundle(1).also { it.putSubId(Settings.EXTRA_SUB_ID, this) }
             return SubscriptionUtil.getSelectableSubscriptionInfoList(context).asFlow().map {
                 it.subscriptionId.toArguments()
             }

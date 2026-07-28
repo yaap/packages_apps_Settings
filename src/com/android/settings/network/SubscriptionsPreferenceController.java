@@ -22,6 +22,7 @@ import static androidx.lifecycle.Lifecycle.Event.ON_RESUME;
 import static com.android.settings.network.MobileIconGroupExtKt.getSummaryForSub;
 import static com.android.settings.network.MobileIconGroupExtKt.maybeToHtml;
 import static com.android.settings.network.telephony.MobileNetworkUtils.NO_CELL_DATA_TYPE_ICON;
+import static com.android.settingslib.flags.Flags.newStatusBarIcons;
 import static com.android.settingslib.mobile.MobileMappings.getIconKey;
 import static com.android.settingslib.mobile.MobileMappings.mapIconSets;
 
@@ -48,6 +49,7 @@ import androidx.annotation.VisibleForTesting;
 import androidx.collection.ArrayMap;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceGroup;
@@ -68,7 +70,6 @@ import com.android.settingslib.mobile.MobileMappings.Config;
 import com.android.settingslib.mobile.TelephonyIcons;
 import com.android.settingslib.net.SignalStrengthUtil;
 import com.android.wifitrackerlib.WifiEntry;
-import com.android.wifitrackerlib.WifiPickerTracker;
 
 import java.util.Collections;
 import java.util.List;
@@ -83,9 +84,10 @@ public class SubscriptionsPreferenceController extends AbstractPreferenceControl
         LifecycleObserver, SubscriptionsChangeListener.SubscriptionsChangeListenerClient,
         MobileDataEnabledListener.Client, DataConnectivityListener.Client,
         SignalStrengthListener.Callback, TelephonyDisplayInfoListener.Callback,
-        TelephonyCallback.CarrierNetworkListener, WifiPickerTracker.WifiPickerTrackerCallback {
+        TelephonyCallback.CarrierNetworkListener {
     private static final String TAG = "SubscriptionsPrefCntrlr";
 
+    public static final String PREF_KEY_ACTIVE_MOBILE_CONNECTION = "active_mobile_connection";
     private UpdateListener mUpdateListener;
     private String mPreferenceGroupKey;
     private PreferenceGroup mPreferenceGroup;
@@ -96,8 +98,8 @@ public class SubscriptionsPreferenceController extends AbstractPreferenceControl
     private DataConnectivityListener mConnectivityListener;
     private SignalStrengthListener mSignalStrengthListener;
     private TelephonyDisplayInfoListener mTelephonyDisplayInfoListener;
-    @VisibleForTesting
-    WifiPickerTrackerHelper mWifiPickerTrackerHelper;
+    private WifiPickerTrackerHelper mWifiPickerTrackerHelper;
+    private final Observer<Integer> mUpdateObserver = i -> update();
     private final WifiManager mWifiManager;
     private boolean mCarrierNetworkChangeMode;
 
@@ -165,7 +167,6 @@ public class SubscriptionsPreferenceController extends AbstractPreferenceControl
         mSignalStrengthListener = new SignalStrengthListener(context, this);
         mTelephonyDisplayInfoListener = new TelephonyDisplayInfoListener(context, this);
         lifecycle.addObserver(this);
-        mWifiPickerTrackerHelper = new WifiPickerTrackerHelper(lifecycle, context, this);
         mSubsPrefCtrlInjector = createSubsPrefCtrlInjector();
         mConfig = mSubsPrefCtrlInjector.getConfig(mContext);
     }
@@ -191,6 +192,10 @@ public class SubscriptionsPreferenceController extends AbstractPreferenceControl
         mSignalStrengthListener.resume();
         mTelephonyDisplayInfoListener.resume();
         registerReceiver();
+        if (mWifiPickerTrackerHelper != null) {
+            mWifiPickerTrackerHelper.mWifiState.observeForever(mUpdateObserver);
+            mWifiPickerTrackerHelper.mWifiEntriesChangedReason.observeForever(mUpdateObserver);
+        }
         update();
     }
 
@@ -202,6 +207,10 @@ public class SubscriptionsPreferenceController extends AbstractPreferenceControl
         mSignalStrengthListener.pause();
         mTelephonyDisplayInfoListener.pause();
         unRegisterReceiver();
+        if (mWifiPickerTrackerHelper != null) {
+            mWifiPickerTrackerHelper.mWifiState.removeObserver(mUpdateObserver);
+            mWifiPickerTrackerHelper.mWifiEntriesChangedReason.removeObserver(mUpdateObserver);
+        }
     }
 
     @Override
@@ -259,6 +268,7 @@ public class SubscriptionsPreferenceController extends AbstractPreferenceControl
         mSubsGearPref.setTitle(SubscriptionUtil.getUniqueSubscriptionDisplayName(
                 subInfo, mContext));
         mSubsGearPref.setOrder(mStartOrder);
+        mSubsGearPref.setKey(PREF_KEY_ACTIVE_MOBILE_CONNECTION);
         mSubsGearPref.setSummary(getMobilePreferenceSummary(subInfo.getSubscriptionId()));
         mSubsGearPref.setIcon(getIcon(subInfo.getSubscriptionId()));
         mPreferenceGroup.addPreference(mSubsGearPref);
@@ -270,7 +280,7 @@ public class SubscriptionsPreferenceController extends AbstractPreferenceControl
         mUpdateListener.onChildrenUpdated();
     }
 
-    /**@return {@code true} if subId is the default data sub. **/
+    /** @return {@code true} if subId is the default data sub. **/
     private boolean isDds(int subId) {
         SubscriptionInfo info = mSubscriptionManager.getDefaultDataSubscriptionInfo();
         return info != null && info.getSubscriptionId() == subId;
@@ -331,8 +341,6 @@ public class SubscriptionsPreferenceController extends AbstractPreferenceControl
             numLevels += 1;
         }
 
-        Drawable icon = mContext.getDrawable(R.drawable.ic_signal_strength_zero_bar_no_internet);
-
         final ServiceState serviceState = tmForSubId.getServiceState();
         final NetworkRegistrationInfo regInfo = (serviceState == null)
                 ? null
@@ -349,10 +357,13 @@ public class SubscriptionsPreferenceController extends AbstractPreferenceControl
         final boolean isDataEnabled = tmForSubId.isDataEnabled()
                 // non-Dds but auto data switch feature is enabled
                 || (!isDds(subId) && tmForSubId.isMobileDataPolicyEnabled(
-                        TelephonyManager.MOBILE_DATA_POLICY_AUTO_DATA_SWITCH));
+                TelephonyManager.MOBILE_DATA_POLICY_AUTO_DATA_SWITCH));
+        Drawable icon;
         if (isDataInService || isVoiceInService || isCarrierNetworkActive) {
             icon = mSubsPrefCtrlInjector.getIcon(mContext, level, numLevels, !isDataEnabled,
                     mCarrierNetworkChangeMode);
+        } else {
+            icon = mSubsPrefCtrlInjector.getNoInternetIcon(mContext, numLevels);
         }
 
         final boolean isActiveCellularNetwork =
@@ -495,24 +506,11 @@ public class SubscriptionsPreferenceController extends AbstractPreferenceControl
         update();
     }
 
-    @Override
-    public void onNumSavedNetworksChanged() {
-        //Do nothing
-    }
-
-    @Override
-    public void onNumSavedSubscriptionsChanged() {
-        //Do nothing
-    }
-
-    @Override
-    public void onWifiStateChanged() {
-        update();
-    }
-
-    @Override
-    public void onWifiEntriesChanged() {
-        update();
+    /**
+     * Set WifiPickerTrackerHelper.
+     */
+    public void setWifiPickerTrackerHelper(WifiPickerTrackerHelper helper) {
+        mWifiPickerTrackerHelper = helper;
     }
 
     @VisibleForTesting
@@ -618,6 +616,17 @@ public class SubscriptionsPreferenceController extends AbstractPreferenceControl
                 boolean carrierNetworkChanged) {
             return MobileNetworkUtils.getSignalStrengthIcon(context, level, numLevels,
                     NO_CELL_DATA_TYPE_ICON, cutOut, carrierNetworkChanged);
+        }
+
+        /**
+         * Gets signal icon with different signal level.
+         */
+        public Drawable getNoInternetIcon(Context context, int numLevels) {
+            if (newStatusBarIcons()) {
+                return getIcon(context, 0 /* level */, numLevels, true /* cutOut */,
+                        false /* carrierNetworkChanged */);
+            }
+            return context.getDrawable(R.drawable.ic_signal_strength_zero_bar_no_internet);
         }
     }
 }

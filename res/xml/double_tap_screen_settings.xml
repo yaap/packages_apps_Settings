@@ -19,6 +19,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:settings="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:key="double_tap_screen"
     android:title="@string/ambient_display_title">
 
     <com.android.settingslib.widget.IllustrationPreference

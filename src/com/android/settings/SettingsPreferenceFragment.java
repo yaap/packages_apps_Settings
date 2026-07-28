@@ -47,6 +47,7 @@ import androidx.preference.PreferenceScreen;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.android.settings.accessibility.AccessibilityFragmentUtils;
 import com.android.settings.core.InstrumentedPreferenceFragment;
 import com.android.settings.core.instrumentation.InstrumentedDialogFragment;
 import com.android.settings.flags.Flags;
@@ -169,6 +170,16 @@ public abstract class SettingsPreferenceFragment extends InstrumentedPreferenceF
         mPinnedHeaderFrameLayout = root.findViewById(R.id.pinned_header);
         mAppBarLayout = getActivity().findViewById(R.id.app_bar);
         return root;
+    }
+
+    @NonNull
+    @Override
+    public RecyclerView onCreateRecyclerView(@NonNull LayoutInflater inflater,
+            @NonNull ViewGroup parent, @Nullable Bundle savedInstanceState) {
+        RecyclerView recyclerView =
+                super.onCreateRecyclerView(inflater, parent, savedInstanceState);
+        recyclerView.setFocusable(false);
+        return AccessibilityFragmentUtils.addCollectionInfoToAccessibilityDelegate(recyclerView);
     }
 
     @Override
@@ -410,8 +421,12 @@ public abstract class SettingsPreferenceFragment extends InstrumentedPreferenceF
             key = intent != null ? intent.getStringExtra(EXTRA_FRAGMENT_ARG_KEY) : null;
         }
         key = PreferenceSearchIndexablesProvider.Companion.getHighlightKey(key);
-        mAdapter = new HighlightablePreferenceGroupAdapter(preferenceScreen, key,
-                mPreferenceHighlighted);
+        mAdapter = new HighlightablePreferenceGroupAdapter(
+                preferenceScreen,
+                key,
+                mPreferenceHighlighted,
+                getFooterDataMap()
+        );
         return mAdapter;
     }
 

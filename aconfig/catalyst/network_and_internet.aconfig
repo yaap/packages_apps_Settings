@@ -57,16 +57,5 @@ flag {
   bug: "323791114"
 }
 
-flag {
-  name: "deeplink_network_and_internet_25q4"
-  namespace: "android_settings"
-  description: "Flag using for all common deeplink migration in 25Q4"
-  bug: "405344827"
-}
 
-flag {
-  name: "catalyst_configure_network_settings"
-  namespace: "android_settings"
-  description: "Flag for Wi-Fi preferences migration in 25Q4"
-  bug: "405344827"
-}
+

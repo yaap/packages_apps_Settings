@@ -30,6 +30,7 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.os.UserHandle;
 import android.os.UserManager;
+import android.platform.test.annotations.DisableFlags;
 import android.platform.test.annotations.EnableFlags;
 import android.platform.test.flag.junit.SetFlagsRule;
 
@@ -48,6 +49,7 @@ import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 
+import java.util.Collections;
 import java.util.List;
 
 @RunWith(RobolectricTestRunner.class)
@@ -74,7 +76,21 @@ public class UserCapabilitiesTest {
     }
 
     @Test
+    @EnableFlags({Flags.FLAG_POLICY_TRANSPARENCY_REFACTOR_ENABLED})
     public void disallowUserSwitch_restrictionIsSet_true() {
+        PolicyEnforcementInfo policyEnforcementInfo = new PolicyEnforcementInfo(List.of(DPC_ADMIN));
+        mDpm.setPolicyEnforcementInfoForUserRestriction(DISALLOW_USER_SWITCH,
+                policyEnforcementInfo);
+
+        UserCapabilities userCapabilities = UserCapabilities.create(mContext);
+        userCapabilities.updateAddUserCapabilities(mContext);
+
+        assertThat(userCapabilities.mDisallowSwitchUser).isTrue();
+    }
+
+    @Test
+    @DisableFlags({Flags.FLAG_POLICY_TRANSPARENCY_REFACTOR_ENABLED})
+    public void disallowUserSwitch_restrictionIsSet_true_refactorDisabled() {
         mUserManager.setUserRestriction(UserHandle.of(UserHandle.myUserId()),
                 UserManager.DISALLOW_USER_SWITCH, true);
 
@@ -129,7 +145,7 @@ public class UserCapabilitiesTest {
     @Test
     @Ignore
     public void restrictedProfile_enabled() {
-        mUserManager.setUserTypeEnabled(UserManager.USER_TYPE_FULL_RESTRICTED, true);
+        mUserManager.setUserTypeSupported(UserManager.USER_TYPE_FULL_RESTRICTED, true);
         mDpm.setDeviceOwner(null);
         SettingsShadowResources.overrideResource(R.bool.config_offer_restricted_profiles, true);
         final UserCapabilities userCapabilities = UserCapabilities.create(mContext);
@@ -138,7 +154,7 @@ public class UserCapabilitiesTest {
 
     @Test
     public void restrictedProfile_configNotSet() {
-        mUserManager.setUserTypeEnabled(UserManager.USER_TYPE_FULL_RESTRICTED, true);
+        mUserManager.setUserTypeSupported(UserManager.USER_TYPE_FULL_RESTRICTED, true);
         mDpm.setDeviceOwner(null);
         SettingsShadowResources.overrideResource(R.bool.config_offer_restricted_profiles, false);
         final UserCapabilities userCapabilities = UserCapabilities.create(mContext);
@@ -147,7 +163,7 @@ public class UserCapabilitiesTest {
 
     @Test
     public void restrictedProfile_deviceIsManaged() {
-        mUserManager.setUserTypeEnabled(UserManager.USER_TYPE_FULL_RESTRICTED, true);
+        mUserManager.setUserTypeSupported(UserManager.USER_TYPE_FULL_RESTRICTED, true);
         mDpm.setDeviceOwner(new ComponentName("test", "test"));
         SettingsShadowResources.overrideResource(R.bool.config_offer_restricted_profiles, true);
         final UserCapabilities userCapabilities = UserCapabilities.create(mContext);
@@ -156,7 +172,7 @@ public class UserCapabilitiesTest {
 
     @Test
     public void restrictedProfile_typeNotEnabled() {
-        mUserManager.setUserTypeEnabled(UserManager.USER_TYPE_FULL_RESTRICTED, false);
+        mUserManager.setUserTypeSupported(UserManager.USER_TYPE_FULL_RESTRICTED, false);
         mDpm.setDeviceOwner(null);
         SettingsShadowResources.overrideResource(R.bool.config_offer_restricted_profiles, true);
         final UserCapabilities userCapabilities = UserCapabilities.create(mContext);
@@ -171,7 +187,7 @@ public class UserCapabilitiesTest {
                 com.android.internal.R.bool.config_userSwitchingMustGoThroughLoginScreen, true);
         mUserManager.setIsAdminUser(true);
         mUserManager.setSupportsMultipleUsers(true);
-        mUserManager.setUserTypeEnabled(UserManager.USER_TYPE_FULL_GUEST, true);
+        mUserManager.setUserTypeSupported(UserManager.USER_TYPE_FULL_GUEST, true);
         UserCapabilities userCapabilities = UserCapabilities.create(mContext);
         assertThat(userCapabilities.mCanAddGuest).isFalse();
     }
@@ -202,6 +218,22 @@ public class UserCapabilitiesTest {
         userCapabilities.updateAddUserCapabilities(mContext);
 
         assertThat(userCapabilities.mDisallowAddUser).isTrue();
+        assertThat(userCapabilities.mDisallowAddUserSetByAdmin).isFalse();
+        assertThat(userCapabilities.mDisallowAddUserRestrictionEnforcementInfo).isEqualTo(
+                policyEnforcementInfo);
+    }
+
+    @Test
+    @EnableFlags({Flags.FLAG_POLICY_TRANSPARENCY_REFACTOR_ENABLED})
+    public void addUserDisallowed_policyTransparencyRefactorEnabled_notRestricted() {
+        PolicyEnforcementInfo policyEnforcementInfo = new PolicyEnforcementInfo(
+                Collections.emptyList());
+        mDpm.setPolicyEnforcementInfoForUserRestriction(DISALLOW_ADD_USER, policyEnforcementInfo);
+
+        UserCapabilities userCapabilities = UserCapabilities.create(mContext);
+        userCapabilities.updateAddUserCapabilities(mContext);
+
+        assertThat(userCapabilities.mDisallowAddUser).isFalse();
         assertThat(userCapabilities.mDisallowAddUserSetByAdmin).isFalse();
         assertThat(userCapabilities.mDisallowAddUserRestrictionEnforcementInfo).isEqualTo(
                 policyEnforcementInfo);

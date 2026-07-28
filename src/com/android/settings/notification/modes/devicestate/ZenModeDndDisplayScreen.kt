@@ -25,7 +25,11 @@ import com.android.settings.contract.TAG_DEVICE_STATE_SCREEN
 import com.android.settings.core.PreferenceScreenMixin
 import com.android.settings.notification.modes.ZenHelperBackend
 import com.android.settings.notification.modes.ZenModeSummaryHelper
+import com.android.settingslib.datastore.KeyValueStore
+import com.android.settingslib.metadata.METADATA_IN_UI
+import com.android.settingslib.metadata.PersistentPreference
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
 import com.android.settingslib.metadata.preferenceHierarchy
@@ -37,6 +41,10 @@ open class ZenModeDndDisplayScreen :
     PreferenceScreenMixin, PreferenceAvailabilityProvider, PreferenceSummaryProvider {
     override val key: String
         get() = KEY
+
+    //TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.device_state_dnd_mode_display_settings_purpose
 
     override val title: Int
         get() = R.string.mode_display_settings_title
@@ -54,6 +62,10 @@ open class ZenModeDndDisplayScreen :
 
     override fun isFlagEnabled(context: Context) = false
 
+    override val availabilityDescription = "The device must support DND mode."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
+
     override fun isAvailable(context: Context) = context.hasDndMode()
 
     override fun getSummary(context: Context): CharSequence? {
@@ -65,7 +77,40 @@ open class ZenModeDndDisplayScreen :
         Intent(context, DndDisplaySettingsActivity::class.java)
 
     override fun getPreferenceHierarchy(context: Context, coroutineScope: CoroutineScope) =
-        preferenceHierarchy(context) {}
+        preferenceHierarchy(context) { +ZenModeDndDisplayScreenPreference(this@ZenModeDndDisplayScreen) }
+
+    class ZenModeDndDisplayScreenPreference(
+        private val screenMetadata : ZenModeDndDisplayScreen
+    ) : PreferenceMetadata, PreferenceSummaryProvider, PreferenceAvailabilityProvider,
+        PersistentPreference<String> {
+        override val key : String
+            get() = "device_state_dnd_mode_display_settings_preference"
+
+        override val purpose : Int
+            get() = screenMetadata.purpose
+
+        override fun tags(context: Context) = arrayOf(METADATA_IN_UI)
+
+        override val indexable = false
+
+        override fun isEnabled(context: Context) : Boolean = screenMetadata.isEnabled(context)
+
+        override fun getSummary(context: Context) : CharSequence? = screenMetadata.getSummary(context)
+
+        override val availabilityDescription = screenMetadata.availabilityDescription
+
+    override fun getAvailabilityStability() = screenMetadata.getAvailabilityStability()
+
+        override fun isAvailable(context: Context) : Boolean = screenMetadata.isAvailable(context)
+
+        override val supportsWrite: Boolean
+            get() = false
+
+        override val valueType = String::class.javaObjectType
+
+        override fun storage(context: Context): KeyValueStore = createSummaryStorage(context, key)
+
+    }
 
     companion object {
         const val KEY = "device_state_dnd_mode_display_settings" // only for device state.

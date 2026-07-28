@@ -19,6 +19,7 @@ import android.content.Context
 import android.os.VibrationAttributes
 import android.provider.Settings
 import com.android.settings.R
+import com.android.settingslib.metadata.SensitivityLevel
 
 /** Accessibility settings for alarm vibration, as a slider. */
 // LINT.IfChange
@@ -26,11 +27,15 @@ class AlarmVibrationIntensitySliderPreference(context: Context) :
     VibrationIntensitySliderPreference(
         context = context,
         key = KEY,
+        purpose = R.string.alarm_vibration_intensity_purpose,
         vibrationUsage = VibrationAttributes.USAGE_ALARM,
         title = R.string.accessibility_alarm_vibration_title,
     ) {
     override val keywords: Int
         get() = R.string.keywords_alarm_vibration
+
+    override val sensitivityLevel: Int
+        get() = SensitivityLevel.NO_SENSITIVITY
 
     companion object {
         const val KEY = Settings.System.ALARM_VIBRATION_INTENSITY

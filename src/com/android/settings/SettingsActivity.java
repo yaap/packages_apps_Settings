@@ -38,7 +38,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.UserHandle;
 import android.os.UserManager;
-import android.permission.flags.Flags;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -57,7 +56,6 @@ import com.android.internal.util.ArrayUtils;
 import com.android.settings.Settings.WifiSettingsActivity;
 import com.android.settings.activityembedding.ActivityEmbeddingUtils;
 import com.android.settings.applications.manageapplications.ManageApplications;
-import com.android.settings.connecteddevice.NfcAndPaymentFragment;
 import com.android.settings.core.OnActivityResultListener;
 import com.android.settings.core.SettingsBaseActivity;
 import com.android.settings.core.SubSettingLauncher;
@@ -65,7 +63,6 @@ import com.android.settings.core.gateway.SettingsGateway;
 import com.android.settings.dashboard.DashboardFeatureProvider;
 import com.android.settings.homepage.SettingsHomepageActivity;
 import com.android.settings.homepage.TopLevelSettings;
-import com.android.settings.nfc.PaymentSettings;
 import com.android.settings.overlay.FeatureFactory;
 import com.android.settings.password.PasswordUtils;
 import com.android.settings.wfd.WifiDisplaySettings;
@@ -186,7 +183,7 @@ public class SettingsActivity extends SettingsBaseActivity
     private int mInitialTitleResId;
 
     private boolean mBatteryPresent = true;
-    private BroadcastReceiver mBatteryInfoReceiver = new BroadcastReceiver() {
+    private final BroadcastReceiver mBatteryInfoReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -206,7 +203,7 @@ public class SettingsActivity extends SettingsBaseActivity
     private Button mNextButton;
 
     // Categories
-    private ArrayList<DashboardCategory> mCategories = new ArrayList<>();
+    private final ArrayList<DashboardCategory> mCategories = new ArrayList<>();
 
     private DashboardFeatureProvider mDashboardFeatureProvider;
 
@@ -415,12 +412,12 @@ public class SettingsActivity extends SettingsBaseActivity
 
         // TODO: move Settings's ActivityEmbeddingUtils to SettingsLib.
         return !com.android.settingslib.activityembedding.ActivityEmbeddingUtils
-                        .shouldHideNavigateUpButton(this, isSecondLayerPage);
+                .shouldHideNavigateUpButton(this, isSecondLayerPage);
     }
 
     private boolean isSubSettings(Intent intent) {
         return this instanceof SubSettings ||
-            intent.getBooleanExtra(EXTRA_SHOW_FRAGMENT_AS_SUBSETTING, false);
+                intent.getBooleanExtra(EXTRA_SHOW_FRAGMENT_AS_SUBSETTING, false);
     }
 
     private boolean shouldShowMultiPaneDeepLink(Intent intent) {
@@ -467,16 +464,12 @@ public class SettingsActivity extends SettingsBaseActivity
             return false;
         }
 
-        if (TextUtils.equals(intent.getAction(), Intent.ACTION_CREATE_SHORTCUT)) {
-            // Returns false to show full screen for Intent.ACTION_CREATE_SHORTCUT because
-            // - Launcher startActivityForResult for Intent.ACTION_CREATE_SHORTCUT and activity
-            //   stack starts from launcher, CreateShortcutActivity will not follows SplitPaitRule
-            //   registered by Settings.
-            // - There is no CreateShortcutActivity entry point from Settings app UI.
-            return false;
-        }
-
-        return true;
+        // Returns false to show full screen for Intent.ACTION_CREATE_SHORTCUT because
+        // - Launcher startActivityForResult for Intent.ACTION_CREATE_SHORTCUT and activity
+        //   stack starts from launcher, CreateShortcutActivity will not follows SplitPaitRule
+        //   registered by Settings.
+        // - There is no CreateShortcutActivity entry point from Settings app UI.
+        return !TextUtils.equals(intent.getAction(), Intent.ACTION_CREATE_SHORTCUT);
     }
 
     /** Returns the initial calling package name that launches the activity. */
@@ -831,7 +824,7 @@ public class SettingsActivity extends SettingsBaseActivity
         // Final step, refresh categories.
         if (somethingChanged) {
             Log.d(LOG_TAG, "Enabled state changed for some tiles, reloading all categories "
-                    + changedList.toString());
+                    + changedList);
             mCategoryMixin.updateCategories();
         } else {
             Log.d(LOG_TAG, "No enabled state changed, skipping updateCategory call");
@@ -862,27 +855,10 @@ public class SettingsActivity extends SettingsBaseActivity
             if (ai == null || ai.metaData == null) return;
             mFragmentClass = ai.metaData.getString(META_DATA_KEY_FRAGMENT_CLASS);
             mHighlightMenuKey = ai.metaData.getString(META_DATA_KEY_HIGHLIGHT_MENU_KEY);
-            /* TODO(b/327036144) Once the Flags.walletRoleEnabled() is rolled out, we will replace
-            value for the fragment class within the com.android.settings.nfc.PaymentSettings
-            activity with com.android.settings.connecteddevice.NfcAndPaymentFragment so that this
-            code can be removed.
-            */
-            if (shouldOverrideContactlessPaymentRouting()) {
-                overrideContactlessPaymentRouting();
-            }
         } catch (NameNotFoundException nnfe) {
             // No recovery
             Log.d(LOG_TAG, "Cannot get Metadata for: " + getComponentName().toString());
         }
-    }
-
-    private boolean shouldOverrideContactlessPaymentRouting() {
-        return Flags.walletRoleEnabled()
-                && TextUtils.equals(PaymentSettings.class.getName(), mFragmentClass);
-    }
-
-    private void overrideContactlessPaymentRouting() {
-        mFragmentClass = NfcAndPaymentFragment.class.getName();
     }
 
     // give subclasses access to the Next button

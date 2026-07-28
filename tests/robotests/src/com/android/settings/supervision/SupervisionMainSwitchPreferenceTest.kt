@@ -20,6 +20,7 @@ import android.app.KeyguardManager
 import android.app.settings.SettingsEnums.ACTION_SUPERVISION_MAIN_TOGGLE_OFF
 import android.app.settings.SettingsEnums.ACTION_SUPERVISION_MAIN_TOGGLE_ON
 import android.app.supervision.SupervisionManager
+import android.app.supervision.flags.Flags
 import android.content.Context
 import android.content.ContextWrapper
 import android.content.Intent
@@ -27,19 +28,28 @@ import android.content.pm.UserInfo
 import android.os.UserManager
 import android.os.UserManager.USER_TYPE_FULL_SYSTEM
 import android.os.UserManager.USER_TYPE_PROFILE_SUPERVISING
+import android.platform.test.annotations.DisableFlags
+import android.platform.test.annotations.EnableFlags
+import android.platform.test.flag.junit.SetFlagsRule
 import androidx.preference.Preference
+import androidx.preference.PreferenceGroup
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.android.settings.R
 import com.android.settings.supervision.SupervisionMainSwitchPreference.Companion.REQUEST_CODE_CONFIRM_SUPERVISION_CREDENTIALS
 import com.android.settings.supervision.SupervisionMainSwitchPreference.Companion.REQUEST_CODE_SET_UP_SUPERVISION
 import com.android.settings.supervision.ipc.PreferenceData
+import com.android.settings.supervision.webcontentfilters.SupervisionWebContentFiltersScreen
 import com.android.settings.testutils.MetricsRule
 import com.android.settings.testutils.shadow.ShadowAlertDialogCompat
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.preference.createAndBindWidget
 import com.android.settingslib.widget.MainSwitchPreference
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.runTest
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
@@ -51,13 +61,19 @@ import org.mockito.kotlin.eq
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.never
 import org.mockito.kotlin.stub
+import org.mockito.kotlin.times
 import org.mockito.kotlin.verify
+import org.mockito.kotlin.whenever
 import org.robolectric.annotation.Config
 
 @RunWith(AndroidJUnit4::class)
 @Config(shadows = [ShadowAlertDialogCompat::class])
+@ExperimentalCoroutinesApi
 class SupervisionMainSwitchPreferenceTest {
-    private val mockLifeCycleContext = mock<PreferenceLifecycleContext>()
+    private val testDispatcher = UnconfinedTestDispatcher()
+    private val testScope = TestScope(testDispatcher)
+    private val mockLifeCycleContext =
+        mock<PreferenceLifecycleContext>() { on { lifecycleScope } doReturn testScope }
     private val mockKeyguardManager = mock<KeyguardManager>()
     private val mockSupervisionManager = mock<SupervisionManager>()
     private val mockUserManager = mock<UserManager>()
@@ -79,6 +95,8 @@ class SupervisionMainSwitchPreferenceTest {
     private val preference = SupervisionMainSwitchPreference(context, preferenceDataProvider)
 
     @get:Rule val metricsRule = MetricsRule()
+
+    @get:Rule val setFlagsRule = SetFlagsRule()
 
     @Before
     fun setUp() {
@@ -317,6 +335,108 @@ class SupervisionMainSwitchPreferenceTest {
             .isEqualTo(context.getString(R.string.supervision_multi_profile_error_title))
         verify(mockLifeCycleContext, never()).startActivityForResult(any(), any(), any())
     }
+
+    @Test
+    @DisableFlags(Flags.FLAG_ENABLE_SUPERVISION_SETTINGS_UI_UPDATES)
+    fun onResume_updatesDependentPreferenceSummary() =
+        testScope.runTest {
+            val newSummary = "New dynamic summary"
+            val webContentFilterKey = SupervisionWebContentFiltersScreen.KEY
+            val dynamicGroupKey = SupervisionDashboardScreen.SUPERVISION_DYNAMIC_GROUP_1
+            val mainSwitchKey = SupervisionMainSwitchPreference.KEY
+
+            val mockWebContentFilterPreference =
+                mock<Preference> { on { key } doReturn webContentFilterKey }
+            val mockDynamicGroup =
+                mock<PreferenceGroup> {
+                    on { key } doReturn dynamicGroupKey
+                    on { preferenceCount } doReturn 1
+                    on { getPreference(0) } doReturn mockWebContentFilterPreference
+                }
+            val mockMainSwitchPreference = mock<Preference> { on { key } doReturn mainSwitchKey }
+            val mockScreenGroup =
+                mock<PreferenceGroup> {
+                    on { preferenceCount } doReturn 2
+                    on { getPreference(0) } doReturn mockMainSwitchPreference
+                    on { getPreference(1) } doReturn mockDynamicGroup
+                }
+
+            whenever(mockWebContentFilterPreference.parent).thenReturn(mockDynamicGroup)
+            whenever(mockDynamicGroup.parent).thenReturn(mockScreenGroup)
+            whenever(mockMainSwitchPreference.parent).thenReturn(mockScreenGroup)
+
+            mockLifeCycleContext.stub {
+                on { findPreference<Preference>(mainSwitchKey) } doReturn mockMainSwitchPreference
+            }
+
+            val myPreference =
+                SupervisionMainSwitchPreference(
+                    mockLifeCycleContext,
+                    preferenceDataProvider,
+                    testDispatcher,
+                )
+
+            val dataMap = mapOf(webContentFilterKey to PreferenceData(summary = newSummary))
+            preferenceDataProvider.stub {
+                onBlocking { getCachedPreferenceData(any()) } doReturn dataMap
+                onBlocking { getPreferenceData(any()) } doReturn dataMap
+            }
+
+            myPreference.onResume(mockLifeCycleContext)
+
+            verify(mockWebContentFilterPreference, times(2)).summary = newSummary
+        }
+
+    @Test
+    @EnableFlags(Flags.FLAG_ENABLE_SUPERVISION_SETTINGS_UI_UPDATES)
+    fun onResume_updatesDependentPreferenceSummary_supervisionSettingsUiUpdatesEnabled() =
+        testScope.runTest {
+            val newSummary = "New dynamic summary"
+            val webContentFilterKey = SupervisionWebContentFiltersScreen.KEY
+            val dynamicGroupKey = SupervisionDashboardScreen.SUPERVISION_DYNAMIC_GROUP_2
+            val mainSwitchKey = SupervisionMainSwitchPreference.KEY
+
+            val mockWebContentFilterPreference =
+                mock<Preference> { on { key } doReturn webContentFilterKey }
+            val mockDynamicGroup =
+                mock<PreferenceGroup> {
+                    on { key } doReturn dynamicGroupKey
+                    on { preferenceCount } doReturn 1
+                    on { getPreference(0) } doReturn mockWebContentFilterPreference
+                }
+            val mockMainSwitchPreference = mock<Preference> { on { key } doReturn mainSwitchKey }
+            val mockScreenGroup =
+                mock<PreferenceGroup> {
+                    on { preferenceCount } doReturn 2
+                    on { getPreference(0) } doReturn mockMainSwitchPreference
+                    on { getPreference(1) } doReturn mockDynamicGroup
+                }
+
+            whenever(mockWebContentFilterPreference.parent).thenReturn(mockDynamicGroup)
+            whenever(mockDynamicGroup.parent).thenReturn(mockScreenGroup)
+            whenever(mockMainSwitchPreference.parent).thenReturn(mockScreenGroup)
+
+            mockLifeCycleContext.stub {
+                on { findPreference<Preference>(mainSwitchKey) } doReturn mockMainSwitchPreference
+            }
+
+            val myPreference =
+                SupervisionMainSwitchPreference(
+                    mockLifeCycleContext,
+                    preferenceDataProvider,
+                    testDispatcher,
+                )
+
+            val dataMap = mapOf(webContentFilterKey to PreferenceData(summary = newSummary))
+            preferenceDataProvider.stub {
+                onBlocking { getCachedPreferenceData(any()) } doReturn dataMap
+                onBlocking { getPreferenceData(any()) } doReturn dataMap
+            }
+
+            myPreference.onResume(mockLifeCycleContext)
+
+            verify(mockWebContentFilterPreference, times(2)).summary = newSummary
+        }
 
     private fun setSupervisionEnabled(enabled: Boolean) =
         mockSupervisionManager.stub { on { isSupervisionEnabled } doReturn enabled }

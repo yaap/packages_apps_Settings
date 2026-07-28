@@ -389,6 +389,11 @@ public final class ConvertUtilsTest {
         optimizationModeCache.mBatteryOptimizeModeCache.put(
                 (int) batteryDiffEntry.mUid,
                 Pair.create(BatteryOptimizationMode.MODE_OPTIMIZED, false));
+        batteryDiffEntry.mDataMetadata =
+                new BatteryDiffEntry.DataMetadata(
+                        List.of(DataErrorType.ERROR_TYPE_UNKNOWN),
+                        "ERROR_MSG"
+                );
 
         final BatteryUsageDiff batteryUsageDiff =
                 ConvertUtils.convertToBatteryUsageDiff(batteryDiffEntry, optimizationModeCache);
@@ -414,6 +419,12 @@ public final class ConvertUtilsTest {
         assertThat(batteryUsageDiff.getIsAppOptimizationModeMutable()).isFalse();
         assertThat(batteryUsageDiff.hasPackageName()).isFalse();
         assertThat(batteryUsageDiff.hasLabel()).isFalse();
+        final DataMetadata dataMetadata = batteryUsageDiff.getDataMetadata();
+        assertThat(dataMetadata).isNotEqualTo(DataMetadata.getDefaultInstance());
+        assertThat(dataMetadata.getDataErrorTypesList()).containsExactly(
+                DataErrorType.ERROR_TYPE_UNKNOWN
+        );
+        assertThat(dataMetadata.getErrorMsg()).isEqualTo("ERROR_MSG");
     }
 
     @Test
@@ -557,12 +568,88 @@ public final class ConvertUtilsTest {
     }
 
     @Test
+    public void convertToAppUsageEvent_invalidEventType_returnsUnknownType() {
+        final MatrixCursor cursor =
+                new MatrixCursor(
+                        new String[] {
+                            AppUsageEventEntity.KEY_UID,
+                            AppUsageEventEntity.KEY_USER_ID,
+                            AppUsageEventEntity.KEY_PACKAGE_NAME,
+                            AppUsageEventEntity.KEY_TIMESTAMP,
+                            AppUsageEventEntity.KEY_APP_USAGE_EVENT_TYPE,
+                            AppUsageEventEntity.KEY_TASK_ROOT_PACKAGE_NAME,
+                            AppUsageEventEntity.KEY_INSTANCE_ID
+                        });
+        cursor.addRow(
+                new Object[] {
+                    101L,
+                    1001L,
+                    "com.android.settings1",
+                    10001L,
+                    -1, // Invalid event type
+                    "com.android.settings2",
+                    100001L
+                });
+        cursor.moveToFirst();
+
+        final AppUsageEvent appUsageEvent = ConvertUtils.convertToAppUsageEvent(cursor);
+
+        assertThat(appUsageEvent.getType()).isEqualTo(AppUsageEventType.UNKNOWN);
+    }
+
+    @Test
     public void convertToBatteryEvent_normalCase_returnsExpectedResult() {
         final BatteryEvent batteryEvent =
                 ConvertUtils.convertToBatteryEvent(666L, BatteryEventType.POWER_DISCONNECTED, 88);
         assertThat(batteryEvent.getTimestamp()).isEqualTo(666L);
         assertThat(batteryEvent.getType()).isEqualTo(BatteryEventType.POWER_DISCONNECTED);
         assertThat(batteryEvent.getBatteryLevel()).isEqualTo(88);
+    }
+
+    @Test
+    public void convertToBatteryEvent_fromCursor_returnsExpectedResult() {
+        final MatrixCursor cursor =
+                new MatrixCursor(
+                        new String[] {
+                            BatteryEventEntity.KEY_TIMESTAMP,
+                            BatteryEventEntity.KEY_BATTERY_EVENT_TYPE,
+                            BatteryEventEntity.KEY_BATTERY_LEVEL
+                        });
+        cursor.addRow(
+                new Object[] {
+                    10001L, BatteryEventType.POWER_CONNECTED.getNumber(), 66,
+                });
+        cursor.moveToFirst();
+
+        final BatteryEvent batteryEvent = ConvertUtils.convertToBatteryEvent(cursor);
+
+        assertThat(batteryEvent.getTimestamp()).isEqualTo(10001L);
+        assertThat(batteryEvent.getType()).isEqualTo(BatteryEventType.POWER_CONNECTED);
+        assertThat(batteryEvent.getBatteryLevel()).isEqualTo(66);
+    }
+
+    @Test
+    public void convertToBatteryEvent_fromCursorWithInvalidType_returnsUnknownType() {
+        final MatrixCursor cursor =
+                new MatrixCursor(
+                        new String[] {
+                            BatteryEventEntity.KEY_TIMESTAMP,
+                            BatteryEventEntity.KEY_BATTERY_EVENT_TYPE,
+                            BatteryEventEntity.KEY_BATTERY_LEVEL
+                        });
+        cursor.addRow(
+                new Object[] {
+                    10001L,
+                    -1, // Invalid event type
+                    66,
+                });
+        cursor.moveToFirst();
+
+        final BatteryEvent batteryEvent = ConvertUtils.convertToBatteryEvent(cursor);
+
+        assertThat(batteryEvent.getTimestamp()).isEqualTo(10001L);
+        assertThat(batteryEvent.getType()).isEqualTo(BatteryEventType.UNKNOWN_EVENT);
+        assertThat(batteryEvent.getBatteryLevel()).isEqualTo(66);
     }
 
     @Test
@@ -576,13 +663,10 @@ public final class ConvertUtilsTest {
         final List<BatteryEvent> batteryEventList =
                 ConvertUtils.convertToBatteryEventList(batteryLevelData);
 
-        assertThat(batteryEventList).hasSize(2);
-        assertThat(batteryEventList.get(0).getTimestamp()).isEqualTo(1691589600000L);
+        assertThat(batteryEventList).hasSize(1);
+        assertThat(batteryEventList.get(0).getTimestamp()).isEqualTo(1691596800000L);
         assertThat(batteryEventList.get(0).getType()).isEqualTo(BatteryEventType.EVEN_HOUR);
-        assertThat(batteryEventList.get(0).getBatteryLevel()).isEqualTo(98);
-        assertThat(batteryEventList.get(1).getTimestamp()).isEqualTo(1691596800000L);
-        assertThat(batteryEventList.get(1).getType()).isEqualTo(BatteryEventType.EVEN_HOUR);
-        assertThat(batteryEventList.get(1).getBatteryLevel()).isEqualTo(90);
+        assertThat(batteryEventList.get(0).getBatteryLevel()).isEqualTo(90);
     }
 
     @Test
@@ -597,16 +681,13 @@ public final class ConvertUtilsTest {
         final List<BatteryEvent> batteryEventList =
                 ConvertUtils.convertToBatteryEventList(batteryLevelData);
 
-        assertThat(batteryEventList).hasSize(3);
-        assertThat(batteryEventList.get(0).getTimestamp()).isEqualTo(1713909600000L);
+        assertThat(batteryEventList).hasSize(2);
+        assertThat(batteryEventList.get(0).getTimestamp()).isEqualTo(1713916800000L);
         assertThat(batteryEventList.get(0).getType()).isEqualTo(BatteryEventType.EVEN_HOUR);
-        assertThat(batteryEventList.get(0).getBatteryLevel()).isEqualTo(98);
-        assertThat(batteryEventList.get(1).getTimestamp()).isEqualTo(1713916800000L);
+        assertThat(batteryEventList.get(0).getBatteryLevel()).isEqualTo(90);
+        assertThat(batteryEventList.get(1).getTimestamp()).isEqualTo(1713924000000L);
         assertThat(batteryEventList.get(1).getType()).isEqualTo(BatteryEventType.EVEN_HOUR);
-        assertThat(batteryEventList.get(1).getBatteryLevel()).isEqualTo(90);
-        assertThat(batteryEventList.get(2).getTimestamp()).isEqualTo(1713924000000L);
-        assertThat(batteryEventList.get(2).getType()).isEqualTo(BatteryEventType.EVEN_HOUR);
-        assertThat(batteryEventList.get(2).getBatteryLevel()).isEqualTo(83);
+        assertThat(batteryEventList.get(1).getBatteryLevel()).isEqualTo(83);
     }
 
 

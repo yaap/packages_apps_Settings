@@ -20,10 +20,13 @@ import android.content.Context
 import android.net.Uri
 import androidx.preference.Preference
 import com.airbnb.lottie.LottieAnimationView
+import com.android.settings.R
 import com.android.settings.accessibility.AccessibilityUtil
 import com.android.settings.accessibility.shared.utils.adjustIllustrationLayoutForSetupWizard
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceMetadata
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.preference.PreferenceBinding
 import com.android.settingslib.utils.ThreadUtils
 import com.android.settingslib.widget.IllustrationPreference
@@ -38,10 +41,19 @@ abstract class ImageUriPreference :
     override val key: String
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.a11y_activity_detail_screen_animated_image_purpose
+
     override val indexable
         get() = false
 
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
+
     abstract fun getImageUri(context: Context): Uri?
+
+    override val availabilityDescription = "The image uri must be not null."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context): Boolean = getImageUri(context) != null
 

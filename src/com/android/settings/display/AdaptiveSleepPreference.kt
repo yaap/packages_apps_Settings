@@ -36,7 +36,9 @@ import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.KeyValueStoreDelegate
 import com.android.settingslib.datastore.SettingsSecureStore
 import com.android.settingslib.metadata.BooleanValuePreference
+import com.android.settingslib.metadata.MUSTPASS
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.ReadWritePermit
@@ -60,6 +62,9 @@ class AdaptiveSleepPreference :
     override val key: String
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.adaptive_sleep_purpose
+
     override val title: Int
         get() = R.string.adaptive_sleep_title
 
@@ -72,13 +77,22 @@ class AdaptiveSleepPreference :
     override val preferenceActionMetrics: Int
         get() = ACTION_SCREEN_ATTENTION_CHANGED
 
-    override fun tags(context: Context) = arrayOf(KEY_SCREEN_ATTENTION)
+    override fun tags(context: Context) = arrayOf(KEY_SCREEN_ATTENTION, MUSTPASS)
+
+    override fun getEnabledDescription(): String = "This setting must not be restricted by a device administrator, and your device must support adaptive sleep."
+
+    override fun getEnabledStability() = PreconditionStability.UNSTABLE
 
     override fun isEnabled(context: Context) =
         super<PreferenceRestrictionMixin>.isEnabled(context) && context.canBeEnabled()
 
     override val restrictionKeys: Array<String>
         get() = arrayOf(UserManager.DISALLOW_CONFIG_SCREEN_TIMEOUT)
+
+    override val availabilityDescription =
+        "The device must support adaptive sleep."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context) = context.isAdaptiveSleepSupported()
 
@@ -100,8 +114,9 @@ class AdaptiveSleepPreference :
         callingUid: Int,
     ) = ReadWritePermit.ALLOW
 
+    override val supportsWrite = true
     override val sensitivityLevel
-        get() = SensitivityLevel.NO_SENSITIVITY
+        get() = SensitivityLevel.DEEP_LINK_ONLY
 
     @Suppress("UNCHECKED_CAST")
     private class Storage(

@@ -38,6 +38,8 @@ import com.android.settings.dashboard.DashboardFragment
 import com.android.settings.datausage.lib.BillingCycleRepository
 import com.android.settings.datausage.lib.NetworkUsageData
 import com.android.settings.network.telephony.SubscriptionRepository
+import com.android.settings.utils.getSubId
+import com.android.settingslib.metadata.CatalystFlagProviderFactory
 import com.android.settingslib.spa.framework.util.collectLatestWithLifecycle
 import com.android.settingslib.spaprivileged.framework.common.userManager
 import com.android.settingslib.widget.LayoutPreference
@@ -169,9 +171,8 @@ open class DataUsageList : DashboardFragment() {
                 )
             val localIntent: Intent = intent.clone() as Intent
             if (subId == SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
-                subId =
-                    getPreferenceScreenBindingArgs(requireContext())?.getInt(Settings.EXTRA_SUB_ID)
-                        ?: SubscriptionManager.INVALID_SUBSCRIPTION_ID
+                subId = getSubIdFromBindingArgs()
+
                 Log.d(
                     TAG,
                     "processArgument: get subId from ScreenBindingArgs and reset subId into intent.",
@@ -189,6 +190,24 @@ open class DataUsageList : DashboardFragment() {
                 )
                     ?: DataUsageUtils.getMobileNetworkTemplateFromSubId(context, localIntent)
                         .getOrNull()
+        }
+
+        if (template == null) {
+            template = NetworkTemplate.Builder(NetworkTemplate.MATCH_WIFI).build()
+            activity?.title = context?.getString(R.string.non_carrier_data_usage)
+        }
+    }
+
+    private fun getSubIdFromBindingArgs(): Int {
+        if (CatalystFlagProviderFactory.catalystUseKeyParameters()) {
+            val parameters = getPreferenceScreenBindingKeyParameters(requireContext())
+
+            return parameters?.get(Settings.EXTRA_SUB_ID)?.toIntOrNull()
+                ?: SubscriptionManager.INVALID_SUBSCRIPTION_ID
+        } else {
+            return getPreferenceScreenBindingArgs(requireContext())
+                ?.getSubId(Settings.EXTRA_SUB_ID, SubscriptionManager.INVALID_SUBSCRIPTION_ID)
+                ?: SubscriptionManager.INVALID_SUBSCRIPTION_ID
         }
     }
 

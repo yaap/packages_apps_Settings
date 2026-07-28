@@ -18,6 +18,7 @@ package com.android.settings.display;
 
 import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE;
 import static android.provider.Settings.System.SCREEN_BRIGHTNESS_MODE_AUTOMATIC;
+import static com.android.settings.core.BasePreferenceController.AVAILABLE;
 
 import android.app.settings.SettingsEnums;
 import android.content.Context;
@@ -98,5 +99,11 @@ public class AutoBrightnessSettings extends DashboardFragment {
     }
 
     public static final BaseSearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
-            new BaseSearchIndexProvider(R.xml.auto_brightness_detail);
+            new BaseSearchIndexProvider(R.xml.auto_brightness_detail) {
+                @Override
+                protected boolean isPageSearchEnabled(Context context) {
+                    return AutoBrightnessExtensionsKt.getAutoBrightnessAvailabilityStatus(context)
+                            == AVAILABLE;
+                }
+            };
 }

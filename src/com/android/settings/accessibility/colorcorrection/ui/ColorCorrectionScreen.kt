@@ -26,7 +26,6 @@ import com.android.internal.accessibility.AccessibilityShortcutController.DALTON
 import com.android.settings.R
 import com.android.settings.accessibility.AccessibilityUtil
 import com.android.settings.accessibility.FeedbackManager
-import com.android.settings.accessibility.Flags
 import com.android.settings.accessibility.ToggleDaltonizerPreferenceFragment
 import com.android.settings.accessibility.colorcorrection.data.ColorCorrectionModeDataStore
 import com.android.settings.accessibility.shared.ui.AccessibilityShortcutPreference
@@ -44,14 +43,21 @@ import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
 import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.preferenceHierarchy
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 import kotlinx.coroutines.CoroutineScope
 
+// LINT.IfChange
 @ProvidePreferenceScreen(ColorCorrectionScreen.KEY)
 class ColorCorrectionScreen :
     PreferenceScreenMixin, PreferenceSummaryProvider, PreferenceLifecycleProvider {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED)
 
     override val key: String
         get() = KEY
+
+    // TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.daltonizer_preference_purpose
 
     override val title: Int
         get() = SettingsLibR.string.accessibility_display_daltonizer_preference_title
@@ -72,8 +78,6 @@ class ColorCorrectionScreen :
 
     override fun fragmentClass(): Class<out Fragment>? =
         ToggleDaltonizerPreferenceFragment::class.java
-
-    override fun isFlagEnabled(context: Context) = Flags.catalystDaltonizer()
 
     override fun getMetricsCategory() = SettingsEnums.ACCESSIBILITY_TOGGLE_DALTONIZER
 
@@ -121,12 +125,14 @@ class ColorCorrectionScreen :
             +GrayscaleModePreference(modeStorage)
             +PreferenceCategory(
                 key = "general_categories",
+                purpose = R.string.general_categories_purpose,
                 title = R.string.accessibility_screen_option,
             ) +=
                 {
                     +AccessibilityShortcutPreference(
                         context = context,
                         key = "daltonizer_shortcut_key",
+                        purpose = R.string.daltonizer_shortcut_key_purpose,
                         title = R.string.accessibility_daltonizer_shortcut_title,
                         componentName = DALTONIZER_COMPONENT_NAME,
                         featureName =
@@ -143,3 +149,4 @@ class ColorCorrectionScreen :
         const val SETTING_KEY = Settings.Secure.ACCESSIBILITY_DISPLAY_DALTONIZER_ENABLED
     }
 }
+// LINT.ThenChange(ColorCorrectionApiFirstScreen.kt)

@@ -22,14 +22,16 @@ import androidx.preference.Preference
 import com.android.settings.bluetooth.BluetoothDeviceUpdater
 import com.android.settings.connecteddevice.DevicePreferenceCallback
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceCategory
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceMetadata
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.preference.PreferenceCategoryBinding
 
-abstract class HearingDevicePreferenceCategory(key: String, title: Int) :
-    PreferenceCategory(key, title),
+abstract class HearingDevicePreferenceCategory(key: String, purpose: Int, title: Int) :
+    PreferenceCategory(key, purpose, title),
     PreferenceCategoryBinding,
     PreferenceAvailabilityProvider,
     PreferenceLifecycleProvider,
@@ -37,6 +39,8 @@ abstract class HearingDevicePreferenceCategory(key: String, title: Int) :
 
     var deviceUpdater: BluetoothDeviceUpdater? = null
     var category: androidx.preference.PreferenceCategory? = null
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
 
     override fun createWidget(context: Context): androidx.preference.PreferenceCategory {
         return super.createWidget(context).apply { isVisible = false }
@@ -74,6 +78,10 @@ abstract class HearingDevicePreferenceCategory(key: String, title: Int) :
         super.onStop(context)
         deviceUpdater?.apply { unregisterCallback() }
     }
+
+    override val availabilityDescription = "The device must support Bluetooth."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context): Boolean =
         context.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)

@@ -16,7 +16,9 @@
 
 package com.android.settings.security;
 
+import android.app.admin.DevicePolicyIdentifiers;
 import android.app.admin.DevicePolicyManager;
+import android.app.admin.EnforcingAdmin;
 import android.content.Context;
 import android.content.Intent;
 import android.os.UserHandle;
@@ -33,7 +35,6 @@ import com.android.settings.Utils;
 import com.android.settings.core.SubSettingLauncher;
 import com.android.settings.overlay.FeatureFactory;
 import com.android.settings.password.ChooseLockGeneric.ChooseLockGenericFragment;
-import com.android.settings.security.screenlock.ScreenLockSettings;
 import com.android.settingslib.RestrictedLockUtils;
 import com.android.settingslib.transition.SettingsTransitionHelper;
 
@@ -84,35 +85,36 @@ public class ScreenLockPreferenceDetailsUtils {
     }
 
     /**
+     * Returns the enforcing admin if the admin has set it to
+     * {@link DevicePolicyManager.PASSWORD_QUALITY_MANAGED} which would make user unable to
+     * change the password. Otherwise, returns null. Note that this method doesn't check for
+     * other password quality levels and only checks for
+     * {@link DevicePolicyManager.PASSWORD_QUALITY_MANAGED} which is the strictest password
+     * quality level. This method includes the admin policies that applied on the parent profile
+     * from managed profile when unified profile challenge is enabled.
+     */
+    @Nullable
+    public EnforcingAdmin getPasswordQualityManagedEnforcingAdmin(int userId) {
+        final DevicePolicyManager dpm = mContext.getSystemService(DevicePolicyManager.class);
+        if (dpm == null) {
+            return null;
+        }
+        // Check with component set to null to check for password quality set by all admins on
+        // that user.
+        if (dpm.getPasswordQuality(/* component= */ null, userId)
+                != DevicePolicyManager.PASSWORD_QUALITY_MANAGED) {
+            return null;
+        }
+        return dpm.getEnforcingAdminsForPolicy(
+                DevicePolicyIdentifiers.PASSWORD_QUALITY_POLICY,
+                userId).getMostImportantEnforcingAdmin();
+    }
+
+    /**
      * Returns whether the lock pattern is secure.
      */
     public boolean isLockPatternSecure() {
         return mLockPatternUtils != null && mLockPatternUtils.isSecure(mUserId);
-    }
-
-    /**
-     * Returns whether the Gear Menu should be shown.
-     */
-    public boolean shouldShowGearMenu() {
-        return !com.android.settings.flags.Flags.biometricsOnboardingEducation()
-                && isLockPatternSecure();
-    }
-
-    /**
-     * Launches the {@link ScreenLockSettings}.
-     */
-    public void openScreenLockSettings(int sourceMetricsCategory) {
-        mContext.startActivity(getLaunchScreenLockSettingsIntent(sourceMetricsCategory));
-    }
-
-    /**
-     * Returns {@link Intent} to launch the {@link ScreenLockSettings}.
-     */
-    public Intent getLaunchScreenLockSettingsIntent(int sourceMetricsCategory) {
-        return new SubSettingLauncher(mContext)
-                .setDestination(ScreenLockSettings.class.getName())
-                .setSourceMetricsCategory(sourceMetricsCategory)
-                .toIntent();
     }
 
     /**
@@ -178,12 +180,13 @@ public class ScreenLockPreferenceDetailsUtils {
         if (!mLockPatternUtils.isSecure(userId)) {
             if (userId == mProfileChallengeUserId
                     || mLockPatternUtils.isLockScreenDisabled(userId)) {
-                return com.android.settings.flags.Flags.biometricsOnboardingEducation()
-                        ? R.string.unlock_set_unlock_mode_off_new
-                        : R.string.unlock_set_unlock_mode_off;
-            } else {
-                return R.string.unlock_set_unlock_mode_none;
+                if (mContext.getResources().getBoolean(
+                        R.bool.config_hide_pattern_security_option)) {
+                    return R.string.unlock_set_unlock_mode_off_new_without_pattern;
+                }
+                return R.string.unlock_set_unlock_mode_off_new;
             }
+            return R.string.unlock_set_unlock_mode_none;
         } else {
             int keyguardStoredPasswordQuality =
                     mLockPatternUtils.getKeyguardStoredPasswordQuality(userId);

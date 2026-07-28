@@ -24,6 +24,7 @@ import androidx.preference.PreferenceScreen;
 
 import com.android.settings.core.BasePreferenceController;
 
+// LINT.IfChange
 public class NightDisplayCustomEndTimePreferenceController extends BasePreferenceController {
 
     private ColorDisplayManager mColorDisplayManager;
@@ -38,8 +39,15 @@ public class NightDisplayCustomEndTimePreferenceController extends BasePreferenc
 
     @Override
     public int getAvailabilityStatus() {
-        return ColorDisplayManager.isNightDisplayAvailable(mContext) ? AVAILABLE
-                : UNSUPPORTED_ON_DEVICE;
+        int status = NightDisplayExtensionsKt.getNightDisplayAvailabilityStatus(mContext);
+        if (status != AVAILABLE) {
+            return status;
+        }
+        if (mColorDisplayManager.getNightDisplayAutoMode()
+                == ColorDisplayManager.AUTO_MODE_CUSTOM_TIME) {
+            return AVAILABLE;
+        }
+        return AVAILABLE_UNSEARCHABLE;
     }
 
     @Override
@@ -58,3 +66,4 @@ public class NightDisplayCustomEndTimePreferenceController extends BasePreferenc
                 mColorDisplayManager.getNightDisplayCustomEndTime()));
     }
 }
+// LINT.ThenChange(NightDisplayApiScreen.kt)

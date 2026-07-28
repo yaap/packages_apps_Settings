@@ -23,7 +23,9 @@ import static com.android.settingslib.RestrictedLockUtils.EnforcedAdmin;
 import android.app.Activity;
 import android.app.AppOpsManager;
 import android.app.KeyguardManager;
+import android.app.admin.DevicePolicyIdentifiers;
 import android.app.admin.DevicePolicyManager;
+import android.app.admin.PolicyEnforcementInfo;
 import android.app.ecm.EnhancedConfirmationManager;
 import android.app.settings.SettingsEnums;
 import android.content.BroadcastReceiver;
@@ -61,6 +63,7 @@ import com.android.settings.applications.specialaccess.interactacrossprofiles.In
 import com.android.settings.applications.specialaccess.pictureinpicture.PictureInPictureDetailPreferenceController;
 import com.android.settings.core.SubSettingLauncher;
 import com.android.settings.dashboard.DashboardFragment;
+import com.android.settings.utils.HsuUtils;
 import com.android.settingslib.RestrictedLockUtilsInternal;
 import com.android.settingslib.applications.AppUtils;
 import com.android.settingslib.applications.ApplicationsState;
@@ -81,6 +84,7 @@ import java.util.List;
  * For non-system applications, there is no option to clear data. Instead there is an option to
  * uninstall the application.
  */
+// Lint.IfChange
 public class AppInfoDashboardFragment extends DashboardFragment
         implements ApplicationsState.Callbacks,
         ButtonActionDialogFragment.AppButtonsDialogListener {
@@ -112,6 +116,7 @@ public class AppInfoDashboardFragment extends DashboardFragment
 
     private static final boolean localLOGV = false;
 
+    private PolicyEnforcementInfo mAppsControlEnforcementInfo;
     private EnforcedAdmin mAppsControlDisallowedAdmin;
     private boolean mAppsControlDisallowedBySystem;
 
@@ -283,10 +288,18 @@ public class AppInfoDashboardFragment extends DashboardFragment
     public void onResume() {
         super.onResume();
         final Activity activity = getActivity();
-        mAppsControlDisallowedAdmin = RestrictedLockUtilsInternal.checkIfRestrictionEnforced(
-                activity, UserManager.DISALLOW_APPS_CONTROL, mUserId);
-        mAppsControlDisallowedBySystem = RestrictedLockUtilsInternal.hasBaseUserRestriction(
-                activity, UserManager.DISALLOW_APPS_CONTROL, mUserId);
+        if (android.app.admin.flags.Flags.policyTransparencyRefactorEnabled()) {
+            mAppsControlEnforcementInfo = activity.getSystemService(
+                    DevicePolicyManager.class).getEnforcingAdminsForPolicy(
+                    DevicePolicyIdentifiers.getIdentifierForUserRestriction(
+                            UserManager.DISALLOW_APPS_CONTROL), mUserId);
+            mAppsControlDisallowedBySystem = mAppsControlEnforcementInfo.isEnforcedBySystem();
+        } else {
+            mAppsControlDisallowedAdmin = RestrictedLockUtilsInternal.checkIfRestrictionEnforced(
+                    activity, UserManager.DISALLOW_APPS_CONTROL, mUserId);
+            mAppsControlDisallowedBySystem = RestrictedLockUtilsInternal.hasBaseUserRestriction(
+                    activity, UserManager.DISALLOW_APPS_CONTROL, mUserId);
+        }
 
         if (!refreshUi()) {
             setIntentAndFinish(true, true);
@@ -428,8 +441,15 @@ public class AppInfoDashboardFragment extends DashboardFragment
         uninstallAllUsersItem.setVisible(
                 shouldShowUninstallForAll(mAppEntry) && !mAppsControlDisallowedBySystem);
         if (uninstallAllUsersItem.isVisible()) {
-            RestrictedLockUtilsInternal.setMenuItemAsDisabledByAdmin(getActivity(),
-                    uninstallAllUsersItem, mAppsControlDisallowedAdmin);
+            if (android.app.admin.flags.Flags.policyTransparencyRefactorEnabled()) {
+                RestrictedLockUtilsInternal.setMenuItemAsDisabledByAdmin(getActivity(),
+                        uninstallAllUsersItem,
+                        mAppsControlEnforcementInfo.getMostImportantEnforcingAdmin(),
+                        null);
+            } else {
+                RestrictedLockUtilsInternal.setMenuItemAsDisabledByAdmin(getActivity(),
+                        uninstallAllUsersItem, mAppsControlDisallowedAdmin);
+            }
         }
         menu.findItem(ACCESS_RESTRICTED_SETTINGS).setVisible(shouldShowAccessRestrictedSettings());
         mUpdatedSysApp = (mAppEntry.info.flags & ApplicationInfo.FLAG_UPDATED_SYSTEM_APP) != 0;
@@ -441,8 +461,15 @@ public class AppInfoDashboardFragment extends DashboardFragment
                 && !mAppsControlDisallowedBySystem
                 && !uninstallUpdateDisabled);
         if (uninstallUpdatesItem.isVisible()) {
-            RestrictedLockUtilsInternal.setMenuItemAsDisabledByAdmin(getActivity(),
-                    uninstallUpdatesItem, mAppsControlDisallowedAdmin);
+            if (android.app.admin.flags.Flags.policyTransparencyRefactorEnabled()) {
+                RestrictedLockUtilsInternal.setMenuItemAsDisabledByAdmin(getActivity(),
+                        uninstallUpdatesItem,
+                        mAppsControlEnforcementInfo.getMostImportantEnforcingAdmin(),
+                        null);
+            } else {
+                RestrictedLockUtilsInternal.setMenuItemAsDisabledByAdmin(getActivity(),
+                        uninstallUpdatesItem, mAppsControlDisallowedAdmin);
+            }
         }
     }
 
@@ -680,12 +707,18 @@ public class AppInfoDashboardFragment extends DashboardFragment
         Bundle args = new Bundle();
         args.putString(ARG_PACKAGE_NAME, app.packageName);
         args.putInt(ARG_PACKAGE_UID, app.uid);
-        new SubSettingLauncher(context)
+        SubSettingLauncher launcher = new SubSettingLauncher(context)
                 .setDestination(destination.getName())
                 .setArguments(args)
-                .setUserHandle(UserHandle.getUserHandleForUid(app.uid))
-                .setSourceMetricsCategory(sourceMetricsCategory)
-                .launch();
+                .setSourceMetricsCategory(sourceMetricsCategory);
+
+        // For HSU apps, we must launch the activity in the current user's context (e.g. user 10)
+        // because the System User (User 0) is headless and cannot display UI.
+        // The fragment will handle data fetching for the target user (User 0) based on the UID.
+        if (!android.multiuser.Flags.hsuAppManagement() || !HsuUtils.isHsuApp(context, app)) {
+            launcher.setUserHandle(UserHandle.getUserHandleForUid(app.uid));
+        }
+        launcher.launch();
     }
 
     private void onPackageRemoved() {
@@ -863,3 +896,4 @@ public class AppInfoDashboardFragment extends DashboardFragment
     };
 
 }
+// Lint.ThenChange(AppInfoScreenApiFirst.kt, HibernationSwitchPreferenceController.java)

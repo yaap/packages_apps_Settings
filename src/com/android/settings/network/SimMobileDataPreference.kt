@@ -20,15 +20,20 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.telephony.SubscriptionManager
 import com.android.settings.R
+import com.android.settingslib.datastore.KeyValueStore
+import com.android.settingslib.metadata.PersistentPreference
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
+import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.preference.PreferenceBinding
 import com.android.settingslib.preference.PreferenceBindingPlaceholder
 
 /** Show primary mobile data's preference in dual active SIMs. */
 @SuppressLint("MissingPermission")
 class SimMobileDataPreference :
+    PersistentPreference<String>,
     PreferenceMetadata,
     PreferenceBinding,
     PreferenceBindingPlaceholder,
@@ -38,11 +43,19 @@ class SimMobileDataPreference :
     override val key: String
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.sim_mobile_datas_preference_key_purpose
+
     override val title: Int
         get() = R.string.mobile_data_settings_title
 
     override val icon: Int
         get() = R.drawable.ic_settings_data_usage
+
+    override val availabilityDescription =
+        "The device must have more than one active subscription available."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
 
     override fun isAvailable(context: Context): Boolean {
         return context
@@ -50,6 +63,12 @@ class SimMobileDataPreference :
             .activeSubscriptionIdList
             .size > 1
     }
+
+    override val supportsWrite = false
+
+    override val valueType = String::class.javaObjectType
+
+    override fun storage(context: Context): KeyValueStore = createSummaryStorage(context, key)
 
     override fun getSummary(context: Context): CharSequence? {
         val subInfo =
@@ -61,6 +80,9 @@ class SimMobileDataPreference :
         }
         return subInfo.displayName
     }
+
+    override val sensitivityLevel
+        get() = SensitivityLevel.NO_SENSITIVITY
 
     companion object {
         const val KEY = "sim_mobile_datas_preference_key"

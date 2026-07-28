@@ -17,9 +17,17 @@
 package com.android.settings.display;
 
 import static com.android.settings.core.BasePreferenceController.AVAILABLE_UNSEARCHABLE;
+import static com.android.settings.core.BasePreferenceController.CONDITIONALLY_UNAVAILABLE;
 import static com.android.settings.core.BasePreferenceController.UNSUPPORTED_ON_DEVICE;
 
 import static com.google.common.truth.Truth.assertThat;
+
+import static org.mockito.Mockito.mock;
+
+import android.hardware.display.DisplayManagerGlobal;
+import android.view.Display;
+import android.view.DisplayAdjustments;
+import android.view.DisplayInfo;
 
 import com.android.settings.testutils.shadow.SettingsShadowResources;
 
@@ -36,11 +44,16 @@ import org.robolectric.annotation.Config;
 public class NightDisplayTopIntroPreferenceControllerTest {
 
     private NightDisplayTopIntroPreferenceController mController;
+    private final DisplayInfo mDisplayInfo = new DisplayInfo();
 
     @Before
     public void setUp() {
-        mController =
-                new NightDisplayTopIntroPreferenceController(RuntimeEnvironment.application, "key");
+        mDisplayInfo.type = Display.TYPE_INTERNAL;
+        DisplayAdjustments daj = null;
+        Display display = new Display(mock(DisplayManagerGlobal.class),
+                Display.DEFAULT_DISPLAY, mDisplayInfo, daj);
+        mController = new NightDisplayTopIntroPreferenceController(
+                RuntimeEnvironment.application.createDisplayContext(display), "key");
     }
 
     @After
@@ -49,18 +62,40 @@ public class NightDisplayTopIntroPreferenceControllerTest {
     }
 
     @Test
-    public void getAvailabilityStatus_configuredAvailable_shouldReturnAVAILABLE_UNSEARCHABLE() {
-        SettingsShadowResources.overrideResource(
-                com.android.internal.R.bool.config_nightDisplayAvailable, true);
-
-        assertThat(mController.getAvailabilityStatus()).isEqualTo(AVAILABLE_UNSEARCHABLE);
+    public void configuredNightDisplayAvailableAndNotBlocked_returnAvailableUnsearchable() {
+        NightDisplayTestUtils.setNightDisplayAvailableAndNotBlocked();
+        assertThat(mController.getAvailabilityStatus())
+                .isEqualTo(AVAILABLE_UNSEARCHABLE);
     }
 
     @Test
-    public void getAvailabilityStatus_configuredUnavailable_shouldReturnUNSUPPORTED_ON_DEVICE() {
-        SettingsShadowResources.overrideResource(
-                com.android.internal.R.bool.config_nightDisplayAvailable, false);
+    public void configuredNightDisplayUnavailableAndNotBlocked_returnUnsupportedOnDevice() {
+        NightDisplayTestUtils.setNightDisplayAvailable(false);
+        NightDisplayTestUtils.setNightDisplaySettingsBlocked(false);
+        assertThat(mController.getAvailabilityStatus())
+                .isEqualTo(UNSUPPORTED_ON_DEVICE);
+    }
 
-        assertThat(mController.getAvailabilityStatus()).isEqualTo(UNSUPPORTED_ON_DEVICE);
+    @Test
+    public void configuredNightDisplayAvailableAndBlocked_returnUnsupportedOnDevice() {
+        NightDisplayTestUtils.setNightDisplayAvailable(true);
+        NightDisplayTestUtils.setNightDisplaySettingsBlocked(true);
+        assertThat(mController.getAvailabilityStatus())
+                .isEqualTo(UNSUPPORTED_ON_DEVICE);
+    }
+
+    @Test
+    public void configuredNightDisplayUnavailableAndBlocked_returnUnsupportedOnDevice() {
+        NightDisplayTestUtils.setNightDisplayAvailable(false);
+        NightDisplayTestUtils.setNightDisplaySettingsBlocked(true);
+        assertThat(mController.getAvailabilityStatus())
+                .isEqualTo(UNSUPPORTED_ON_DEVICE);
+    }
+
+    @Test
+    public void configuredNightDisplayAvailableAndNotBlocked_externalDisplay_isUnavailable() {
+        NightDisplayTestUtils.setNightDisplayAvailableAndNotBlocked();
+        mDisplayInfo.type = Display.TYPE_EXTERNAL;
+        assertThat(mController.getAvailabilityStatus()).isEqualTo(CONDITIONALLY_UNAVAILABLE);
     }
 }

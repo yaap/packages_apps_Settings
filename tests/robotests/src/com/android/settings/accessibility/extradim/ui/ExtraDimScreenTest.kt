@@ -17,34 +17,54 @@
 package com.android.settings.accessibility.extradim.ui
 
 import android.app.settings.SettingsEnums
+import android.content.Context
+import android.hardware.display.DisplayManagerGlobal
 import android.provider.Settings.ACTION_REDUCE_BRIGHT_COLORS_SETTINGS
+import android.view.Display
+import android.view.DisplayAdjustments
+import android.view.DisplayInfo
+import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.android.internal.R as AndroidInternalR
 import com.android.settings.R
 import com.android.settings.SettingsActivity.EXTRA_FRAGMENT_ARG_KEY
-import com.android.settings.accessibility.Flags
 import com.android.settings.accessibility.ToggleReduceBrightColorsPreferenceFragment
 import com.android.settings.accessibility.extradim.data.ExtraDimDataStore
 import com.android.settings.testutils.SettingsStoreRule
 import com.android.settings.testutils.shadow.SettingsShadowResources
-import com.android.settings.testutils2.SettingsCatalystTestCase
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ReadWritePermit
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Rule
 import org.junit.Test
+import org.junit.runner.RunWith
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
+import org.mockito.kotlin.whenever
 import org.robolectric.annotation.Config
 
 @Config(shadows = [SettingsShadowResources::class])
-class ExtraDimScreenTest : SettingsCatalystTestCase() {
+@RunWith(AndroidJUnit4::class)
+class ExtraDimScreenTest {
     @get:Rule val settingsStoreRule = SettingsStoreRule()
-    override val flagName = Flags.FLAG_CATALYST_EXTRA_DIM
-    override val preferenceScreenCreator by lazy { ExtraDimScreen(appContext) }
+
+    private var appContext: Context = ApplicationProvider.getApplicationContext()
+    private val preferenceScreenCreator by lazy { ExtraDimScreen(appContext) }
+    private val displayInfo = DisplayInfo()
 
     @Before
     fun setUp() {
+        displayInfo.type = Display.TYPE_INTERNAL
+        val displayManagerGlobal = mock<DisplayManagerGlobal>()
+        val daj: DisplayAdjustments? = null
+        appContext =
+            appContext.createDisplayContext(
+                Display(displayManagerGlobal, Display.DEFAULT_DISPLAY, displayInfo, daj)
+            )
+        whenever(displayManagerGlobal.getDisplayInfo(Display.DEFAULT_DISPLAY))
+            .thenReturn(displayInfo)
+
         SettingsShadowResources.overrideResource(
             AndroidInternalR.bool.config_reduceBrightColorsAvailable,
             true,
@@ -107,6 +127,10 @@ class ExtraDimScreenTest : SettingsCatalystTestCase() {
             AndroidInternalR.bool.config_reduceBrightColorsAvailable,
             true,
         )
+        SettingsShadowResources.overrideResource(
+            AndroidInternalR.bool.config_evenDimmerEnabled,
+            false,
+        )
         assertThat(preferenceScreenCreator.isAvailable(appContext)).isTrue()
     }
 
@@ -116,6 +140,29 @@ class ExtraDimScreenTest : SettingsCatalystTestCase() {
             AndroidInternalR.bool.config_reduceBrightColorsAvailable,
             false,
         )
+        assertThat(preferenceScreenCreator.isAvailable(appContext)).isFalse()
+    }
+
+    @Test
+    fun isAvailable_evenDimmerEnabled_returnFalse() {
+        SettingsShadowResources.overrideResource(
+            AndroidInternalR.bool.config_evenDimmerEnabled,
+            true,
+        )
+        assertThat(preferenceScreenCreator.isAvailable(appContext)).isFalse()
+    }
+
+    @Test
+    fun isAvailable_externalDisplay_returnFalse() {
+        SettingsShadowResources.overrideResource(
+            AndroidInternalR.bool.config_reduceBrightColorsAvailable,
+            true,
+        )
+        SettingsShadowResources.overrideResource(
+            AndroidInternalR.bool.config_evenDimmerEnabled,
+            false,
+        )
+        displayInfo.type = Display.TYPE_EXTERNAL
         assertThat(preferenceScreenCreator.isAvailable(appContext)).isFalse()
     }
 

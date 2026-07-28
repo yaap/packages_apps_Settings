@@ -31,25 +31,28 @@ import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.preferenceHierarchy
 import com.android.settingslib.widget.SettingsThemeHelper.isExpressiveTheme
 import kotlinx.coroutines.CoroutineScope
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 
 // LINT.IfChange
 @ProvidePreferenceScreen(AccountScreen.KEY)
 open class AccountScreen : PreferenceScreenMixin, PreferenceTitleProvider, PreferenceIconProvider {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED)
+
     override val key: String
         get() = KEY
+
+    // TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.top_level_accounts_purpose
 
     override val summary: Int
         get() = R.string.account_dashboard_default_summary
 
     override val keywords: Int
-        get() = R.string.keywords_accounts
+        get() = if (Flags.enableAccountsAndBackupScreen()) 0 else R.string.keywords_accounts
 
     override fun getTitle(context: Context): CharSequence =
-        context.getText(
-            if (CredentialManager.isServiceEnabled(context)) {
-                R.string.account_dashboard_title_with_passkeys
-            } else R.string.account_dashboard_title
-        )
+        context.getText(context.getAccountScreenTitle())
 
     override fun getIcon(context: Context) =
         when {
@@ -61,8 +64,6 @@ open class AccountScreen : PreferenceScreenMixin, PreferenceTitleProvider, Prefe
         get() = R.string.menu_key_accounts
 
     override fun getMetricsCategory() = SettingsEnums.ACCOUNT
-
-    override fun isFlagEnabled(context: Context): Boolean = Flags.catalystAccountsScreen()
 
     override fun hasCompleteHierarchy() = false
 
@@ -76,6 +77,14 @@ open class AccountScreen : PreferenceScreenMixin, PreferenceTitleProvider, Prefe
 
     companion object {
         const val KEY = "top_level_accounts"
+
+        @JvmStatic
+        fun Context.getAccountScreenTitle(): Int =
+            when {
+                !CredentialManager.isServiceEnabled(this) -> R.string.account_dashboard_title
+                Flags.enableAccountsAndBackupScreen() -> R.string.dashboard_title_passwords_passkeys
+                else -> R.string.account_dashboard_title_with_passkeys
+            }
     }
 }
 // LINT.ThenChange(AccountDashboardFragment.java)

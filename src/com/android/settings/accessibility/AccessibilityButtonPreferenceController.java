@@ -31,11 +31,11 @@ import com.android.settings.core.BasePreferenceController;
 import com.android.settingslib.search.SearchIndexableRaw;
 
 import java.util.List;
-import java.util.Locale;
 
 /**
  * Preference controller for accessibility button preference.
  */
+// LINT.IfChange
 public class AccessibilityButtonPreferenceController extends BasePreferenceController {
     public AccessibilityButtonPreferenceController(Context context, String key) {
         super(context, key);
@@ -63,9 +63,7 @@ public class AccessibilityButtonPreferenceController extends BasePreferenceContr
             return "";
         } else {
             return mContext.getString(
-                    R.string.accessibility_shortcut_unassigned_setting_unavailable_summary,
-                    AccessibilityUtil.getShortcutSummaryList(mContext, SOFTWARE)
-                            .toString().toLowerCase(Locale.getDefault()));
+                    R.string.a11y_button_shortcut_unassigned_setting_unavailable_summary);
         }
     }
 
@@ -90,3 +88,4 @@ public class AccessibilityButtonPreferenceController extends BasePreferenceContr
         return R.string.accessibility_button_title;
     }
 }
+// LINT.ThenChange(buttonshortcutsetting/ui/ButtonShortcutSettingScreen.kt)

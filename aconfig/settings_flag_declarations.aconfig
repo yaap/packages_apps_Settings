@@ -2,13 +2,6 @@ package: "com.android.settings.flags"
 container: "system_ext"
 
 flag {
-    name: "mainline_module_explicit_intent"
-    namespace: "android_settings"
-    description: "Enabling will provide an explicit package name for Intent to update mainline modules"
-    bug: "278987474"
-}
-
-flag {
     name: "app_archiving"
     namespace: "android_settings"
     description: "Feature flag to enable the archiving feature."
@@ -20,13 +13,6 @@ flag {
     namespace: "android_settings"
     description: "Feature flag to remove relevant slices dependencies."
     bug: "297367302"
-}
-
-flag {
-    name: "support_raw_dynamic_icons"
-    namespace: "android_settings"
-    description: "Flag to gate support of injected preference icons containing raw data"
-    bug: "351884562"
 }
 
 flag {
@@ -51,23 +37,6 @@ flag {
 }
 
 flag {
-  name: "extended_screenshots_exclude_nested_scrollables"
-  namespace: "systemui"
-  description: "Sets a flag on the main scrollable container to exclude any nested scrollable views as potential targets for extended screenshots."
-  bug: "399810823"
-  metadata {
-    purpose: PURPOSE_BUGFIX
-  }
-}
-
-flag {
-  name: "touchpad_settings_design_update"
-  namespace: "android_settings"
-  description: "All touchpad settings pages should either migrate to non-custom implementations or be updated"
-  bug: "400647661"
-}
-
-flag {
   name: "three_finger_tap_app_launch"
   namespace: "android_settings"
   description: "Use three finger tap to open a custom app"
@@ -89,11 +58,8 @@ flag {
 }
 
 flag {
-  name: "disable_update_height_profile_select_location_services"
-  namespace: "android_settings"
-  description: "Disable updateHeight in the Location Services page to allow scrolling in certain screen sizes / orientations"
-  bug: "418876165"
-  metadata {
-    purpose: PURPOSE_BUGFIX
-  }
+  name: "storage_summary_percentage_alignment"
+  namespace: "mediaprovider"
+  description: "Isolate percentage formatting in storage summary to ensure correct alignment in RTL locales."
+  bug: "394910107"
 }

@@ -36,6 +36,7 @@ import com.android.settingslib.search.SearchIndexable;
 import java.util.ArrayList;
 import java.util.List;
 
+// LINT.IfChange
 /** Controls the USB device details and provides updates to individual controllers. */
 @SearchIndexable(forTarget = SearchIndexable.ALL & ~SearchIndexable.ARC)
 public class UsbDetailsFragment extends DashboardFragment {
@@ -121,10 +122,13 @@ public class UsbDetailsFragment extends DashboardFragment {
             Context context, UsbBackend usbBackend, UsbDetailsFragment fragment) {
         List<UsbDetailsController> ret = new ArrayList<>();
         ret.add(new UsbDetailsHeaderController(context, fragment, usbBackend));
+        ret.add(new UsbDetailsConnectedDevicesController(context, fragment, usbBackend));
         ret.add(new UsbDetailsDataRoleController(context, fragment, usbBackend));
         ret.add(new UsbDetailsFunctionsController(context, fragment, usbBackend));
         ret.add(new UsbDetailsPowerRoleController(context, fragment, usbBackend));
         ret.add(new UsbDetailsTranscodeMtpController(context, fragment, usbBackend));
+        ret.add(new UsbDetailsPciTunnelingController(context, fragment, usbBackend));
+
         return ret;
     }
 
@@ -145,3 +149,4 @@ public class UsbDetailsFragment extends DashboardFragment {
                 }
             };
 }
+// LINT.ThenChange(UsbDetailsApiScreen.kt)

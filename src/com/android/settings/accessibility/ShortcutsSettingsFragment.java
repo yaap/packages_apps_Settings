@@ -17,14 +17,20 @@
 package com.android.settings.accessibility;
 
 import android.app.settings.SettingsEnums;
+import android.content.Context;
 
 import com.android.settings.R;
+import com.android.settings.accessibility.shortcutssettings.ui.ShortcutsSettingsScreen;
+import com.android.settings.dashboard.DashboardFragment;
 import com.android.settings.search.BaseSearchIndexProvider;
 import com.android.settingslib.search.SearchIndexable;
 
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
 /** Accessibility settings for accessibility shortcuts. */
 @SearchIndexable(forTarget = SearchIndexable.ALL & ~SearchIndexable.ARC)
-public class ShortcutsSettingsFragment extends BaseSupportFragment {
+public class ShortcutsSettingsFragment extends DashboardFragment {
 
     private static final String TAG = "ShortcutsSettingsFragment";
 
@@ -39,11 +45,18 @@ public class ShortcutsSettingsFragment extends BaseSupportFragment {
     }
 
     @Override
+    public @Nullable String getPreferenceScreenBindingKey(@NotNull Context context) {
+        return ShortcutsSettingsScreen.KEY;
+    }
+
+    @Override
     protected String getLogTag() {
         return TAG;
     }
 
     public static final BaseSearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
-            new BaseSearchIndexProvider(R.xml.accessibility_shortcuts_settings);
+            new BaseSearchIndexProvider(
+                    Flags.catalystA11yShortcutsSettings() ? 0
+                            : R.xml.accessibility_shortcuts_settings);
 
 }

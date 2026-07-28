@@ -23,10 +23,12 @@ import static com.android.settings.connecteddevice.display.ExternalDisplaySettin
 import static com.android.settings.connecteddevice.display.ExternalDisplaySettingsConfiguration.EXTERNAL_DISPLAY_HELP_URL;
 import static com.android.settings.connecteddevice.display.ExternalDisplaySettingsConfiguration.EXTERNAL_DISPLAY_NOT_FOUND_RESOURCE;
 
+import android.app.Application;
 import android.app.settings.SettingsEnums;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Point;
+import android.icu.text.NumberFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.util.Pair;
@@ -38,10 +40,13 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceGroup;
 import androidx.preference.PreferenceScreen;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.internal.util.ToBooleanFunction;
 import com.android.settings.R;
@@ -55,6 +60,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -95,6 +101,9 @@ public class ResolutionPreferenceFragment extends SettingsPreferenceFragmentBase
                     scheduleUpdate();
                 }
             };
+    private final NumberFormat mNumberFormatter =
+            NumberFormat.getNumberInstance(Locale.getDefault());
+    private ConfirmationViewModel mConfirmationViewModel;
 
     @Override
     public int getMetricsCategory() {
@@ -111,6 +120,8 @@ public class ResolutionPreferenceFragment extends SettingsPreferenceFragmentBase
         if (mInjector == null) {
             mInjector = new ConnectedDisplayInjector(getPrefContext());
         }
+        mConfirmationViewModel = new ViewModelProvider(this).get(ConfirmationViewModel.class);
+        mNumberFormatter.setGroupingUsed(false);
         addPreferencesFromResource(EXTERNAL_DISPLAY_RESOLUTION_SETTINGS_RESOURCE);
         updateDisplayModeLimits(mInjector.getContext());
         setupResolutionApplyConfirmationHandler();
@@ -137,6 +148,11 @@ public class ResolutionPreferenceFragment extends SettingsPreferenceFragmentBase
         }
         mInjector.registerDisplayListener(mListener);
         scheduleUpdate();
+        final RecyclerView recyclerView = getListView();
+        if (recyclerView != null) {
+            // A11y is announced on the individual resolution selections
+            recyclerView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_NO);
+        }
     }
 
     @Override
@@ -205,6 +221,22 @@ public class ResolutionPreferenceFragment extends SettingsPreferenceFragmentBase
                 remainingModes.first,
                 remainingModes.second);
         Log.i(TAG, "Currently selected display mode: " + modeToReadableString(getSelectedMode()));
+
+        if (mConfirmationViewModel.mIsPendingConfirmation) {
+            Mode selectedMode = mConfirmationViewModel.mPendingMode;
+            Mode existingMode = mConfirmationViewModel.mExistingMode;
+            if (selectedMode == null || existingMode == null) {
+                return;
+            }
+
+            if (getParentFragmentManager().findFragmentByTag(ResolutionChangeDialogFragment.TAG)
+                    == null) {
+                ResolutionChangeDialogFragment dialog =
+                        ResolutionChangeDialogFragment.Companion.newInstance(
+                                selectedMode, existingMode);
+                dialog.show(getParentFragmentManager(), ResolutionChangeDialogFragment.TAG);
+            }
+        }
     }
 
     private PreferenceCategory getTopPreference(
@@ -227,9 +259,7 @@ public class ResolutionPreferenceFragment extends SettingsPreferenceFragmentBase
             mMoreOptionsPreference.setPersistent(false);
             mMoreOptionsPreference.setTitle(MORE_OPTIONS_TITLE_RESOURCE);
             mMoreOptionsPreference.setOnExpandButtonClickListener(
-                    () -> {
-                        mMoreOptionsExpanded = true;
-                    });
+                    () -> mMoreOptionsExpanded = true);
             mMoreOptionsPreference.setKey(MORE_OPTIONS_KEY);
             screen.addPreference(mMoreOptionsPreference);
         } else {
@@ -245,11 +275,13 @@ public class ResolutionPreferenceFragment extends SettingsPreferenceFragmentBase
             boolean isSelectedModeFound,
             @NonNull List<Mode> moreModes) {
         if (moreModes.isEmpty()) {
+            group.setVisible(false);
             return;
         }
         mMoreOptionsExpanded |= !isSelectedModeFound;
         group.setInitialExpandedChildrenCount(mMoreOptionsExpanded ? Integer.MAX_VALUE : 0);
         addModePreferences(context, group, moreModes, /* checkMode= */ null, display);
+        group.setVisible(group.getPreferenceCount() > 0);
     }
 
     private Pair<Boolean, List<Mode>> addModePreferences(
@@ -260,7 +292,6 @@ public class ResolutionPreferenceFragment extends SettingsPreferenceFragmentBase
             @NonNull DisplayDevice display) {
         Mode curMode = display.getMode();
         var currentResolution = modeToPrefKey(curMode);
-        var rotatedResolution = rotatedModeToPrefKey(curMode);
         var skippedModes = new ArrayList<Mode>();
         var isAnyOfModesSelected = false;
         for (var mode : modes) {
@@ -272,8 +303,7 @@ public class ResolutionPreferenceFragment extends SettingsPreferenceFragmentBase
                 skippedModes.add(mode);
                 continue;
             }
-            var isCurrentMode =
-                    currentResolution.equals(modeStr) || rotatedResolution.equals(modeStr);
+            var isCurrentMode = currentResolution.equals(modeStr);
             if (!isCurrentMode && !isAllowedMode(mode)) {
                 continue;
             }
@@ -283,14 +313,20 @@ public class ResolutionPreferenceFragment extends SettingsPreferenceFragmentBase
             pref.setKey(modeStr);
             int width = mode.getPhysicalWidth();
             int height = mode.getPhysicalHeight();
+            String formattedWidth = mNumberFormatter.format(width);
+            String formattedHeight = mNumberFormatter.format(height);
             pref.setTitle(
                     createAccessibleSequence(
-                            modeToReadableString(mode),
+                            getResources()
+                                    .getString(
+                                            R.string.screen_resolution_displayed_text,
+                                            formattedWidth,
+                                            formattedHeight),
                             getResources()
                                     .getString(
                                             R.string.screen_resolution_delimiter_a11y,
-                                            width,
-                                            height)));
+                                            formattedWidth,
+                                            formattedHeight)));
             pref.setSingleLineTitle(true);
             pref.setOnClickListener(preference -> onDisplayModeClicked(preference, display));
             pref.setChecked(isCurrentMode);
@@ -328,7 +364,8 @@ public class ResolutionPreferenceFragment extends SettingsPreferenceFragmentBase
         }
 
         // If mode filtering is enabled.
-        if (!mExternDisplayResolutionShown.isEmpty()) {
+        if (!ResolutionRefreshRatePreferenceViewModel.skipExternalDisplayResolutionFiltering()
+                && !mExternDisplayResolutionShown.isEmpty()) {
             Mode m;
             // If this is an anisotropic mode, check the base mode is supported.
             if ((mode.getFlags() & Mode.FLAG_ANISOTROPY_CORRECTION) != 0) {
@@ -372,7 +409,7 @@ public class ResolutionPreferenceFragment extends SettingsPreferenceFragmentBase
         }
         // Don't show confirmation dialog for synthetic mode
         boolean isSyntheticMode = (mode.getFlags() & Mode.FLAG_SIZE_OVERRIDE) != 0;
-        if (isSyntheticMode || !enableResolutionApplyConfirmation()) {
+        if (isSyntheticMode) {
             mInjector.setUserPreferredDisplayMode(display.getId(), mode, /* storeMode= */ true);
 
             ExternalDisplaySettingsLoggerStore.ExternalDisplayMetricsLogger logger =
@@ -417,17 +454,10 @@ public class ResolutionPreferenceFragment extends SettingsPreferenceFragmentBase
         // Temporarily set the display mode
         mInjector.setUserPreferredDisplayMode(
                 mDisplay.getId(), selectedMode, /* storeMode= */ false);
-
-        ResolutionChangeDialogFragment dialog =
-                ResolutionChangeDialogFragment.Companion.newInstance(selectedMode, existingMode);
-        Log.i(TAG, "Prompts for confirmation on resolution change");
-        dialog.show(getParentFragmentManager(), ResolutionChangeDialogFragment.TAG);
+        mConfirmationViewModel.startConfirmation(selectedMode, existingMode);
     }
 
-    private void updateDisplayModeLimits(@Nullable Context context) {
-        if (context == null) {
-            return;
-        }
+    private void updateDisplayModeLimits(Context context) {
         mExternalDisplayPeakRefreshRate =
                 getResources(context)
                         .getInteger(
@@ -446,8 +476,7 @@ public class ResolutionPreferenceFragment extends SettingsPreferenceFragmentBase
                                 com.android.internal.R.bool
                                         .config_refreshRateSynchronizationEnabled);
         int[] resolutionsArray =
-                getResources(context)
-                        .getIntArray(R.array.config_resolutionsShownOnExternalDisplay);
+                getResources(context).getIntArray(R.array.config_resolutionsShownOnExternalDisplay);
         mExternDisplayResolutionShown.clear();
         if (resolutionsArray != null) {
             for (int i = 0; i < resolutionsArray.length; i += 2) {
@@ -461,8 +490,12 @@ public class ResolutionPreferenceFragment extends SettingsPreferenceFragmentBase
         Log.d(TAG, "mExternalDisplayPeakWidth=" + mExternalDisplayPeakWidth);
         Log.d(TAG, "mExternalDisplayPeakHeight=" + mExternalDisplayPeakHeight);
         Log.d(TAG, "mRefreshRateSynchronizationEnabled=" + mRefreshRateSynchronizationEnabled);
-        Log.d(TAG, "mExternDisplayResolutionShown=" + mExternDisplayResolutionShown.stream().map(
-                p -> p.x + "x" + p.y).collect(Collectors.joining(", ")));
+        Log.d(
+                TAG,
+                "mExternDisplayResolutionShown="
+                        + mExternDisplayResolutionShown.stream()
+                                .map(p -> p.x + "x" + p.y)
+                                .collect(Collectors.joining(", ")));
     }
 
     private @Nullable Mode getSelectedMode() {
@@ -494,13 +527,6 @@ public class ResolutionPreferenceFragment extends SettingsPreferenceFragmentBase
         return toPrefKey(m.getPhysicalWidth(), m.getPhysicalHeight());
     }
 
-    private String rotatedModeToPrefKey(@Nullable Mode m) {
-        if (m == null) {
-            return "";
-        }
-        return toPrefKey(m.getPhysicalHeight(), m.getPhysicalWidth());
-    }
-
     private String toPrefKey(int w, int h) {
         return w + "x" + h;
     }
@@ -509,26 +535,28 @@ public class ResolutionPreferenceFragment extends SettingsPreferenceFragmentBase
         if (m == null) {
             return "";
         }
-        return m.getPhysicalWidth() + " x " + m.getPhysicalHeight();
+        String formattedWidth = mNumberFormatter.format(m.getPhysicalWidth());
+        String formattedHeight = mNumberFormatter.format(m.getPhysicalHeight());
+        return formattedWidth + " x " + formattedHeight;
     }
 
     private void setupResolutionApplyConfirmationHandler() {
-        if (!enableResolutionApplyConfirmation()) {
-            return;
-        }
         getParentFragmentManager()
                 .setFragmentResultListener(
                         ResolutionChangeDialogFragment.KEY_RESULT,
                         this,
                         (requestKey, bundle) -> {
-                            if (mInjector == null) {
+                            ResolutionChangeConfirmationState confirmed =
+                                    bundle.getParcelable(
+                                            ResolutionChangeDialogFragment.KEY_CONFIRMED,
+                                            ResolutionChangeConfirmationState.class);
+                            if (mInjector == null
+                                    || confirmed == ResolutionChangeConfirmationState.NO_ACTION) {
                                 return;
                             }
-                            boolean confirmed =
-                                    bundle.getBoolean(
-                                            ResolutionChangeDialogFragment.KEY_CONFIRMED, false);
+                            mConfirmationViewModel.finishConfirmation();
                             int displayId = getDisplayIdArg();
-                            if (confirmed) {
+                            if (confirmed == ResolutionChangeConfirmationState.ACCEPT) {
                                 Mode selectedMode =
                                         bundle.getParcelable(
                                                 ResolutionChangeDialogFragment.KEY_NEW_MODE,
@@ -573,10 +601,26 @@ public class ResolutionPreferenceFragment extends SettingsPreferenceFragmentBase
                         });
     }
 
-    private boolean enableResolutionApplyConfirmation() {
-        if (mInjector == null) {
-            return false;
+    public static class ConfirmationViewModel extends AndroidViewModel {
+
+        boolean mIsPendingConfirmation = false;
+        @Nullable Mode mPendingMode = null;
+        @Nullable Mode mExistingMode = null;
+
+        public ConfirmationViewModel(@NonNull Application application) {
+            super(application);
         }
-        return mInjector.getFlags().enableResolutionApplyConfirmationBugfix();
+
+        void startConfirmation(Mode newMode, Mode existingMode) {
+            mIsPendingConfirmation = true;
+            mPendingMode = newMode;
+            mExistingMode = existingMode;
+        }
+
+        void finishConfirmation() {
+            mIsPendingConfirmation = false;
+            mPendingMode = null;
+            mExistingMode = null;
+        }
     }
 }

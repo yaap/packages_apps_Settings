@@ -19,6 +19,7 @@ import static android.content.Intent.EXTRA_BRIGHTNESS_DIALOG_IS_FULL_WIDTH;
 import static com.android.settingslib.display.BrightnessUtils.GAMMA_SPACE_MAX;
 import static com.android.settingslib.display.BrightnessUtils.GAMMA_SPACE_MIN;
 import static com.android.settingslib.display.BrightnessUtils.convertLinearToGammaFloat;
+import static com.android.systemui.shared.Flags.brightnessDialogOnSystemUser;
 
 import android.app.ActivityOptions;
 import android.content.ContentResolver;
@@ -32,6 +33,7 @@ import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Process;
+import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings.System;
 import android.text.TextUtils;
@@ -112,7 +114,7 @@ public class BrightnessLevelPreferenceController extends BasePreferenceControlle
 
     @Override
     public int getAvailabilityStatus() {
-        return AVAILABLE;
+        return BrightnessLevelExtensionsKt.getBrightnessLevelAvailabilityStatus(mContext);
     }
 
     @Override
@@ -158,7 +160,12 @@ public class BrightnessLevelPreferenceController extends BasePreferenceControlle
         // Start activity in the same task and pass fade animations
         final ActivityOptions options = ActivityOptions.makeCustomAnimation(mContext,
                 android.R.anim.fade_in, android.R.anim.fade_out);
-        mContext.startActivityForResult(preference.getKey(), intent, 0, options.toBundle());
+        if (brightnessDialogOnSystemUser()) {
+            options.setOverrideTaskTransition(true);
+            mContext.startActivityAsUser(intent, options.toBundle(), UserHandle.SYSTEM);
+        } else {
+            mContext.startActivityForResult(preference.getKey(), intent, 0, options.toBundle());
+        }
         return true;
     }
 
@@ -188,4 +195,4 @@ public class BrightnessLevelPreferenceController extends BasePreferenceControlle
         return (value - min) / (max - min);
     }
 }
-// LINT.ThenChange(BrightnessLevelPreference.kt)
+// LINT.ThenChange(BrightnessLevelPreference.kt, DisplayApiScreen.kt)

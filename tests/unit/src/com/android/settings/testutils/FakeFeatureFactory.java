@@ -32,6 +32,7 @@ import com.android.settings.connecteddevice.audiosharing.AudioSharingFeatureProv
 import com.android.settings.connecteddevice.fastpair.FastPairFeatureProvider;
 import com.android.settings.connecteddevice.stylus.StylusFeatureProvider;
 import com.android.settings.connecteddevice.threadnetwork.ThreadNetworkFeatureProvider;
+import com.android.settings.connecteddevice.usb.UsbFeatureProvider;
 import com.android.settings.dashboard.DashboardFeatureProvider;
 import com.android.settings.dashboard.suggestions.SuggestionFeatureProvider;
 import com.android.settings.display.DisplayFeatureProvider;
@@ -43,6 +44,7 @@ import com.android.settings.homepage.contextualcards.ContextualCardFeatureProvid
 import com.android.settings.i18n.RegionalCustomizationFeatureProvider;
 import com.android.settings.inputmethod.KeyboardSettingsFeatureProvider;
 import com.android.settings.localepicker.LocaleFeatureProvider;
+import com.android.settings.network.telephony.TelephonyFeatureProvider;
 import com.android.settings.notification.syncacrossdevices.SyncAcrossDevicesFeatureProvider;
 import com.android.settings.onboarding.OnboardingFeatureProvider;
 import com.android.settings.overlay.DockUpdaterFeatureProvider;
@@ -110,6 +112,8 @@ public class FakeFeatureFactory extends FeatureFactory {
     public SyncAcrossDevicesFeatureProvider mSyncAcrossDevicesFeatureProvider;
     public AccessibilityFeedbackFeatureProvider mAccessibilityFeedbackFeatureProvider;
     public AudioSharingFeatureProvider mAudioSharingFeatureProvider;
+    public UsbFeatureProvider mUsbFeatureProvider;
+    public TelephonyFeatureProvider mTelephonyFeatureProvider;
 
     /** Call this in {@code @Before} method of the test class to use fake factory. */
     public static FakeFeatureFactory setupForTest() {
@@ -164,6 +168,8 @@ public class FakeFeatureFactory extends FeatureFactory {
         mDisplayFeatureProvider = mock(DisplayFeatureProvider.class);
         mSyncAcrossDevicesFeatureProvider = mock(SyncAcrossDevicesFeatureProvider.class);
         mAudioSharingFeatureProvider = mock(AudioSharingFeatureProvider.class);
+        mUsbFeatureProvider = mock(UsbFeatureProvider.class);
+        mTelephonyFeatureProvider = mock(TelephonyFeatureProvider.class);
     }
 
     @Override
@@ -370,5 +376,15 @@ public class FakeFeatureFactory extends FeatureFactory {
     @Override
     public AudioSharingFeatureProvider getAudioSharingFeatureProvider() {
         return mAudioSharingFeatureProvider;
+    }
+
+    @Override
+    public @NotNull UsbFeatureProvider getUsbFeatureProvider() {
+        return mUsbFeatureProvider;
+    }
+
+    @Override
+    public @NotNull TelephonyFeatureProvider getTelephonyFeatureProvider() {
+        return mTelephonyFeatureProvider;
     }
 }

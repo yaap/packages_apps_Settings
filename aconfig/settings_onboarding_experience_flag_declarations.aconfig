@@ -2,8 +2,8 @@ package: "com.android.settings.flags"
 container: "system_ext"
 
 flag {
-  name: "enable_sound_backup"
+  name: "enable_accounts_and_backup_screen"
   namespace: "onboarding_experience"
-  description: "Feature flag for B&R sound settings."
-  bug: "278975761"
+  description: "Feature flag for Accounts & backup menu in Settings"
+  bug: "436614052"
 }

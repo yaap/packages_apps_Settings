@@ -16,7 +16,6 @@
 
 package com.android.settings.bluetooth;
 
-import static android.bluetooth.AudioInputControl.MUTE_DISABLED;
 import static android.bluetooth.AudioInputControl.MUTE_MUTED;
 import static android.bluetooth.AudioInputControl.MUTE_NOT_MUTED;
 
@@ -43,7 +42,6 @@ import androidx.test.core.app.ApplicationProvider;
 
 import com.android.settings.R;
 import com.android.settingslib.bluetooth.hearingdevices.ui.AmbientVolumeUi;
-import com.android.settingslib.widget.SliderPreference;
 
 import org.junit.Before;
 import org.junit.Rule;
@@ -179,38 +177,6 @@ public class AmbientVolumePreferenceTest {
     }
 
     @Test
-    public void isMutable_bothSideNotMutable_returnFalse() {
-        mPreference.setSliderMuteState(SIDE_LEFT, MUTE_DISABLED);
-        mPreference.setSliderMuteState(SIDE_RIGHT, MUTE_DISABLED);
-
-        assertThat(mPreference.isMutable()).isFalse();
-    }
-
-    @Test
-    public void isMutable_oneSideMutable_returnTrue() {
-        mPreference.setSliderMuteState(SIDE_LEFT, MUTE_DISABLED);
-        mPreference.setSliderMuteState(SIDE_RIGHT, MUTE_NOT_MUTED);
-
-        assertThat(mPreference.isMutable()).isTrue();
-    }
-
-    @Test
-    public void isMuted_bothSideMuted_returnTrue() {
-        mPreference.setSliderMuteState(SIDE_LEFT, MUTE_MUTED);
-        mPreference.setSliderMuteState(SIDE_RIGHT, MUTE_MUTED);
-
-        assertThat(mPreference.isMuted()).isTrue();
-    }
-
-    @Test
-    public void isMuted_oneSideNotMuted_returnFalse() {
-        mPreference.setSliderMuteState(SIDE_LEFT, MUTE_MUTED);
-        mPreference.setSliderMuteState(SIDE_RIGHT, MUTE_NOT_MUTED);
-
-        assertThat(mPreference.isMuted()).isFalse();
-    }
-
-    @Test
     public void setSliderMuteState_muteLeft_volumeIconIsCorrect() {
         mPreference.setControlExpanded(true);
         mPreference.setSliderMuteState(SIDE_LEFT, MUTE_MUTED);
@@ -236,7 +202,7 @@ public class AmbientVolumePreferenceTest {
 
     private void assertControlUiCorrect() {
         final boolean expanded = mPreference.isControlExpanded();
-        Map<Integer, SliderPreference> sliders = mPreference.getSliders();
+        Map<Integer, AmbientVolumeSliderPreference> sliders = mPreference.getSliders();
         assertThat(sliders.get(SIDE_UNIFIED).isVisible()).isEqualTo(!expanded);
         assertThat(sliders.get(SIDE_LEFT).isVisible()).isEqualTo(expanded);
         assertThat(sliders.get(SIDE_RIGHT).isVisible()).isEqualTo(expanded);

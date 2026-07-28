@@ -16,18 +16,15 @@ package com.android.settings.applications;
 
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
-import android.content.pm.FeatureFlags;
-import android.content.pm.FeatureFlagsImpl;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.ApplicationInfoFlags;
 import android.content.pm.UserInfo;
 import android.os.AsyncTask;
-import android.os.SystemProperties;
+import android.os.Build;
 import android.os.UserHandle;
 import android.os.UserManager;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
 
 import com.android.settings.flags.Flags;
 
@@ -37,18 +34,10 @@ public abstract class AppCounter extends AsyncTask<Void, Void, Integer> {
 
     protected final PackageManager mPm;
     protected final UserManager mUm;
-    protected final FeatureFlags mFf;
-
-    @VisibleForTesting
-    AppCounter(@NonNull Context context, @NonNull PackageManager packageManager,
-            @NonNull FeatureFlags featureFlags) {
-        mPm = packageManager;
-        mUm = context.getSystemService(UserManager.class);
-        mFf = featureFlags;
-    }
 
     public AppCounter(@NonNull Context context, @NonNull PackageManager packageManager) {
-        this(context, packageManager, new FeatureFlagsImpl());
+        mPm = packageManager;
+        mUm = context.getSystemService(UserManager.class);
     }
 
     @Override
@@ -58,7 +47,8 @@ public abstract class AppCounter extends AsyncTask<Void, Void, Integer> {
             long flags = PackageManager.GET_DISABLED_COMPONENTS
                     | PackageManager.GET_DISABLED_UNTIL_USED_COMPONENTS
                     | (isArchivingEnabled() ? PackageManager.MATCH_ARCHIVED_PACKAGES : 0)
-                    | (user.isAdmin() ? PackageManager.MATCH_ANY_USER : 0);
+                    | (android.multiuser.Flags.dontShowOtherUsersAppsToAdmin() ? 0 :
+                                    (user.isAdmin() ? PackageManager.MATCH_ANY_USER : 0));
             ApplicationInfoFlags infoFlags = ApplicationInfoFlags.of(flags);
             final List<ApplicationInfo> list =
                     mPm.getInstalledApplicationsAsUser(infoFlags, user.id);
@@ -72,7 +62,8 @@ public abstract class AppCounter extends AsyncTask<Void, Void, Integer> {
     }
 
     private boolean isArchivingEnabled() {
-        return mFf.archiving() || Flags.appArchiving();
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM
+                || Flags.appArchiving();
     }
 
     @Override

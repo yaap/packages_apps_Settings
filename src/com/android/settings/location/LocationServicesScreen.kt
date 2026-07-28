@@ -23,19 +23,25 @@ import androidx.fragment.app.Fragment
 import com.android.settings.R
 import com.android.settings.Settings.ScanningSettingsActivity
 import com.android.settings.core.PreferenceScreenMixin
-import com.android.settings.flags.Flags
 import com.android.settings.utils.makeLaunchIntent
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.preferenceHierarchy
 import kotlinx.coroutines.CoroutineScope
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 
 // LINT.IfChange
 @ProvidePreferenceScreen(LocationServicesScreen.KEY)
 open class LocationServicesScreen : PreferenceScreenMixin, PreferenceAvailabilityProvider {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED)
+
     override val key: String
         get() = KEY
+
+    override val purpose: Int
+        get() = R.string.location_services_purpose
 
     override val title: Int
         get() = R.string.location_services_preference_title
@@ -45,11 +51,14 @@ open class LocationServicesScreen : PreferenceScreenMixin, PreferenceAvailabilit
 
     override fun getMetricsCategory() = SettingsEnums.LOCATION_SERVICES
 
-    override fun isFlagEnabled(context: Context) = Flags.deeplinkOthers25q4()
-
     override fun hasCompleteHierarchy() = false
 
     override fun fragmentClass(): Class<out Fragment>? = LocationServices::class.java
+
+    override val availabilityDescription =
+        "The device must support showing location services in Settings."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context) =
         context.resources.getBoolean(R.bool.config_show_location_services)

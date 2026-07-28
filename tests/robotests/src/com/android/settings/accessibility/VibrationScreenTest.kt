@@ -21,25 +21,25 @@ import android.content.Intent
 import android.content.res.Resources
 import android.media.AudioManager
 import android.os.Vibrator
-import android.platform.test.annotations.EnableFlags
 import android.provider.Settings.System.APPLY_RAMPING_RINGER
 import android.provider.Settings.System.KEYBOARD_VIBRATION_ENABLED
 import android.provider.Settings.System.NOTIFICATION_VIBRATION_INTENSITY
 import android.provider.Settings.System.RING_VIBRATION_INTENSITY
 import androidx.core.content.getSystemService
+import androidx.fragment.app.testing.FragmentScenario
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.SwitchPreferenceCompat
 import androidx.test.core.app.ApplicationProvider
+import androidx.test.ext.junit.runners.AndroidJUnit4
 import com.android.settings.R
-import com.android.settings.flags.Flags
 import com.android.settings.testutils.shadow.ShadowAudioManager
-import com.android.settings.testutils2.SettingsCatalystTestCase
 import com.android.settingslib.datastore.SettingsSystemStore
 import com.android.settingslib.widget.MainSwitchPreference
 import com.google.common.truth.Truth.assertThat
 import com.google.common.truth.Truth.assertWithMessage
 import kotlinx.coroutines.test.TestScope
 import org.junit.Before
+import org.junit.runner.RunWith
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
@@ -49,8 +49,9 @@ import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowLooper
 
 // LINT.IfChange
+@RunWith(AndroidJUnit4::class)
 @Config(shadows = [ShadowAudioManager::class])
-class VibrationScreenTest : SettingsCatalystTestCase() {
+class VibrationScreenTest {
     private val testScope = TestScope()
     private lateinit var vibratorMock: Vibrator
 
@@ -58,7 +59,7 @@ class VibrationScreenTest : SettingsCatalystTestCase() {
         spy((ApplicationProvider.getApplicationContext() as Context).resources)
 
     private val context: Context =
-        object : ContextWrapper(appContext) {
+        object : ContextWrapper(ApplicationProvider.getApplicationContext()) {
             override fun getSystemService(name: String): Any? =
                 when {
                     name == VIBRATOR_SERVICE -> vibratorMock
@@ -68,10 +69,7 @@ class VibrationScreenTest : SettingsCatalystTestCase() {
             override fun getResources(): Resources = resourcesSpy
         }
 
-    override val preferenceScreenCreator = VibrationScreen()
-
-    override val flagName: String
-        get() = Flags.FLAG_CATALYST_VIBRATION_INTENSITY_SCREEN
+    private val preferenceScreenCreator = VibrationScreen()
 
     @Before
     fun setUp() {
@@ -105,7 +103,6 @@ class VibrationScreenTest : SettingsCatalystTestCase() {
         assertThat(preferenceScreenCreator.isAvailable(context)).isTrue()
     }
 
-    @EnableFlags(Flags.FLAG_CATALYST_VIBRATION_INTENSITY_SCREEN_25Q4)
     @Test
     fun mainSwitchClick_withIntensitiesSet_disablesAndUnchecksAllIntensitiesAndPreservesStorage() {
         val intensityKeys = findVibrationIntensitySwitchPreferences()
@@ -163,7 +160,6 @@ class VibrationScreenTest : SettingsCatalystTestCase() {
         }
     }
 
-    @EnableFlags(Flags.FLAG_CATALYST_VIBRATION_INTENSITY_SCREEN_25Q4)
     @Test
     fun ringerModeChange_disablesOnlyRingAndNotificationOnSilentMode() {
         setRingerMode(AudioManager.RINGER_MODE_NORMAL)
@@ -226,7 +222,6 @@ class VibrationScreenTest : SettingsCatalystTestCase() {
         }
     }
 
-    @EnableFlags(Flags.FLAG_CATALYST_VIBRATION_INTENSITY_SCREEN_25Q4)
     @Test
     fun ringVibrationChange_disablesRampingRingerAndPreservesStorage() {
         // Setup initial ring vibration and ramping ringer.
@@ -304,6 +299,11 @@ class VibrationScreenTest : SettingsCatalystTestCase() {
         val clazz = preferenceScreenCreator.fragmentClass() as Class<PreferenceFragmentCompat>
         launchFragment(clazz) { fragment -> action.invoke(fragment) }
     }
+
+    private fun launchFragment(
+        fragmentClass: Class<PreferenceFragmentCompat>,
+        action: (PreferenceFragmentCompat) -> Unit,
+    ): Unit = FragmentScenario.launch(fragmentClass).use { it.onFragment(action) }
 
     private fun findVibrationIntensitySwitchPreferences(): Map<String, String> {
         val switches = HashMap<String, String>()

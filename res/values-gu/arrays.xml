@@ -37,7 +37,7 @@
     <!-- no translation found for dark_ui_scheduler_with_bedtime_preference_titles:2 (1527300254382984555) -->
     <!-- no translation found for dark_ui_scheduler_with_bedtime_preference_titles:3 (5231566512901956369) -->
   <string-array name="lock_after_timeout_entries">
-    <item msgid="2223808927866488981">"ત્વરિત"</item>
+    <item msgid="2223808927866488981">"તરત જ"</item>
     <item msgid="463591454172790676">"5 સેકન્ડ"</item>
     <item msgid="6981910499530067289">"15 સેકન્ડ"</item>
     <item msgid="841968393904987343">"30 સેકન્ડ"</item>
@@ -305,16 +305,6 @@
     <item msgid="3756073389408535680">"પૃષ્ઠભૂમિમાં ચલાવો"</item>
     <item msgid="2114661179947426734">"ઍક્સેસિબિલિટી વૉલ્યૂમ"</item>
   </string-array>
-  <string-array name="long_press_timeout_selector_titles">
-    <item msgid="6926391290986427331">"નાનો"</item>
-    <item msgid="5118829513010894576">"મધ્યમ"</item>
-    <item msgid="6740026006576843477">"લાંબો"</item>
-  </string-array>
-  <string-array name="long_press_timeout_selector_list_titles">
-    <item msgid="8908021508913038488">"બસ દબાવીને છોડી દો"</item>
-    <item msgid="7397961711906421599">"દબાવો અને છોડો"</item>
-    <item msgid="4079132024502041928">"દવાબી રાખો"</item>
-  </string-array>
   <string-array name="ethernet_ip_settings">
     <item msgid="7618681915649929019">"DHCP"</item>
     <item msgid="4425163520864432692">"સ્થિર"</item>
@@ -343,7 +333,7 @@
     <item msgid="4132127611510627490">"આઉટલાઇન"</item>
     <item msgid="1226216870460161087">"છાયો છોડો"</item>
     <item msgid="2328414188644618697">"ઉઠાવેલું"</item>
-    <item msgid="7758730980218689351">"દબાવેલ"</item>
+    <item msgid="7758730980218689351">"દબાવેલી"</item>
   </string-array>
   <string-array name="captioning_opacity_selector_titles">
     <item msgid="1140998823196874513">"25%"</item>
@@ -358,14 +348,6 @@
     <item msgid="1119043472912497241">"કાળા પર પીળી"</item>
     <item msgid="2836895041823327816">"વાદળી પર પીળી"</item>
     <item msgid="747238414788976867">"કસ્ટમ"</item>
-  </string-array>
-  <string-array name="accessibility_button_location_selector_titles">
-    <item msgid="6485511780196327736">"અન્ય ઍપની ઉપર ફ્લોટિંગ કરતું"</item>
-    <item msgid="3605616699204153590">"નૅવિગેશન બાર"</item>
-  </string-array>
-  <string-array name="accessibility_button_size_selector_titles">
-    <item msgid="7482952318152486459">"નાનું"</item>
-    <item msgid="1666628329913333563">"મોટું"</item>
   </string-array>
   <string-array name="vpn_proxy_settings">
     <item msgid="7165538292837266997">"એકપણ નહીં"</item>

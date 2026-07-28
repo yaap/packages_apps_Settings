@@ -26,6 +26,7 @@ import com.android.settings.core.PreferenceScreenMixin
 import com.android.settings.flags.Flags
 import com.android.settings.utils.makeLaunchIntent
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceCategory
 import com.android.settingslib.metadata.PreferenceIconProvider
 import com.android.settingslib.metadata.PreferenceMetadata
@@ -33,13 +34,20 @@ import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.preferenceHierarchy
 import com.android.settingslib.widget.SettingsThemeHelper.isExpressiveTheme
 import kotlinx.coroutines.CoroutineScope
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 
 // LINT.IfChange
 @ProvidePreferenceScreen(AccessibilityScreen.KEY)
 open class AccessibilityScreen :
     PreferenceScreenMixin, PreferenceIconProvider, PreferenceAvailabilityProvider {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED)
+
     override val key: String
         get() = KEY
+
+    // TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.top_level_accessibility_purpose
 
     override val title: Int
         get() = R.string.accessibility_settings
@@ -55,6 +63,10 @@ open class AccessibilityScreen :
 
     override val keywords: Int
         get() = R.string.keywords_accessibility
+
+    override val availabilityDescription = "The device must support the accessibility screen."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context) =
         context.resources.getBoolean(R.bool.config_show_top_level_accessibility)
@@ -72,9 +84,14 @@ open class AccessibilityScreen :
 
     override fun getPreferenceHierarchy(context: Context, coroutineScope: CoroutineScope) =
         preferenceHierarchy(context) {
-            +PreferenceCategory("display_category", R.string.display_category_title) += {
-                if (Flags.catalystTextReadingScreen()) +TextReadingScreenOnAccessibility.KEY
-            }
+            +PreferenceCategory(
+                "display_category",
+                purpose = R.string.display_category_purpose,
+                R.string.display_category_title,
+            ) +=
+                {
+                    +TextReadingScreenOnAccessibility.KEY
+                }
         }
 
     override fun getLaunchIntent(context: Context, metadata: PreferenceMetadata?) =

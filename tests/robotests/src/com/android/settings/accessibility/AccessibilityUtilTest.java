@@ -26,24 +26,40 @@ import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.icu.text.CaseMap;
 import android.os.Build;
+import android.platform.test.annotations.DisableFlags;
+import android.platform.test.annotations.EnableFlags;
+import android.platform.test.flag.junit.SetFlagsRule;
 import android.provider.Settings;
+import android.view.WindowManagerPolicyConstants;
 
 import androidx.test.core.app.ApplicationProvider;
 
 import com.android.internal.accessibility.common.ShortcutConstants.UserShortcutType;
+import com.android.server.accessibility.Flags;
 import com.android.settings.R;
+import com.android.settings.testutils.shadow.SettingsShadowResources;
+import com.android.settings.testutils.shadow.ShadowInputDevice;
+import com.android.settings.utils.LocaleUtils;
 
+import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.robolectric.RobolectricTestRunner;
+import org.robolectric.annotation.Config;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
+@Config(shadows = {ShadowInputDevice.class, SettingsShadowResources.class})
 @RunWith(RobolectricTestRunner.class)
 public final class AccessibilityUtilTest {
+    @Rule
+    public SetFlagsRule setFlagsRule = new SetFlagsRule();
     private static final String SECURE_TEST_KEY = "secure_test_key";
     private static final String MOCK_PACKAGE_NAME = "com.mock.example";
     private static final String MOCK_CLASS_NAME = MOCK_PACKAGE_NAME + ".mock_a11y_service";
@@ -55,6 +71,11 @@ public final class AccessibilityUtilTest {
     @Before
     public void setUp() {
         mContext = ApplicationProvider.getApplicationContext();
+    }
+
+    @After
+    public void tearDown() {
+        SettingsShadowResources.reset();
     }
 
     @Test
@@ -106,12 +127,71 @@ public final class AccessibilityUtilTest {
         assertThat(result.isEmpty()).isEqualTo(true);
     }
 
+    @DisableFlags(Flags.FLAG_ENABLE_KEY_GESTURE_SHORTCUT_SETTINGS)
     @Test
-    public void getShortcutSummaryList_keyGestureShortcut_shouldReturnEmptyString() {
+    public void getShortcutSummaryList_keyGestureShortcut_flagDisabled_shouldReturnEmptyString() {
+        setHardwareKeyboard(true);
+        final CharSequence result = AccessibilityUtil.getShortcutSummaryList(mContext,
+                UserShortcutType.KEY_GESTURE);
+        assertThat(result.isEmpty()).isEqualTo(true);
+    }
+
+    @EnableFlags(Flags.FLAG_ENABLE_KEY_GESTURE_SHORTCUT_SETTINGS)
+    @Test
+    public void getShortcutSummaryList_keyGestureShortcut_noKeyboard_shouldReturnEmptyString() {
+        setHardwareKeyboard(false);
+        final CharSequence result = AccessibilityUtil.getShortcutSummaryList(mContext,
+                UserShortcutType.KEY_GESTURE);
+        assertThat(result.isEmpty()).isEqualTo(true);
+    }
+
+    @EnableFlags(Flags.FLAG_ENABLE_KEY_GESTURE_SHORTCUT_SETTINGS)
+    @Test
+    public void getShortcutSummaryList_keyGestureShortcut_hasKeyboard_shouldReturnNonEmptyString() {
+        setHardwareKeyboard(true);
         final CharSequence result = AccessibilityUtil.getShortcutSummaryList(mContext,
                 UserShortcutType.KEY_GESTURE);
 
-        assertThat(result.isEmpty()).isEqualTo(true);
+        assertThat(result.isEmpty()).isEqualTo(false);
+        final CharSequence summary = CaseMap.toTitle().wholeString().noLowercase().apply(
+                Locale.getDefault(),
+                /* iter= */ null,
+                mContext.getText(R.string.accessibility_shortcut_keyboard_keyword));
+        assertThat(result.toString()).isEqualTo(summary.toString());
+    }
+
+    @EnableFlags(Flags.FLAG_ENABLE_KEY_GESTURE_SHORTCUT_SETTINGS)
+    @Test
+    public void getShortcutSummaryList_softwareAndKeyGestureShortcut_hasKeyboard_shouldReturnConcatenatedString() {
+        setHardwareKeyboard(true);
+        final CharSequence result = AccessibilityUtil.getShortcutSummaryList(mContext,
+                UserShortcutType.SOFTWARE | UserShortcutType.KEY_GESTURE);
+
+        assertThat(result.isEmpty()).isEqualTo(false);
+        final List<CharSequence> list = new ArrayList<>();
+        list.add(mContext.getText(R.string.accessibility_shortcut_keyboard_keyword));
+        list.add(mContext.getText(R.string.accessibility_shortcut_edit_summary_software));
+
+        list.sort(CharSequence::compare);
+        final CharSequence summary = CaseMap.toTitle().wholeString().noLowercase().apply(
+                Locale.getDefault(), /* iter= */
+                null, LocaleUtils.getConcatenatedString(list));
+        assertThat(result.toString()).isEqualTo(summary.toString());
+    }
+
+    @EnableFlags(Flags.FLAG_ENABLE_KEY_GESTURE_SHORTCUT_SETTINGS)
+    @Test
+    public void getShortcutSummaryList_softwareAndKeyGestureShortcut_noKeyboard_shouldReturnSoftwareString() {
+        setHardwareKeyboard(false);
+        final CharSequence result = AccessibilityUtil.getShortcutSummaryList(mContext,
+                UserShortcutType.SOFTWARE | UserShortcutType.KEY_GESTURE);
+
+        assertThat(result.isEmpty()).isEqualTo(false);
+        final CharSequence summary = CaseMap.toTitle().wholeString().noLowercase().apply(
+                Locale.getDefault(),
+                /* iter= */ null,
+                mContext.getText(R.string.accessibility_shortcut_edit_summary_software));
+        assertThat(result.toString()).isEqualTo(summary.toString());
     }
 
     @Test
@@ -160,6 +240,102 @@ public final class AccessibilityUtilTest {
                 AccessibilityUtil.AccessibilityServiceFragmentType.TOGGLE);
     }
 
+    @DisableFlags(Flags.FLAG_ENABLE_KEY_GESTURE_SHORTCUT_SETTINGS)
+    @Test
+    public void isKeyboardShortcutSettingAvailable_noKeyboardFlagOff_returnsFalse() {
+        setHardwareKeyboard(false);
+        assertThat(AccessibilityUtil.isKeyboardShortcutSettingAvailable()).isFalse();
+    }
+
+    @DisableFlags(Flags.FLAG_ENABLE_KEY_GESTURE_SHORTCUT_SETTINGS)
+    @Test
+    public void isKeyboardShortcutSettingAvailable_hasKeyboardFlagOff_returnsFalse() {
+        setHardwareKeyboard(true);
+        assertThat(AccessibilityUtil.isKeyboardShortcutSettingAvailable()).isFalse();
+    }
+
+    @EnableFlags(Flags.FLAG_ENABLE_KEY_GESTURE_SHORTCUT_SETTINGS)
+    @Test
+    public void isKeyboardShortcutSettingAvailable_noKeyboardFlagOn_returnsFalse() {
+        setHardwareKeyboard(false);
+        assertThat(AccessibilityUtil.isKeyboardShortcutSettingAvailable()).isFalse();
+    }
+
+    @EnableFlags(Flags.FLAG_ENABLE_KEY_GESTURE_SHORTCUT_SETTINGS)
+    @Test
+    public void isKeyboardShortcutSettingAvailable_hasKeyboardFlagOn_returnsTrue() {
+        setHardwareKeyboard(true);
+        assertThat(AccessibilityUtil.isKeyboardShortcutSettingAvailable()).isTrue();
+    }
+
+    @Test
+    public void removeTypeFromShortcutTypes_defaultShortcut() {
+        assertThat(AccessibilityUtil.removeTypeFromShortcutTypes(UserShortcutType.DEFAULT,
+                UserShortcutType.KEY_GESTURE))
+                .isEqualTo(UserShortcutType.DEFAULT);
+    }
+
+    @Test
+    public void removeTypeFromShortcutTypes_defaultAndKeyboardShortcut() {
+        assertThat(AccessibilityUtil.removeTypeFromShortcutTypes(UserShortcutType.DEFAULT
+                | UserShortcutType.KEY_GESTURE, UserShortcutType.KEY_GESTURE))
+                .isEqualTo(UserShortcutType.DEFAULT);
+    }
+
+    @Test
+    public void removeTypeFromShortcutTypes_keyboardShortcut() {
+        assertThat(AccessibilityUtil.removeTypeFromShortcutTypes(
+                UserShortcutType.KEY_GESTURE, UserShortcutType.KEY_GESTURE))
+                .isEqualTo(UserShortcutType.DEFAULT);
+    }
+
+    @Test
+    public void removeTypeFromShortcutTypes_softwareAndKeyboardShortcut() {
+        assertThat(AccessibilityUtil.removeTypeFromShortcutTypes(UserShortcutType.SOFTWARE
+                | UserShortcutType.KEY_GESTURE, UserShortcutType.KEY_GESTURE))
+                .isEqualTo(UserShortcutType.SOFTWARE);
+    }
+
+    @Test
+    public void isAccessibilityButtonLocationConfigurable_gestureNavigationOff_returnsTrue() {
+        Settings.Secure.putInt(mContext.getContentResolver(),
+                Settings.Secure.NAVIGATION_MODE, WindowManagerPolicyConstants.NAV_BAR_MODE_3BUTTON);
+
+        assertThat(AccessibilityUtil.isAccessibilityButtonLocationConfigurable(mContext)).isTrue();
+    }
+
+    @Test
+    public void isAccessibilityButtonLocationConfigurable_gestureNavigationOn_navBarCanMove() {
+        Settings.Secure.putInt(mContext.getContentResolver(), Settings.Secure.NAVIGATION_MODE,
+                WindowManagerPolicyConstants.NAV_BAR_MODE_GESTURAL);
+        SettingsShadowResources.overrideResource(com.android.internal.R.bool.config_navBarCanMove,
+                true);
+
+        assertThat(AccessibilityUtil.isAccessibilityButtonLocationConfigurable(mContext)).isFalse();
+    }
+
+    @Test
+    @EnableFlags(android.view.accessibility.Flags.FLAG_ALLOW_A11Y_BUTTON_ON_LARGE_SCREEN)
+    public void isAccessibilityButtonLocationConfigurable_gestureNavigationOn_navBarCannotMove() {
+        Settings.Secure.putInt(mContext.getContentResolver(), Settings.Secure.NAVIGATION_MODE,
+                WindowManagerPolicyConstants.NAV_BAR_MODE_GESTURAL);
+        SettingsShadowResources.overrideResource(com.android.internal.R.bool.config_navBarCanMove,
+                false);
+
+        assertThat(AccessibilityUtil.isAccessibilityButtonLocationConfigurable(mContext)).isTrue();
+    }
+
+    @Test
+    @DisableFlags(android.view.accessibility.Flags.FLAG_ALLOW_A11Y_BUTTON_ON_LARGE_SCREEN)
+    public void isAccessibilityButtonLocationConfigurable_flagOff() {
+        Settings.Secure.putInt(mContext.getContentResolver(), Settings.Secure.NAVIGATION_MODE,
+                WindowManagerPolicyConstants.NAV_BAR_MODE_GESTURAL);
+        SettingsShadowResources.overrideResource(com.android.internal.R.bool.config_navBarCanMove,
+                false);
+
+        assertThat(AccessibilityUtil.isAccessibilityButtonLocationConfigurable(mContext)).isFalse();
+    }
+
     private AccessibilityServiceInfo getMockAccessibilityServiceInfo() {
         final ApplicationInfo applicationInfo = new ApplicationInfo();
         final ServiceInfo serviceInfo = new ServiceInfo();
@@ -187,5 +363,14 @@ public final class AccessibilityUtilTest {
         Settings.Secure.putInt(mContext.getContentResolver(),
                 settingsKey,
                 enabled ? AccessibilityUtil.State.ON : AccessibilityUtil.State.OFF);
+    }
+
+    private void setHardwareKeyboard(boolean hasConnectedKeyboard) {
+        if (hasConnectedKeyboard) {
+            var device = ShadowInputDevice.makeFullKeyboardInputDevicebyId(/* id= */ 1);
+            ShadowInputDevice.addDevice(device.getId(), device);
+        } else {
+            ShadowInputDevice.reset();
+        }
     }
 }

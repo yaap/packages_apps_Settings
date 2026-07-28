@@ -39,6 +39,7 @@ import com.android.settingslib.core.lifecycle.events.OnStart;
 import com.android.settingslib.core.lifecycle.events.OnStop;
 import com.android.settingslib.widget.SelectorWithWidgetPreference;
 
+// LINT.IfChange
 public class DoubleTapPowerForWalletPreferenceController extends BasePreferenceController
         implements LifecycleObserver, OnStart, OnStop {
 
@@ -170,3 +171,5 @@ public class DoubleTapPowerForWalletPreferenceController extends BasePreferenceC
                 && mQuickAccessWalletClient.isWalletServiceAvailable();
     }
 }
+// LINT.ThenChange(DoubleTapPowerApiFirstScreen.kt)
+

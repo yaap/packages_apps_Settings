@@ -37,13 +37,13 @@ import androidx.lifecycle.OnLifecycleEvent;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
 
-import com.android.server.accessibility.Flags;
 import com.android.settings.R;
 import com.android.settings.core.BasePreferenceController;
 
 import com.google.common.collect.ImmutableBiMap;
 
 /** Controller class that controls accessibility autoclick cursor area size settings. */
+// LINT.IfChange
 public class ToggleAutoclickCursorAreaSizeController extends BasePreferenceController
         implements LifecycleObserver, SharedPreferences.OnSharedPreferenceChangeListener {
 
@@ -139,7 +139,7 @@ public class ToggleAutoclickCursorAreaSizeController extends BasePreferenceContr
 
     @Override
     public int getAvailabilityStatus() {
-        return Flags.enableAutoclickIndicator() ? AVAILABLE : CONDITIONALLY_UNAVAILABLE;
+        return AVAILABLE;
     }
 
     @Override
@@ -182,3 +182,4 @@ public class ToggleAutoclickCursorAreaSizeController extends BasePreferenceContr
         return size;
     }
 }
+// LINT.ThenChange(autoclick/ui/AutoclickCursorAreaSizePreference.kt)

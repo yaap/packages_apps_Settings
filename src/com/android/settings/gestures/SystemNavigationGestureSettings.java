@@ -36,6 +36,8 @@ import android.provider.Settings;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import androidx.preference.PreferenceScreen;
 
 import com.android.settings.R;
@@ -91,10 +93,14 @@ public class SystemNavigationGestureSettings extends RadioButtonPickerFragment i
                 ServiceManager.getService(Context.OVERLAY_SERVICE));
 
         mVideoPreference = new IllustrationPreference(context);
-        Context windowContext = context.createWindowContext(TYPE_APPLICATION_OVERLAY, null);
-        if (windowContext.getResources()
-                .getConfiguration().smallestScreenWidthDp >= MIN_LARGESCREEN_WIDTH_DP) {
-            mVideoPreference.applyDynamicColor();
+        try {
+            Context windowContext = context.createWindowContext(TYPE_APPLICATION_OVERLAY, null);
+            if (windowContext.getResources()
+                    .getConfiguration().smallestScreenWidthDp >= MIN_LARGESCREEN_WIDTH_DP) {
+                mVideoPreference.applyDynamicColor();
+            }
+        } catch (UnsupportedOperationException e) {
+            // Catch unsupported contexts in test scenarios
         }
         setIllustrationVideo(mVideoPreference, getDefaultKey());
 
@@ -148,28 +154,39 @@ public class SystemNavigationGestureSettings extends RadioButtonPickerFragment i
             pref.setExtraWidgetOnClickListener((v) -> startActivity(new Intent(
                     GestureNavigationSettingsFragment.GESTURE_NAVIGATION_SETTINGS)
                     .setPackage(getContext().getPackageName())));
+
+            pref.setExtraWidgetContentDescription(getContext().getString(
+                    R.string.gesture_settings_button_description));
+            addClickHintForExtra(pref, R.string.gesture_settings_extra_button_hint);
         }
 
-        // With flag enabled, the button order preference will always be available
-        boolean navbarAvailable = android.view.accessibility.Flags.navbarFlipOrderOption()
-                || !PreferenceControllerListHelper.areAllPreferencesUnavailable(
-                        getContext(), getPreferenceManager(), R.xml.button_navigation_settings);
-
         if ((KEY_SYSTEM_NAV_2BUTTONS.equals(info.getKey())
-                || KEY_SYSTEM_NAV_3BUTTONS.equals(info.getKey()))
-                // Don't add the settings button if that page will be blank.
-                && navbarAvailable) {
+                || KEY_SYSTEM_NAV_3BUTTONS.equals(info.getKey()))) {
             pref.setExtraWidgetOnClickListener((v) ->
                     new SubSettingLauncher(getContext())
                             .setDestination(ButtonNavigationSettingsFragment.class.getName())
                             .setSourceMetricsCategory(SettingsEnums.SETTINGS_GESTURE_SWIPE_UP)
                             .launch());
+
+            pref.setExtraWidgetContentDescription(getContext().getString(
+                    R.string.button_navigation_settings_button_description));
+            addClickHintForExtra(pref, R.string.button_navigation_settings_extra_button_hint);
         }
 
         if (KEY_SYSTEM_NAV_3BUTTONS.equals(info.getKey())) {
             pref.setExtraWidgetOnClickListener((v) -> startActivity(new Intent(
                     ButtonNavigationSettingsFragment.BUTTON_NAVIGATION_SETTINGS)));
         }
+    }
+
+    private void addClickHintForExtra(SelectorWithWidgetPreference pref, int hint) {
+        pref.setExtraWidgetOnBindConsumer((widget) ->
+                ViewCompat.replaceAccessibilityAction(
+                        widget,
+                        AccessibilityNodeInfoCompat.AccessibilityActionCompat.ACTION_CLICK,
+                        getContext().getString(hint),
+                        null
+                ));
     }
 
     @Override

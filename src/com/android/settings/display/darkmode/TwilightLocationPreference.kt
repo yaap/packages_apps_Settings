@@ -25,7 +25,9 @@ import com.android.settings.R
 import com.android.settings.Settings.LocationSettingsActivity
 import com.android.settings.overlay.FeatureFactory.Companion.featureFactory
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceMetadata
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.preference.PreferenceBinding
 import com.android.settingslib.widget.BannerMessagePreference
 
@@ -36,11 +38,21 @@ class TwilightLocationPreference :
     override val key: String
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.dark_ui_location_off_purpose
+
     override val title: Int
         get() = R.string.twilight_mode_location_off_dialog_message
 
     override val indexable
         get() = false
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
+
+    override val availabilityDescription =
+        "The device must have location turned off."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
 
     override fun isAvailable(context: Context): Boolean {
         val locationManager =

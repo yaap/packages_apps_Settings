@@ -16,6 +16,7 @@
 
 package com.android.settings.password;
 
+import static android.app.admin.flags.Flags.useHardenedFrpActiveCheck;
 import static android.app.admin.DevicePolicyManager.ACTION_SET_NEW_PARENT_PROFILE_PASSWORD;
 import static android.app.admin.DevicePolicyManager.ACTION_SET_NEW_PASSWORD;
 import static android.app.admin.DevicePolicyManager.PASSWORD_COMPLEXITY_HIGH;
@@ -418,7 +419,11 @@ public class ChooseLockGeneric extends SettingsActivity {
 
             // Can only run during setup if factory reset protection has already been cleared
             // or if the device does not support FRP.
-            return (pdbm == null || pdbm.getDataBlockSize() == 0);
+            if (useHardenedFrpActiveCheck()) {
+                return (pdbm == null || !pdbm.isFactoryResetProtectionActive());
+            } else {
+                return (pdbm == null || pdbm.getDataBlockSize() == 0);
+            }
         }
 
         protected Class<? extends ChooseLockGeneric.InternalActivity> getInternalActivityClass() {
@@ -529,20 +534,10 @@ public class ChooseLockGeneric extends SettingsActivity {
                         Utils.requestBiometricAuthenticationForMandatoryBiometrics(getActivity(),
                                 false /* biometricsAuthenticationRequested */,
                                 mUserId);
-                if (android.hardware.biometrics.Flags.bpFallbackOptions()) {
-                    if (biometricAuthStatus != Utils.BiometricStatus.NOT_ACTIVE) {
-                        Utils.launchBiometricPromptForMandatoryBiometrics(this,
-                                BIOMETRIC_AUTH_REQUEST,
-                                mUserId, true /* hideBackground */);
-                    }
-                } else if (biometricAuthStatus == Utils.BiometricStatus.OK) {
+                if (biometricAuthStatus != Utils.BiometricStatus.NOT_ACTIVE) {
                     Utils.launchBiometricPromptForMandatoryBiometrics(this,
                             BIOMETRIC_AUTH_REQUEST,
                             mUserId, true /* hideBackground */);
-                } else if (biometricAuthStatus != Utils.BiometricStatus.NOT_ACTIVE) {
-                    IdentityCheckBiometricErrorDialog
-                            .showBiometricErrorDialogAndFinishActivityOnDismiss(getActivity(),
-                                    biometricAuthStatus);
                 }
             } else if (requestCode == BIOMETRIC_AUTH_REQUEST) {
                 if (resultCode == Activity.RESULT_OK) {
@@ -894,6 +889,12 @@ public class ChooseLockGeneric extends SettingsActivity {
                             .setForBiometrics(mForBiometrics)
                             .setUserId(mUserId)
                             .setRequestGatekeeperPasswordHandle(mRequestGatekeeperPasswordHandle);
+            if (android.app.supervision.flags.Flags.enableSupervisionSettingsUiUpdates()) {
+                builder.setForSupervisionReset(
+                        getIntent().getBooleanExtra(
+                                ChooseLockPassword.EXTRA_KEY_FOR_SUPERVISION_RESET,
+                                false));
+            }
             if (mUserPassword != null) {
                 builder.setPassword(mUserPassword);
             }

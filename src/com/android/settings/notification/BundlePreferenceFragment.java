@@ -40,7 +40,7 @@ import java.util.List;
 @SearchIndexable(forTarget = SearchIndexable.ALL & ~SearchIndexable.ARC)
 public class BundlePreferenceFragment extends DashboardFragment {
 
-    private static final String BUNDLE_CATEGORY_KEY = "enabled_settings";
+    static final String BUNDLE_CATEGORY_KEY = "enabled_settings";
 
     @Override
     public int getMetricsCategory() {
@@ -91,8 +91,7 @@ public class BundlePreferenceFragment extends DashboardFragment {
                 @Override
                 protected boolean isPageSearchEnabled(Context context) {
                     NotificationBackend backend = new NotificationBackend();
-                    return Flags.notificationClassificationUi()
-                            && backend.isNotificationBundlingSupported();
+                    return backend.isNotificationBundlingSupported();
                 }
             };
 }

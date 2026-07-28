@@ -24,7 +24,11 @@ import com.android.settings.R
 import com.android.settings.Settings.ModeSettingsActivity
 import com.android.settings.contract.TAG_DEVICE_STATE_SCREEN
 import com.android.settings.core.PreferenceScreenMixin
+import com.android.settingslib.datastore.KeyValueStore
+import com.android.settingslib.metadata.METADATA_IN_UI
+import com.android.settingslib.metadata.PersistentPreference
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
 import com.android.settingslib.metadata.PreferenceTitleProvider
@@ -42,6 +46,10 @@ open class ZenModeBedtimeScreen :
     override val key: String
         get() = KEY
 
+    //TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.device_state_bedtime_mode_screen_purpose
+
     override fun getMetricsCategory() =
         SettingsEnums.PAGE_UNKNOWN // TODO: correct page id in future for non-virtual migration.
 
@@ -51,6 +59,10 @@ open class ZenModeBedtimeScreen :
     override fun tags(context: Context) = arrayOf(TAG_DEVICE_STATE_SCREEN)
 
     override fun isFlagEnabled(context: Context) = false
+
+    override val availabilityDescription = "The device must support bedtime mode."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context) = context.hasBedtimeMode()
 
@@ -64,7 +76,43 @@ open class ZenModeBedtimeScreen :
             .putExtra(EXTRA_AUTOMATIC_ZEN_RULE_ID, context.getBedtimeMode()?.id)
 
     override fun getPreferenceHierarchy(context: Context, coroutineScope: CoroutineScope) =
-        preferenceHierarchy(context) { +ZenModeButtonPreference(context.getBedtimeMode()!!) }
+        preferenceHierarchy(context) {
+            +ZenModeBedtimeScreenPreference(this@ZenModeBedtimeScreen)
+            +ZenModeButtonPreference(context.getBedtimeMode()!!)
+        }
+
+    class ZenModeBedtimeScreenPreference(
+        private val screenMetadata : ZenModeBedtimeScreen
+    ) : PreferenceMetadata, PreferenceSummaryProvider, PreferenceAvailabilityProvider, PreferenceTitleProvider, PersistentPreference<String> {
+        override val key : String
+            get() = "device_state_bedtime_mode_screen_preference"
+
+        override val purpose : Int
+            get() = screenMetadata.purpose
+
+        override fun tags(context: Context) = arrayOf(METADATA_IN_UI)
+
+        override val indexable = false
+
+        override fun isEnabled(context: Context) : Boolean = screenMetadata.isEnabled(context)
+
+        override fun getSummary(context: Context) : CharSequence? = screenMetadata.getSummary(context)
+
+        override val supportsWrite: Boolean
+            get() = false
+
+        override val valueType = String::class.javaObjectType
+
+        override fun storage(context: Context): KeyValueStore = createSummaryStorage(context, key)
+
+        override val availabilityDescription = screenMetadata.availabilityDescription
+
+        override fun getAvailabilityStability() = screenMetadata.getAvailabilityStability()
+
+        override fun isAvailable(context: Context) : Boolean = screenMetadata.isAvailable(context)
+
+        override fun getTitle(context: Context): CharSequence? = screenMetadata.getTitle(context)
+    }
 
     companion object {
         const val KEY = "device_state_bedtime_mode_screen" // only for device state.

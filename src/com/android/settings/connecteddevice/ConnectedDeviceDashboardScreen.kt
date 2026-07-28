@@ -22,22 +22,29 @@ import androidx.fragment.app.Fragment
 import com.android.settings.R
 import com.android.settings.Settings.ConnectedDeviceDashboardActivity
 import com.android.settings.core.PreferenceScreenMixin
-import com.android.settings.flags.Flags
 import com.android.settings.utils.makeLaunchIntent
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceIconProvider
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.preferenceHierarchy
 import com.android.settingslib.widget.SettingsThemeHelper.isExpressiveTheme
 import kotlinx.coroutines.CoroutineScope
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 
 // LINT.IfChange
 @ProvidePreferenceScreen(ConnectedDeviceDashboardScreen.KEY)
 open class ConnectedDeviceDashboardScreen :
     PreferenceScreenMixin, PreferenceAvailabilityProvider, PreferenceIconProvider {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED)
+
     override val key: String
         get() = KEY
+
+    // TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.top_level_connected_devices_purpose
 
     override val title: Int
         get() = R.string.connected_devices_dashboard_title
@@ -50,8 +57,6 @@ open class ConnectedDeviceDashboardScreen :
     override val highlightMenuKey
         get() = R.string.menu_key_connected_devices
 
-    override fun isFlagEnabled(context: Context) = Flags.deeplinkConnectedDevices25q4()
-
     override fun hasCompleteHierarchy() = false
 
     override fun fragmentClass(): Class<out Fragment>? =
@@ -62,6 +67,10 @@ open class ConnectedDeviceDashboardScreen :
 
     override fun getLaunchIntent(context: Context, metadata: PreferenceMetadata?) =
         makeLaunchIntent(context, ConnectedDeviceDashboardActivity::class.java, metadata?.key)
+
+    override val availabilityDescription = "The device must support the 'connected devices' top level Settings category."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context): Boolean =
         context.resources.getBoolean(R.bool.config_show_top_level_connected_devices)
@@ -76,4 +85,5 @@ open class ConnectedDeviceDashboardScreen :
         const val KEY = "top_level_connected_devices"
     }
 }
-// LINT.ThenChange(ConnectedDeviceDashboardFragment.java, TopLevelConnectedDevicesPreferenceController.java)
+// LINT.ThenChange(ConnectedDeviceDashboardFragment.java,
+// TopLevelConnectedDevicesPreferenceController.java)

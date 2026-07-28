@@ -23,13 +23,11 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
-import android.app.Flags;
 import android.app.INotificationManager;
 import android.content.Context;
 import android.content.pm.ApplicationInfo;
 import android.os.UserHandle;
 import android.os.UserManager;
-import android.platform.test.annotations.EnableFlags;
 import android.platform.test.flag.junit.SetFlagsRule;
 
 import androidx.fragment.app.Fragment;
@@ -53,8 +51,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RunWith(RobolectricTestRunner.class)
-@EnableFlags({Flags.FLAG_NM_SUMMARIZATION_UI, Flags.FLAG_NM_SUMMARIZATION,
-        Flags.FLAG_NOTIFICATION_CLASSIFICATION_UI})
 public class AdjustmentExcludedAppsPreferenceControllerTest {
 
     @Rule
@@ -92,13 +88,13 @@ public class AdjustmentExcludedAppsPreferenceControllerTest {
     @Test
     public void testIsAvailable() {
         when(mBackend.isNotificationBundlingSupported()).thenReturn(true);
-        when(mBackend.isNotificationSummarizationSupported()).thenReturn(true);
+        when(mBackend.showSummarizationSettings()).thenReturn(true);
         assertThat(mController.isAvailable()).isTrue();
     }
 
     @Test
     public void isAvailable_flagEnabledNasDoesNotSupport_shouldReturnFalse() throws Exception {
-        when(mInm.getUnsupportedAdjustmentTypes()).thenReturn(List.of(KEY_SUMMARIZATION));
+        when(mBackend.showSummarizationSettings()).thenReturn(false);
         assertThat(mController.isAvailable()).isFalse();
     }
 

@@ -30,29 +30,64 @@ import com.android.settings.datausage.lib.BillingCycleRepository
 import com.android.settings.datausage.lib.DataUsageLib
 import com.android.settings.datausage.lib.NetworkCycleDataRepository
 import com.android.settings.datausage.lib.NetworkStatsRepository.Companion.AllTimeRange
-import com.android.settings.flags.Flags
 import com.android.settings.network.telephony.MobileNetworkScreen
 import com.android.settings.network.telephony.subscriptionManager
+import com.android.settings.utils.getSubId
 import com.android.settings.utils.makeLaunchIntent
+import com.android.settingslib.datastore.KeyValueStore
+import com.android.settingslib.metadata.CatalystFlagProviderFactory
+import com.android.settingslib.metadata.KeyParametersSchema
+import com.android.settingslib.metadata.METADATA_IN_UI
+import com.android.settingslib.metadata.ParameterizedPreferenceScreenArgumentsFactory
+import com.android.settingslib.metadata.PersistentPreference
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
 import com.android.settingslib.metadata.ProvidePreferenceScreen
+import com.android.settingslib.metadata.ValidatedKeyParameters
 import com.android.settingslib.metadata.preferenceHierarchy
 import com.android.settingslib.spaprivileged.framework.common.userManager
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_MOBILE_DATA
 
 // LINT.IfChange
 /** Preference screen for Network & Internet -> SIMs -> [SIM] -> App data usage. */
 @ProvidePreferenceScreen(DataUsageListScreen.KEY, parameterized = true)
-open class DataUsageListScreen(override val arguments: Bundle) :
-    PreferenceScreenMixin, PreferenceSummaryProvider {
+open class DataUsageListScreen
+private constructor(
+    @Deprecated(
+        "This property will be removed once the catalyst framework stops passing the arguments as a bundle. Use the keyParameters instead."
+    )
+    final override val arguments: Bundle?,
+    final override val keyParameters: ValidatedKeyParameters?,
+) : PreferenceScreenMixin, PreferenceSummaryProvider {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_MOBILE_DATA)
 
-    private val subId =
-        arguments.getInt(Settings.EXTRA_SUB_ID, SubscriptionManager.INVALID_SUBSCRIPTION_ID)
+    private val subId: Int =
+        if (CatalystFlagProviderFactory.catalystUseKeyParameters()) {
+            keyParameters!![Settings.EXTRA_SUB_ID]?.toIntOrNull()
+                ?: SubscriptionManager.INVALID_SUBSCRIPTION_ID
+        } else {
+            arguments!!.getSubId(Settings.EXTRA_SUB_ID, SubscriptionManager.INVALID_SUBSCRIPTION_ID)
+        }
+
+    @Deprecated(
+        "This constructor will be removed once the catalyst framework stops passing the arguments as a bundle. Use the other constructor instead."
+    )
+    constructor(args: Bundle) : this(args, null)
+
+    constructor(keyParameters: ValidatedKeyParameters) : this(null, keyParameters)
 
     override val key: String
         get() = KEY
+
+    override val keyParametersSchema: KeyParametersSchema
+        get() = parametersSchema
+
+    // TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.data_usage_summary_purpose
 
     override val title: Int
         get() = R.string.app_cellular_data_usage
@@ -65,18 +100,30 @@ open class DataUsageListScreen(override val arguments: Bundle) :
 
     override fun getMetricsCategory() = SettingsEnums.DATA_USAGE_LIST
 
-    override fun isFlagEnabled(context: Context) = Flags.deeplinkNetworkAndInternet25q4()
-
     override fun fragmentClass(): Class<out Fragment> = DataUsageList::class.java
 
     override fun hasCompleteHierarchy() = false
 
     override fun getPreferenceHierarchy(context: Context, coroutineScope: CoroutineScope) =
-        preferenceHierarchy(context) {}
+        preferenceHierarchy(context) { +DataUsageListScreenPreference(this@DataUsageListScreen) }
 
     override fun getLaunchIntent(context: Context, metadata: PreferenceMetadata?): Intent? {
         val intent =
-            makeLaunchIntent(context, MobileDataUsageListActivity::class.java, metadata?.key)
+            if (CatalystFlagProviderFactory.catalystUseKeyParameters()) {
+                makeLaunchIntent(
+                    context,
+                    MobileDataUsageListActivity::class.java,
+                    keyParameters!!,
+                    metadata?.key,
+                )
+            } else {
+                makeLaunchIntent(
+                    context,
+                    MobileDataUsageListActivity::class.java,
+                    arguments!!,
+                    metadata?.key,
+                )
+            }
         intent.putExtra(Settings.EXTRA_SUB_ID, subId)
         return intent
     }
@@ -89,9 +136,40 @@ open class DataUsageListScreen(override val arguments: Bundle) :
 
     override fun getSummary(context: Context) = getDataUsageInfo(context, subId).summary
 
-    companion object {
+    class DataUsageListScreenPreference(
+        private val screenMetadata : DataUsageListScreen
+    ) : PreferenceMetadata, PreferenceSummaryProvider, PersistentPreference<String> {
+        override val key : String
+            get() = "data_usage_summary_preference"
+        override val purpose : Int
+            get() = screenMetadata.purpose
+        override val supportsWrite: Boolean
+            get() = false
+        override val valueType = String::class.javaObjectType
+        override fun storage(context: Context): KeyValueStore = createSummaryStorage(context, key)
+        override fun tags(context: Context) = arrayOf(METADATA_IN_UI)
+        override val indexable = false
+        override fun isEnabled(context: Context) : Boolean = screenMetadata.isEnabled(context)
+        override fun getSummary(context: Context) : CharSequence? = screenMetadata.getSummary(context)
+    }
+
+    companion object : ParameterizedPreferenceScreenArgumentsFactory {
         const val KEY = "data_usage_summary"
 
+        @JvmStatic override val parametersSchema = MobileNetworkScreen.parametersSchema
+
+        @JvmStatic
+        override fun keyParameters(context: Context): Flow<ValidatedKeyParameters> {
+            // TODO (b/457649430): when the catalyst framework stops passing the arguments as a
+            // bundle: replace the parameters(context) call to the actual implementation,
+            // or make this function the primary implementation and the legacy parameters() should
+            // call this one.
+            return parameters(context).map { bundle -> parametersSchema.prepare(bundle) }
+        }
+
+        @Deprecated(
+            "This method will be removed once the catalyst framework stops passing the arguments as a bundle. Use keyParameters instead."
+        )
         @JvmStatic
         fun parameters(context: Context): Flow<Bundle> {
             return MobileNetworkScreen.parameters(context)

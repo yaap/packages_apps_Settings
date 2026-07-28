@@ -23,27 +23,33 @@ import androidx.fragment.app.Fragment
 import com.android.settings.R
 import com.android.settings.Settings.ResetDashboardActivity
 import com.android.settings.core.PreferenceScreenMixin
-import com.android.settings.factory_reset.Flags as FactoryResetFlags
-import com.android.settings.flags.Flags
 import com.android.settings.restriction.UserRestrictions
 import com.android.settings.utils.makeLaunchIntent
 import com.android.settingslib.RestrictedPreference
 import com.android.settingslib.datastore.HandlerExecutor
 import com.android.settingslib.datastore.KeyedObserver
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.preferenceHierarchy
 import kotlinx.coroutines.CoroutineScope
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 
 // LINT.IfChange
 @ProvidePreferenceScreen(ResetDashboardScreen.KEY)
 open class ResetDashboardScreen :
     PreferenceScreenMixin, PreferenceAvailabilityProvider, PreferenceLifecycleProvider {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED)
+
     override val key: String
         get() = KEY
+
+    // TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.reset_dashboard_purpose
 
     override val title: Int
         get() = R.string.reset_dashboard_title
@@ -56,11 +62,13 @@ open class ResetDashboardScreen :
 
     override fun getMetricsCategory() = SettingsEnums.RESET_DASHBOARD
 
-    override fun isFlagEnabled(context: Context) = Flags.deeplinkSystem25q4()
-
     override fun hasCompleteHierarchy() = false
 
     override fun fragmentClass(): Class<out Fragment>? = ResetDashboardFragment::class.java
+
+    override val availabilityDescription = "The device must support the reset dashboard."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context) =
         context.resources.getBoolean(R.bool.config_show_reset_dashboard)
@@ -75,13 +83,10 @@ open class ResetDashboardScreen :
 
     override fun onCreate(context: PreferenceLifecycleContext) {
         super.onCreate(context)
-        if (!FactoryResetFlags.fixFactoryResetPreferenceOnRestrictionChange()) return
         val restrictedPreference: RestrictedPreference =
             context.findPreference(FACTORY_RESET_KEY) ?: return
         factoryResetRestrictionObserver = KeyedObserver { _, _ ->
-            restrictedPreference.checkRestrictionAndSetDisabled(
-                UserManager.DISALLOW_FACTORY_RESET
-            )
+            restrictedPreference.checkRestrictionAndSetDisabled(UserManager.DISALLOW_FACTORY_RESET)
             context.notifyPreferenceChange(FACTORY_RESET_KEY)
         }
         val userRestrictions = UserRestrictions.get(context)
@@ -94,15 +99,13 @@ open class ResetDashboardScreen :
 
     override fun onDestroy(context: PreferenceLifecycleContext) {
         super.onDestroy(context)
-        if (FactoryResetFlags.fixFactoryResetPreferenceOnRestrictionChange()) {
-            if (factoryResetRestrictionObserver != null) {
-                val userRestrictions = UserRestrictions.get(context)
-                userRestrictions.removeObserver(
-                    UserManager.DISALLOW_FACTORY_RESET,
-                    factoryResetRestrictionObserver!!,
-                )
-                factoryResetRestrictionObserver = null
-            }
+        if (factoryResetRestrictionObserver != null) {
+            val userRestrictions = UserRestrictions.get(context)
+            userRestrictions.removeObserver(
+                UserManager.DISALLOW_FACTORY_RESET,
+                factoryResetRestrictionObserver!!,
+            )
+            factoryResetRestrictionObserver = null
         }
     }
 

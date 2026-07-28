@@ -43,25 +43,6 @@
         <com.android.settingslib.widget.UntitledPreferenceCategory
             android:key="enabled_classification_types">
 
-            <CheckBoxPreference
-                  android:key="promotions"
-                  android:title="@*android:string/promotional_notification_channel_label"
-                  android:summary="@string/notification_bundle_promotions_summary"/>
-
-            <CheckBoxPreference
-                android:key="news"
-                android:title="@*android:string/news_notification_channel_label"
-                android:summary="@string/notification_bundle_news_summary"/>
-
-            <CheckBoxPreference
-                android:key="social"
-                android:title="@*android:string/social_notification_channel_label"
-                android:summary="@string/notification_bundle_social_summary"/>
-
-            <CheckBoxPreference
-                android:key="recs"
-                android:title="@*android:string/recs_notification_channel_label"
-                android:summary="@string/notification_bundle_recs_summary"/>
         </com.android.settingslib.widget.UntitledPreferenceCategory>
 
         <com.android.settingslib.widget.UntitledPreferenceCategory>
@@ -70,11 +51,18 @@
                 android:title="@string/notification_adjustment_work_switch_title" />
         </com.android.settingslib.widget.UntitledPreferenceCategory>
 
-        <com.android.settingslib.widget.UntitledPreferenceCategory>
-            <SwitchPreferenceCompat
+        <PreferenceCategory
+            android:title="@string/notification_bundle_expansion_category_title">
+            <com.android.settingslib.widget.SelectorWithWidgetPreference
+                android:key="auto_expand_pref"
+                android:title="@string/notification_bundle_expand_auto_title"/>
+            <com.android.settingslib.widget.SelectorWithWidgetPreference
                 android:key="always_expand_pref"
                 android:title="@string/notification_bundle_expand_always_title"/>
-        </com.android.settingslib.widget.UntitledPreferenceCategory>
+            <com.android.settingslib.widget.SelectorWithWidgetPreference
+                android:key="never_expand_pref"
+                android:title="@string/notification_bundle_expand_never_title"/>
+        </PreferenceCategory>
 
         <PreferenceCategory
             android:key="notification_bundle_excluded_apps_list"

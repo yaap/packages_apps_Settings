@@ -28,15 +28,20 @@ import com.android.settings.accessibility.shared.utils.DebounceConfigurationChan
 import com.android.settings.accessibility.shared.utils.DebounceConfigurationChangeCommitController.Companion.CHANGE_BY_BUTTON_DELAY
 import com.android.settings.accessibility.shared.utils.DebounceConfigurationChangeCommitController.Companion.CHANGE_BY_SLIDER_DELAY
 import com.android.settings.accessibility.shared.utils.DebounceConfigurationChangeCommitController.Companion.MIN_COMMIT_DELAY
+import com.android.settings.accessibility.shared.utils.shouldShowFocusRingsInSuw
 import com.android.settings.accessibility.textreading.data.DisplaySizeDataStore
 import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.Permissions
 import com.android.settingslib.metadata.IntRangeValuePreference
+import com.android.settingslib.metadata.MUSTPASS_SET
+import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ReadWritePermit
 import com.android.settingslib.metadata.SensitivityLevel
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.widget.SliderPreference
 import com.android.settingslib.widget.SliderPreferenceBinding
 import com.google.android.material.slider.Slider
@@ -44,12 +49,24 @@ import kotlin.time.Duration
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-internal class DisplaySizePreference(context: Context, @EntryPoint private val entryPoint: Int) :
+internal class DisplaySizePreference(
+    context: Context,
+    @EntryPoint private val entryPoint: Int,
+    val isUiOnly: Boolean,
+) :
     IntRangeValuePreference,
     SliderPreferenceBinding,
     Slider.OnSliderTouchListener,
     Slider.OnChangeListener,
-    PreferenceLifecycleProvider {
+    PreferenceLifecycleProvider,
+    PreferenceAvailabilityProvider {
+
+    override fun tags(context: Context): Array<String> {
+        if (isUiOnly) {
+            return arrayOf(UI_ONLY_PREFERENCE)
+        }
+        return arrayOf(MUSTPASS_SET)
+    }
 
     override fun getReadPermissions(context: Context) = Permissions.EMPTY
 
@@ -66,6 +83,8 @@ internal class DisplaySizePreference(context: Context, @EntryPoint private val e
     ): @ReadWritePermit Int {
         return ReadWritePermit.ALLOW
     }
+
+    override val supportsWrite = true
 
     override val sensitivityLevel
         get() = SensitivityLevel.NO_SENSITIVITY
@@ -93,6 +112,9 @@ internal class DisplaySizePreference(context: Context, @EntryPoint private val e
 
     override val key: String
         get() = KEY
+
+    override val purpose: Int
+        get() = R.string.display_size_purpose
 
     override val title: Int
         get() = R.string.screen_zoom_title
@@ -133,8 +155,15 @@ internal class DisplaySizePreference(context: Context, @EntryPoint private val e
         // datastore while the user is dragging, or when we want to have some delay to show the
         // preview before committing the changes.
         preference as SliderPreference
-        preference.isPersistent = false
-        preference.value = _displaySizePreview.value.currentIndex
+        preference.run {
+            isPersistent = false
+            value = _displaySizePreview.value.currentIndex
+            // This change makes the row that contains the "Display size" slider unable to be
+            // focused, but allows the slider and its buttons to be focusable.
+            if (shouldShowFocusRingsInSuw(context)) {
+                isSelectable = false
+            }
+        }
     }
 
     override fun onStart(context: PreferenceLifecycleContext) {
@@ -183,6 +212,12 @@ internal class DisplaySizePreference(context: Context, @EntryPoint private val e
             commitChange(CHANGE_BY_BUTTON_DELAY, value.toInt())
         }
     }
+
+    override val availabilityDescription = "The main display must be internal."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
+
+    override fun isAvailable(context: Context) = context.display.isInternal
 
     @VisibleForTesting
     internal fun commitChange(delay: Duration, index: Int) {

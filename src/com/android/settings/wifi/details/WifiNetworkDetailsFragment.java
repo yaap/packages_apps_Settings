@@ -23,6 +23,7 @@ import android.app.Dialog;
 import android.app.admin.DevicePolicyManager;
 import android.app.settings.SettingsEnums;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.net.ConnectivityManager;
 import android.net.wifi.WifiManager;
@@ -36,7 +37,9 @@ import android.os.SimpleClock;
 import android.os.SystemClock;
 import android.os.UserHandle;
 import android.os.UserManager;
+import android.security.Flags;
 import android.telephony.SignalStrength;
+import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -45,6 +48,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
+import androidx.preference.TwoStatePreference;
 
 import com.android.settings.R;
 import com.android.settings.Utils;
@@ -88,7 +92,8 @@ import java.util.List;
  * in order to properly render this page.
  */
 public class WifiNetworkDetailsFragment extends RestrictedDashboardFragment implements
-        WifiDialog2.WifiDialog2Listener {
+        WifiDialog2.WifiDialog2Listener,
+        WifiAutoConnectPreferenceController2.PreferenceRefreshCallback {
 
     private static final String TAG = "WifiNetworkDetailsFrg";
 
@@ -143,12 +148,25 @@ public class WifiNetworkDetailsFragment extends RestrictedDashboardFragment impl
                 .setWifiEntry(wifiEntry);
         use(WepLessSecureWarningController.class)
                 .setWifiEntry(wifiEntry);
+        List<AbstractPreferenceController> wifiNetworkDetailsUiControllers =
+                useGroup(AbstractWifiNetworkDetailsUiController.class);
+        wifiNetworkDetailsUiControllers.forEach(
+                controller -> {
+                    AbstractWifiNetworkDetailsUiController uiController =
+                            (AbstractWifiNetworkDetailsUiController) controller;
+                    uiController.setWifiNetworkDetailsFragment(this);
+                    uiController.setWifiEntry(wifiEntry);
+                }
+        );
+
     }
 
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        setIfOnlyAvailableForAdmins(true);
+        if (!WifiUtils.isWifiMultiuserEnabled()) {
+            setIfOnlyAvailableForAdmins(true);
+        }
         mIsUiRestricted = isUiRestricted();
     }
 
@@ -222,7 +240,7 @@ public class WifiNetworkDetailsFragment extends RestrictedDashboardFragment impl
             MenuItem item = menu.add(0, Menu.FIRST, 0, R.string.wifi_modify);
             item.setIcon(com.android.internal.R.drawable.ic_mode_edit);
             item.setShowAsAction(MenuItem.SHOW_AS_ACTION_ALWAYS);
-            if (com.android.settings.connectivity.Flags.wifiMultiuser()
+            if (WifiUtils.isWifiMultiuserEnabled()
                     && !mWifiDetailPreferenceController2.canModifyNetwork()) {
                 item.setTooltipText(
                         getContext().getString(R.string.edit_wifi_network_non_owner_message));
@@ -260,6 +278,24 @@ public class WifiNetworkDetailsFragment extends RestrictedDashboardFragment impl
     }
 
     @Override
+    public void onPreferenceStateChange(Preference preference) {
+        refreshPreferences();
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (Flags.aapmFeatureDisableInsecureWifiAutojoinV2()) {
+            WifiAutoConnectPreferenceController2 controller =
+                    use(WifiAutoConnectPreferenceController2.class);
+            if (controller != null) {
+                controller.handleDialogResult(requestCode, resultCode);
+            }
+        }
+    }
+
+    @Override
     protected List<AbstractPreferenceController> createPreferenceControllers(Context context) {
         mControllers = new ArrayList<>();
         final ConnectivityManager cm = context.getSystemService(ConnectivityManager.class);
@@ -289,19 +325,24 @@ public class WifiNetworkDetailsFragment extends RestrictedDashboardFragment impl
         final WifiAutoConnectPreferenceController2 wifiAutoConnectPreferenceController2 =
                 new WifiAutoConnectPreferenceController2(context);
         wifiAutoConnectPreferenceController2.setWifiEntry(wifiEntry);
+        if (Flags.aapmFeatureDisableInsecureWifiAutojoinV2()) {
+            wifiAutoConnectPreferenceController2.setRefreshCallback(this);
+            wifiAutoConnectPreferenceController2.setParentFragment(this);
+        }
         mControllers.add(wifiAutoConnectPreferenceController2);
+
+        mWifiPickerTrackerHelper =
+                new WifiPickerTrackerHelper(getSettingsLifecycle(), getContext(), null);
+
+        final WifiSharedPreferenceController wifiSharedPreferenceController =
+                new WifiSharedPreferenceController(
+                        context, KEY_SHARED_TOGGLE, mWifiPickerTrackerHelper, wifiEntry);
+        mControllers.add(wifiSharedPreferenceController);
 
         final WifiEditConfigPreferenceController wifiEditConfigPreferenceController =
                 new WifiEditConfigPreferenceController(
                         context, KEY_EDIT_CONFIG_TOGGLE, wifiEntry);
         mControllers.add(wifiEditConfigPreferenceController);
-
-        mWifiPickerTrackerHelper =
-                new WifiPickerTrackerHelper(getSettingsLifecycle(), getContext(), null);
-        final WifiSharedPreferenceController wifiSharedPreferenceController =
-                new WifiSharedPreferenceController(
-                        context, KEY_SHARED_TOGGLE, mWifiPickerTrackerHelper, wifiEntry);
-        mControllers.add(wifiSharedPreferenceController);
 
         final AddDevicePreferenceController2 addDevicePreferenceController2 =
                 new AddDevicePreferenceController2(context);
@@ -334,6 +375,21 @@ public class WifiNetworkDetailsFragment extends RestrictedDashboardFragment impl
         for (WifiDialog2.WifiDialog2Listener listener : mWifiDialogListeners) {
             listener.onSubmit(dialog);
         }
+    }
+
+    @Override
+    public boolean onPreferenceTreeClick(Preference preference) {
+        final boolean handled = super.onPreferenceTreeClick(preference);
+
+        if (TextUtils.equals(preference.getKey(), KEY_SHARED_TOGGLE)) {
+            final Preference editConfigPreference = findPreference(KEY_EDIT_CONFIG_TOGGLE);
+            if (editConfigPreference instanceof TwoStatePreference) {
+                editConfigPreference.setEnabled(
+                        ((TwoStatePreference) preference).isChecked()
+                        && mWifiDetailPreferenceController2.canModifyShareSettings());
+            }
+        }
+        return handled;
     }
 
     private void setupNetworksDetailTracker() {
@@ -410,6 +466,18 @@ public class WifiNetworkDetailsFragment extends RestrictedDashboardFragment impl
         }
         if (mIsInstantHotspotFeatureEnabled) {
             getWifiNetworkDetailsViewModel().setWifiEntry(mNetworkDetailsTracker.getWifiEntry());
+        }
+
+        final Preference sharedPreference = screen.findPreference(KEY_SHARED_TOGGLE);
+        final Preference editConfigPreference = screen.findPreference(KEY_EDIT_CONFIG_TOGGLE);
+        if (sharedPreference != null) {
+            sharedPreference.setEnabled(
+                    mWifiDetailPreferenceController2.canModifyShareSettings());
+        }
+        if (editConfigPreference != null && sharedPreference instanceof TwoStatePreference) {
+            editConfigPreference.setEnabled(
+                    ((TwoStatePreference) sharedPreference).isChecked()
+                    && mWifiDetailPreferenceController2.canModifyShareSettings());
         }
     }
 

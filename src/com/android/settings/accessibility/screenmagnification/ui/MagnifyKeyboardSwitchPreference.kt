@@ -19,7 +19,6 @@ package com.android.settings.accessibility.screenmagnification.ui
 import android.content.Context
 import android.provider.Settings
 import com.android.internal.accessibility.util.AccessibilityUtils
-import com.android.server.accessibility.Flags
 import com.android.settings.R
 import com.android.settings.accessibility.AccessibilityUtil
 import com.android.settings.accessibility.MagnificationCapabilities
@@ -31,15 +30,20 @@ import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.KeyedObserver
 import com.android.settingslib.datastore.SettingsSecureStore
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceSummaryProvider
 import com.android.settingslib.metadata.ReadWritePermit
+import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.metadata.SwitchPreference
 
-// LINT.IfChange
 class MagnifyKeyboardSwitchPreference :
-    SwitchPreference(KEY, R.string.accessibility_screen_magnification_nav_ime_title),
+    SwitchPreference(
+        KEY,
+        R.string.accessibility_magnification_magnify_nav_and_ime_purpose,
+        R.string.accessibility_screen_magnification_nav_ime_title,
+    ),
     PreferenceSummaryProvider,
     PreferenceAvailabilityProvider,
     PreferenceLifecycleProvider,
@@ -81,10 +85,17 @@ class MagnifyKeyboardSwitchPreference :
         storage(context).removeObserver(this)
     }
 
+    override val availabilityDescription = "The device must support window magnification."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
+
     override fun isAvailable(context: Context): Boolean {
-        return Flags.enableMagnificationMagnifyNavBarAndIme() &&
-            context.isWindowMagnificationSupported()
+        return context.isWindowMagnificationSupported()
     }
+
+    override fun getEnabledDescription(): String = "Screen magnification must be set to full screen or both."
+
+    override fun getEnabledStability() = PreconditionStability.UNSTABLE
 
     override fun isEnabled(context: Context): Boolean {
         @MagnificationCapabilities.MagnificationMode
@@ -106,6 +117,9 @@ class MagnifyKeyboardSwitchPreference :
         lifecycleContext.notifyPreferenceChange(KEY)
     }
 
+    override val sensitivityLevel: Int
+        get() = SensitivityLevel.NO_SENSITIVITY
+
     companion object {
         const val KEY = Settings.Secure.ACCESSIBILITY_MAGNIFICATION_MAGNIFY_NAV_AND_IME
 
@@ -121,4 +135,3 @@ class MagnifyKeyboardSwitchPreference :
                 }
     }
 }
-// LINT.ThenChange(/src/com/android/settings/accessibility/screenmagnification/MagnifyKeyboardPreferenceController.java)

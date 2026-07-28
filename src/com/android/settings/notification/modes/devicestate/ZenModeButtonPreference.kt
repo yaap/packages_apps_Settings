@@ -23,6 +23,7 @@ import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.NoOpKeyedObservable
 import com.android.settingslib.metadata.BooleanValuePreference
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceTitleProvider
 import com.android.settingslib.notification.modes.ZenMode
@@ -41,12 +42,19 @@ class ZenModeButtonPreference(val zenMode: ZenMode) :
     override val key: String
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.device_state_activate_purpose
+
     override val summary: Int
         get() =
             if (zenMode.isActive) R.string.zen_mode_action_deactivate
             else R.string.zen_mode_action_activate
 
     override fun tags(context: Context) = arrayOf(TAG_DEVICE_STATE_PREFERENCE)
+
+    override val availabilityDescription = "The DND mode must be enabled and be allowed to be manually invoked."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
 
     override fun isAvailable(context: Context) =
         zenMode.isEnabled && (zenMode.isActive || zenMode.isManualInvocationAllowed)
@@ -63,6 +71,8 @@ class ZenModeButtonPreference(val zenMode: ZenMode) :
 
             override fun <T : Any> setValue(key: String, valueType: Class<T>, value: T?) {}
         }
+
+    override val supportsWrite = false
 
     companion object {
         const val KEY = "device_state_activate" // only for device state.

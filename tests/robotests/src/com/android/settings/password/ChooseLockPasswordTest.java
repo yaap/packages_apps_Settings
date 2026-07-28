@@ -190,6 +190,19 @@ public class ChooseLockPasswordTest {
     }
 
     @Test
+    @EnableFlags(android.app.supervision.flags.Flags.FLAG_ENABLE_SUPERVISION_SETTINGS_UI_UPDATES)
+    public void intentBuilder_setForSupervisionReset_shouldAddExtra() {
+        Intent intent = new IntentBuilder(application)
+                .setForSupervisionReset(true)
+                .build();
+
+        assertWithMessage("EXTRA_KEY_FOR_SUPERVISION_RESET").that(
+                        intent.getBooleanExtra(
+                                ChooseLockPassword.EXTRA_KEY_FOR_SUPERVISION_RESET, false))
+                .isTrue();
+    }
+
+    @Test
     public void activity_shouldHaveSecureFlag() {
         PasswordPolicy policy = new PasswordPolicy();
         policy.quality = PASSWORD_QUALITY_ALPHABETIC;
@@ -543,41 +556,41 @@ public class ChooseLockPasswordTest {
     }
 
     @Test
-    public void defaultMessage_shouldBeInTextColorPrimary() {
+    public void defaultMessage_shouldBeInMaterialColorOnSurface() {
         final ChooseLockPassword passwordActivity = setupActivityWithPinTypeAndDefaultPolicy();
 
         final ChooseLockPasswordFragment fragment = getChooseLockPasswordFragment(passwordActivity);
         final ScrollToParentEditText passwordEntry = passwordActivity.findViewById(R.id.password_entry);
         final RecyclerView view = (RecyclerView) fragment.getPasswordRequirementsView();
-        @ColorInt final int textColorPrimary = Utils.getColorAttrDefaultColor(passwordActivity,
-                android.R.attr.textColorPrimary);
+        @ColorInt final int onSurfaceColor = passwordActivity.getColor(
+                com.android.systemui.dynamiccolors.R.color.materialColorOnSurface);
 
         passwordEntry.setText("");
         fragment.updateUi();
         shadowOf(Looper.getMainLooper()).idle();
         TextView textView = (TextView)view.getLayoutManager().findViewByPosition(0);
 
-        assertThat(textView.getCurrentTextColor()).isEqualTo(textColorPrimary);
+        assertThat(textView.getCurrentTextColor()).isEqualTo(onSurfaceColor);
     }
 
     @Test
     @EnableFlags(Flags.FLAG_IS_EXPRESSIVE_DESIGN_ENABLED)
-    public void defaultMessage_shouldBeInTextColorPrimary_referGlifExpressiveFlag() {
+    public void defaultMessage_shouldBeInMaterialColorOnSurface_referGlifExpressiveFlag() {
         final ChooseLockPassword passwordActivity = setupActivityWithPinTypeAndDefaultPolicy();
 
         final ChooseLockPasswordFragment fragment = getChooseLockPasswordFragment(passwordActivity);
         final ScrollToParentEditText passwordEntry = passwordActivity.findViewById(
                 R.id.password_entry);
         final RecyclerView view = (RecyclerView) fragment.getPasswordRequirementsView();
-        @ColorInt final int textColorPrimary = Utils.getColorAttrDefaultColor(passwordActivity,
-                android.R.attr.textColorPrimary);
+        @ColorInt final int onSurfaceColor = passwordActivity.getColor(
+                com.android.systemui.dynamiccolors.R.color.materialColorOnSurface);
 
         passwordEntry.setText("");
         fragment.updateUi();
         shadowOf(Looper.getMainLooper()).idle();
         TextView textView = (TextView) view.getLayoutManager().findViewByPosition(0);
 
-        assertThat(textView.getCurrentTextColor()).isEqualTo(textColorPrimary);
+        assertThat(textView.getCurrentTextColor()).isEqualTo(onSurfaceColor);
     }
 
     @Test
@@ -587,8 +600,8 @@ public class ChooseLockPasswordTest {
         final ChooseLockPasswordFragment fragment = getChooseLockPasswordFragment(passwordActivity);
         final ScrollToParentEditText passwordEntry = passwordActivity.findViewById(R.id.password_entry);
         final RecyclerView view = (RecyclerView) fragment.getPasswordRequirementsView();
-        @ColorInt final int textColorPrimary = Utils.getColorAttrDefaultColor(passwordActivity,
-                android.R.attr.textColorPrimary);
+        @ColorInt final int onSurfaceColor = passwordActivity.getColor(
+                com.android.systemui.dynamiccolors.R.color.materialColorOnSurface);
         @ColorInt final int colorError = Utils.getColorAttrDefaultColor(passwordActivity,
                 android.R.attr.colorError);
 
@@ -597,7 +610,7 @@ public class ChooseLockPasswordTest {
         shadowOf(Looper.getMainLooper()).idle();
         TextView textView = (TextView)view.getLayoutManager().findViewByPosition(0);
 
-        assertThat(textView.getCurrentTextColor()).isEqualTo(textColorPrimary);
+        assertThat(textView.getCurrentTextColor()).isEqualTo(onSurfaceColor);
 
         // Password must be fewer than 17 digits, so this should give an error.
         passwordEntry.setText("a".repeat(17));

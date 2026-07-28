@@ -17,13 +17,10 @@ package com.android.settings.connecteddevice;
 
 import static com.android.settings.core.BasePreferenceController.AVAILABLE_UNSEARCHABLE;
 import static com.android.settings.core.BasePreferenceController.UNSUPPORTED_ON_DEVICE;
-import static com.android.settings.flags.Flags.FLAG_DISPLAY_TOPOLOGY_PANE_IN_DISPLAY_LIST;
-import static com.android.settings.flags.Flags.FLAG_RESOLUTION_AND_ENABLE_CONNECTED_DISPLAY_SETTING;
-import static com.android.settings.flags.Flags.FLAG_RESOLUTION_AND_ENABLE_CONNECTED_DISPLAY_SETTING_BUGFIX;
-import static com.android.settings.flags.Flags.FLAG_ROTATION_CONNECTED_DISPLAY_SETTING;
 
 import static com.google.common.truth.Truth.assertThat;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -43,6 +40,7 @@ import android.platform.test.flag.junit.SetFlagsRule;
 import android.util.FeatureFlagUtils;
 import android.view.InputDevice;
 
+import androidx.lifecycle.LifecycleOwner;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceGroup;
 import androidx.preference.PreferenceManager;
@@ -56,9 +54,11 @@ import com.android.settings.connecteddevice.dock.DockUpdater;
 import com.android.settings.connecteddevice.stylus.StylusDeviceUpdater;
 import com.android.settings.connecteddevice.usb.ConnectedUsbDeviceUpdater;
 import com.android.settings.dashboard.DashboardFragment;
-import com.android.settings.flags.FakeFeatureFlagsImpl;
+import com.android.settings.overlay.DockUpdaterFeatureProvider;
+import com.android.settings.testutils.FakeFeatureFactory;
 import com.android.settings.testutils.shadow.ShadowBluetoothAdapter;
 import com.android.settings.testutils.shadow.ShadowBluetoothUtils;
+import com.android.settings.testutils.shadow.ShadowDesktopSettingsUtils;
 import com.android.settingslib.bluetooth.CachedBluetoothDevice;
 import com.android.settingslib.bluetooth.CachedBluetoothDeviceManager;
 import com.android.settingslib.bluetooth.LocalBluetoothManager;
@@ -86,7 +86,8 @@ import java.util.List;
         shadows = {
             ShadowApplicationPackageManager.class,
             ShadowBluetoothUtils.class,
-            ShadowBluetoothAdapter.class
+            ShadowBluetoothAdapter.class,
+            ShadowDesktopSettingsUtils.class
         })
 public class ConnectedDeviceGroupControllerTest {
 
@@ -111,24 +112,20 @@ public class ConnectedDeviceGroupControllerTest {
     @Mock private BluetoothDevice mDevice;
     @Mock private Resources mResources;
     @Mock private AudioManager mAudioManager;
-    private final FakeFeatureFlagsImpl mFakeFeatureFlags = new FakeFeatureFlagsImpl();
 
     private ShadowApplicationPackageManager mPackageManager;
     private PreferenceGroup mPreferenceGroup;
     private Context mContext;
     private Preference mPreference;
     private ConnectedDeviceGroupController mConnectedDeviceGroupController;
+    private FakeFeatureFactory mFakeFeatureFactory;
 
     @Rule public final SetFlagsRule mSetFlagsRule = new SetFlagsRule();
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        mFakeFeatureFlags.setFlag(FLAG_DISPLAY_TOPOLOGY_PANE_IN_DISPLAY_LIST, false);
-        mFakeFeatureFlags.setFlag(FLAG_ROTATION_CONNECTED_DISPLAY_SETTING, true);
-        mFakeFeatureFlags.setFlag(FLAG_RESOLUTION_AND_ENABLE_CONNECTED_DISPLAY_SETTING, true);
-        mFakeFeatureFlags.setFlag(
-                FLAG_RESOLUTION_AND_ENABLE_CONNECTED_DISPLAY_SETTING_BUGFIX, true);
+        mFakeFeatureFactory = FakeFeatureFactory.setupForTest();
 
         mContext = spy(ApplicationProvider.getApplicationContext());
         mPreference = new Preference(mContext);
@@ -148,7 +145,6 @@ public class ConnectedDeviceGroupControllerTest {
         when(mLocalBluetoothManager.getCachedDeviceManager()).thenReturn(mCachedDeviceManager);
 
         mConnectedDeviceGroupController = spy(new ConnectedDeviceGroupController(mContext));
-        when(mConnectedDeviceGroupController.getFeatureFlags()).thenReturn(mFakeFeatureFlags);
 
         mConnectedDeviceGroupController.init(
                 mExternalDisplayUpdater,
@@ -239,10 +235,7 @@ public class ConnectedDeviceGroupControllerTest {
 
     @Test
     public void getAvailabilityStatus_noBluetoothUsbDockFeature_returnUnSupported() {
-        mFakeFeatureFlags.setFlag(FLAG_ROTATION_CONNECTED_DISPLAY_SETTING, false);
-        mFakeFeatureFlags.setFlag(FLAG_RESOLUTION_AND_ENABLE_CONNECTED_DISPLAY_SETTING, false);
-        mFakeFeatureFlags.setFlag(
-                FLAG_RESOLUTION_AND_ENABLE_CONNECTED_DISPLAY_SETTING_BUGFIX, false);
+
         mPackageManager.setSystemFeature(PackageManager.FEATURE_BLUETOOTH, false);
         mPackageManager.setSystemFeature(PackageManager.FEATURE_USB_ACCESSORY, false);
         mPackageManager.setSystemFeature(PackageManager.FEATURE_USB_HOST, false);
@@ -251,18 +244,6 @@ public class ConnectedDeviceGroupControllerTest {
 
         assertThat(mConnectedDeviceGroupController.getAvailabilityStatus())
                 .isEqualTo(UNSUPPORTED_ON_DEVICE);
-    }
-
-    @Test
-    public void getAvailabilityStatus_connectedDisplay_returnSupported() {
-        mPackageManager.setSystemFeature(PackageManager.FEATURE_BLUETOOTH, false);
-        mPackageManager.setSystemFeature(PackageManager.FEATURE_USB_ACCESSORY, false);
-        mPackageManager.setSystemFeature(PackageManager.FEATURE_USB_HOST, false);
-        mConnectedDeviceGroupController.init(
-                null, mConnectedBluetoothDeviceUpdater, mConnectedUsbDeviceUpdater, null, null);
-
-        assertThat(mConnectedDeviceGroupController.getAvailabilityStatus())
-                .isEqualTo(AVAILABLE_UNSEARCHABLE);
     }
 
     @Test
@@ -307,10 +288,6 @@ public class ConnectedDeviceGroupControllerTest {
 
     @Test
     public void getAvailabilityStatus_noUsiStylusFeature_returnUnSupported() {
-        mFakeFeatureFlags.setFlag(FLAG_ROTATION_CONNECTED_DISPLAY_SETTING, false);
-        mFakeFeatureFlags.setFlag(FLAG_RESOLUTION_AND_ENABLE_CONNECTED_DISPLAY_SETTING, false);
-        mFakeFeatureFlags.setFlag(
-                FLAG_RESOLUTION_AND_ENABLE_CONNECTED_DISPLAY_SETTING_BUGFIX, false);
         mPackageManager.setSystemFeature(PackageManager.FEATURE_BLUETOOTH, false);
         mPackageManager.setSystemFeature(PackageManager.FEATURE_USB_ACCESSORY, false);
         mPackageManager.setSystemFeature(PackageManager.FEATURE_USB_HOST, false);
@@ -355,6 +332,53 @@ public class ConnectedDeviceGroupControllerTest {
 
         assertThat(mConnectedDeviceGroupController.getAvailabilityStatus())
                 .isEqualTo(AVAILABLE_UNSEARCHABLE);
+    }
+
+    @Test
+    public void getAvailabilityStatus_haveExternalDisplayFeature_returnSupported() {
+        mPackageManager.setSystemFeature(PackageManager.FEATURE_BLUETOOTH, false);
+        mPackageManager.setSystemFeature(PackageManager.FEATURE_USB_ACCESSORY, false);
+        mPackageManager.setSystemFeature(PackageManager.FEATURE_USB_HOST, false);
+
+        // When showTopLevelDeviceCategory is false, init(fragment) sets externalDisplayUpdater
+        ShadowDesktopSettingsUtils.setShouldShow(false);
+
+        when(mPreferenceScreen.findPreference(anyString())).thenReturn(mPreferenceGroup);
+        mConnectedDeviceGroupController.init(mDashboardFragment);
+        mConnectedDeviceGroupController.displayPreference(mPreferenceScreen);
+        mConnectedDeviceGroupController.onStart();
+        mConnectedDeviceGroupController.onStop();
+
+        assertThat(mConnectedDeviceGroupController.getAvailabilityStatus())
+                .isEqualTo(AVAILABLE_UNSEARCHABLE);
+    }
+
+    @Test
+    public void getAvailabilityStatus_showTopLevelDeviceCategory_returnUnsupported() {
+        mPackageManager.setSystemFeature(PackageManager.FEATURE_BLUETOOTH, false);
+        mPackageManager.setSystemFeature(PackageManager.FEATURE_USB_ACCESSORY, false);
+        mPackageManager.setSystemFeature(PackageManager.FEATURE_USB_HOST, false);
+
+        // Ensure stylus feature is disabled
+        FeatureFlagUtils.setEnabled(
+                mContext, FeatureFlagUtils.SETTINGS_SHOW_STYLUS_PREFERENCES, false);
+
+        // Ensure dock updater returns null so it doesn't make status AVAILABLE
+        when(mFakeFeatureFactory.dockUpdaterFeatureProvider.getConnectedDockUpdater(any(), any()))
+                .thenReturn(null);
+
+        // When showTopLevelDeviceCategory is true, init(fragment) sets externalDisplayUpdater to
+        // null
+        ShadowDesktopSettingsUtils.setShouldShow(true);
+
+        when(mPreferenceScreen.findPreference(anyString())).thenReturn(mPreferenceGroup);
+        mConnectedDeviceGroupController.init(mDashboardFragment);
+        mConnectedDeviceGroupController.displayPreference(mPreferenceScreen);
+        mConnectedDeviceGroupController.onStart();
+        mConnectedDeviceGroupController.onStop();
+
+        assertThat(mConnectedDeviceGroupController.getAvailabilityStatus())
+                .isEqualTo(UNSUPPORTED_ON_DEVICE);
     }
 
     @Test

@@ -32,6 +32,7 @@ import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.Permissions
 import com.android.settingslib.metadata.PersistentPreference
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceChangeReason
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
@@ -77,8 +78,16 @@ class EnabledNetworkModePreference(
     override val key: String
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.enabled_networks_key_purpose
+
     override val title: Int
         get() = R.string.preferred_network_mode_title
+
+    override val availabilityDescription =
+        "The sim must be configurable for network mode."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
 
     override fun isAvailable(context: Context): Boolean =
         data.enabledNetworkModeFlow.value.isAvailable
@@ -143,8 +152,10 @@ class EnabledNetworkModePreference(
     override fun getWritePermit(context: Context, callingPid: Int, callingUid: Int) =
         ReadWritePermit.DISALLOW
 
+    override val supportsWrite = false
+
     override val sensitivityLevel
-        get() = SensitivityLevel.LOW_SENSITIVITY
+        get() = SensitivityLevel.REQUIRES_CONFIRMATION
 
     @Suppress("UNCHECKED_CAST")
     private class Store(private val data: MobileNetworkData) :

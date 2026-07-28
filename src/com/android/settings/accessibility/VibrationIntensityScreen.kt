@@ -25,13 +25,15 @@ import androidx.fragment.app.Fragment
 import com.android.settings.R
 import com.android.settings.Settings.VibrationIntensitySettingsActivity
 import com.android.settings.core.PreferenceScreenMixin
-import com.android.settings.flags.Flags
 import com.android.settings.utils.makeLaunchIntent
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.preferenceHierarchy
 import kotlinx.coroutines.CoroutineScope
+import com.android.settings.appfunctions.DeviceStateAppFunctionType
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 
 /** Accessibility settings for vibration intensities. */
 // TODO(b/368360218): investigate if we still need this screen once we finish the migration.
@@ -40,8 +42,13 @@ import kotlinx.coroutines.CoroutineScope
 // LINT.IfChange
 @ProvidePreferenceScreen(VibrationIntensityScreen.KEY)
 open class VibrationIntensityScreen : PreferenceScreenMixin, PreferenceAvailabilityProvider {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED)
+
     override val key: String
         get() = KEY
+
+    override val purpose: Int
+        get() = R.string.vibration_intensity_screen_purpose
 
     override val title: Int
         get() = R.string.accessibility_vibration_settings_title
@@ -51,13 +58,16 @@ open class VibrationIntensityScreen : PreferenceScreenMixin, PreferenceAvailabil
 
     override fun getMetricsCategory() = SettingsEnums.ACCESSIBILITY_VIBRATION
 
+    override val availabilityDescription =
+        "The device must have a vibrator and support at least two vibration intensity levels."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
+
     override fun isAvailable(context: Context) =
         context.hasVibrator && context.getSupportedVibrationIntensityLevels() > 1
 
     override val highlightMenuKey
         get() = R.string.menu_key_accessibility
-
-    override fun isFlagEnabled(context: Context): Boolean = Flags.catalystVibrationIntensityScreen()
 
     override fun hasCompleteHierarchy() = false
 
@@ -66,31 +76,28 @@ open class VibrationIntensityScreen : PreferenceScreenMixin, PreferenceAvailabil
 
     override fun getPreferenceHierarchy(context: Context, coroutineScope: CoroutineScope) =
         preferenceHierarchy(context) {
-            +VibrationMainSwitchPreference(VIBRATE_ON)
-            // The preferences below are migrated behind a different flag from the screen migration.
-            // They should only be declared in this screen hierarchy if their migration is enabled.
-            if (Flags.catalystVibrationIntensityScreen25q4()) {
-                +CallVibrationPreferenceCategory() += {
-                    +RingVibrationIntensitySliderPreference(context)
-                }
-                +NotificationAlarmVibrationPreferenceCategory() += {
-                    +NotificationVibrationIntensitySliderPreference(context)
-                    +AlarmVibrationIntensitySliderPreference(context)
-                }
-                +InteractiveHapticsPreferenceCategory() += {
-                    +TouchVibrationIntensitySliderPreference(context)
-                    +MediaVibrationIntensitySliderPreference(context)
-                    +KeyboardVibrationSwitchPreference(context, KEYBOARD_VIBRATION_ENABLED)
-                }
+            +VibrationMainSwitchPreference(VIBRATE_ON, purpose = R.string.vibrate_on_purpose)
+            +CallVibrationPreferenceCategory() += {
+                +RingVibrationIntensitySliderPreference(context)
+            }
+            +NotificationAlarmVibrationPreferenceCategory() += {
+                +NotificationVibrationIntensitySliderPreference(context)
+                +AlarmVibrationIntensitySliderPreference(context)
+            }
+            +InteractiveHapticsPreferenceCategory() += {
+                +TouchVibrationIntensitySliderPreference(context)
+                +MediaVibrationIntensitySliderPreference(context)
+                +KeyboardVibrationSwitchPreference(
+                    context,
+                    KEYBOARD_VIBRATION_ENABLED,
+                    R.string.keyboard_vibration_enabled_purpose,
+                )
+                +KeyboardVibrationIntensitySliderPreference(context)
             }
         }
 
     override fun getLaunchIntent(context: Context, metadata: PreferenceMetadata?) =
-        if (Flags.deeplinkSoundAndVibration25q4()) {
-            makeLaunchIntent(context, VibrationIntensitySettingsActivity::class.java, metadata?.key)
-        } else {
-            super.getLaunchIntent(context, metadata)
-        }
+        makeLaunchIntent(context, VibrationIntensitySettingsActivity::class.java, metadata?.key)
 
     companion object {
         const val KEY = "vibration_intensity_screen"

@@ -21,8 +21,6 @@ import android.app.settings.SettingsEnums
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
-import android.content.pm.FeatureFlags as PmFeatureFlags
-import android.content.pm.FeatureFlagsImpl as PmFeatureFlagsImpl
 import android.content.pm.PackageInfo
 import android.content.pm.PackageManager
 import android.os.UserHandle
@@ -31,8 +29,6 @@ import androidx.annotation.VisibleForTesting
 import androidx.compose.runtime.Composable
 import com.android.settings.Utils
 import com.android.settings.applications.appinfo.AppInfoDashboardFragment
-import com.android.settings.flags.FeatureFlags
-import com.android.settings.flags.FeatureFlagsImpl
 import com.android.settings.overlay.FeatureFactory.Companion.featureFactory
 import com.android.settings.spa.app.startUninstallActivity
 import com.android.settingslib.spa.framework.compose.LocalNavController
@@ -56,58 +52,58 @@ import kotlinx.coroutines.plus
 
 private const val TAG = "PackageInfoPresenter"
 
-/**
- * Presenter which helps to present the status change of [PackageInfo].
- */
+/** Presenter which helps to present the status change of [PackageInfo]. */
 class PackageInfoPresenter(
     val context: Context,
     val packageName: String,
     val userId: Int,
     private val coroutineScope: CoroutineScope,
     private val packageManagers: IPackageManagers = PackageManagers,
-    private val featureFlags: PmFeatureFlags = PmFeatureFlagsImpl(),
 ) {
     private val metricsFeatureProvider = featureFactory.metricsFeatureProvider
     private val userHandle = UserHandle.of(userId)
     val userContext by lazy { context.asUser(userHandle) }
     val userPackageManager: PackageManager by lazy { userContext.packageManager }
 
-    private val appChangeFlow = context.broadcastReceiverAsUserFlow(
-        intentFilter = IntentFilter().apply {
-            // App enabled / disabled
-            addAction(Intent.ACTION_PACKAGE_CHANGED)
+    private val appChangeFlow =
+        context
+            .broadcastReceiverAsUserFlow(
+                intentFilter =
+                    IntentFilter().apply {
+                        // App enabled / disabled
+                        addAction(Intent.ACTION_PACKAGE_CHANGED)
 
-            // App archived
-            addAction(Intent.ACTION_PACKAGE_REMOVED)
+                        // App archived
+                        addAction(Intent.ACTION_PACKAGE_REMOVED)
 
-            // App updated / the updates are uninstalled (system app)
-            addAction(Intent.ACTION_PACKAGE_REPLACED)
+                        // App updated / the updates are uninstalled (system app)
+                        addAction(Intent.ACTION_PACKAGE_REPLACED)
 
-            // App force-stopped
-            addAction(Intent.ACTION_PACKAGE_RESTARTED)
+                        // App force-stopped
+                        addAction(Intent.ACTION_PACKAGE_RESTARTED)
 
-            addDataScheme("package")
-        },
-        userHandle = userHandle,
-    ).filter(::isInterestedAppChange).filter(::isForThisApp)
+                        addDataScheme("package")
+                    },
+                userHandle = userHandle,
+            )
+            .filter(::isInterestedAppChange)
+            .filter(::isForThisApp)
 
     @VisibleForTesting
     fun isInterestedAppChange(intent: Intent) =
         intent.action != Intent.ACTION_PACKAGE_REMOVED ||
             intent.getBooleanExtra(Intent.EXTRA_ARCHIVAL, false)
 
-    val flow: StateFlow<PackageInfo?> = merge(flowOf(null), appChangeFlow)
-        .map { getPackageInfo() }
-        .stateIn(coroutineScope + Dispatchers.Default, SharingStarted.Eagerly, null)
+    val flow: StateFlow<PackageInfo?> =
+        merge(flowOf(null), appChangeFlow)
+            .map { getPackageInfo() }
+            .stateIn(coroutineScope + Dispatchers.Default, SharingStarted.Eagerly, null)
 
-    /**
-     * Detects the package fully removed event, and close the current page.
-     */
+    /** Detects the package fully removed event, and close the current page. */
     @Composable
     fun PackageFullyRemovedEffect() {
-        val intentFilter = IntentFilter(Intent.ACTION_PACKAGE_FULLY_REMOVED).apply {
-            addDataScheme("package")
-        }
+        val intentFilter =
+            IntentFilter(Intent.ACTION_PACKAGE_FULLY_REMOVED).apply { addDataScheme("package") }
         val navController = LocalNavController.current
         DisposableBroadcastReceiverAsUser(intentFilter, userHandle) { intent ->
             if (isForThisApp(intent)) {
@@ -120,9 +116,7 @@ class PackageInfoPresenter(
 
     private fun requireAuthAndExecute(action: () -> Unit) {
         if (Utils.isProtectedPackage(context, packageName)) {
-            AppInfoDashboardFragment.showLockScreen(context) {
-                action()
-            }
+            AppInfoDashboardFragment.showLockScreen(context) { action() }
         } else {
             action()
         }
@@ -133,7 +127,9 @@ class PackageInfoPresenter(
         logAction(SettingsEnums.ACTION_SETTINGS_ENABLE_APP)
         coroutineScope.launch(Dispatchers.IO) {
             userPackageManager.setApplicationEnabledSetting(
-                packageName, PackageManager.COMPONENT_ENABLED_STATE_DEFAULT, 0
+                packageName,
+                PackageManager.COMPONENT_ENABLED_STATE_DEFAULT,
+                0,
             )
         }
     }
@@ -144,7 +140,9 @@ class PackageInfoPresenter(
         requireAuthAndExecute {
             coroutineScope.launch(Dispatchers.IO) {
                 userPackageManager.setApplicationEnabledSetting(
-                    packageName, PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER, 0
+                    packageName,
+                    PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER,
+                    0,
                 )
             }
         }
@@ -172,15 +170,30 @@ class PackageInfoPresenter(
         requireAuthAndExecute {
             coroutineScope.launch(Dispatchers.Default) {
                 Log.d(TAG, "Stopping package $packageName")
-                if (android.app.Flags.appRestrictionsApi()) {
-                    val uid = userPackageManager.getPackageUid(packageName, 0)
-                    context.activityManager.noteAppRestrictionEnabled(
-                        packageName, uid,
-                        ActivityManager.RESTRICTION_LEVEL_FORCE_STOPPED, true,
-                        ActivityManager.RESTRICTION_REASON_USER, "settings",
-                        ActivityManager.RESTRICTION_SOURCE_USER, 0)
+                try {
+                    if (android.app.Flags.appRestrictionsApi()) {
+                        val uid = userPackageManager.getPackageUid(packageName, 0)
+                        context.activityManager.noteAppRestrictionEnabled(
+                            packageName,
+                            uid,
+                            ActivityManager.RESTRICTION_LEVEL_FORCE_STOPPED,
+                            true,
+                            ActivityManager.RESTRICTION_REASON_USER,
+                            "settings",
+                            ActivityManager.RESTRICTION_SOURCE_USER,
+                            0,
+                        )
+                    }
+                    context.activityManager.forceStopPackageAsUser(packageName, userId)
+                } catch (e: PackageManager.NameNotFoundException) {
+                    Log.i(
+                        TAG,
+                        "Package not found, likely uninstalled: $packageName. " +
+                            "Force stop aborted.",
+                    )
+                } catch (e: Exception) {
+                    Log.e(TAG, "Error force stopping package $packageName", e)
                 }
-                context.activityManager.forceStopPackageAsUser(packageName, userId)
             }
         }
     }
@@ -202,10 +215,11 @@ class PackageInfoPresenter(
     private fun getPackageInfo(): PackageInfo? =
         packageManagers.getPackageInfoAsUser(
             packageName = packageName,
-            flags = PackageManager.MATCH_ANY_USER.toLong() or
-                PackageManager.MATCH_DISABLED_COMPONENTS.toLong() or
-                PackageManager.GET_PERMISSIONS.toLong() or
-                if (isArchivingEnabled(featureFlags)) PackageManager.MATCH_ARCHIVED_PACKAGES else 0,
+            flags =
+                PackageManager.MATCH_ANY_USER.toLong() or
+                    PackageManager.MATCH_DISABLED_COMPONENTS.toLong() or
+                    PackageManager.GET_PERMISSIONS.toLong() or
+                    if (isArchivingEnabled()) PackageManager.MATCH_ARCHIVED_PACKAGES else 0,
             userId = userId,
         )
 }

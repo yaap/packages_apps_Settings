@@ -38,6 +38,7 @@ import android.util.Log;
 import android.util.TypedValue;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -347,6 +348,25 @@ public class WifiUtils extends com.android.settingslib.wifi.WifiUtils {
         }
     }
 
+
+    /** @return  true if the current user is a guest. */
+    public static boolean isGuestUser(@NonNull Context context) {
+        UserManager userManager = context.getSystemService(UserManager.class);
+        return userManager != null && userManager.isGuestUser();
+    }
+
+    /** @return  true if the current user is an Admin user. */
+    private static boolean isAdminUser(@NonNull Context context) {
+        UserManager userManager = context.getSystemService(UserManager.class);
+        return userManager != null && userManager.isAdminUser();
+    }
+
+    /** @return true if the multi user WiFi is enabled by flags. */
+    public static boolean isWifiMultiuserEnabled() {
+        return com.android.settings.connectivity.Flags.wifiMultiuser()
+            || com.android.settings.flags.Flags.enableWifiMultiuser();
+    }
+
     /**
      * Checks if the network is owned by the current user of the settings app or
      * if the userCount is one.
@@ -356,24 +376,92 @@ public class WifiUtils extends com.android.settingslib.wifi.WifiUtils {
      * @return true if the network is owned by the current user or if the device
      *         contains single user.
      */
-    public static boolean isNetworkEditable(
+    public static boolean isCurrentUserNetworkOwner(
             @NonNull WifiEntry wifiEntry, @NonNull Context context) {
-        if (!com.android.settings.connectivity.Flags.wifiMultiuser()
-                || wifiEntry.isModifiableByOtherUsers()) {
+        WifiConfiguration config = wifiEntry.getWifiConfiguration();
+        if (!isWifiMultiuserEnabled() || config == null) {
             return true;
         }
 
         UserManager userManager = context.getSystemService(UserManager.class);
         int userCount = userManager.getUserCount();
+        int currentUserId = Process.myUserHandle().getIdentifier();
+        int creatorUserId = config.getCreatorUserId();
 
-        UserHandle currentUserHandle = Process.myUserHandle();
+        return (userCount == 1) || (currentUserId == creatorUserId);
+    }
 
-        int currentUserId = currentUserHandle.getIdentifier();
+    /**
+     * Checks if the network is editable by the current user of the settings app
+     *
+     * @param wifiEntry the network entry for which the ownership check will be
+     * made.
+     * @param context Context of caller
+     * @return true if the network can be modified by the current user of the
+     *          settings app.
+     */
+    public static boolean isNetworkEditable(
+            @NonNull WifiEntry wifiEntry, @NonNull Context context) {
+        // A network can always be modified by the network owner or
+        // other non-guest users if the owner has enabled edits by others.
+        return isCurrentUserNetworkOwner(wifiEntry, context)
+                || (!isGuestUser(context)
+                && wifiEntry.isModifiableByOtherUsers());
+    }
 
-        int creatorUid = wifiEntry.getWifiConfiguration().creatorUid;
-        UserHandle userHandle = UserHandle.getUserHandleForUid(creatorUid);
+    /**
+     * Checks if the shared fields are editable by the current user of the
+     * settings app
+     *
+     * @param wifiEntry the network entry for which the ownership check will be
+     *      made.
+     * @param context Context of caller
+     * @return true if the current user can toggle the share network and
+     *      allow-edits toggles.
+     */
+    public static boolean isSharedFieldEditable(
+            @Nullable WifiEntry wifiEntry, @NonNull Context context) {
+        if (!isWifiMultiuserEnabled()) {
+            return false;
+        }
 
-        return (userCount == 1)
-                || (userHandle != null && (currentUserId == userHandle.getIdentifier()));
+        // A guest user can never toggle the shared fields on/off. For a
+        // non-null wifi entry/configuration, only the network owner can toggle
+        // shared fields.
+        return !isGuestUser(context)
+                && (wifiEntry == null
+                || isCurrentUserNetworkOwner(wifiEntry, context));
+    }
+
+    /**
+     * Checks if the current user can share the network QR code/password.
+     *
+     * @param wifiEntry the network entry for which the ownership check will be
+     *      made.
+     * @param context Context of caller
+     * @return true if the share QR code/password button should be visible to
+     *      the current user.
+     */
+    public static boolean isNetworkShareable(
+            @NonNull WifiEntry wifiEntry, @NonNull Context context) {
+        return wifiEntry.canShare()
+                && isCurrentUserNetworkOwner(wifiEntry, context)
+                && !isGuestUser(context);
+    }
+
+    /**
+     * Checks if the current user can forget the network.
+     *
+     * @param wifiEntry the network entry for which the ownership check will be
+     *      made.
+     * @param context Context of caller
+     * @return true if the forget button should be visible to the current user.
+     */
+    public static boolean isNetworkForgettable(
+            @NonNull WifiEntry wifiEntry, @NonNull Context context) {
+        return wifiEntry.canForget()
+                && !isNetworkLockedDown(context, wifiEntry.getWifiConfiguration())
+                && (isCurrentUserNetworkOwner(wifiEntry, context)
+                || isAdminUser(context));
     }
 }

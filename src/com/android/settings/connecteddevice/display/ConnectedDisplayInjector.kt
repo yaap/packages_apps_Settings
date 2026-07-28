@@ -31,12 +31,13 @@ import android.os.Handler
 import android.os.Looper
 import android.os.RemoteException
 import android.os.SystemProperties
-import android.util.DisplayMetrics
 import android.util.Log
 import android.util.Size
 import android.view.Display
 import android.view.Display.DEFAULT_DISPLAY
 import android.view.Display.INVALID_DISPLAY
+import android.view.Display.Mode.FLAG_ANISOTROPY_CORRECTION
+import android.view.Display.Mode.FLAG_SIZE_OVERRIDE
 import android.view.DisplayInfo
 import android.view.IWindowManager
 import android.view.SurfaceControl
@@ -44,12 +45,12 @@ import android.view.View
 import android.view.ViewManager
 import android.view.WindowManager
 import android.view.WindowManagerGlobal
+import androidx.annotation.OpenForTesting
+import com.android.server.display.feature.flags.Flags
 import com.android.settings.connecteddevice.display.ExternalDisplaySettingsConfiguration.VIRTUAL_DISPLAY_PACKAGE_NAME_SYSTEM_PROPERTY
-import com.android.settings.flags.FeatureFlagsImpl
 import com.android.wm.shell.shared.desktopmode.DesktopState
 import java.util.function.Consumer
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.IO
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
@@ -62,9 +63,8 @@ import kotlinx.coroutines.coroutineScope
  */
 data class RevealedWallpaper(val displayId: Int, val revealer: View, val viewManager: ViewManager)
 
-open class ConnectedDisplayInjector(open val context: Context?) {
+open class ConnectedDisplayInjector(open val context: Context) {
 
-    open val flags: DesktopExperienceFlags by lazy { DesktopExperienceFlags(FeatureFlagsImpl()) }
     open val handler: Handler by lazy { Handler(Looper.getMainLooper()) }
 
     /**
@@ -75,16 +75,18 @@ open class ConnectedDisplayInjector(open val context: Context?) {
 
     /** The display manager instance, or null if context is null. */
     val displayManager: DisplayManager? by lazy {
-        context?.getSystemService(DisplayManager::class.java)
+        context.getSystemService(DisplayManager::class.java)
     }
 
-    val desktopState: DesktopState? by lazy { context?.let { DesktopState.fromContext(it) } }
+    @get:OpenForTesting
+    open val desktopState: DesktopState? by lazy { context.let { DesktopState.getInstance(it) } }
 
     /** The window manager instance, or null if it cannot be retrieved. */
     val windowManager: IWindowManager? by lazy { WindowManagerGlobal.getWindowManagerService() }
 
     open fun isProjectedModeEnabled(): Boolean =
-        desktopState?.isDesktopModeSupportedOnDisplay(DEFAULT_DISPLAY) != true
+        desktopState?.canEnterDesktopMode == true &&
+            desktopState?.isDesktopModeSupportedOnDisplay(DEFAULT_DISPLAY) != true
 
     /**
      * Reveals the wallpaper on the given display using a View with FLAG_SHOW_WALLPAPER flag set in
@@ -96,17 +98,18 @@ open class ConnectedDisplayInjector(open val context: Context?) {
     open fun revealWallpaper(displayId: Int): RevealedWallpaper? {
         val display = displayManager?.getDisplay(displayId) ?: return null
         val windowCtx =
-            context?.createWindowContext(
+            context.createWindowContext(
                 display,
                 WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY,
                 /* options= */ null,
             )
-        val windowManager = windowCtx?.getSystemService(WindowManager::class.java) ?: return null
+        val windowManager = windowCtx.getSystemService(WindowManager::class.java) ?: return null
 
         val view = View(windowCtx)
         windowManager.addView(
             view,
             WindowManager.LayoutParams().also {
+                it.title = "display#$displayId show_wallpaper window"
                 it.width = 1
                 it.height = 1
                 it.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY
@@ -116,6 +119,7 @@ open class ConnectedDisplayInjector(open val context: Context?) {
                 it.format = PixelFormat.TRANSLUCENT
             },
         )
+        Log.d(TAG, "Added wallpaper window for display#$displayId")
         return RevealedWallpaper(display.displayId, view, windowManager)
     }
 
@@ -132,15 +136,28 @@ open class ConnectedDisplayInjector(open val context: Context?) {
             display.supportedModes.asList(),
             isEnabled,
             isConnectedDisplay,
+            display.rotation,
+            display.supportedModes.any { !it.supportedHdrTypes.isEmpty() },
         )
 
     private fun getDisplayMode(display: Display): Display.Mode {
         val userPreferredMode = display.userPreferredDisplayMode
+        if (userPreferredMode != null && (userPreferredMode.flags and FLAG_SIZE_OVERRIDE) != 0) {
+            return userPreferredMode
+        }
         if (
             userPreferredMode != null &&
-                (userPreferredMode.flags and Display.Mode.FLAG_SIZE_OVERRIDE) != 0
+                (userPreferredMode.flags and FLAG_ANISOTROPY_CORRECTION) != 0
         ) {
-            return userPreferredMode
+            val parentMode =
+                display.supportedModes.find { it.modeId == userPreferredMode.parentModeId }
+            // active mode size matches with parent mode size
+            if (
+                parentMode != null &&
+                    display.mode.matches(parentMode.physicalWidth, parentMode.physicalHeight)
+            ) {
+                return userPreferredMode
+            }
         }
         return display.mode
     }
@@ -150,16 +167,22 @@ open class ConnectedDisplayInjector(open val context: Context?) {
      * displays that are relying on external display settings page to modify their settings (e.g.
      * rotation)
      */
-    private fun isConnectedDisplay(display: Display): Boolean =
+    fun isConnectedDisplay(display: Display): Boolean =
         display.type == Display.TYPE_EXTERNAL ||
             display.type == Display.TYPE_OVERLAY ||
             isVirtualDisplayAllowed(display)
 
     private fun isVirtualDisplayAllowed(display: Display): Boolean {
+        if (display.type != Display.TYPE_VIRTUAL) {
+            return false
+        }
+        if (Flags.virtualSecondaryDisplays()) {
+            if ((display.getFlags() and Display.FLAG_ALLOWS_CONTENT_MODE_SWITCH) != 0) {
+                return true
+            }
+        }
         val sysProp = getSystemProperty(VIRTUAL_DISPLAY_PACKAGE_NAME_SYSTEM_PROPERTY)
-        return !sysProp.isEmpty() &&
-            display.type == Display.TYPE_VIRTUAL &&
-            sysProp == display.ownerPackageName
+        return !sysProp.isEmpty() && sysProp == display.ownerPackageName
     }
 
     /** @return all displays including disabled. */
@@ -192,8 +215,8 @@ open class ConnectedDisplayInjector(open val context: Context?) {
                 baseDisplayDevices.map { display ->
                     // Fetch concurrently
                     async(Dispatchers.IO) {
-                        val rotation = getDisplayUserRotation(display.id)
                         val connectionPreference = getDisplayConnectionPreference(display.uniqueId)
+                        val hdrPreference = getUserHdrPreference(display.id)
                         DisplayDeviceAdditionalInfo(
                             display.id,
                             display.uniqueId,
@@ -202,8 +225,10 @@ open class ConnectedDisplayInjector(open val context: Context?) {
                             display.supportedModes,
                             display.isEnabled,
                             display.isConnectedDisplay,
-                            rotation,
+                            display.rotation,
+                            display.isHdrSupported,
                             connectionPreference,
+                            hdrPreference,
                         )
                     }
                 }
@@ -228,11 +253,22 @@ open class ConnectedDisplayInjector(open val context: Context?) {
     }
 
     /** Register display listener. */
-    open fun registerDisplayListener(listener: DisplayManager.DisplayListener) {
+    @JvmOverloads
+    open fun registerDisplayListener(
+        listener: DisplayManager.DisplayListener,
+        includeRefreshRateEvents: Boolean = false,
+    ) {
+        var eventFlags =
+            EVENT_TYPE_DISPLAY_ADDED or EVENT_TYPE_DISPLAY_CHANGED or EVENT_TYPE_DISPLAY_REMOVED
+
+        if (includeRefreshRateEvents) {
+            eventFlags = eventFlags or DisplayManager.EVENT_TYPE_DISPLAY_REFRESH_RATE
+        }
+
         displayManager?.registerDisplayListener(
             listener,
             handler,
-            EVENT_TYPE_DISPLAY_ADDED or EVENT_TYPE_DISPLAY_CHANGED or EVENT_TYPE_DISPLAY_REMOVED,
+            eventFlags,
             PRIVATE_EVENT_TYPE_DISPLAY_CONNECTION_CHANGED,
         )
     }
@@ -263,21 +299,12 @@ open class ConnectedDisplayInjector(open val context: Context?) {
     open fun updateDisplayConnectionPreference(uniqueId: String, connectionPreference: Int) =
         displayManager?.setExternalDisplayConnectionPreference(uniqueId, connectionPreference)
 
-    /**
-     * Get display rotation
-     *
-     * @param displayId display identifier
-     * @return rotation
-     */
-    open fun getDisplayUserRotation(displayId: Int): Int {
-        val wm = windowManager ?: return 0
-        try {
-            return wm.getDisplayUserRotation(displayId)
-        } catch (e: RemoteException) {
-            Log.e(TAG, "Error getting user rotation of display $displayId", e)
-            return 0
-        }
-    }
+    open fun setUserHdrPreference(displayId: Int, hdrPreference: Int) =
+        displayManager?.setUserPreferredHdrMode(displayId, hdrPreference)
+
+    open fun getUserHdrPreference(displayId: Int): Int =
+        displayManager?.getUserPreferredHdrMode(displayId)
+            ?: DisplayManager.HDR_PREFERENCE_HDR_ALLOWED
 
     /**
      * Freeze rotation of the display in the specified rotation.
@@ -289,7 +316,7 @@ open class ConnectedDisplayInjector(open val context: Context?) {
     open fun freezeDisplayRotation(displayId: Int, rotation: Int): Boolean {
         val wm = windowManager ?: return false
         try {
-            wm.freezeDisplayRotation(displayId, rotation, "ExternalDisplayPreferenceFragment")
+            wm.freezeDisplayRotation(displayId, rotation, "SelectedDisplayPreferenceFragment")
             return true
         } catch (e: RemoteException) {
             Log.e(TAG, "Error while freezing user rotation of display $displayId", e)
@@ -307,14 +334,18 @@ open class ConnectedDisplayInjector(open val context: Context?) {
         DisplayManagerGlobal.getInstance().resetUserPreferredDisplayMode(displayId)
     }
 
-    open fun isDefaultDisplayInTopologyFlagEnabled(): Boolean =
-        android.window.DesktopExperienceFlags.ENABLE_DEFAULT_DISPLAY_IN_TOPOLOGY_SWITCH.isTrue() &&
-            flags.enableDefaultDisplayInTopologySwitchBugfix()
-
     open var displayTopology: DisplayTopology?
         get() = displayManager?.displayTopology
         set(value) {
-            displayManager?.let { it.displayTopology = value }
+            displayManager?.let {
+                try {
+                    it.displayTopology = value
+                } catch (e: IllegalArgumentException) {
+                    // This can happen if Display Manager updated the topology at the same time.
+                    // Cancel this and wait for an update from Display Manager.
+                    Log.w(TAG, "Topology not set, waiting for an update from Display Manager")
+                }
+            }
         }
 
     /**
@@ -341,22 +372,6 @@ open class ConnectedDisplayInjector(open val context: Context?) {
         }
     }
 
-    /**
-     * This density is the density of the current display (showing the Settings app UI). It is
-     * necessary to use this density here because the topology pane coordinates are in physical
-     * pixels, and the display bounds and accessibility constraints are in density-independent
-     * pixels.
-     */
-    open val densityDpi: Int by lazy {
-        val c = context
-        val info = DisplayInfo()
-        if (c != null && c.display.getDisplayInfo(info)) {
-            info.logicalDensityDpi
-        } else {
-            DisplayMetrics.DENSITY_DEFAULT
-        }
-    }
-
     open fun getLogicalSize(displayId: Int): Size? {
         val display = displayManager?.getDisplay(displayId) ?: return null
         val displayInfo = DisplayInfo()
@@ -364,8 +379,15 @@ open class ConnectedDisplayInjector(open val context: Context?) {
         return Size(displayInfo.logicalWidth, displayInfo.logicalHeight)
     }
 
+    open fun getPhysicalDpi(displayId: Int): Pair<Float, Float> {
+        val display = displayManager?.getDisplay(displayId) ?: return Pair(0f, 0f)
+        val displayInfo = DisplayInfo()
+        display.getDisplayInfo(displayInfo)
+        return Pair(displayInfo.physicalXDpi, displayInfo.physicalYDpi)
+    }
+
     open fun registerTopologyListener(listener: Consumer<DisplayTopology>) {
-        val executor = context?.mainExecutor
+        val executor = context.mainExecutor
         if (executor != null) displayManager?.registerTopologyListener(executor, listener)
     }
 
@@ -377,7 +399,23 @@ open class ConnectedDisplayInjector(open val context: Context?) {
 
     open fun getSurfaceControlBuilder() = SurfaceControl.Builder()
 
-    private companion object {
+    companion object {
+        const val SYSPROP_ENABLE_HDR_MODE_SPLITTING =
+            "persist.sys.display.enable_hdr_mode_splitting"
         private const val TAG = "ConnectedDisplayInjector"
+
+        fun isRefreshRateFlagsEnabled() =
+            com.android.settings.flags.Flags.enableResolutionRefreshRateSetting() &&
+                com.android.graphics.surfaceflinger.flags.Flags
+                    .followerArbitraryRefreshRateSelectionPlatform() &&
+                com.android.graphics.surfaceflinger.flags.Flags
+                    .forceSlowerFollowerGpuCompositionPlatform() &&
+                com.android.graphics.surfaceflinger.flags.Flags
+                    .followerDisplayBackpressurePlatform() &&
+                com.android.graphics.surfaceflinger.flags.Flags.syncedResolutionSwitch()
+
+        fun isUserPreferredHdrModeEnabled() =
+            com.android.window.flags.Flags.enableUserPreferredHdrMode() &&
+                SystemProperties.getBoolean(SYSPROP_ENABLE_HDR_MODE_SPLITTING, false)
     }
 }

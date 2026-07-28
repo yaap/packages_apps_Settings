@@ -40,8 +40,6 @@ import android.view.DisplayInfo;
 
 import androidx.test.platform.app.InstrumentationRegistry;
 
-import com.android.server.display.feature.flags.Flags;
-
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -50,6 +48,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 
+// LINT.IfChange
 @RunWith(RobolectricTestRunner.class)
 public class HdrBrightnessPreferenceControllerTest {
     private HdrBrightnessPreferenceController mPreferenceController;
@@ -75,7 +74,6 @@ public class HdrBrightnessPreferenceControllerTest {
     }
 
     @Test
-    @RequiresFlagsEnabled(Flags.FLAG_HDR_BRIGHTNESS_SETTING)
     public void getAvailabilityStatus_available() {
         DisplayAdjustments daj = null;
 
@@ -136,3 +134,4 @@ public class HdrBrightnessPreferenceControllerTest {
                 HDR_BRIGHTNESS_ENABLED, /* def= */ -1));
     }
 }
+// LINT.ThenChange(HdrBrightnessApiScreenTest.kt)

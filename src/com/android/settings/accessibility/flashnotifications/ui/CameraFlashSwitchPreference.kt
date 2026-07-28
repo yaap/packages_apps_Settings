@@ -24,15 +24,26 @@ import com.android.settings.accessibility.FlashNotificationsUtil
 import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.SettingsSystemStore
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.ReadWritePermit
 import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.metadata.SwitchPreference
 import com.android.settingslib.preference.SwitchPreferenceBinding
 
-class CameraFlashSwitchPreference : SwitchPreference(KEY, R.string.camera_flash_notification_title),
+class CameraFlashSwitchPreference : SwitchPreference(
+    KEY,
+    R.string.camera_flash_notification_purpose,
+    R.string.camera_flash_notification_title,
+),
     SwitchPreferenceBinding, PreferenceAvailabilityProvider {
 
-    override fun storage(context: Context): KeyValueStore = SettingsSystemStore.get(context)
+    override fun storage(context: Context): KeyValueStore =
+        SettingsSystemStore.get(context).apply { setDefaultValue(KEY, false) }
+
+    override val availabilityDescription =
+        "The device must have a back-facing camera with a flash."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context) = FlashNotificationsUtil.isTorchAvailable(context)
 

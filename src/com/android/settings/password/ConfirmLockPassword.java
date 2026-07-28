@@ -22,6 +22,7 @@ import static android.app.admin.DevicePolicyResources.Strings.Settings.WORK_PROF
 import static android.app.admin.DevicePolicyResources.Strings.Settings.WORK_PROFILE_LAST_PIN_ATTEMPT_BEFORE_WIPE;
 import static android.app.admin.DevicePolicyResources.UNDEFINED;
 
+import static com.android.settings.flags.Flags.showFooterButtonsOnPasswordConfirm;
 import static com.android.settings.biometrics.GatekeeperPasswordProvider.containsGatekeeperPasswordHandle;
 import static com.android.settings.biometrics.GatekeeperPasswordProvider.getGatekeeperPasswordHandle;
 import static com.android.settings.password.ChooseLockSettingsHelper.EXTRA_KEY_GK_PW_HANDLE;
@@ -51,6 +52,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.view.accessibility.AccessibilityNodeInfo;
+import android.view.accessibility.AccessibilityNodeInfo.AccessibilityAction;
 import android.view.animation.AnimationUtils;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
@@ -67,17 +70,24 @@ import com.android.internal.widget.LockPatternChecker;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.internal.widget.LockscreenCredential;
 import com.android.internal.widget.TextViewInputDisabler;
+import com.android.internal.widget.VerifyCredentialResponse;
 import com.android.settings.R;
 import com.android.settings.SetupRedactionInterstitial;
 import com.android.settings.Utils;
+import com.android.settings.accessibility.shared.utils.SetupWizardUtilKt;
 import com.android.settings.flags.Flags;
+import com.android.settings.widget.FocusIndicatorDrawable;
 import com.android.settings.widget.ImeAwareTextInputEditText;
 import com.android.settingslib.animation.AppearAnimationUtils;
 import com.android.settingslib.animation.DisappearAnimationUtils;
 
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.android.setupcompat.template.FooterBarMixin;
+import com.google.android.setupcompat.template.FooterButton;
+import com.google.android.setupcompat.util.WizardManagerHelper;
 import com.google.android.setupdesign.util.ThemeHelper;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -136,6 +146,13 @@ public class ConfirmLockPassword extends ConfirmDeviceCredentialBaseActivity {
         private DisappearAnimationUtils mDisappearAnimationUtils;
         private boolean mIsManagedProfile;
         private CharSequence mCheckBoxLabel;
+        private boolean mIsExpressiveStyle;
+
+        // Focus ring indicator dimensions
+        private static final int FOCUS_RING_HORIZONTAL_PADDING_ADJUSTMENT_DP = -12;
+        private static final int FOCUS_RING_VERTICAL_PADDING_ADJUSTMENT_DP = -4;
+        // Use "999" to specify a circular corner radius
+        private static final int FOCUS_RING_CORNER_RADIUS_DP = 999;
 
         // required constructor for fragments
         public ConfirmLockPasswordFragment() {
@@ -148,7 +165,7 @@ public class ConfirmLockPassword extends ConfirmDeviceCredentialBaseActivity {
             final int storedQuality = mLockPatternUtils.getKeyguardStoredPasswordQuality(
                     mEffectiveUserId);
             final ConfirmLockPassword activity = (ConfirmLockPassword) getActivity();
-            final boolean isExpressiveStyle = getActivity().getIntent().getBooleanExtra(
+            mIsExpressiveStyle = getActivity().getIntent().getBooleanExtra(
                     ChooseLockSettingsHelper.EXTRA_KEY_USE_EXPRESSIVE_STYLE, false) || (
                     activity.getConfirmCredentialTheme() == ConfirmCredentialTheme.EXPRESSIVE);
             int layoutId = switch (activity.getConfirmCredentialTheme()) {
@@ -171,6 +188,29 @@ public class ConfirmLockPassword extends ConfirmDeviceCredentialBaseActivity {
             }
             mPasswordEntry = (EditText) view.findViewById(R.id.password_entry);
             mPasswordEntry.setOnEditorActionListener(this);
+
+            // Support a11y actions to submit the input
+            mPasswordEntry.setAccessibilityDelegate(new View.AccessibilityDelegate() {
+                @Override
+                public void onInitializeAccessibilityNodeInfo(View host,
+                        AccessibilityNodeInfo info) {
+                    super.onInitializeAccessibilityNodeInfo(host, info);
+                    info.addAction(new AccessibilityAction(
+                            AccessibilityNodeInfo.ACTION_CLICK,
+                            getContext().getString(R.string.lockpassword_confirm_label)));
+                }
+
+                @Override
+                public boolean performAccessibilityAction(View host, int action, Bundle args) {
+                    if (action == AccessibilityNodeInfo.ACTION_CLICK
+                            && !TextUtils.isEmpty(mPasswordEntry.getText())) {
+                        handleNext();
+                        return true;
+                    }
+                    return super.performAccessibilityAction(host, action, args);
+                }
+            });
+
             // EditText inside ScrollView doesn't automatically get focus.
             mPasswordEntry.requestFocus();
             mPasswordEntryInputDisabler = new TextViewInputDisabler(mPasswordEntry);
@@ -189,7 +229,7 @@ public class ConfirmLockPassword extends ConfirmDeviceCredentialBaseActivity {
                         || DevicePolicyManager.PASSWORD_QUALITY_COMPLEX == storedQuality
                         || DevicePolicyManager.PASSWORD_QUALITY_MANAGED == storedQuality;
             }
-            if (isExpressiveStyle && mPasswordEntryLayout != null) {
+            if (mIsExpressiveStyle && mPasswordEntryLayout != null) {
                 final int textEntryLayoutHintId = mIsAlpha
                         ? R.string.unlock_set_unlock_mode_password
                         : R.string.unlock_set_unlock_mode_pin;
@@ -274,6 +314,27 @@ public class ConfirmLockPassword extends ConfirmDeviceCredentialBaseActivity {
         @Override
         public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
             super.onViewCreated(view, savedInstanceState);
+
+            if (mIsExpressiveStyle && showFooterButtonsOnPasswordConfirm()
+                    && getResources().getBoolean(
+                        R.bool.config_show_footer_buttons_on_password_confirmation_screen)) {
+                mFooterBarMixin = mGlifLayout.getMixin(FooterBarMixin.class);
+                mFooterBarMixin.setSecondaryButton(
+                    new FooterButton.Builder(getActivity())
+                        .setText(R.string.lockpassword_clear_label)
+                        .setListener(this::onClearButtonClick)
+                        .setButtonType(FooterButton.ButtonType.CANCEL)
+                        .setTheme(com.google.android.setupdesign.R.style.SudGlifButton_Secondary)
+                        .build());
+                mFooterBarMixin.setPrimaryButton(
+                    new FooterButton.Builder(getActivity())
+                        .setText(R.string.lockpassword_confirm_label)
+                        .setListener(this::onConfirmButtonClick)
+                        .setButtonType(FooterButton.ButtonType.NEXT)
+                        .setTheme(com.google.android.setupdesign.R.style.SudGlifButton_Primary)
+                        .build());
+            }
+
             if (mRemoteValidation) {
                 if (mCheckBox != null) {
                     mCheckBox.setText(TextUtils.isEmpty(mCheckBoxLabel)
@@ -299,11 +360,37 @@ public class ConfirmLockPassword extends ConfirmDeviceCredentialBaseActivity {
                 updateRemoteLockscreenValidationViews();
             }
 
+            final boolean shouldShowFocusRingsInSuw =
+                    SetupWizardUtilKt.shouldShowFocusRingsInSuw(getActivity())
+                    ||
+                    (com.android.settings.accessibility.Flags.enableInsetFocusRingsInSuwReadOnly()
+                    && getResources().getBoolean(
+                        com.android.internal.R.bool.config_enableInsetFocusRingsInSuw)
+                    && !WizardManagerHelper.isUserSetupComplete(getContext()));
+            if (mCheckBox != null && shouldShowFocusRingsInSuw) {
+                mCheckBox.setForeground(
+                        new FocusIndicatorDrawable.Builder(getContext())
+                                .withHorizontalPaddingAdjustment(
+                                    FOCUS_RING_HORIZONTAL_PADDING_ADJUSTMENT_DP)
+                                .withVerticalPaddingAdjustment(
+                                    FOCUS_RING_VERTICAL_PADDING_ADJUSTMENT_DP)
+                                .withCornerRadius(FOCUS_RING_CORNER_RADIUS_DP)
+                                .build());
+            }
+
             if (mForgotButton != null) {
                 mForgotButton.setText(mIsAlpha
                         ? R.string.lockpassword_forgot_password
                         : R.string.lockpassword_forgot_pin);
             }
+        }
+
+        private void onConfirmButtonClick(View view) {
+            handleNext();
+        }
+
+        private void onClearButtonClick(View view) {
+            mPasswordEntry.setText(null);
         }
 
         @Override
@@ -481,7 +568,7 @@ public class ConfirmLockPassword extends ConfirmDeviceCredentialBaseActivity {
         @Override
         public void onResume() {
             super.onResume();
-            long deadline = mLockPatternUtils.getLockoutAttemptDeadline(mEffectiveUserId);
+            long deadline = mLockPatternUtils.getLockoutEndTime(mEffectiveUserId).toMillis();
             if (deadline != 0) {
                 mCredentialCheckResultTracker.clearResult();
                 handleAttemptLockout(deadline);
@@ -503,12 +590,13 @@ public class ConfirmLockPassword extends ConfirmDeviceCredentialBaseActivity {
 
         @Override
         protected void authenticationSucceeded() {
-            mCredentialCheckResultTracker.setResult(true, new Intent(), 0, mEffectiveUserId);
+            mCredentialCheckResultTracker.setResult(true, new Intent(), Duration.ZERO,
+                    mEffectiveUserId);
         }
 
         private void updatePasswordEntry() {
             final boolean isLockedOut =
-                    mLockPatternUtils.getLockoutAttemptDeadline(mEffectiveUserId) != 0;
+                    !mLockPatternUtils.getLockoutEndTime(mEffectiveUserId).isZero();
             final boolean isRemoteLockscreenValidationInProgress =
                     mRemoteLockscreenValidationFragment != null
                     && mRemoteLockscreenValidationFragment.isRemoteValidationInProgress();
@@ -582,7 +670,8 @@ public class ConfirmLockPassword extends ConfirmDeviceCredentialBaseActivity {
                 return;
             }
 
-            mCredentialCheckResultTracker.setResult(false, intent, 0, mEffectiveUserId);
+            mCredentialCheckResultTracker.setResult(false, intent, Duration.ZERO,
+                    mEffectiveUserId);
         }
 
         private boolean isInternalActivity() {
@@ -593,7 +682,8 @@ public class ConfirmLockPassword extends ConfirmDeviceCredentialBaseActivity {
                 @LockPatternUtils.VerifyFlag int flags) {
             final int localEffectiveUserId = mEffectiveUserId;
             final int localUserId = mUserId;
-            final LockPatternChecker.OnVerifyCallback onVerifyCallback = (response, timeoutMs) -> {
+            final LockPatternChecker.OnVerifyCallback onVerifyCallback = response -> {
+                final Duration timeout = response.getTimeout();
                 mPendingLockCheck = null;
                 final boolean matched = response.isMatched();
                 if (matched && mReturnCredentials) {
@@ -606,7 +696,7 @@ public class ConfirmLockPassword extends ConfirmDeviceCredentialBaseActivity {
                                 response.getGatekeeperHAT());
                     }
                 }
-                mCredentialCheckResultTracker.setResult(matched, intent, timeoutMs,
+                mCredentialCheckResultTracker.setResult(matched, intent, timeout,
                         localEffectiveUserId);
             };
             mPendingLockCheck = (localEffectiveUserId == localUserId)
@@ -625,13 +715,15 @@ public class ConfirmLockPassword extends ConfirmDeviceCredentialBaseActivity {
                     localEffectiveUserId,
                     new LockPatternChecker.OnCheckCallback() {
                         @Override
-                        public void onChecked(boolean matched, int timeoutMs) {
+                        public void onChecked(VerifyCredentialResponse response) {
+                            final boolean matched = response.isMatched();
+                            final Duration timeout = response.getTimeout();
                             mPendingLockCheck = null;
                             if (matched && isInternalActivity() && mReturnCredentials) {
                                 intent.putExtra(
                                         ChooseLockSettingsHelper.EXTRA_KEY_PASSWORD, credential);
                             }
-                            mCredentialCheckResultTracker.setResult(matched, intent, timeoutMs,
+                            mCredentialCheckResultTracker.setResult(matched, intent, timeout,
                                     localEffectiveUserId);
                         }
                     });
@@ -665,7 +757,7 @@ public class ConfirmLockPassword extends ConfirmDeviceCredentialBaseActivity {
             }
         }
 
-        private void onPasswordChecked(boolean matched, Intent intent, int timeoutMs,
+        private void onPasswordChecked(boolean matched, Intent intent, Duration timeout,
                 int effectiveUserId, boolean newResult) {
             mPasswordEntryInputDisabler.setInputEnabled(true);
             if (matched) {
@@ -677,10 +769,10 @@ public class ConfirmLockPassword extends ConfirmDeviceCredentialBaseActivity {
                 startDisappearAnimation(intent);
                 ConfirmDeviceCredentialUtils.checkForPendingIntent(getActivity());
             } else {
-                if (timeoutMs > 0) {
+                if (timeout.isPositive()) {
                     refreshLockScreen();
-                    long deadline = mLockPatternUtils.setLockoutAttemptDeadline(
-                            effectiveUserId, timeoutMs);
+                    long deadline = mLockPatternUtils.getLockoutEndTime(
+                            effectiveUserId).toMillis();
                     handleAttemptLockout(deadline);
                 } else {
                     showError(getErrorMessage(), CLEAR_WRONG_ATTEMPT_TIMEOUT_MS);
@@ -716,16 +808,16 @@ public class ConfirmLockPassword extends ConfirmDeviceCredentialBaseActivity {
                                 mEffectiveUserId);
                     } else {
                         mCredentialCheckResultTracker.setResult(/* matched= */ true, new Intent(),
-                                /* timeoutMs= */ 0, mEffectiveUserId);
+                                /* timeout= */ Duration.ZERO, mEffectiveUserId);
                     }
                     return;
                 case RemoteLockscreenValidationResult.RESULT_GUESS_INVALID:
                     mCredentialCheckResultTracker.setResult(/* matched= */ false, new Intent(),
-                            /* timeoutMs= */ 0, mEffectiveUserId);
+                            /* timeout= */ Duration.ZERO, mEffectiveUserId);
                     break;
                 case RemoteLockscreenValidationResult.RESULT_LOCKOUT:
                     mCredentialCheckResultTracker.setResult(/* matched= */ false, new Intent(),
-                            (int) result.getTimeoutMillis(), mEffectiveUserId);
+                            Duration.ofMillis(result.getTimeoutMillis()), mEffectiveUserId);
                     break;
                 case RemoteLockscreenValidationResult.RESULT_NO_REMAINING_ATTEMPTS:
                 case RemoteLockscreenValidationResult.RESULT_SESSION_EXPIRED:
@@ -740,9 +832,9 @@ public class ConfirmLockPassword extends ConfirmDeviceCredentialBaseActivity {
         }
 
         @Override
-        public void onCredentialChecked(boolean matched, Intent intent, int timeoutMs,
+        public void onCredentialChecked(boolean matched, Intent intent, Duration timeout,
                 int effectiveUserId, boolean newResult) {
-            onPasswordChecked(matched, intent, timeoutMs, effectiveUserId, newResult);
+            onPasswordChecked(matched, intent, timeout, effectiveUserId, newResult);
         }
 
         @Override
@@ -811,7 +903,7 @@ public class ConfirmLockPassword extends ConfirmDeviceCredentialBaseActivity {
                 SetupRedactionInterstitial.setEnabled(getContext(), true);
             }
             mCredentialCheckResultTracker.setResult(/* matched= */ true, result,
-                    /* timeoutMs= */ 0, mEffectiveUserId);
+                    /* timeout= */ Duration.ZERO, mEffectiveUserId);
         }
     }
 }

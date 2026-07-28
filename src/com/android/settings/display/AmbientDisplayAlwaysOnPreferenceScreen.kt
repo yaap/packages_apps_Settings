@@ -23,18 +23,20 @@ import android.os.SystemProperties
 import android.os.UserHandle
 import android.os.UserManager
 import androidx.fragment.app.Fragment
+import com.android.internal.R.bool.config_dozeSupportsAodInactivityDetection
 import com.android.internal.R.bool.config_dozeSupportsAodWallpaper
 import com.android.settings.CatalystFragment
 import com.android.settings.CatalystSettingsActivity
 import com.android.settings.R
 import com.android.settings.contract.KEY_AMBIENT_DISPLAY_ALWAYS_ON
 import com.android.settings.core.PreferenceScreenMixin
-import com.android.settings.display.AmbientDisplayAlwaysOnPreferenceController.isAodSuppressedByBedtime
+import com.android.settings.display.AmbientDisplayAlwaysOnPreferenceScreenController.isAodSuppressedByBedtime
 import com.android.settings.display.ambient.AmbientDisplayIllustration
 import com.android.settings.display.ambient.AmbientDisplayMainSwitchPreference
 import com.android.settings.display.ambient.AmbientDisplaySchedulePreference
 import com.android.settings.display.ambient.AmbientDisplayStorage
 import com.android.settings.display.ambient.AmbientDisplayTopIntroPreference
+import com.android.settings.display.ambient.AmbientInactivityDetectionPreference
 import com.android.settings.display.ambient.AmbientWallpaperPreference
 import com.android.settings.metrics.PreferenceActionMetricsProvider
 import com.android.settings.restriction.PreferenceRestrictionMixin
@@ -46,6 +48,7 @@ import com.android.settingslib.datastore.KeyedObserver
 import com.android.settingslib.datastore.SettingsSecureStore
 import com.android.settingslib.metadata.BooleanValuePreference
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceCategory as Category
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
@@ -55,8 +58,9 @@ import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.ReadWritePermit
 import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.metadata.preferenceHierarchy
-import com.android.systemui.shared.Flags.ambientAod
+import com.android.systemui.shared.Flags.aodInactivityDetection
 import kotlinx.coroutines.CoroutineScope
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 
 // LINT.IfChange
 /**
@@ -73,15 +77,21 @@ open class AmbientDisplayAlwaysOnPreferenceScreen(context: Context) :
     PreferenceRestrictionMixin,
     PreferenceLifecycleProvider,
     PreferenceSummaryProvider {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED, KEY_AMBIENT_DISPLAY_ALWAYS_ON)
+
 
     private val ambientWallpaperPreference = AmbientWallpaperPreference(context)
     private lateinit var keyedObserver: KeyedObserver<String>
 
     override val title: Int
-        get() = if (ambientAod()) R.string.doze_always_on_title2 else R.string.doze_always_on_title
+        get() = R.string.doze_always_on_title2
 
     override val key: String
         get() = KEY
+
+    //TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.ambient_display_always_on_screen_purpose
 
     override val keywords: Int
         get() = R.string.keywords_always_show_time_info
@@ -97,15 +107,23 @@ open class AmbientDisplayAlwaysOnPreferenceScreen(context: Context) :
     override val preferenceActionMetrics: Int
         get() = ACTION_AMBIENT_DISPLAY_ALWAYS_ON
 
-    override fun tags(context: Context) = arrayOf(KEY_AMBIENT_DISPLAY_ALWAYS_ON)
+
 
     override val restrictionKeys: Array<String>
         get() = arrayOf(UserManager.DISALLOW_AMBIENT_DISPLAY)
 
+    override fun getEnabledDescription(): String = "This setting must not be restricted by a device administrator."
+
+    override fun getEnabledStability() = PreconditionStability.UNSTABLE
+
     override fun isEnabled(context: Context) = super<PreferenceRestrictionMixin>.isEnabled(context)
 
+    override val availabilityDescription =
+        "The device must support ambient display always on, and the user must not have display inversion enabled."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
+
     override fun isAvailable(context: Context): Boolean {
-        if (!ambientAod()) return false
         return !SystemProperties.getBoolean(PROP_AWARE_AVAILABLE, false) &&
             AmbientDisplayConfiguration(context).alwaysOnAvailableForUser(UserHandle.myUserId())
     }
@@ -121,7 +139,7 @@ open class AmbientDisplayAlwaysOnPreferenceScreen(context: Context) :
                     R.string.doze_always_on_summary_without_wallpaper
                 }
             } else {
-                R.string.doze_always_on_summary
+                R.string.doze_always_on_summary_short
             }
         )
 
@@ -155,8 +173,15 @@ open class AmbientDisplayAlwaysOnPreferenceScreen(context: Context) :
             +AmbientDisplayIllustration(context)
             +AmbientDisplayMainSwitchPreference()
             +AmbientDisplaySchedulePreference(context)
+            if (context.isAmbientInactivityDetectionAvailable) {
+                +AmbientInactivityDetectionPreference(context)
+            }
             if (context.isAmbientWallpaperOptionsAvailable) {
-                +Category("ambient_wallpaperGroup", R.string.doze_always_on_wallpaper_options) += {
+                +Category(
+                    "ambient_wallpaperGroup",
+                    R.string.ambient_wallpaper_group_purpose,
+                    R.string.doze_always_on_wallpaper_options
+                ) += {
                     +ambientWallpaperPreference
                 }
             }
@@ -174,6 +199,7 @@ open class AmbientDisplayAlwaysOnPreferenceScreen(context: Context) :
     override fun getWritePermit(context: Context, callingPid: Int, callingUid: Int) =
         ReadWritePermit.ALLOW
 
+    override val supportsWrite = true
     override val sensitivityLevel
         get() = SensitivityLevel.NO_SENSITIVITY
 
@@ -182,11 +208,16 @@ open class AmbientDisplayAlwaysOnPreferenceScreen(context: Context) :
         const val PROP_AWARE_AVAILABLE = "ro.vendor.aware_available"
 
         private val Context.isAmbientWallpaperOptionsAvailable: Boolean
-            get() = ambientAod() && resources.getBoolean(config_dozeSupportsAodWallpaper)
+            get() = resources.getBoolean(config_dozeSupportsAodWallpaper)
+
+        private val Context.isAmbientInactivityDetectionAvailable: Boolean
+            get() =
+                aodInactivityDetection() &&
+                    resources.getBoolean(config_dozeSupportsAodInactivityDetection)
     }
 }
 
-// LINT.ThenChange(AmbientDisplayAlwaysOnPreferenceController.java)
+// LINT.ThenChange(AmbientDisplayAlwaysOnPreferenceScreenController.java)
 
 class AmbientDisplayAlwaysOnActivity :
     CatalystSettingsActivity(

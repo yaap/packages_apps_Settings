@@ -16,6 +16,8 @@
 
 package com.android.settings.localepicker;
 
+import static com.android.settings.localepicker.LocaleUtils.canDisplayLocaleUi;
+
 import android.app.Activity;
 import android.app.settings.SettingsEnums;
 import android.content.Context;
@@ -25,7 +27,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.LocaleList;
 import android.text.TextUtils;
-import android.util.FeatureFlagUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -34,7 +35,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -53,7 +56,6 @@ import com.android.settings.applications.AppLocaleUtil;
 import com.android.settings.dashboard.DashboardFragment;
 import com.android.settings.search.BaseSearchIndexProvider;
 import com.android.settingslib.core.AbstractPreferenceController;
-import com.android.settingslib.core.lifecycle.Lifecycle;
 
 import com.google.android.material.appbar.AppBarLayout;
 
@@ -71,6 +73,7 @@ import java.util.stream.Collectors;
  * Allows the user to search for locales using both their native name and their name in the
  * default locale.</p>
  */
+// LINT.IfChange
 public class AppLocalePickerFragment extends DashboardFragment implements
         SearchView.OnQueryTextListener, MenuItem.OnActionExpandListener {
     public static final String ARG_PACKAGE_NAME = "package";
@@ -127,7 +130,7 @@ public class AppLocalePickerFragment extends DashboardFragment implements
             return;
         }
 
-        if (!canDisplayLocaleUi()) {
+        if (!canDisplayLocaleUi(mActivity, mPackageName)) {
             Log.w(TAG, "Not allow to display Locale Settings UI.");
             return;
         }
@@ -195,6 +198,20 @@ public class AppLocalePickerFragment extends DashboardFragment implements
             } else {
                 mSearchView.setQuery(null, false /* submit */);
             }
+
+            // Set zero margin and padding to align with the text horizontally in the preference
+            final TextView searchViewTextView = (TextView) mSearchView.findViewById(
+                    com.android.internal.R.id.search_src_text);
+            searchViewTextView.setPadding(0, searchViewTextView.getPaddingTop(), 0,
+                    searchViewTextView.getPaddingBottom());
+            searchViewTextView.setTextAppearance(R.style.TextAppearance_SearchBar);
+            final View editFrame = mSearchView.findViewById(
+                    com.android.internal.R.id.search_edit_frame);
+            final LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) editFrame
+                    .getLayoutParams();
+            params.setMarginStart(0);
+            params.setMarginEnd(0);
+            editFrame.setLayoutParams(params);
         }
     }
 
@@ -239,20 +256,6 @@ public class AppLocalePickerFragment extends DashboardFragment implements
             Log.w(TAG, "Application info not found for: " + packageName);
             return null;
         }
-    }
-
-    private boolean canDisplayLocaleUi() {
-        try {
-            PackageManager packageManager = getPackageManager();
-            return AppLocaleUtil.canDisplayLocaleUi(mActivity,
-                    packageManager.getApplicationInfo(mPackageName, 0),
-                    packageManager.queryIntentActivities(AppLocaleUtil.LAUNCHER_ENTRY_INTENT,
-                            PackageManager.GET_META_DATA));
-        } catch (PackageManager.NameNotFoundException e) {
-            Log.e(TAG, "Unable to find info for package: " + mPackageName);
-        }
-
-        return false;
     }
 
     private void filterSearch(@Nullable String query) {
@@ -442,3 +445,4 @@ public class AppLocalePickerFragment extends DashboardFragment implements
     public static final BaseSearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
             new BaseSearchIndexProvider(R.xml.app_language_picker);
 }
+// LINT.ThenChange(AppLocalePickerApiFirstScreen.kt)

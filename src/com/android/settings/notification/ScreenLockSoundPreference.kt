@@ -24,13 +24,18 @@ import com.android.settings.metrics.PreferenceActionMetricsProvider
 import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.SettingsSystemStore
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.ReadWritePermit
 import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.metadata.SwitchPreference
 
 // LINT.IfChange
 class ScreenLockSoundPreference :
-    SwitchPreference(KEY, R.string.screen_locking_sounds_title),
+    SwitchPreference(
+        key = KEY,
+        purpose = R.string.lockscreen_sounds_enabled_purpose,
+        title = R.string.screen_locking_sounds_title
+    ),
     PreferenceActionMetricsProvider,
     PreferenceAvailabilityProvider {
     override val preferenceActionMetrics: Int
@@ -39,6 +44,10 @@ class ScreenLockSoundPreference :
     override fun tags(context: Context) = arrayOf(KEY_SCREEN_LOCKING_SOUND)
 
     override fun storage(context: Context) = context.dataStore
+
+    override val availabilityDescription = "The device must support configuring screen locking sounds."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context) =
         context.resources.getBoolean(R.bool.config_show_screen_locking_sounds)

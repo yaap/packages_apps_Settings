@@ -15,6 +15,7 @@
  */
 package com.android.settings.supervision
 
+import android.app.supervision.flags.Flags
 import android.content.Context
 import android.content.Intent
 import android.graphics.drawable.Icon
@@ -27,6 +28,7 @@ import com.android.settings.supervision.ipc.PreferenceData
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceMetadata
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.preference.PreferenceBinding
 import com.android.settingslib.widget.CardPreference
 import com.android.settingslib.widget.mainswitch.R as MainSwitchPreferenceR
@@ -47,12 +49,19 @@ class SupervisionPromoFooterPreference(
 
     private var preferenceData: PreferenceData? = null
 
+    private var lifeCycleContext: PreferenceLifecycleContext? = null
+
     override val key: String
         get() = KEY
+
+    override val purpose: Int
+        get() = R.string.promo_footer_purpose
 
     // Non indexable as the metadata (title, summary, etc.) is provided by another app with IPC
     override val indexable
         get() = false
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
 
     override fun createWidget(context: Context): Preference = FooterPreference(context)
 
@@ -96,6 +105,13 @@ class SupervisionPromoFooterPreference(
         // and the action has to be valid for the preference to be visible.
         preference.isVisible =
             intent != null && (preferenceData?.title != null || preferenceData?.summary != null)
+        if (Flags.enableSupervisionSettingsUiUpdates()) {
+            updateParentVisibility(lifeCycleContext)
+        }
+    }
+
+    override fun onCreate(context: PreferenceLifecycleContext) {
+        this.lifeCycleContext = context
     }
 
     override fun onResume(context: PreferenceLifecycleContext) {
@@ -122,6 +138,10 @@ class SupervisionPromoFooterPreference(
 
     private fun Intent.isValid(context: Context) =
         context.packageManager.queryIntentActivitiesAsUser(this, 0, context.userId).isNotEmpty()
+
+    private fun updateParentVisibility(context: PreferenceLifecycleContext?) {
+        context?.notifyPreferenceChange(SupervisionDashboardScreen.AVAILABLE_SUPERVISION_APPS_GROUP)
+    }
 
     companion object {
         const val KEY = "promo_footer"

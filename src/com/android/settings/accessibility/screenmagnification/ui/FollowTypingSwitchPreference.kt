@@ -24,19 +24,21 @@ import com.android.settings.accessibility.extensions.isWindowMagnificationSuppor
 import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.SettingsSecureStore
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.ReadWritePermit
+import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.metadata.SwitchPreference
 
-// LINT.IfChange
 class FollowTypingSwitchPreference :
     SwitchPreference(
         KEY,
+        R.string.accessibility_magnification_follow_typing_enabled_purpose,
         R.string.accessibility_screen_magnification_follow_typing_title,
         R.string.accessibility_screen_magnification_follow_typing_summary,
     ),
     PreferenceAvailabilityProvider {
 
-    override fun storage(context: Context): KeyValueStore = SettingsSecureStore.get(context)
+    override fun storage(context: Context): KeyValueStore = context.dataStore
 
     override fun getReadPermissions(context: Context) = SettingsSecureStore.getReadPermissions()
 
@@ -54,12 +56,21 @@ class FollowTypingSwitchPreference :
         callingUid: Int,
     ): @ReadWritePermit Int? = ReadWritePermit.ALLOW
 
+    override val availabilityDescription =
+        "The device must not be during setup and must support window magnification."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
+
     override fun isAvailable(context: Context): Boolean {
         return !context.isInSetupWizard() && context.isWindowMagnificationSupported()
     }
 
+    override val sensitivityLevel: Int
+        get() = SensitivityLevel.NO_SENSITIVITY
+
     companion object {
         const val KEY = Settings.Secure.ACCESSIBILITY_MAGNIFICATION_FOLLOW_TYPING_ENABLED
+        private val Context.dataStore: KeyValueStore
+            get() = SettingsSecureStore.get(this).apply { setDefaultValue(KEY, true) }
     }
 }
-// LINT.ThenChange(/src/com/android/settings/accessibility/screenmagnification/FollowTypingPreferenceController.java)

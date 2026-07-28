@@ -33,11 +33,14 @@ import com.android.settingslib.metadata.PreferenceSummaryProvider
 import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.preferenceHierarchy
 import kotlinx.coroutines.CoroutineScope
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 
 // LINT.IfChange
 @ProvidePreferenceScreen(MediaControlsScreen.KEY)
 open class MediaControlsScreen(context: Context) :
     AbstractKeyedDataObservable<String>(), PreferenceScreenMixin, PreferenceSummaryProvider {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED)
+
 
     private val observer =
         KeyedObserver<String> { _, _ -> notifyChange(KEY, PreferenceChangeReason.STATE) }
@@ -46,6 +49,10 @@ open class MediaControlsScreen(context: Context) :
 
     override val key: String
         get() = KEY
+
+    //TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.media_controls_purpose
 
     override val title: Int
         get() = R.string.media_controls_title

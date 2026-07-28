@@ -216,7 +216,7 @@
     <item msgid="5099026183238335900">"کنترل موقعیت مکانی"</item>
     <item msgid="2297727967385895059">"کنترل مکان پرقدرت"</item>
     <item msgid="8700593962030471569">"دریافت آمار استفاده"</item>
-    <item msgid="4140820386622184831">"صدادار/بی‌صدا کردن میکروفن"</item>
+    <item msgid="4140820386622184831">"صدادار/صامت کردن میکروفن"</item>
     <item msgid="317746827951691657">"نمایش پنجره خبری"</item>
     <item msgid="5679422988212309779">"فرستادن رسانه"</item>
     <item msgid="6454031639780101439">"‏فعال کردن VPN"</item>
@@ -283,7 +283,7 @@
     <item msgid="8482874682804856549">"موقعیت مکانی"</item>
     <item msgid="5186169827582545242">"مکان"</item>
     <item msgid="6122293931012635638">"دریافت آمار استفاده"</item>
-    <item msgid="2526677383312751932">"صدادار/بی‌صدا کردن میکروفن"</item>
+    <item msgid="2526677383312751932">"صدادار/صامت کردن میکروفن"</item>
     <item msgid="4000577305179914546">"نمایش پنجره خبری"</item>
     <item msgid="8660207174515570558">"فرستادن رسانه"</item>
     <item msgid="3904996949561946108">"‏فعال کردن VPN"</item>
@@ -305,16 +305,6 @@
     <item msgid="3756073389408535680">"اجرا در پس‌زمینه"</item>
     <item msgid="2114661179947426734">"میزان صدای دسترس‌پذیری"</item>
   </string-array>
-  <string-array name="long_press_timeout_selector_titles">
-    <item msgid="6926391290986427331">"کوتاه"</item>
-    <item msgid="5118829513010894576">"متوسط"</item>
-    <item msgid="6740026006576843477">"طولانی"</item>
-  </string-array>
-  <string-array name="long_press_timeout_selector_list_titles">
-    <item msgid="8908021508913038488">"کوتاه"</item>
-    <item msgid="7397961711906421599">"متوسط"</item>
-    <item msgid="4079132024502041928">"طولانی"</item>
-  </string-array>
   <string-array name="ethernet_ip_settings">
     <item msgid="7618681915649929019">"DHCP"</item>
     <item msgid="4425163520864432692">"ثابت"</item>
@@ -326,7 +316,7 @@
     <item msgid="2396492419730702454">"‏Sans-serif با عرض ثابت"</item>
     <item msgid="8199675052804786099">"Serif"</item>
     <item msgid="4554123140736897688">"‏Serif با عرض ثابت"</item>
-    <item msgid="5485652650875486635">"غیررسمی"</item>
+    <item msgid="5485652650875486635">"بی‌تکلف"</item>
     <item msgid="1071057864355989694">"شکسته"</item>
     <item msgid="5012882784126308133">"حروف بزرگ با اندازه کوچک"</item>
   </string-array>
@@ -354,21 +344,13 @@
   <string-array name="captioning_preset_selector_titles">
     <item msgid="3880932435325583041">"تنظیم‌شده توسط برنامه"</item>
     <item msgid="8719204526359229387">"سفید روی سیاه"</item>
-    <item msgid="5410164687403735103">"سیاه در سفید"</item>
-    <item msgid="1119043472912497241">"زرد در سیاه"</item>
-    <item msgid="2836895041823327816">"زرد در آبی"</item>
+    <item msgid="5410164687403735103">"سیاه روی سفید"</item>
+    <item msgid="1119043472912497241">"زرد روی سیاه"</item>
+    <item msgid="2836895041823327816">"زرد روی آبی"</item>
     <item msgid="747238414788976867">"سفارشی"</item>
   </string-array>
-  <string-array name="accessibility_button_location_selector_titles">
-    <item msgid="6485511780196327736">"شناور روی برنامه‌های دیگر"</item>
-    <item msgid="3605616699204153590">"نوار پیمایش"</item>
-  </string-array>
-  <string-array name="accessibility_button_size_selector_titles">
-    <item msgid="7482952318152486459">"کوچک"</item>
-    <item msgid="1666628329913333563">"بزرگ"</item>
-  </string-array>
   <string-array name="vpn_proxy_settings">
-    <item msgid="7165538292837266997">"خالی"</item>
+    <item msgid="7165538292837266997">"هیچ‌کدام"</item>
     <item msgid="2397017538263427575">"دستی"</item>
   </string-array>
   <string-array name="vpn_states">
@@ -382,7 +364,7 @@
   <string-array name="security_settings_premium_sms_values">
     <item msgid="3985605994234635072">"سؤال شود"</item>
     <item msgid="2358187544264718285">"همیشه غیرمجاز"</item>
-    <item msgid="7043782324123900484">"همیشه مجاز است"</item>
+    <item msgid="7043782324123900484">"همیشه اجازه داشتن"</item>
   </string-array>
   <string-array name="ram_states">
     <item msgid="335564863849202240">"معمولی"</item>
@@ -417,7 +399,7 @@
   </string-array>
   <string-array name="wifi_privacy_entries">
     <item msgid="91222619458919148">"‏استفاده کردن از MAC تصادفی"</item>
-    <item msgid="741680937828608749">"‏استفاده از MAC دستگاه"</item>
+    <item msgid="741680937828608749">"‏استفاده کردن از MAC دستگاه"</item>
   </string-array>
   <string-array name="wifi_dhcp_entries">
     <item msgid="2532836996945493932">"ارسال کردن نام دستگاه به شبکه"</item>

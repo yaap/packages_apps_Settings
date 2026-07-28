@@ -19,6 +19,7 @@ package com.android.settings.connecteddevice.display
 import android.app.ActivityManager.LOCK_TASK_MODE_LOCKED
 import android.app.Application
 import android.app.TaskStackListener
+import android.hardware.display.DisplayManager
 import android.provider.Settings
 import android.view.Display
 import android.view.Display.DEFAULT_DISPLAY
@@ -237,6 +238,8 @@ class DisplayPreferenceViewModelTest : ExternalDisplayTestBase() {
                 listOf(mode),
                 DisplayIsEnabled.YES,
                 /* isConnectedDisplay= */ false,
+                /* rotation= */ 0,
+                /* isHdrSupported= */ true,
             )
         )
         updateDisplaysAndTopology(updatedEnabledDisplays)
@@ -265,6 +268,8 @@ class DisplayPreferenceViewModelTest : ExternalDisplayTestBase() {
                 listOf(mode),
                 DisplayIsEnabled.NO,
                 /* isConnectedDisplay= */ true,
+                /* rotation= */ 0,
+                /* isHdrSupported= */ true,
             )
         )
         updateDisplaysAndTopology(updatedEnabledDisplays)
@@ -292,5 +297,35 @@ class DisplayPreferenceViewModelTest : ExternalDisplayTestBase() {
         assertThat(state.enabledDisplays).hasSize(1)
         assertThat(state.enabledDisplays.keys).containsExactly(updatedEnabledDisplays[0].id)
         assertThat(state.selectedDisplayId).isEqualTo(mDisplayTopology.primaryDisplayId)
+    }
+
+    @Test
+    fun updateUserHdrPreference_callsInjectorAndUpdatesDisplays() {
+        setupViewModel()
+        val displayId = EXTERNAL_DISPLAY_ID
+
+        viewModel.updateUserHdrPreference(displayId, true)
+
+        verify(mMockedInjector)
+            .setUserHdrPreference(displayId, DisplayManager.HDR_PREFERENCE_HDR_ALLOWED)
+        val display = viewModel.uiState.value!!.enabledDisplays[displayId]!!
+        assertThat(display.hdrPreference).isEqualTo(DisplayManager.HDR_PREFERENCE_HDR_ALLOWED)
+    }
+
+    @Test
+    fun updateUserHdrPreference_disableHdr_callsInjectorAndUpdatesDisplays() {
+        setupViewModel()
+        val displayId = EXTERNAL_DISPLAY_ID
+
+        // Action: update user HDR preference to disable
+        viewModel.updateUserHdrPreference(displayId, /* enable= */ false)
+
+        // Verify injector is called with SDR_ONLY preference
+        verify(mMockedInjector)
+            .setUserHdrPreference(displayId, DisplayManager.HDR_PREFERENCE_SDR_ONLY)
+
+        // Verify UI state is updated with the new preference
+        val display = viewModel.uiState.value!!.enabledDisplays[displayId]!!
+        assertThat(display.hdrPreference).isEqualTo(DisplayManager.HDR_PREFERENCE_SDR_ONLY)
     }
 }

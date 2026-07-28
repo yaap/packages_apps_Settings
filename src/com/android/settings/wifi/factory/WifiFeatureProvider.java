@@ -19,6 +19,7 @@ package com.android.settings.wifi.factory;
 import android.content.Context;
 import android.net.TetheringManager;
 import android.net.wifi.WifiManager;
+import android.print.PrintManager;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
@@ -26,8 +27,13 @@ import androidx.annotation.Nullable;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelStoreOwner;
 
+import com.android.settings.network.tether.TetheringRepository;
+import com.android.settings.print.PrintRepository;
+import com.android.settings.wifi.WifiDataUsageRepository;
 import com.android.settings.wifi.details.WifiNetworkDetailsViewModel;
 import com.android.settings.wifi.dpp.WifiDppQrCodeGeneratorFragment;
+import com.android.settings.wifi.repository.DataUsageRepository;
+import com.android.settings.wifi.repository.SavedNetworkRepository;
 import com.android.settings.wifi.repository.SharedConnectivityRepository;
 import com.android.settings.wifi.repository.WifiHotspotRepository;
 import com.android.settings.wifi.tether.WifiHotspotSecurityViewModel;
@@ -45,9 +51,15 @@ public class WifiFeatureProvider {
     private final Context mAppContext;
     private WifiManager mWifiManager;
     private TetheringManager mTetheringManager;
+    private PrintManager mPrintManager;
     private WifiVerboseLogging mWifiVerboseLogging;
     private WifiHotspotRepository mWifiHotspotRepository;
+    private WifiDataUsageRepository mWifiDataUsageRepository;
+    private SavedNetworkRepository mSavedNetworkRepository;
+    private TetheringRepository mTetheringRepository;
     private SharedConnectivityRepository mSharedConnectivityRepository;
+    private DataUsageRepository mDataUsageRepository;
+    private PrintRepository mPrintRepository;
 
     public WifiFeatureProvider(@NonNull Context appContext) {
         mAppContext = appContext;
@@ -75,6 +87,17 @@ public class WifiFeatureProvider {
     }
 
     /**
+     * Gets PrintManager
+     */
+    public PrintManager getPrintManager() {
+        if (mPrintManager == null) {
+            mPrintManager = mAppContext.getSystemService(PrintManager.class);
+            verboseLog(TAG, "getPrintManager():" + mPrintManager);
+        }
+        return mPrintManager;
+    }
+
+    /**
      * Gets WifiVerboseLogging
      */
     public WifiVerboseLogging getWifiVerboseLogging() {
@@ -82,6 +105,17 @@ public class WifiFeatureProvider {
             mWifiVerboseLogging = new WifiVerboseLogging(mAppContext, getWifiManager());
         }
         return mWifiVerboseLogging;
+    }
+
+    /**
+     * Gets TetheringRepository
+     */
+    public TetheringRepository getTetheringRepository() {
+        if (mTetheringRepository == null) {
+            mTetheringRepository = new TetheringRepository(mAppContext, getTetheringManager());
+            verboseLog(TAG, "getTetheringRepository():" + mTetheringRepository);
+        }
+        return mTetheringRepository;
     }
 
     /**
@@ -97,6 +131,28 @@ public class WifiFeatureProvider {
     }
 
     /**
+     * Gets WifiDataUsageRepository
+     */
+    public WifiDataUsageRepository getWifiDataUsageRepository() {
+        if (mWifiDataUsageRepository == null) {
+            mWifiDataUsageRepository = new WifiDataUsageRepository(mAppContext);
+            verboseLog(TAG, "getWifiDataUsageRepository():" + mWifiDataUsageRepository);
+        }
+        return mWifiDataUsageRepository;
+    }
+
+    /**
+     * Gets SavedNetworkRepository
+     */
+    public SavedNetworkRepository getSavedNetworkRepository() {
+        if (mSavedNetworkRepository == null) {
+            mSavedNetworkRepository = new SavedNetworkRepository(mAppContext);
+            verboseLog(TAG, "getSavedNetworkRepository():" + mSavedNetworkRepository);
+        }
+        return mSavedNetworkRepository;
+    }
+
+    /**
      * Gets SharedConnectivityRepository
      */
     public SharedConnectivityRepository getSharedConnectivityRepository() {
@@ -105,6 +161,28 @@ public class WifiFeatureProvider {
             verboseLog(TAG, "getSharedConnectivityRepository():" + mSharedConnectivityRepository);
         }
         return mSharedConnectivityRepository;
+    }
+
+    /**
+     * Gets DataUsageRepository
+     */
+    public DataUsageRepository getDataUsageRepository() {
+        if (mDataUsageRepository == null) {
+            mDataUsageRepository = new DataUsageRepository(mAppContext);
+            verboseLog(TAG, "getDataUsageRepository():" + mDataUsageRepository);
+        }
+        return mDataUsageRepository;
+    }
+
+    /**
+     * Gets PrintRepository
+     */
+    public PrintRepository getPrintRepository() {
+        if (mPrintRepository == null) {
+            mPrintRepository = new PrintRepository(mAppContext);
+            verboseLog(TAG, "getPrintRepository():" + mPrintRepository);
+        }
+        return mPrintRepository;
     }
 
     /**

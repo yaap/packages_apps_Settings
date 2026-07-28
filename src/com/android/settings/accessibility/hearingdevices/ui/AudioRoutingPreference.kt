@@ -24,11 +24,16 @@ import com.android.settings.R
 import com.android.settings.accessibility.AccessibilityAudioRoutingFragment
 import com.android.settings.core.SubSettingLauncher
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceMetadata
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 
 class AudioRoutingPreference : PreferenceMetadata, PreferenceAvailabilityProvider {
     override val key: String
         get() = KEY
+
+    override val purpose: Int
+        get() = R.string.hearing_device_audio_routing_purpose
 
     override val title: Int
         get() = R.string.bluetooth_audio_routing_title
@@ -36,11 +41,17 @@ class AudioRoutingPreference : PreferenceMetadata, PreferenceAvailabilityProvide
     override val summary: Int
         get() = R.string.bluetooth_audio_routing_summary
 
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
+
     override fun intent(context: Context): Intent? =
         SubSettingLauncher(context)
             .setDestination(AccessibilityAudioRoutingFragment::class.java.name)
             .setSourceMetricsCategory(SettingsEnums.ACCESSIBILITY_HEARING_AID_SETTINGS)
             .toIntent()
+
+    override val availabilityDescription = UI_ONLY_PREFERENCE
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context): Boolean =
         FeatureFlagUtils.isEnabled(context, FeatureFlagUtils.SETTINGS_AUDIO_ROUTING)

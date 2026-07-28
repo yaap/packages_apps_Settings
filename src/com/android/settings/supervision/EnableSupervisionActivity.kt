@@ -22,12 +22,15 @@ import android.app.role.RoleManager.ROLE_SUPERVISION
 import android.app.role.RoleManager.ROLE_SYSTEM_SUPERVISION
 import android.app.supervision.SupervisionManager
 import android.app.supervision.flags.Flags
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.provider.Settings.Secure.USER_SETUP_COMPLETE
 import android.provider.Settings.Secure.getInt
 import android.provider.Settings.SettingNotFoundException
 import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.VisibleForTesting
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.FragmentActivity
@@ -35,6 +38,7 @@ import androidx.lifecycle.lifecycleScope
 import com.android.settings.supervision.EnableSupervisionDialogFragment.Companion.DIALOG_DISMISSED
 import com.android.settings.supervision.EnableSupervisionDialogFragment.Companion.DIALOG_NEGATIVE_BUTTON_CLICKED
 import com.android.settings.supervision.EnableSupervisionDialogFragment.Companion.DIALOG_POSITIVE_BUTTON_CLICKED
+import com.android.settings.supervision.shared.systemSupervisionPackageName
 import com.android.settingslib.supervision.SupervisionLog.TAG
 import kotlin.coroutines.suspendCoroutine
 import kotlinx.coroutines.launch
@@ -46,8 +50,36 @@ import kotlinx.coroutines.launch
  * enables device supervision and finishes the activity with `Activity.RESULT_OK`.
  */
 class EnableSupervisionActivity : FragmentActivity() {
+
+    private lateinit var supervisionManager: SupervisionManager
+
+    private enum class SupervisionEnablementResult {
+        SUCCESS,
+        FAILURE,
+        PIN_SETUP_LAUNCHED,
+    }
+
+    private val setupPinLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                enableSupervisionAndFinish()
+            } else {
+                setResult(RESULT_CANCELED)
+                finish()
+            }
+        }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        if (Flags.enableSupervisionSettingsUiUpdates()) {
+            supervisionManager = getSystemService(SupervisionManager::class.java)
+            if (supervisionManager == null) {
+                setResult(RESULT_CANCELED)
+                finish()
+                return
+            }
+        }
 
         val packageName = callingPackage
         if (packageName == null) {
@@ -121,23 +153,55 @@ class EnableSupervisionActivity : FragmentActivity() {
         }
     }
 
-    private suspend fun enableSupervision(packageName: String): Boolean {
-        if (!grantSupervisionRole(packageName)) {
-            Log.w(
-                TAG,
-                "Failed to grant supervision role for $packageName. Cannot enable supervision.",
-            )
-            return false
-        }
+    private suspend fun enableSupervision(packageName: String): SupervisionEnablementResult {
+        if (Flags.enableSupervisionSettingsUiUpdates()) {
+            // Conditionally launch SetupSupervisionActivity if the calling package does not have
+            // alternative approval methods and there is no PIN set up yet.
+            if (
+                !hasAlternativeApproval(packageName) &&
+                    !supervisionManager.hasSupervisionCredentials()
+            ) {
+                val setupPinIntent = Intent(this, SetupSupervisionActivity::class.java)
+                setupPinLauncher.launch(setupPinIntent)
+                return SupervisionEnablementResult.PIN_SETUP_LAUNCHED
+            }
 
-        val supervisionManager = getSystemService(SupervisionManager::class.java)
-        if (supervisionManager == null) {
-            Log.w(TAG, "SupervisionManager is null or not accessible on this device.")
-            return false
-        }
+            if (!grantSupervisionRole(packageName)) {
+                Log.w(
+                    TAG,
+                    "Failed to grant supervision role for $packageName. Cannot enable supervision.",
+                )
+                return SupervisionEnablementResult.FAILURE
+            }
 
-        supervisionManager.setSupervisionEnabled(true)
-        return true
+            supervisionManager.setSupervisionEnabled(true)
+            return SupervisionEnablementResult.SUCCESS
+        } else {
+            // Keep the old logic for flags.enableSupervisionSettingsUiUpdates() == false
+            if (!grantSupervisionRole(packageName)) {
+                Log.w(
+                    TAG,
+                    "Failed to grant supervision role for $packageName. Cannot enable supervision.",
+                )
+                return SupervisionEnablementResult.FAILURE
+            }
+            val supervisionManager = getSystemService(SupervisionManager::class.java)
+            if (supervisionManager == null) {
+                Log.w(TAG, "SupervisionManager is null or not accessible on this device.")
+                return SupervisionEnablementResult.FAILURE
+            }
+
+            supervisionManager.setSupervisionEnabled(true)
+            return SupervisionEnablementResult.SUCCESS
+        }
+    }
+
+    private fun hasAlternativeApproval(packageName: String): Boolean {
+        val intent = Intent(SupervisionManager.ACTION_CONFIRM_SUPERVISION_APPROVAL)
+        intent.setPackage(packageName)
+        val resolveInfos =
+            packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+        return resolveInfos.isNotEmpty()
     }
 
     private suspend fun grantSupervisionRole(packageName: String): Boolean {
@@ -169,8 +233,18 @@ class EnableSupervisionActivity : FragmentActivity() {
         if (savedInstanceState == null) {
             setFragmentResultListeners()
 
-            val message = getIntent().getCharSequenceExtra(EXTRA_SUPERVISION_DIALOG_EXPLANATION)
-            val appName = getIntent().getCharSequenceExtra(EXTRA_SUPERVISION_APP_NAME)
+            val message =
+                if (Flags.enableSupervisionSettingsUiUpdates()) {
+                    null
+                } else {
+                    getIntent().getCharSequenceExtra(EXTRA_SUPERVISION_DIALOG_EXPLANATION)
+                }
+            val appName =
+                if (Flags.enableSupervisionSettingsUiUpdates()) {
+                    null
+                } else {
+                    getIntent().getCharSequenceExtra(EXTRA_SUPERVISION_APP_NAME)
+                }
 
             val dialog = EnableSupervisionDialogFragment.newInstance(message, appName)
             dialog.show(supportFragmentManager, "enable_supervision_dialog")
@@ -213,14 +287,21 @@ class EnableSupervisionActivity : FragmentActivity() {
         }
 
         lifecycleScope.launch {
-            if (enableSupervision(packageName)) {
-                Log.i(TAG, "Supervision successfully enabled for $packageName.")
-                setResult(RESULT_OK)
-            } else {
-                Log.e(TAG, "Failed to enable supervision for $packageName.")
-                setResult(RESULT_CANCELED)
+            when (enableSupervision(packageName)) {
+                SupervisionEnablementResult.SUCCESS -> {
+                    Log.i(TAG, "Supervision successfully enabled for $packageName.")
+                    setResult(RESULT_OK)
+                    finish()
+                }
+                SupervisionEnablementResult.FAILURE -> {
+                    Log.e(TAG, "Failed to enable supervision for $packageName.")
+                    setResult(RESULT_CANCELED)
+                    finish()
+                }
+                SupervisionEnablementResult.PIN_SETUP_LAUNCHED -> {
+                    // Do nothing. Wait for the PIN setup flow to finish.
+                }
             }
-            finish()
         }
     }
 

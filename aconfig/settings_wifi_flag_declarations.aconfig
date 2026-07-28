@@ -4,9 +4,22 @@ container: "system_ext"
 # NOTE: Keep alphabetized to help limit merge conflicts from multiple simultaneous editors.
 
 flag {
+    name: "enable_2_and_6_ghz_hotspot_speed"
+    namespace: "android_settings"
+    description: "Add a 2.4 and 6 Ghz speed option to hotspot settings."
+    bug: "392662056"
+}
+
+flag {
     name: "enable_wifi_sharing_runtime_fragment"
     namespace: "prism_qr"
     description: "Use WifiFeatureProvider to get the instance of WifiDppQrCodeGeneratorFragment."
     bug: "329012096"
 }
 
+flag {
+  name: "enable_wifi_multiuser"
+  namespace: "android_settings"
+  description: "Flag for WiFi Multiuser"
+  bug: "402214828"
+}

@@ -626,7 +626,6 @@ public class BluetoothDetailsProfilesControllerTest extends BluetoothDetailsCont
 
     @Test
     public void classicAudioDeviceWithLeAudio_showLeAudioToggle() {
-        mSetFlagsRule.enableFlags(Flags.FLAG_HIDE_LE_AUDIO_TOGGLE_FOR_LE_AUDIO_ONLY_DEVICE);
         setupDevice(makeDefaultDeviceConfig());
         addLeAudioProfileToDevice(false);
         addA2dpProfileToDevice(false, false, false);
@@ -639,7 +638,6 @@ public class BluetoothDetailsProfilesControllerTest extends BluetoothDetailsCont
 
     @Test
     public void leAudioOnlyDevice_hideLeAudioToggle() {
-        mSetFlagsRule.enableFlags(Flags.FLAG_HIDE_LE_AUDIO_TOGGLE_FOR_LE_AUDIO_ONLY_DEVICE);
         setupDevice(makeDefaultDeviceConfig());
         addLeAudioProfileToDevice(false);
 
@@ -647,6 +645,60 @@ public class BluetoothDetailsProfilesControllerTest extends BluetoothDetailsCont
 
         List<SwitchPreferenceCompat> switches = getProfileSwitches(false);
         assertThat(switches.get(0).isVisible()).isFalse();
+    }
+
+    @Test
+    public void leAudioOnlyDevice_becomesDualMode_showLeAudioToggle() {
+        setupDevice(makeDefaultDeviceConfig());
+        // Initially, it's an LE Audio only device.
+        addLeAudioProfileToDevice(false);
+
+        showScreen(mController);
+
+        // The LE Audio toggle should be hidden for an LE Audio only device.
+        List<SwitchPreferenceCompat> switches = getProfileSwitches(false);
+        assertThat(switches).hasSize(1);
+        assertThat(switches.get(0).isVisible()).isFalse();
+
+        // Now, add a classic audio profile, making it a dual-mode device.
+        addA2dpProfileToDevice(false, false, false);
+        // Trigger a refresh to re-evaluate the profiles.
+        mController.onDeviceAttributesChanged();
+
+        // The LE Audio toggle should now be visible. The A2DP toggle should not be visible.
+        switches = getProfileSwitches(false);
+        assertThat(switches).hasSize(1);
+        assertThat(switches.get(0).getKey()).isEqualTo(mLeAudioProfile.toString());
+        assertThat(switches.get(0).isVisible()).isTrue();
+    }
+
+    @Test
+    public void dualModeDevice_becomesLeAudioOnly_hideLeAudioToggle() {
+        mSetFlagsRule.enableFlags(Flags.FLAG_HIDE_LE_AUDIO_TOGGLE_FOR_LE_AUDIO_ONLY_DEVICE);
+        setupDevice(makeDefaultDeviceConfig());
+        // Initially, it's a dual-mode device.
+        addLeAudioProfileToDevice(false);
+        addA2dpProfileToDevice(false, false, false);
+
+        showScreen(mController);
+
+        // The LE Audio toggle should be visible for a dual-mode device.
+        List<SwitchPreferenceCompat> switches = getProfileSwitches(false);
+        assertThat(switches).hasSize(1);
+        assertThat(switches.get(0).getKey()).isEqualTo(mLeAudioProfile.toString());
+        assertThat(switches.get(0).isVisible()).isTrue();
+
+        // Now, remove the classic audio profile, making it an LE Audio only device.
+        mConnectableProfiles.remove(mA2dpProfile);
+        when(mCachedDevice.getRemovedProfiles()).thenReturn(List.of(mA2dpProfile));
+
+        // Trigger a refresh to re-evaluate the profiles.
+        mController.onDeviceAttributesChanged();
+
+        // The LE Audio toggle should now be hidden.
+        SwitchPreferenceCompat leAudioPref = mScreen.findPreference(mLeAudioProfile.toString());
+        assertThat(leAudioPref).isNotNull();
+        assertThat(leAudioPref.isVisible()).isFalse();
     }
 
     @Test
@@ -683,5 +735,64 @@ public class BluetoothDetailsProfilesControllerTest extends BluetoothDetailsCont
 
         List<SwitchPreferenceCompat> switches = getProfileSwitches(false);
         assertThat(switches.isEmpty()).isTrue();
+    }
+
+    @Test
+    public void refreshUi_allProfilesInvisible_hidesParentCategory() {
+        // Setup a parent category for the profiles container to test visibility propagation.
+        PreferenceCategory parentCategory = new PreferenceCategory(mContext);
+        parentCategory.setKey("parent_category");
+        mScreen.removeAll();
+        mScreen.addPreference(parentCategory);
+        parentCategory.addPreference(mProfiles);
+
+        // Add a single profile to the device.
+        addA2dpProfileToDevice(true, false, false);
+        when(mFeatureProvider.getInvisibleProfilePreferenceKeys(any(), any()))
+                .thenReturn(ImmutableSet.of());
+
+        // Initial display, everything should be visible.
+        showScreen(mController);
+        assertThat(parentCategory.isVisible()).isTrue();
+        assertThat(mProfiles.isVisible()).isTrue();
+        assertThat(mProfiles.getPreference(0).isVisible()).isTrue();
+
+        // Make the only profile invisible. This will trigger a refresh.
+        mController.setInvisibleProfiles(List.of("A2DP"));
+
+        // After refresh, the profile preference should be invisible.
+        final Preference profilePref = mProfiles.getPreference(0);
+        assertThat(profilePref.isVisible()).isFalse();
+
+        // Consequently, the profiles container should also be invisible.
+        assertThat(mProfiles.isVisible()).isFalse();
+
+        // And because of the call to Utils.updateVisibilityAccordingToChildren,
+        // the parent category should also be hidden as it has no visible children.
+        assertThat(parentCategory.isVisible()).isFalse();
+    }
+
+    @Test
+    public void refreshUi_oneProfileInvisible_parentCategoryStaysVisible() {
+        // Setup a parent category with another visible preference.
+        PreferenceCategory parentCategory = new PreferenceCategory(mContext);
+        parentCategory.setKey("parent_category");
+        Preference otherPref = new Preference(mContext);
+        otherPref.setKey("other_pref");
+        otherPref.setVisible(true);
+        mScreen.removeAll();
+        mScreen.addPreference(parentCategory);
+        parentCategory.addPreference(mProfiles); // mProfiles is the profiles container
+        parentCategory.addPreference(otherPref);
+
+        addA2dpProfileToDevice(true, false, false);
+        when(mFeatureProvider.getInvisibleProfilePreferenceKeys(any(), any()))
+                .thenReturn(ImmutableSet.of());
+        showScreen(mController);
+
+        mController.setInvisibleProfiles(List.of("A2DP"));
+
+        assertThat(mProfiles.isVisible()).isFalse();
+        assertThat(parentCategory.isVisible()).isTrue();
     }
 }

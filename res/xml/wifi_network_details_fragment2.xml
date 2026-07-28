@@ -69,16 +69,16 @@
 
     <!-- General Details Preferences -->
     <PreferenceCategory>
-        <Preference
+        <com.android.settings.widget.NonClickablePreference
             android:key="signal_strength"
             android:title="@string/wifi_signal" />
 
-        <Preference
+        <com.android.settings.widget.NonClickablePreference
             android:key="frequency"
             android:icon="@drawable/ic_frequency_antenna"
             android:title="@string/wifi_frequency" />
 
-        <Preference
+        <com.android.settings.widget.NonClickablePreference
             android:key="security"
             android:icon="@drawable/ic_security_lock_24dp"
             android:title="@string/wifi_security" />
@@ -99,14 +99,15 @@
 
       <SwitchPreferenceCompat
           android:key="shared"
-          android:icon="@drawable/ic_edit_24dp"
+          android:icon="@drawable/ic_group_24dp"
           android:title="@string/wifi_share_preference_title"
           android:summary="@string/wifi_share_preference_summary"/>
 
       <SwitchPreferenceCompat
           android:key="edit_configuration"
-          android:icon="@drawable/ic_edit_24dp"
+          android:icon="@drawable/ic_network_manage_24dp"
           android:title="@string/wifi_allow_edit_configuration_title"
+          android:summary="@string/wifi_allow_edit_configuration_summary"
           settings:isPreferenceVisible="true"/>
 
         <com.android.settings.spa.preference.ComposePreference
@@ -144,48 +145,48 @@
         <com.android.settings.spa.preference.ComposePreference
             android:key="server_name"
             settings:controller="com.android.settings.wifi.details2.ServerNamePreferenceController"/>
-        <Preference
+        <com.android.settings.widget.NonClickablePreference
                 android:key="type"
                 android:title="@string/wifi_type_title"
                 settings:enableCopying="true"/>
-        <Preference
+        <com.android.settings.widget.NonClickablePreference
                 android:key="ssid"
                 android:title="@string/wifi_advanced_ssid_title"
                 settings:enableCopying="true"/>
-        <Preference
+        <com.android.settings.widget.NonClickablePreference
                 android:key="eap_sim_subscription"
                 android:title="@string/sim_card"
                 settings:enableCopying="true"/>
-        <Preference
+        <com.android.settings.widget.NonClickablePreference
                 android:key="mac_address"
                 android:title="@string/wifi_advanced_randomized_mac_address_title"
                 settings:enableCopying="true"/>
-        <Preference
+        <com.android.settings.widget.NonClickablePreference
                 android:key="ip_address"
                 android:title="@string/wifi_ip_address"
                 settings:enableCopying="true"/>
-        <Preference
+        <com.android.settings.widget.NonClickablePreference
                 android:key="gateway"
                 android:title="@string/wifi_gateway"
                 settings:enableCopying="true"/>
-        <Preference
+        <com.android.settings.widget.NonClickablePreference
                 android:key="subnet_mask"
                 android:title="@string/wifi_details_subnet_mask"
                 settings:enableCopying="true"/>
-        <Preference
+        <com.android.settings.widget.NonClickablePreference
                 android:key="dns"
                 android:title="@string/wifi_details_dns"
                 settings:enableCopying="true"/>
-        <Preference
+        <com.android.settings.widget.NonClickablePreference
                 android:key="tx_link_speed"
                 android:title="@string/tx_wifi_speed"
                 settings:enableCopying="true"/>
-        <Preference
+        <com.android.settings.widget.NonClickablePreference
                 android:key="rx_link_speed"
                 android:title="@string/rx_wifi_speed"
                 settings:enableCopying="true"/>
         <!-- IPv6 address -->
-        <Preference
+        <com.android.settings.widget.NonClickablePreference
             android:title="@string/wifi_details_ipv6_address_header"
             android:key="ipv6_addresses"
             settings:enableCopying="true"/>
@@ -193,7 +194,7 @@
 
     <com.android.settingslib.widget.FooterPreference
         android:key="shared_network_footer"
-        android:title="@string/shared_network_footer"
+        android:title="@string/edit_wifi_network_non_owner_message"
         settings:isPreferenceVisible="false">
     </com.android.settingslib.widget.FooterPreference>
 </PreferenceScreen>

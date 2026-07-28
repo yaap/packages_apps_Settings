@@ -293,10 +293,11 @@ public final class ConvertUtils {
     public static AppUsageEvent convertToAppUsageEvent(final Cursor cursor) {
         final AppUsageEvent.Builder eventBuilder = AppUsageEvent.newBuilder();
         eventBuilder.setTimestamp(getLongFromCursor(cursor, AppUsageEventEntity.KEY_TIMESTAMP));
-        eventBuilder.setType(
+        final AppUsageEventType appUsageEventType =
                 AppUsageEventType.forNumber(
-                        getIntegerFromCursor(
-                                cursor, AppUsageEventEntity.KEY_APP_USAGE_EVENT_TYPE)));
+                        getIntegerFromCursor(cursor, AppUsageEventEntity.KEY_APP_USAGE_EVENT_TYPE));
+        eventBuilder.setType(
+                appUsageEventType != null ? appUsageEventType : AppUsageEventType.UNKNOWN);
         eventBuilder.setPackageName(
                 getStringFromCursor(cursor, AppUsageEventEntity.KEY_PACKAGE_NAME));
         eventBuilder.setInstanceId(
@@ -322,9 +323,11 @@ public final class ConvertUtils {
     public static BatteryEvent convertToBatteryEvent(final Cursor cursor) {
         final BatteryEvent.Builder eventBuilder = BatteryEvent.newBuilder();
         eventBuilder.setTimestamp(getLongFromCursor(cursor, BatteryEventEntity.KEY_TIMESTAMP));
-        eventBuilder.setType(
+        final BatteryEventType batteryEventType =
                 BatteryEventType.forNumber(
-                        getIntegerFromCursor(cursor, BatteryEventEntity.KEY_BATTERY_EVENT_TYPE)));
+                        getIntegerFromCursor(cursor, BatteryEventEntity.KEY_BATTERY_EVENT_TYPE));
+        eventBuilder.setType(
+                batteryEventType != null ? batteryEventType : BatteryEventType.UNKNOWN_EVENT);
         eventBuilder.setBatteryLevel(
                 getIntegerFromCursor(cursor, BatteryEventEntity.KEY_BATTERY_LEVEL));
         return eventBuilder.build();
@@ -345,6 +348,11 @@ public final class ConvertUtils {
                 // For timestamp data on adjacent days, the last data (24:00) of the previous day is
                 // equal to the first data (00:00) of the next day, so skip sending EVEN_HOUR event.
                 if (dailyIndex < dailyDataSize - 1 && hourIndex == hourDataSize - 1) {
+                    continue;
+                }
+                // Drop the battery event for the first hourly snapshot of the first day, as it was
+                // already saved to the database in the previous periodic job. See b/479060454.
+                if (hourIndex == 0 && dailyIndex == 0) {
                     continue;
                 }
                 batteryEventList.add(
@@ -503,6 +511,8 @@ public final class ConvertUtils {
                 return AppUsageEventType.ACTIVITY_STOPPED;
             case Event.DEVICE_SHUTDOWN:
                 return AppUsageEventType.DEVICE_SHUTDOWN;
+            case Event.SCREEN_NON_INTERACTIVE:
+                return AppUsageEventType.SCREEN_NON_INTERACTIVE;
             default:
                 return AppUsageEventType.UNKNOWN;
         }
@@ -549,6 +559,15 @@ public final class ConvertUtils {
             builder.setAppOptimizationMode(batteryOptimizationModeInfo.first)
                     .setIsAppOptimizationModeMutable(batteryOptimizationModeInfo.second);
         }
+        final BatteryDiffEntry.DataMetadata dataMetadata = batteryDiffEntry.mDataMetadata;
+        if (dataMetadata != null) {
+            builder.setDataMetadata(
+                    com.android.settings.fuelgauge.batteryusage.DataMetadata.newBuilder()
+                            .addAllDataErrorTypes(dataMetadata.mErrorTypes)
+                            .setErrorMsg(dataMetadata.mErrorMsg)
+                            .build()
+            );
+        }
         return builder.build();
     }
 
@@ -577,7 +596,7 @@ public final class ConvertUtils {
 
     private static BatteryDiffEntry convertToBatteryDiffEntry(
             Context context, final BatteryUsageDiff batteryUsageDiff) {
-        return new BatteryDiffEntry(
+        final BatteryDiffEntry batteryDiffEntry = new BatteryDiffEntry(
                 context,
                 batteryUsageDiff.getUid(),
                 batteryUsageDiff.getUserId(),
@@ -596,6 +615,16 @@ public final class ConvertUtils {
                 batteryUsageDiff.getForegroundServiceUsageConsumePower(),
                 batteryUsageDiff.getBackgroundUsageConsumePower(),
                 batteryUsageDiff.getCachedUsageConsumePower());
+        if (batteryUsageDiff.hasDataMetadata()) {
+            final DataMetadata dataMetadata = batteryUsageDiff.getDataMetadata();
+            batteryDiffEntry.setDataMetadata(
+                    new BatteryDiffEntry.DataMetadata(
+                            dataMetadata.getDataErrorTypesList(),
+                            dataMetadata.getErrorMsg()
+                    )
+            );
+        }
+        return batteryDiffEntry;
     }
 
     static BatteryDiffData convertToBatteryDiffData(

@@ -17,7 +17,10 @@ package com.android.settings.safetycenter
 
 import android.app.ActivityManager
 import android.app.PendingIntent
+import android.app.job.JobInfo
+import android.app.job.JobScheduler
 import android.content.BroadcastReceiver
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.database.ContentObserver
@@ -28,6 +31,7 @@ import android.net.Uri
 import android.os.Handler
 import android.os.Looper
 import android.os.SystemProperties
+import android.os.UserManager
 import android.provider.Settings
 import android.proximity.IProximityResultCallback
 import android.proximity.ProximityResultCode
@@ -52,24 +56,39 @@ import java.util.concurrent.Executors
  */
 class IdentityCheckSafetySource : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        WatchContentObserver(context).registerContentObserver()
+        if (com.android.settings.flags.Flags.scheduleWatchRangingAvailabilityWithJobScheduler()) {
+            if (intent.action == Intent.ACTION_BOOT_COMPLETED) {
+                val jobScheduler = context.getSystemService(JobScheduler::class.java)
+                val componentName =
+                    ComponentName(context.applicationContext, WatchRangingJobService::class.java)
 
-        if (intent.action?.equals(Intent.ACTION_BOOT_COMPLETED) == true) {
-            val pendingResult = goAsync()
-            val watchRangingFuture = context.getWatchRangingAvailabilityFuture()
-            watchRangingFuture.addListener(
-                {
-                    try {
-                        val watchRangingSupported = watchRangingFuture.get()
-                        context.setWatchRangingSupported(watchRangingSupported)
-                    } catch (e: Exception) {
-                        Log.e(TAG, "Error getting watch ranging support: ${e.message}", e)
-                    } finally {
-                        pendingResult?.finish()
-                    }
-                },
-                Executors.newSingleThreadExecutor(),
-            )
+                val jobInfo = JobInfo.Builder(WATCH_RANGING_JOB_ID, componentName).build()
+
+                val result = jobScheduler.schedule(jobInfo)
+                if (result != JobScheduler.RESULT_SUCCESS) {
+                    Log.w(TAG, "Watch Ranging Job could not be scheduled.")
+                }
+            }
+        } else {
+            WatchContentObserver(context).registerContentObserver()
+
+            if (intent.action?.equals(Intent.ACTION_BOOT_COMPLETED) == true) {
+                val pendingResult = goAsync()
+                val watchRangingFuture = context.getWatchRangingAvailabilityFuture()
+                watchRangingFuture.addListener(
+                    {
+                        try {
+                            val watchRangingSupported = watchRangingFuture.get()
+                            context.setWatchRangingSupported(watchRangingSupported)
+                        } catch (e: Exception) {
+                            Log.e(TAG, "Error getting watch ranging support: ${e.message}", e)
+                        } finally {
+                            pendingResult?.finish()
+                        }
+                    },
+                    Executors.newSingleThreadExecutor(),
+                )
+            }
         }
     }
 
@@ -81,6 +100,9 @@ class IdentityCheckSafetySource : BroadcastReceiver() {
             "com.android.settings.safetycenter.action.IDENTITY_CHECK_ISSUE_CARD_WATCH_SHOW_DETAILS"
         const val ACTION_ISSUE_NOTIFICATION_CLICKED =
             "com.android.settings.safetycenter.action.IDENTITY_CHECK_NOTIFICATION_CLICKED"
+        const val ACTION_WATCH_ISSUE_NOTIFICATION_CLICKED =
+            "com.android.settings.safetycenter.action.IDENTITY_CHECK_WATCH_NOTIFICATION_CLICKED"
+        const val WATCH_RANGING_JOB_ID = 1001
         private const val TAG = "ICSafetySource"
         private const val REQUEST_ID = 0
         private const val ISSUE_CARD_VIEW_DETAILS = 1
@@ -95,6 +117,7 @@ class IdentityCheckSafetySource : BroadcastReceiver() {
                 context,
                 safetyEvent,
                 context.getSystemService(BiometricManager::class.java),
+                context.getSystemService(UserManager::class.java),
             )
         }
 
@@ -103,10 +126,15 @@ class IdentityCheckSafetySource : BroadcastReceiver() {
             context: Context,
             safetyEvent: SafetyEvent,
             biometricManager: BiometricManager?,
+            userManager: UserManager?,
             isTablet: Boolean = isTablet(),
             isLowRamDevice: Boolean = isLowRam(context),
+            userId: Int = context.userId,
         ) {
             if (!SafetyCenterManagerWrapper.get().isEnabled(context)) {
+                return
+            }
+            if (userManager?.isProfile(userId) == true) {
                 return
             }
             if (isTablet) {
@@ -125,17 +153,23 @@ class IdentityCheckSafetySource : BroadcastReceiver() {
                 sendNullData(context, safetyEvent)
                 return
             }
-            if (!Flags.identityCheckAllSurfaces()) {
-                sendNullData(context, safetyEvent)
-                return
-            }
             if (Flags.identityCheckWatch()) {
                 if (!isWatchRangingSupportedValueUpdated(context)) {
                     sendNullData(context, safetyEvent)
                     return
                 }
             }
-            if (!hasPromoCardBeenShown(context)) {
+
+            if (
+                Flags.identityCheckWatch() &&
+                    shouldShowWatchRangingPromoCard(context) &&
+                    !hasWatchPromoCardBeenShown(context)
+            ) {
+                val safetySourceData =
+                    SafetySourceData.Builder().addIssue(getWatchIssue(context)).build()
+                SafetyCenterManagerWrapper.get()
+                    .setSafetySourceData(context, SAFETY_SOURCE_ID, safetySourceData, safetyEvent)
+            } else if (!hasPromoCardBeenShown(context)) {
                 val safetySourceData =
                     SafetySourceData.Builder().addIssue(getIssue(context)).build()
                 SafetyCenterManagerWrapper.get()
@@ -162,29 +196,45 @@ class IdentityCheckSafetySource : BroadcastReceiver() {
                 0, /* def */
             ) == 1
 
+        private fun hasWatchPromoCardBeenShown(context: Context): Boolean =
+            Settings.Secure.getInt(
+                context.contentResolver,
+                Settings.Secure.IDENTITY_CHECK_WATCH_PROMO_CARD_SHOWN,
+                0, /* def */
+            ) == 1
+
         private fun getIssue(context: Context): SafetySourceIssue {
-            var issueCardDetails =
+            val issueCardDetails =
                 IssueCardDetails(
                     context.getString(R.string.identity_check_issue_card_title),
                     context.getString(R.string.identity_check_issue_card_summary),
                     ACTION_ISSUE_CARD_SHOW_DETAILS,
                 )
-            var notificationDetails =
+            val notificationDetails =
                 NotificationDetails(
                     context.getString(R.string.identity_check_notification_title),
                     context.getString(R.string.identity_check_notification_summary),
                     context.getString(R.string.identity_check_view_details),
+                    ACTION_ISSUE_NOTIFICATION_CLICKED,
                 )
 
-            if (Flags.identityCheckWatch() && shouldShowWatchRangingPromoCard(context)) {
-                val watchIssueCardTitle =
-                    context.getString(R.string.identity_check_watch_issue_card_title)
-                val watchIssueCardSummary =
-                    context.getString(R.string.identity_check_watch_issue_card_summary)
-                issueCardDetails.title = watchIssueCardTitle
-                issueCardDetails.summary = watchIssueCardSummary
-                issueCardDetails.intentAction = ACTION_ISSUE_CARD_WATCH_SHOW_DETAILS
-            }
+            return getIssue(context, issueCardDetails, notificationDetails)
+        }
+
+        private fun getWatchIssue(context: Context): SafetySourceIssue {
+            val issueCardDetails =
+                IssueCardDetails(
+                    context.getString(R.string.identity_check_watch_issue_card_title),
+                    context.getString(R.string.identity_check_watch_issue_card_summary),
+                    ACTION_ISSUE_CARD_WATCH_SHOW_DETAILS,
+                )
+            val notificationDetails =
+                NotificationDetails(
+                    context.getString(R.string.identity_check_watch_notification_title),
+                    context.getString(R.string.identity_check_watch_notification_summary),
+                    context.getString(R.string.identity_check_view_details),
+                    ACTION_WATCH_ISSUE_NOTIFICATION_CLICKED,
+                )
 
             return getIssue(context, issueCardDetails, notificationDetails)
         }
@@ -231,12 +281,33 @@ class IdentityCheckSafetySource : BroadcastReceiver() {
             return "tablet" in SystemProperties.get("ro.build.characteristics", "").split(',')
         }
 
-        private fun getIfIdentityCheckPromoNotificationHasBeenClicked(context: Context): Boolean =
+        private fun isIdentityCheckToggleEnabled(context: Context): Boolean =
             Settings.Secure.getInt(
                 context.contentResolver,
-                Settings.Secure.IDENTITY_CHECK_NOTIFICATION_VIEW_DETAILS_CLICKED,
+                Settings.Secure.MANDATORY_BIOMETRICS,
                 0,
             ) == 1
+
+        private fun getIfIdentityCheckPromoNotificationHasBeenClicked(
+            context: Context,
+            isWatch: Boolean,
+        ): Boolean {
+            val notificationClicked =
+                if (isWatch) {
+                    Settings.Secure.getInt(
+                        context.contentResolver,
+                        Settings.Secure.IDENTITY_CHECK_WATCH_NOTIFICATION_VIEW_DETAILS_CLICKED,
+                        0,
+                    ) == 1
+                } else {
+                    Settings.Secure.getInt(
+                        context.contentResolver,
+                        Settings.Secure.IDENTITY_CHECK_NOTIFICATION_VIEW_DETAILS_CLICKED,
+                        0,
+                    ) == 1
+                }
+            return notificationClicked
+        }
 
         /** Returns the safety source issue for Identity Check. */
         private fun getIssue(
@@ -246,6 +317,13 @@ class IdentityCheckSafetySource : BroadcastReceiver() {
         ): SafetySourceIssue {
             val issueCardButtonText =
                 context.getString(R.string.identity_check_issue_card_button_text)
+            val issueIntent =
+                Intent(issueCardDetails.intentAction)
+                    .setClass(context, IdentityCheckPromoCardActivity::class.java)
+            val notificationIntent =
+                Intent(notificationDetails.action)
+                    .setClass(context, IdentityCheckNotificationPromoCardActivity::class.java)
+
             val action =
                 SafetySourceIssue.Action.Builder(
                         ACTION_ISSUE_CARD_SHOW_DETAILS,
@@ -253,15 +331,11 @@ class IdentityCheckSafetySource : BroadcastReceiver() {
                         PendingIntent.getActivity(
                             context,
                             ISSUE_CARD_VIEW_DETAILS,
-                            Intent(issueCardDetails.intentAction)
-                                .setClass(context, IdentityCheckPromoCardActivity::class.java),
+                            issueIntent,
                             PendingIntent.FLAG_IMMUTABLE,
                         ),
                     )
                     .build()
-            val notificationIntent =
-                Intent(ACTION_ISSUE_NOTIFICATION_CLICKED)
-                    .setClass(context, IdentityCheckNotificationPromoCardActivity::class.java)
 
             val notificationPendingIntent =
                 PendingIntent.getActivity(
@@ -296,7 +370,12 @@ class IdentityCheckSafetySource : BroadcastReceiver() {
                     .addAction(action)
                     .setIssueActionability(SafetySourceIssue.ISSUE_ACTIONABILITY_TIP)
 
-            if (!getIfIdentityCheckPromoNotificationHasBeenClicked(context)) {
+            if (
+                !getIfIdentityCheckPromoNotificationHasBeenClicked(
+                    context,
+                    issueCardDetails.intentAction == ACTION_ISSUE_CARD_WATCH_SHOW_DETAILS,
+                ) && isIdentityCheckToggleEnabled(context)
+            ) {
                 issue
                     .setCustomNotification(notification)
                     .setNotificationBehavior(SafetySourceIssue.NOTIFICATION_BEHAVIOR_IMMEDIATELY)
@@ -309,7 +388,7 @@ class IdentityCheckSafetySource : BroadcastReceiver() {
         val future = SettableFuture.create<Boolean>()
         val authenticationPolicyManager = getSystemService(AuthenticationPolicyManager::class.java)
 
-        if (!hasPromoCardBeenShown(this) && Flags.identityCheckWatch()) {
+        if (!hasWatchPromoCardBeenShown(this) && Flags.identityCheckWatch()) {
             if (authenticationPolicyManager == null) {
                 Log.e(TAG, "Authentication policy manager is null. Setting future to false.")
                 future.set(false)
@@ -346,7 +425,12 @@ class IdentityCheckSafetySource : BroadcastReceiver() {
     data class IssueCardDetails(var title: String, var summary: String, var intentAction: String)
 
     // Data class to encapsulate notification details
-    data class NotificationDetails(val title: String, val summary: String, val buttonText: String)
+    data class NotificationDetails(
+        val title: String,
+        val summary: String,
+        val buttonText: String,
+        val action: String,
+    )
 
     class WatchContentObserver(private val context: Context) :
         ContentObserver(Handler(Looper.getMainLooper())) {

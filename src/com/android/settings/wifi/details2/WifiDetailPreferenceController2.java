@@ -862,20 +862,26 @@ public class WifiDetailPreferenceController2 extends AbstractPreferenceControlle
     }
 
     /**
-     * Returns true if the current user owns the network or if there is only a single user
-     * on the device.
+     * Returns true if the current user can modify the network or if there is
+     * only a single user on the device.
      */
     public boolean canModifyNetwork() {
         return WifiUtils.isNetworkEditable(mWifiEntry, mContext);
     }
 
     /**
+     * Returns true if the current user can modify the share settings for a
+     * network.
+     */
+    public boolean canModifyShareSettings() {
+        return WifiUtils.isSharedFieldEditable(mWifiEntry, mContext);
+    }
+
+    /**
      * Returns whether the network represented by this preference can be forgotten.
      */
     public boolean canForgetNetwork() {
-        return mWifiEntry.canForget()
-                && !WifiUtils.isNetworkLockedDown(mContext, mWifiEntry.getWifiConfiguration())
-                    && WifiUtils.isNetworkEditable(mWifiEntry, mContext);
+        return WifiUtils.isNetworkForgettable(mWifiEntry, mContext);
     }
 
     /**
@@ -889,7 +895,7 @@ public class WifiDetailPreferenceController2 extends AbstractPreferenceControlle
      * Returns whether the user can share the network represented by this preference with QR code.
      */
     private boolean canShareNetwork() {
-        return mWifiEntry.canShare() && WifiUtils.isNetworkEditable(mWifiEntry, mContext);
+        return WifiUtils.isNetworkShareable(mWifiEntry, mContext);
     }
 
     /**
@@ -899,14 +905,18 @@ public class WifiDetailPreferenceController2 extends AbstractPreferenceControlle
         if (mWifiEntry.isSubscription()) {
             // Post a dialog to confirm if user really want to forget the passpoint network.
             showConfirmForgetDialog(
-                    R.string.wifi_forget_dialog_title, R.string.forget_passpoint_dialog_message);
+                    R.string.wifi_forget_dialog_title,
+                    mContext.getString(
+                        R.string.forget_passpoint_dialog_message));
             return;
-        } else if (com.android.settings.connectivity.Flags.wifiMultiuser()
+        } else if (WifiUtils.isWifiMultiuserEnabled()
                         && mWifiEntry.isSharedWithOtherUsers()
                         && mUserManager.getUserCount() > 1) {
             showConfirmForgetDialog(
-                    R.string.shared_wifi_forget_dialog_title,
-                    R.string.shared_wifi_forget_dialog_message);
+                    R.string.wifi_forget_dialog_title,
+                    mContext.getString(
+                        R.string.shared_wifi_forget_dialog_message,
+                        BidiFormatter.getInstance().unicodeWrap(mWifiEntry.getTitle())));
             return;
         } else {
             mWifiEntry.forget(this);
@@ -920,7 +930,7 @@ public class WifiDetailPreferenceController2 extends AbstractPreferenceControlle
     }
 
     @VisibleForTesting
-    protected void showConfirmForgetDialog(int titleId, int messageId) {
+    protected void showConfirmForgetDialog(int titleId, String message) {
         final AlertDialog dialog = new AlertDialog.Builder(mContext)
                 .setPositiveButton(R.string.forget, ((dialog1, which) -> {
                     try {
@@ -934,7 +944,7 @@ public class WifiDetailPreferenceController2 extends AbstractPreferenceControlle
                 }))
                 .setNegativeButton(R.string.cancel, null /* listener */)
                 .setTitle(titleId)
-                .setMessage(messageId)
+                .setMessage(message)
                 .create();
         dialog.show();
     }

@@ -18,6 +18,7 @@ package com.android.settings.accessibility
 import android.app.settings.SettingsEnums
 import android.content.Context
 import android.os.VibrationAttributes
+import android.os.vibrator.Flags
 import android.provider.Settings.System.KEYBOARD_VIBRATION_ENABLED
 import android.provider.Settings.System.VIBRATE_ON
 import androidx.preference.Preference
@@ -27,7 +28,10 @@ import com.android.settings.R
 import com.android.settings.metrics.PreferenceActionMetricsProvider
 import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceMetadata
+import com.android.settingslib.metadata.ReadWritePermit
+import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.metadata.SwitchPreference
 import com.android.settingslib.preference.SwitchPreferenceBinding
 
@@ -36,9 +40,14 @@ import com.android.settingslib.preference.SwitchPreferenceBinding
 class KeyboardVibrationSwitchPreference(
     context: Context,
     key: String,
+    purpose: Int,
     private val mainSwitchPreferenceKey: String = VIBRATE_ON,
 ) :
-    SwitchPreference(key = key, title = R.string.accessibility_keyboard_vibration_title),
+    SwitchPreference(
+        key = key,
+        purpose = purpose,
+        title = R.string.accessibility_keyboard_vibration_title,
+    ),
     PreferenceActionMetricsProvider,
     PreferenceAvailabilityProvider,
     OnPreferenceChangeListener,
@@ -59,10 +68,23 @@ class KeyboardVibrationSwitchPreference(
     override val keywords: Int
         get() = R.string.keywords_keyboard_vibration
 
-    override fun isAvailable(context: Context) =
-        context.resources.getBoolean(
+    override val availabilityDescription = "The device must support keyboard vibration settings."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
+
+    override fun isAvailable(context: Context): Boolean {
+        val isVibrationSupported = context.resources.getBoolean(
             com.android.internal.R.bool.config_keyboardVibrationSettingsSupported
         )
+        val isIntensitySupported = context.resources.getBoolean(
+            com.android.internal.R.bool.config_keyboardVibrationSettingsIntensitySupported
+        ) && Flags.keyboardIntensitySliderEnabled()
+        return isVibrationSupported && !isIntensitySupported
+    }
+
+    override fun getEnabledDescription() = "The vibration setting (vibrate_on) must be enabled."
+
+    override fun getEnabledStability() = PreconditionStability.UNSTABLE
 
     override fun isEnabled(context: Context) = storage.isPreferenceEnabled()
 
@@ -86,6 +108,18 @@ class KeyboardVibrationSwitchPreference(
         }
         return false
     }
+
+    override fun getWritePermit(
+        context: Context,
+        value: Boolean?,
+        callingPid: Int,
+        callingUid: Int,
+    ) = ReadWritePermit.ALLOW
+
+    override val supportsWrite = true
+
+    override val sensitivityLevel: Int
+        get() = SensitivityLevel.NO_SENSITIVITY
 
     companion object {
         private const val DEFAULT_VALUE = true

@@ -16,6 +16,7 @@
 
 package com.android.settings.applications.specialaccess
 
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import android.Manifest.permission.MANAGE_EXTERNAL_STORAGE
 import android.app.AppOpsManager
 import android.app.settings.SettingsEnums
@@ -33,8 +34,13 @@ import com.android.settings.contract.TAG_DEVICE_STATE_PREFERENCE
 import com.android.settings.contract.TAG_DEVICE_STATE_SCREEN
 import com.android.settings.flags.Flags
 import com.android.settings.utils.highlightPreference
+import com.android.settingslib.metadata.CatalystFlagProviderFactory
+import com.android.settingslib.metadata.KeyParametersSchema
+import com.android.settingslib.metadata.ParameterizedPreferenceScreenArgumentsFactory
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ProvidePreferenceScreen
+import com.android.settingslib.metadata.SensitivityLevel
+import com.android.settingslib.metadata.ValidatedKeyParameters
 
 /**
  * The app detail catalyst screen for "All files access" special app access.
@@ -43,11 +49,27 @@ import com.android.settingslib.metadata.ProvidePreferenceScreen
  * access > [app name]
  */
 @ProvidePreferenceScreen(AllFilesAccessAppDetailScreen.KEY, parameterized = true)
-open class AllFilesAccessAppDetailScreen(private val context: Context, arguments: Bundle) :
-    SpecialAccessAppDetailScreen(context, arguments) {
+open class AllFilesAccessAppDetailScreen : SpecialAccessAppDetailScreen {
+
+    @Deprecated(
+        "This constructor will be removed once the catalyst framework stops passing the arguments as a bundle. Use the other constructor instead."
+    )
+    constructor(context: Context, arguments: Bundle) : super(context, arguments)
+
+    constructor(
+        context: Context,
+        keyArguments: ValidatedKeyParameters,
+    ) : super(context, keyArguments)
 
     override val key
         get() = KEY
+
+    override val keyParametersSchema: KeyParametersSchema
+        get() = parametersSchema
+
+    //TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.special_access_all_files_access_app_detail_purpose
 
     override val bindingKey
         get() = "$KEY-$packageName"
@@ -70,6 +92,13 @@ open class AllFilesAccessAppDetailScreen(private val context: Context, arguments
     override val footerPreferenceTitle
         get() = R.string.allow_manage_external_storage_description
 
+    override val availabilityDescription =
+        "The app must be enabled, and must have requested manage external storage permission."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
+
+    override val sensitivityLevel = SensitivityLevel.DO_NOT_EXPOSE
+
     // Edge case: what if the app's read permission is revoked/granted
     override fun isAvailable(context: Context) =
         super.isAvailable(context) && allFilesAccessFilter(context, packageInfo?.applicationInfo)
@@ -90,15 +119,34 @@ open class AllFilesAccessAppDetailScreen(private val context: Context, arguments
     override fun getLaunchIntent(context: Context, metadata: PreferenceMetadata?) =
         Intent(ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION).apply {
             data = "package:$packageName".toUri()
-            highlightPreference(arguments, metadata?.bindingKey)
+
+            if (CatalystFlagProviderFactory.catalystUseKeyParameters()) {
+                highlightPreference(keyParameters!!, metadata?.bindingKey)
+            } else {
+                highlightPreference(arguments!!, metadata?.bindingKey)
+            }
         }
 
-    companion object {
+    companion object :
+        ParameterizedPreferenceScreenArgumentsFactory by SpecialAccessAppDetailScreen.Companion {
         const val KEY = "special_access_all_files_access_app_detail"
         const val PERMISSION = MANAGE_EXTERNAL_STORAGE
 
-        @JvmStatic fun parameters(context: Context) = parameters(context, DEFAULT_SHOW_SYSTEM)
+        @JvmStatic
+        override fun keyParameters(context: Context) = keyParameters(context, DEFAULT_SHOW_SYSTEM)
 
+        fun keyParameters(context: Context, showSystemApp: Boolean) =
+            keyParameters(context, showSystemApp, ::allFilesAccessFilter)
+
+        @JvmStatic
+        @Deprecated(
+            "This method will be removed once the catalyst framework stops passing the arguments as a bundle. Use keyParameters instead."
+        )
+        fun parameters(context: Context) = parameters(context, DEFAULT_SHOW_SYSTEM)
+
+        @Deprecated(
+            "This method will be removed once the catalyst framework stops passing the arguments as a bundle. Use keyParameters instead."
+        )
         fun parameters(context: Context, showSystemApp: Boolean) =
             parameters(context, showSystemApp, ::allFilesAccessFilter)
 

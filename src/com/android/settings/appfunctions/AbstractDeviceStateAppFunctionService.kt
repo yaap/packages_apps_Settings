@@ -17,29 +17,41 @@
 package com.android.settings.appfunctions
 
 import android.app.KeyguardManager
+import android.app.appfunctions.AppFunctionException
 import android.app.appfunctions.AppFunctionException.ERROR_DENIED
+import android.app.appfunctions.AppFunctionException.ERROR_FUNCTION_NOT_FOUND
+import android.app.appfunctions.AppFunctionException.ERROR_SYSTEM_ERROR
+import android.app.appfunctions.AppFunctionService
+import android.app.appfunctions.ExecuteAppFunctionRequest
+import android.app.appfunctions.ExecuteAppFunctionResponse
 import android.app.appsearch.GenericDocument
 import android.content.Context
+import android.content.pm.SigningInfo
 import android.content.res.Configuration
 import android.os.CancellationSignal
 import android.os.OutcomeReceiver
+import android.os.SystemClock
 import android.os.Trace
 import android.util.Log
 import androidx.annotation.Keep
-import com.android.extensions.appfunctions.AppFunctionException
-import com.android.extensions.appfunctions.AppFunctionException.ERROR_FUNCTION_NOT_FOUND
-import com.android.extensions.appfunctions.AppFunctionService
-import com.android.extensions.appfunctions.ExecuteAppFunctionRequest
-import com.android.extensions.appfunctions.ExecuteAppFunctionResponse
-import com.android.settings.appfunctions.providers.AndroidApiStateProviderExecutor
-import com.android.settings.appfunctions.providers.AndroidApiStateSetterExecutor
-import com.android.settings.appfunctions.providers.CatalystStateMetadataProviderExecutor
-import com.android.settings.appfunctions.providers.CatalystStateProviderExecutor
-import com.android.settings.appfunctions.providers.CatalystStateSetterExecutor
-import com.android.settings.appfunctions.providers.DeviceStateExecutor
+import com.android.settings.appfunctions.executors.AndroidApiStateMetadataProviderExecutor
+import com.android.settings.appfunctions.executors.AndroidApiStateProviderExecutor
+import com.android.settings.appfunctions.executors.AndroidApiStateSetterExecutor
+import com.android.settings.appfunctions.executors.CatalystStateGetterExecutor
+import com.android.settings.appfunctions.executors.CatalystStateMetadataProviderExecutor
+import com.android.settings.appfunctions.executors.CatalystStateProviderExecutor
+import com.android.settings.appfunctions.executors.CatalystStateSetterExecutor
+import com.android.settings.appfunctions.executors.DeviceStateExecutor
+import com.android.settings.metrics.AppFunctionMetricsLogger
+import com.android.settings.metrics.toMetricsId
 import com.android.settings.utils.getLocale
+import com.android.settingslib.metadata.AppFunctionMetricsLoggerInterface
 import java.util.Locale
-import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
 
 /**
  * An abstract [AppFunctionService] that provides device state information.
@@ -49,8 +61,12 @@ import kotlinx.coroutines.runBlocking
  */
 @Keep
 abstract class AbstractDeviceStateAppFunctionService : AppFunctionService() {
+    open val metricsLogger: AppFunctionMetricsLoggerInterface = AppFunctionMetricsLogger()
+
     protected lateinit var englishContext: Context
         private set
+
+    private val backgroundScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
 
     open val deviceStateProviderExecutors: List<DeviceStateExecutor> by lazy {
         listOf(
@@ -66,13 +82,21 @@ abstract class AbstractDeviceStateAppFunctionService : AppFunctionService() {
         DeviceStateProviderAggregator(deviceStateProviderExecutors)
     }
 
+    open val deviceStateItemProviderExecutors: List<DeviceStateExecutor> by lazy {
+        listOf(CatalystStateGetterExecutor(applicationContext))
+    }
+    val deviceStateItemProviderAggregator by lazy {
+        DeviceStateItemProviderAggregator(deviceStateItemProviderExecutors)
+    }
+
     open val deviceStateMetadataProviderExecutors: List<DeviceStateExecutor> by lazy {
         listOf(
             CatalystStateMetadataProviderExecutor(
                 getSettingsCatalystConfig(),
                 applicationContext,
                 englishContext,
-            )
+            ),
+            AndroidApiStateMetadataProviderExecutor(applicationContext),
         )
     }
     val deviceStateMetadataProviderAggregator by lazy {
@@ -80,7 +104,10 @@ abstract class AbstractDeviceStateAppFunctionService : AppFunctionService() {
     }
 
     open val deviceStateSetterExecutors: List<DeviceStateExecutor> by lazy {
-        listOf(CatalystStateSetterExecutor(), AndroidApiStateSetterExecutor(applicationContext))
+        listOf(
+            CatalystStateSetterExecutor(applicationContext),
+            AndroidApiStateSetterExecutor(applicationContext),
+        )
     }
     val deviceStateSetterAggregator by lazy {
         DeviceStateSetterAggregator(deviceStateSetterExecutors)
@@ -95,11 +122,11 @@ abstract class AbstractDeviceStateAppFunctionService : AppFunctionService() {
             DeviceStateAppFunctionType.GET_NOTIFICATIONS to deviceStateProviderAggregator,
             DeviceStateAppFunctionType.GET_APPS to deviceStateProviderAggregator,
             DeviceStateAppFunctionType.GET_METADATA to deviceStateMetadataProviderAggregator,
+            DeviceStateAppFunctionType.GET_DEVICE_STATE to deviceStateItemProviderAggregator,
             DeviceStateAppFunctionType.SET_DEVICE_STATE to deviceStateSetterAggregator,
             DeviceStateAppFunctionType.ADJUST_DEVICE_STATE_BY_PERCENTAGE to
                 deviceStateSetterAggregator,
             DeviceStateAppFunctionType.OFFSET_DEVICE_STATE_BY_VALUE to deviceStateSetterAggregator,
-            DeviceStateAppFunctionType.TOGGLE_DEVICE_STATE to deviceStateSetterAggregator,
         )
     }
 
@@ -111,11 +138,18 @@ abstract class AbstractDeviceStateAppFunctionService : AppFunctionService() {
     final override fun onExecuteFunction(
         request: ExecuteAppFunctionRequest,
         callingPackage: String,
+        callingPackageSigningInfo: SigningInfo,
         cancellationSignal: CancellationSignal,
         callback: OutcomeReceiver<ExecuteAppFunctionResponse, AppFunctionException>,
     ) {
         val appFunctionType = DeviceStateAppFunctionType.fromId(request.functionIdentifier)
         if (appFunctionType == null) {
+            metricsLogger.logAppFunctionError(
+                callingPackage,
+                ERROR_FUNCTION_NOT_FOUND,
+                applicationContext,
+                null,
+            )
             callback.onError(
                 AppFunctionException(
                     ERROR_FUNCTION_NOT_FOUND,
@@ -129,6 +163,14 @@ abstract class AbstractDeviceStateAppFunctionService : AppFunctionService() {
             shouldCheckForDeviceLock(request.parameters, appFunctionType) &&
                 applicationContext.getSystemService(KeyguardManager::class.java).isDeviceLocked
         ) {
+            metricsLogger.logAppFunctionError(
+                callingPackage,
+                ERROR_DENIED,
+                applicationContext,
+                appFunctionType.toMetricsId(),
+            )
+
+            // Any code beyond this point will not execute
             callback.onError(
                 AppFunctionException(
                     ERROR_DENIED,
@@ -138,27 +180,64 @@ abstract class AbstractDeviceStateAppFunctionService : AppFunctionService() {
             )
         }
 
-        runBlocking {
-            Trace.beginSection("DeviceStateAppFunction ${request.functionIdentifier}")
+        backgroundScope.launch(NonCancellable) {
+            Trace.beginAsyncSection("DeviceStateAppFunction ${request.functionIdentifier}", 0)
             Log.d(TAG, "device state app function ${request.functionIdentifier} called.")
             if (!aggregators.containsKey(appFunctionType)) {
+                metricsLogger.logAppFunctionError(
+                    callingPackage,
+                    ERROR_FUNCTION_NOT_FOUND,
+                    applicationContext,
+                    appFunctionType.toMetricsId(),
+                )
+                // Any code beyond this point will not execute
                 callback.onError(
                     AppFunctionException(
                         ERROR_FUNCTION_NOT_FOUND,
                         "${request.functionIdentifier} not supported.",
                     )
                 )
+                return@launch
             }
-            val responseData =
-                aggregators[appFunctionType]!!.aggregate(
-                    appFunctionType,
-                    request.parameters,
-                    applicationContext.getLocale().toString(),
+            try {
+                val startMs = SystemClock.elapsedRealtime()
+
+                val responseData =
+                    aggregators[appFunctionType]!!.aggregate(
+                        appFunctionType,
+                        request.parameters,
+                        applicationContext.getLocale().toString(),
+                    )
+                val response = buildResponse(responseData)
+                callback.onResult(response)
+
+                val executeDurationMs = SystemClock.elapsedRealtime() - startMs
+                Log.d(TAG, "app function ${request.functionIdentifier} fulfilled.")
+
+                metricsLogger.logAppFunction(
+                    appFunctionType.toMetricsId(),
+                    callingPackage,
+                    executeDurationMs,
+                    applicationContext,
                 )
-            val response = buildResponse(responseData)
-            callback.onResult(response)
-            Log.d(TAG, "app function ${request.functionIdentifier} fulfilled.")
-            Trace.endSection()
+            } catch (e: Exception) {
+                // TODO(b/491141423): granular exceptions handle
+                metricsLogger.logAppFunctionError(
+                    callingPackage,
+                    ERROR_SYSTEM_ERROR,
+                    applicationContext,
+                    appFunctionType.toMetricsId(),
+                )
+
+                Log.e(TAG, "device state app function ${request.functionIdentifier} failed.", e)
+
+                // Any code beyond this point will not execute
+                callback.onError(
+                    AppFunctionException(ERROR_SYSTEM_ERROR, e.javaClass::class.java.toString())
+                )
+            } finally {
+                Trace.endAsyncSection("DeviceStateAppFunction ${request.functionIdentifier}", 0)
+            }
         }
     }
 

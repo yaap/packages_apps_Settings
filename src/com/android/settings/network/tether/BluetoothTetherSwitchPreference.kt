@@ -34,17 +34,28 @@ import com.android.settingslib.datastore.AbstractKeyedDataObservable
 import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.Permissions
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceChangeReason
 import com.android.settingslib.metadata.ReadWritePermit
 import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.metadata.SwitchPreference
+import com.android.settingslib.spa.flow.broadcastReceiverFlow
 import java.util.concurrent.atomic.AtomicReference
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 // LINT.IfChange
 @Suppress("DEPRECATION")
 class BluetoothTetherSwitchPreference(
-    private val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
-) : SwitchPreference(KEY, R.string.bluetooth_tether_checkbox_text), PreferenceAvailabilityProvider {
+    private val coroutineScope: CoroutineScope,
+    private val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter(),
+) :
+    SwitchPreference(
+        key = KEY,
+        purpose = R.string.enable_bluetooth_tethering_purpose,
+        title = R.string.bluetooth_tether_checkbox_text,
+    ),
+    PreferenceAvailabilityProvider {
 
     override val summary: Int
         get() = R.string.bluetooth_tethering_subtext
@@ -53,7 +64,11 @@ class BluetoothTetherSwitchPreference(
         get() = R.string.keywords_hotspot_tethering
 
     override fun storage(context: Context): KeyValueStore =
-        BluetoothTetherStore(context, bluetoothAdapter)
+        BluetoothTetherStore(context, coroutineScope, bluetoothAdapter)
+
+    override val availabilityDescription = "The device must support bluetooth tethering."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context): Boolean {
         bluetoothAdapter ?: return false
@@ -70,6 +85,7 @@ class BluetoothTetherSwitchPreference(
         when (btState) {
             BluetoothAdapter.STATE_TURNING_OFF,
             BluetoothAdapter.STATE_TURNING_ON -> return false
+
             else -> {}
         }
         val dataSaverBackend = DataSaverBackend(context)
@@ -92,11 +108,12 @@ class BluetoothTetherSwitchPreference(
         ReadWritePermit.ALLOW
 
     override val sensitivityLevel: Int
-        get() = SensitivityLevel.LOW_SENSITIVITY
+        get() = SensitivityLevel.DEEP_LINK_ONLY
 
     @Suppress("UNCHECKED_CAST")
     private class BluetoothTetherStore(
         private val context: Context,
+        private val coroutineScope: CoroutineScope,
         private val adapter: BluetoothAdapter?,
     ) : AbstractKeyedDataObservable<String>(), KeyValueStore {
 
@@ -158,23 +175,23 @@ class BluetoothTetherSwitchPreference(
                 if (adapter.state == BluetoothAdapter.STATE_OFF) {
                     // Turn on Bluetooth first.
                     adapter.enable()
-                    val filter = IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)
-                    val bluetoothStateReceiver =
-                        object : BroadcastReceiver() {
-                            override fun onReceive(context: Context, intent: Intent) {
-                                if (
-                                    intent.getIntExtra(
-                                        BluetoothAdapter.EXTRA_STATE,
-                                        BluetoothAdapter.ERROR,
-                                    ) == BluetoothAdapter.STATE_ON
-                                ) {
-                                    startTethering()
-                                    context.unregisterReceiver(this)
-                                }
+
+                    val btIntentFlow =
+                        context.broadcastReceiverFlow(
+                            IntentFilter(BluetoothAdapter.ACTION_STATE_CHANGED)
+                        )
+                    coroutineScope.launch {
+                        btIntentFlow.collect { it ->
+                            if (
+                                it.getIntExtra(
+                                    BluetoothAdapter.EXTRA_STATE,
+                                    BluetoothAdapter.ERROR,
+                                ) == BluetoothAdapter.STATE_ON
+                            ) {
+                                startTethering()
                             }
                         }
-                    val intent = context.registerReceiver(bluetoothStateReceiver, filter)
-                    if (intent != null) bluetoothStateReceiver.onReceive(context, intent)
+                    }
                 } else {
                     startTethering()
                 }

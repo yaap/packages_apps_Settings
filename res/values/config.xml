@@ -204,8 +204,11 @@
     <!-- List of packages that should be allowlisted for slice uri access for debugging purpose. Do not translate -->
     <string-array name="slice_allowlist_package_names_for_dev" translatable="false"/>
 
+    <!-- Whether to hide the skip buttons on lskf screens during SetupWizard -->
+    <bool name="config_hide_skip_security_options_in_suw">false</bool>
+
     <!-- Whether to support click input for the pattern component -->
-    <bool name="config_enable_pattern_input_click_support">false</bool>
+    <bool name="config_enable_pattern_input_click_support">true</bool>
 
     <!-- Whether to use a UI variant that minimizes the number of UI elements on screen. This is
          typically used when there is not enough space to display everything, because pattern view
@@ -347,6 +350,9 @@
     <!-- Whether to support enrollment during setup wizard flow -->
     <bool name="config_suw_support_face_enroll">true</bool>
 
+    <!-- Whether to show a timeout dialog on the face ernoll intro screen -->
+    <bool name="config_show_face_enroll_intro_timeout_dialog">false</bool>
+
     <!-- App intent -->
     <string name="config_account_intent_uri" translatable="false"></string>
 
@@ -378,6 +384,18 @@
 
     <!-- Whether swipe security option is hidden or not -->
     <bool name="config_hide_swipe_security_option">false</bool>
+
+    <!-- Whether to disable keyboard settings in demo mode -->
+    <bool name="config_disable_keyboard_settings_in_demo_mode">false</bool>
+
+    <!-- Whether to hide modes setting in demo mode -->
+    <bool name="config_hide_modes_setting_in_demo_mode">false</bool>
+
+    <!-- Whether to hide dream setting in demo mode -->
+    <bool name="config_hide_dream_setting_in_demo_mode">false</bool>
+
+    <!-- Whether to hide supervision setting in demo mode -->
+    <bool name="config_hide_supervision_setting_in_demo_mode">false</bool>
 
     <!-- Whether Wi-Fi settings should be shown or not.
     This also controls whether Wi-fi related sub-settings (e.g. Wi-Fi preferences) will
@@ -413,6 +431,9 @@
 
     <!-- Whether alarm_volume should be shown or not. -->
     <bool name="config_show_alarm_volume">true</bool>
+
+    <!-- Whether SIM Specific Ringtone should be shown or not. -->
+    <bool name="config_show_sim_specific_ringtone">false</bool>
 
     <!-- Whether call_volume should be shown or not. -->
     <bool name="config_show_call_volume">true</bool>
@@ -479,6 +500,12 @@
 
     <!-- Whether show_password should be shown or not. -->
     <bool name="config_show_show_password">true</bool>
+
+    <!-- Whether to show the "Show secrets (touch)" toggle in Privacy Settings. -->
+    <bool name="config_show_show_secrets_touch">true</bool>
+
+    <!-- Whether to show the "Show secrets (physical)" toggle in Privacy Settings. -->
+    <bool name="config_show_show_secrets_physical">false</bool>
 
     <!-- Whether trust_agent_click_intent should be shown or not. -->
     <bool name="config_show_trust_agent_click_intent">true</bool>
@@ -709,12 +736,15 @@
     <!-- The ratio to use when using the two-pane settings layout -->
     <item name="config_activity_embed_split_ratio" format="float" type="dimen">0.3636</item>
 
+    <!-- The smallest value of current width of the window when the split should be used. -->
+    <integer name="config_activity_embed_split_min_cur_dp">720</integer>
+
+    <!-- The smallest value of current height of the window when the split should be used. -->
+    <integer name="config_activity_embed_split_min_height_dp">600</integer>
+
     <!-- The smallest value of the smallest-width (sw) of the window in any rotation when the split
          should be used. -->
     <integer name="config_activity_embed_split_min_sw_dp">600</integer>
-
-    <!-- The smallest value of current width of the window when the split should be used. -->
-    <integer name="config_activity_embed_split_min_cur_dp">720</integer>
 
     <!-- The number of visible app icons while entering app list related pages for preloading.
          Take the "Unrestricted data" page as the example, the visible app icons could be 15
@@ -730,9 +760,6 @@
     <!-- Whether to show communal settings at the top level. -->
     <bool name="config_show_communal_settings">false</bool>
 
-    <!-- Whether to show communal settings at the top level on mobile. -->
-    <bool name="config_show_communal_settings_mobile">false</bool>
-
     <!-- Whether posturing detection is supported. -->
     <bool name="config_posturing_supported">false</bool>
 
@@ -742,9 +769,7 @@
     <!-- Whether to show the "glanceable hub" settings on mobile. -->
     <bool name="config_show_glanceable_hub_toggle_setting_mobile">false</bool>
 
-    <!-- Whether to show a "restrict to wireless charging" settings option in screensaver and hub
-         mode settings (false by default). -->
-    <bool name="config_show_restrict_to_wireless_charging">false</bool>
+
 
     <!-- The extra value for battery tip -->
     <integer name="config_battery_extra_tip_value">12</integer>
@@ -911,7 +936,9 @@
          R.string.identity_check_watch_issue_card_title
          R.string.identity_check_watch_issue_card_summary
          R.string.identity_check_watch_promo_card_title
-         R.string.identity_check_promo_card_watch_summary -->
+         R.string.identity_check_promo_card_watch_summary
+         R.string.identity_check_watch_notification_title
+         R.string.identity_check_watch_notification_summary -->
     <bool name="config_show_identity_check_watch_promo">false</bool>
 
     <!-- Safety Center safety source ID of an app security source. -->
@@ -944,11 +971,129 @@
     <!-- Safety Center safety source ID of a backup source. -->
     <string name="config_safety_center_backup_source_id" translatable="false"></string>
 
+    <!-- Safety Center safety source ID of an advanced protection source. -->
+    <string name="config_safety_center_advanced_protection_source_id" translatable="false"></string>
+
     <!-- Comma separated list of Safety Center safety source IDs to show in the same task as Safety Center -->
-    <string name="config_same_task_safety_source_ids" translatable="false">AdvancedProtection,AndroidAccessibility,AndroidAppFunctionAccess,AndroidBackgroundLocation,AndroidBiometrics,AndroidFaceUnlock,AndroidFingerprintUnlock,AndroidHealthConnect,AndroidLockScreen,AndroidPrivateSpace,AndroidNotificationListener,AndroidPermissionAutoRevoke,AndroidPrivacyAppDataSharingUpdates,AndroidWearUnlock,AndroidWorkPolicyInfo</string>
+    <string name="config_same_task_safety_source_ids" translatable="false">AndroidAccessibility,AndroidAppFunctionAccess,AndroidBackgroundLocation,AndroidBiometrics,AndroidFaceUnlock,AndroidFingerprintUnlock,AndroidHealthConnect,AndroidLockScreen,AndroidPrivateSpace,AndroidNotificationListener,AndroidPermissionAutoRevoke,AndroidPrivacyAppDataSharingUpdates,AndroidWearUnlock,AndroidWorkPolicyInfo</string>
+
+    <!-- Safety Center subpage ID for the app security subpage. -->
+    <string name="config_safety_center_app_security_subpage_id" translatable="false"></string>
+    <!-- Safety Center subpage ID for the accounts subpage. -->
+    <string name="config_safety_center_accounts_subpage_id" translatable="false"></string>
+    <!-- Safety Center subpage ID for the device finders subpage. -->
+    <string name="config_safety_center_device_finders_subpage_id" translatable="false"></string>
+    <!-- Safety Center subpage ID for the updates subpage. -->
+    <string name="config_safety_center_updates_subpage_id" translatable="false"></string>
+    <!-- Safety Center subpage ID for the lock screen subpage. -->
+    <string name="config_safety_center_lock_screen_subpage_id" translatable="false">AndroidLockScreenSources</string>
+    <!-- Safety Center subpage ID for the updates subpage. -->
+    <string name="config_safety_center_privacy_controls_subpage_id" translatable="false">AndroidPrivacySources</string>
 
     <!-- Resolutions shown on external display (for native resolutions only). There must be an even
          number of values, each pair being width x height. If empty, all resolutions are supported. -->
     <integer-array name="config_resolutionsShownOnExternalDisplay" translatable="false"/>
 
+    <!-- Whether to enable using init_enroll_remaining in the enroll progress logic -->
+    <bool name="config_init_fingerprint_enroll_remaining">false</bool>
+
+    <!-- The initial value for remaining in enroll progress -->
+    <integer name="init_fingerprint_enroll_remaining">0</integer>
+
+    <!-- An array of package names of satellite apps for the NB-NTN landing page. -->
+    <string-array name="config_satellite_apps_for_nbntn_landing_page" translatable="false"></string-array>
+
+    <!-- An array of package names of satellite apps for the LTE landing page. -->
+    <string-array name="config_satellite_apps_for_lte_landing_page" translatable="false"></string-array>
+
+    <!-- The package name of the phone app for satellite. -->
+    <string name="config_satellite_phone_app_package" translatable="false">com.google.android.dialer</string>
+
+    <!-- The package name of the messages app for satellite. -->
+    <string name="config_satellite_messages_app_package" translatable="false">com.google.android.apps.messaging</string>
+
+    <!-- The package name of the app that provides the satellite settings gateway. -->
+    <string name="config_satellite_settings_gateway_package" translatable="false">com.google.android.apps.scone</string>
+
+    <!-- The class name of the activity that provides the satellite settings gateway. -->
+    <string name="config_satellite_settings_gateway_class" translatable="false">com.google.android.apps.scone.satellite.settings.gateway.SettingsGatewayActivity</string>
+
+    <!-- Whether to show the satellite tile in quick settings. This is true by default for all OEMs. -->
+    <bool name="config_show_satellite_tile">true</bool>
+
+    <!-- Whether to hide the pattern lock screen option from Settings and Setup Wizard.
+         This will prevent users from setting a new pattern lock, but does not affect
+         existing pattern locks. -->
+    <bool name="config_hide_pattern_security_option">false</bool>
+
+    <!-- Whether to disable the option for setting the remote lockscreen credential as the
+         local screen lock during remote validation (Smart Setup/Quick Start) -->
+    <bool name="config_disable_remote_lockscreen_transfer_checkbox">false</bool>
+
+    <!-- Light theme customization for lottie illustration in the setup. Not translatable. -->
+    <string-array name="layout_animated_banner_customization" translatable="false">
+        <item>.primary:@sud_system_primary_light</item>
+        <item>.onPrimary:@sud_system_on_primary_light</item>
+        <item>.primaryContainer:@sud_system_primary_container_light</item>
+        <item>.onPrimaryContainer:@sud_system_on_primary_container_light</item>
+        <item>.primaryInverse:@sud_system_primary_inverse_light</item>
+        <item>.primaryFixed:@sud_system_primary_fixed_light</item>
+        <item>.primaryFixedDim:@sud_system_primary_fixed_dim_light</item>
+        <item>.onPrimaryFixed:@sud_system_on_primary_fixed_light</item>
+        <item>.onPrimaryFixedVariant:@sud_system_on_primary_fixed_variant_light</item>
+        <item>.secondary:@sud_system_secondary_light</item>
+        <item>.onSecondary:@sud_system_on_secondary_light</item>
+        <item>.secondaryContainer:@sud_system_secondary_container_light</item>
+        <item>.onSecondaryContainer:@sud_system_on_secondary_container_light</item>
+        <item>.secondaryFixed:@sud_system_secondary_fixed_light</item>
+        <item>.secondaryFixedDim:@sud_system_secondary_fixed_dim_light</item>
+        <item>.onSecondaryFixed:@sud_system_on_secondary_fixed_light</item>
+        <item>.onSecondaryFixedVariant:@sud_system_on_secondary_fixed_variant_light</item>
+        <item>.tertiary:@sud_system_tertiary_light</item>
+        <item>.onTertiary:@sud_system_on_tertiary_light</item>
+        <item>.tertiaryContainer:@sud_system_tertiary_container_light</item>
+        <item>.onTertiaryContainer:@sud_system_on_tertiary_container_light</item>
+        <item>.tertiaryFixed:@sud_system_tertiary_fixed_light</item>
+        <item>.tertiaryFixedDim:@sud_system_tertiary_fixed_dim_light</item>
+        <item>.onTertiaryFixed:@sud_system_on_tertiary_fixed_light</item>
+        <item>.onTertiaryFixedVariant:@sud_system_on_tertiary_fixed_variant_light</item>
+        <item>.error:@sud_system_error_light</item>
+        <item>.onError:@sud_system_on_error_light</item>
+        <item>.errorContainer:@sud_system_error_container_light</item>
+        <item>.onErrorContainer:@sud_system_on_error_container_light</item>
+        <item>.outline:@sud_system_outline_light</item>
+        <item>.outlineVariant:@sud_system_outline_variant_light</item>
+        <item>.onBackground:@sud_system_on_background_light</item>
+        <item>.surface:@sud_system_surface_light</item>
+        <item>.onSurface:@sud_system_on_surface_light</item>
+        <item>.surfaceVariant:@sud_system_surface_variant_light</item>
+        <item>.onSurfaceVariant:@sud_system_on_surface_variant_light</item>
+        <item>.surfaceInverse:@sud_system_surface_inverse_light</item>
+        <item>.onSurfaceInverse:@sud_system_on_surface_inverse_light</item>
+        <item>.surfaceBright:@sud_system_surface_bright_light</item>
+        <item>.surfaceDim:@sud_system_surface_dim_light</item>
+        <item>.surfaceContainer:@sud_system_surface_container_light</item>
+        <item>.surfaceContainerLow:@sud_system_surface_container_low_light</item>
+        <item>.surfaceContainerLowest:@sud_system_surface_container_lowest_light</item>
+        <item>.surfaceContainerHigh:@sud_system_surface_container_high_light</item>
+        <item>.surfaceContainerHighest:@sud_system_surface_container_highest_light</item>
+    </string-array>
+
+    <!-- Whether to show detailed fingerprint find sensor instructions during fingerprint enrollment. -->
+    <bool name="config_show_detailed_fingerprint_find_sensor_instructions">false</bool>
+
+    <!-- Whether to show the footer buttons on the password confirmation screen -->
+    <bool name="config_show_footer_buttons_on_password_confirmation_screen">false</bool>
+
+    <!-- When true, launches the feedback reporter in a new task. -->
+    <bool name="config_launch_feedback_reporter_in_new_task">false</bool>
+
+    <!-- The package and class name of the troubleshooting info provider app. -->
+    <string name="config_connectivity_troubleshooting_service_name" translatable="false"></string>
+
+    <!-- Whether to enable the device state app functions. -->
+    <bool name="config_device_state_app_functions_enabled">false</bool>
+
+    <!-- TODO(b/496286136): Whether to force showing the icon on the locale picker screen. -->
+    <bool name="config_force_showing_icon_on_locale_picker_screen">false</bool>
 </resources>

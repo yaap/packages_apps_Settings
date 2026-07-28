@@ -19,18 +19,36 @@ import android.content.Context
 import com.android.settings.R
 import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.metadata.BooleanValuePreference
+import com.android.settingslib.metadata.SensitivityLevel
+import com.android.settingslib.metadata.ReadWritePermit
 import com.android.settingslib.widget.MainSwitchPreferenceBinding
-import com.android.systemui.shared.Flags.ambientAod
 
 class AmbientDisplayMainSwitchPreference : BooleanValuePreference, MainSwitchPreferenceBinding {
 
     override val key
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.ambient_display_always_on_key_purpose
+
     override val title
-        get() = if (ambientAod()) R.string.doze_always_on_title2 else R.string.doze_always_on_title
+        get() = R.string.doze_always_on_title2
+
+    override val summary
+        get() = R.string.doze_always_on_summary
+
+    override val indexable
+        get() = false
 
     override fun storage(context: Context): KeyValueStore = AmbientDisplayStorage(context)
+
+    override fun getWritePermit(context: Context, callingPid: Int, callingUid: Int) =
+        ReadWritePermit.ALLOW
+
+    override val supportsWrite = true
+
+    override val sensitivityLevel: Int
+        get() = SensitivityLevel.NO_SENSITIVITY
 
     companion object {
         val KEY = "ambient_display_always_on_key"

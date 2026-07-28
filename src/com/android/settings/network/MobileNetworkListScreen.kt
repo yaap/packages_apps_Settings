@@ -41,7 +41,10 @@ import com.android.settings.spa.network.startSatelliteWarningDialogFlow
 import com.android.settings.utils.makeLaunchIntent
 import com.android.settingslib.RestrictedPreference
 import com.android.settingslib.datastore.HandlerExecutor
+import com.android.settingslib.metadata.CatalystFlagProviderFactory
+import com.android.settingslib.metadata.METADATA_IN_UI
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceMetadata
@@ -51,7 +54,7 @@ import com.android.settingslib.metadata.preferenceHierarchy
 import com.android.settingslib.preference.PreferenceBinding
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_MOBILE_DATA
 @ProvidePreferenceScreen(MobileNetworkListScreen.KEY)
 open class MobileNetworkListScreen(context: Context) :
     PreferenceScreenMixin,
@@ -61,12 +64,18 @@ open class MobileNetworkListScreen(context: Context) :
     PreferenceLifecycleProvider,
     PreferenceRestrictionMixin,
     OnPreferenceClickListener {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_MOBILE_DATA)
+
 
     private var subscriptionInfoList: List<SubscriptionInfo>? = null
     private var onSubscriptionsChangedListener: OnSubscriptionsChangedListener? = null
 
     override val key: String
         get() = KEY
+
+    // TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.mobile_network_list_purpose
 
     override val title: Int
         get() = R.string.provider_network_settings_title
@@ -98,8 +107,12 @@ open class MobileNetworkListScreen(context: Context) :
     override fun getLaunchIntent(context: Context, metadata: PreferenceMetadata?) =
         makeLaunchIntent(context, Settings.MobileNetworkListActivity::class.java, metadata?.key)
 
-    override fun isAvailable(context: Context) =
-        SimRepository(context).showMobileNetworkPageEntrance()
+    override val availabilityDescription =
+        "The device must support showing mobile network list in Settings."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
+
+    override fun isAvailable(context: Context) = SimRepository(context).showMobileNetworkPageEntrance()
 
     override fun isEnabled(context: Context) =
         super<PreferenceRestrictionMixin>.isEnabled(context) &&
@@ -180,7 +193,11 @@ open class MobileNetworkListScreen(context: Context) :
         preferenceHierarchy(context) {
             +MobileDataPreference()
             addAsync(coroutineScope, Dispatchers.Default) {
-                if (Flags.deeplinkNetworkAndInternet25q4()) {
+                if (CatalystFlagProviderFactory.catalystUseKeyParameters()) {
+                    MobileNetworkScreen.keyParameters(context).collect {
+                        +(MobileNetworkScreen.KEY withParameters it)
+                    }
+                } else {
                     MobileNetworkScreen.parameters(context).collect {
                         +(MobileNetworkScreen.KEY args it)
                     }
@@ -190,6 +207,30 @@ open class MobileNetworkListScreen(context: Context) :
             +SimSmsPreference() order +140
             +SimMobileDataPreference() order +150
         }
+
+    class MobileNetworkListScreenPreference(
+        private val screenMetadata : MobileNetworkListScreen
+    ) : PreferenceMetadata, PreferenceSummaryProvider, PreferenceAvailabilityProvider {
+        override val key : String
+            get() = "mobile_network_list_preference"
+
+        override val purpose : Int
+            get() = screenMetadata.purpose
+
+        override fun tags(context: Context) = arrayOf(METADATA_IN_UI)
+
+        override val indexable = false
+
+        override fun isEnabled(context: Context) : Boolean = screenMetadata.isEnabled(context)
+
+        override fun getSummary(context: Context) : CharSequence? = screenMetadata.getSummary(context)
+
+        override val availabilityDescription = screenMetadata.availabilityDescription
+
+        override fun getAvailabilityStability() = screenMetadata.getAvailabilityStability()
+
+        override fun isAvailable(context: Context) : Boolean = screenMetadata.isAvailable(context)
+    }
 
     companion object {
         const val KEY = "mobile_network_list"

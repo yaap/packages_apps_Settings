@@ -23,11 +23,14 @@ import androidx.fragment.app.Fragment
 import com.android.settings.R
 import com.android.settings.Settings.SavedAccessPointsSettingsActivity
 import com.android.settings.core.PreferenceScreenMixin
-import com.android.settings.flags.Flags
 import com.android.settings.utils.makeLaunchIntent
 import com.android.settings.wifi.WifiPickerTrackerHelper
 import com.android.settings.wifi.utils.wifiManager
+import com.android.settingslib.datastore.KeyValueStore
+import com.android.settingslib.metadata.METADATA_IN_UI
+import com.android.settingslib.metadata.PersistentPreference
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceMetadata
@@ -37,6 +40,7 @@ import com.android.settingslib.metadata.preferenceHierarchy
 import com.android.settingslib.utils.StringUtil
 import com.android.wifitrackerlib.WifiPickerTracker
 import kotlinx.coroutines.CoroutineScope
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_MOBILE_DATA
 
 // LINT.IfChange
 @ProvidePreferenceScreen(SavedAccessPointsWifiScreen.KEY)
@@ -46,11 +50,17 @@ open class SavedAccessPointsWifiScreen :
     PreferenceSummaryProvider,
     PreferenceLifecycleProvider,
     WifiPickerTracker.WifiPickerTrackerCallback {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_MOBILE_DATA)
+
     private lateinit var lifeCycleContext: PreferenceLifecycleContext
     private var wifiTracker: WifiPickerTracker? = null
 
     override val key: String
         get() = KEY
+
+    // TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.saved_networks_purpose
 
     override val title: Int
         get() = R.string.wifi_saved_access_points_label
@@ -60,17 +70,19 @@ open class SavedAccessPointsWifiScreen :
 
     override fun getMetricsCategory() = SettingsEnums.WIFI_SAVED_ACCESS_POINTS
 
-    override fun isFlagEnabled(context: Context) = Flags.deeplinkNetworkAndInternet25q4()
-
     override fun fragmentClass(): Class<out Fragment>? = SavedAccessPointsWifiSettings2::class.java
 
     override fun hasCompleteHierarchy() = false
 
     override fun getPreferenceHierarchy(context: Context, coroutineScope: CoroutineScope) =
-        preferenceHierarchy(context) {}
+        preferenceHierarchy(context) { +SavedAccessPointsWifiScreenPreference(this@SavedAccessPointsWifiScreen) }
 
     override fun getLaunchIntent(context: Context, metadata: PreferenceMetadata?) =
         makeLaunchIntent(context, SavedAccessPointsSettingsActivity::class.java, metadata?.key)
+
+    override val availabilityDescription = "There must be at least one saved network or subscription."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
 
     override fun isAvailable(context: Context): Boolean {
         val wifiManager = context.wifiManager ?: return false
@@ -156,6 +168,35 @@ open class SavedAccessPointsWifiScreen :
                 R.string.wifi_saved_all_access_points_summary,
             )
         }
+
+    class SavedAccessPointsWifiScreenPreference(
+        private val screenMetadata : SavedAccessPointsWifiScreen
+    ) : PreferenceMetadata, PreferenceSummaryProvider, PreferenceAvailabilityProvider, PersistentPreference<String> {
+        override val key : String
+            get() = "saved_networks_preference"
+
+        override val purpose : Int
+            get() = screenMetadata.purpose
+
+        override fun tags(context: Context) = arrayOf(METADATA_IN_UI)
+
+        override fun isEnabled(context: Context) : Boolean = screenMetadata.isEnabled(context)
+
+        override fun getSummary(context: Context) : CharSequence? = screenMetadata.getSummary(context)
+
+        override val availabilityDescription = screenMetadata.availabilityDescription
+
+        override fun getAvailabilityStability() = screenMetadata.getAvailabilityStability()
+
+        override fun isAvailable(context: Context) : Boolean = screenMetadata.isAvailable(context)
+
+        override val supportsWrite: Boolean
+            get() = false
+
+        override val valueType = String::class.javaObjectType
+
+        override fun storage(context: Context): KeyValueStore = createSummaryStorage(context, key)
+    }
 
     companion object {
         const val KEY = "saved_networks"

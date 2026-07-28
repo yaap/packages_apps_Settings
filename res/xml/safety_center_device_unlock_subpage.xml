@@ -15,11 +15,74 @@
   limitations under the License.
   -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:settings="http://schemas.android.com/apk/res-auto">
+    xmlns:settings="http://schemas.android.com/apk/res-auto"
+    android:title="@string/device_unlock_subpage_title">
+    <com.android.settingslib.widget.IllustrationPreference
+        android:key="device_unlock_illustration"
+        android:order="10"
+        android:selectable="false" />
+
+    <com.android.settingslib.widget.BannerMessagePreferenceGroup
+        android:key="device_unlock_issues_banner_group"
+        android:order="20"
+        settings:showDismissedPreferences="true"
+        settings:expandDismissedTitle="@string/safety_center_expand_dismissed_issues"
+        settings:collapseDismissedTitle="@string/safety_center_collapse_dismissed_issues" />
 
     <com.android.settingslib.safetycenter.SafetySourcePreference
         android:key="android_lock_screen"
-        android:title="@string/lock_screen_title"
-        settings:safetySource="AndroidLockScreen" />
+        android:order="30"
+        settings:controller="com.android.settings.safetycenter.ui.SafetySourcePreferenceController"
+        settings:keywords="@string/safety_center_android_lock_screen_search_terms"
+        settings:safetySource="AndroidLockScreen"
+        settings:profile="personal_profile" />
+
+    <com.android.settingslib.safetycenter.SafetySourcePreference
+        android:key="android_fingerprint_unlock_personal"
+        android:order="40"
+        settings:controller="com.android.settings.safetycenter.ui.SafetySourcePreferenceController"
+        settings:keywords="@string/safety_center_fingerprint_unlock_search_terms"
+        settings:safetySource="AndroidFingerprintUnlock"
+        settings:profile="personal_profile" />
+
+    <com.android.settingslib.safetycenter.SafetySourcePreference
+        android:key="android_fingerprint_unlock_work"
+        android:order="50"
+        settings:controller="com.android.settings.safetycenter.ui.SafetySourcePreferenceController"
+        settings:keywords="@string/safety_center_fingerprint_unlock_search_terms"
+        settings:safetySource="AndroidFingerprintUnlock"
+        settings:profile="work_profile" />
+
+    <com.android.settingslib.safetycenter.SafetySourcePreference
+        android:key="android_face_unlock_personal"
+        android:order="60"
+        settings:controller="com.android.settings.safetycenter.ui.SafetySourcePreferenceController"
+        settings:keywords="@string/safety_center_face_unlock_search_terms"
+        settings:safetySource="AndroidFaceUnlock"
+        settings:profile="personal_profile" />
+
+    <com.android.settingslib.safetycenter.SafetySourcePreference
+        android:key="android_face_unlock_work"
+        android:order="70"
+        settings:controller="com.android.settings.safetycenter.ui.SafetySourcePreferenceController"
+        settings:keywords="@string/safety_center_face_unlock_search_terms"
+        settings:safetySource="AndroidFaceUnlock"
+        settings:profile="work_profile" />
+
+    <com.android.settingslib.safetycenter.SafetySourcePreference
+        android:key="android_wear_unlock_personal"
+        android:order="80"
+        settings:controller="com.android.settings.safetycenter.ui.SafetySourcePreferenceController"
+        settings:keywords="@string/safety_center_wear_unlock_search_terms"
+        settings:safetySource="AndroidWearUnlock"
+        settings:profile="personal_profile" />
+
+    <com.android.settingslib.safetycenter.SafetySourcePreference
+        android:key="android_wear_unlock_work"
+        android:order="90"
+        settings:controller="com.android.settings.safetycenter.ui.SafetySourcePreferenceController"
+        settings:keywords="@string/safety_center_wear_unlock_search_terms"
+        settings:safetySource="AndroidWearUnlock"
+        settings:profile="work_profile" />
 
 </PreferenceScreen>

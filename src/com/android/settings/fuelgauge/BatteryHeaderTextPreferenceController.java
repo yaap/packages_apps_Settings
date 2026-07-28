@@ -18,6 +18,7 @@ package com.android.settings.fuelgauge;
 
 import android.content.Context;
 import android.os.BatteryManager;
+import android.os.Flags;
 import android.os.PowerManager;
 import android.util.Log;
 
@@ -74,9 +75,18 @@ public class BatteryHeaderTextPreferenceController extends BasePreferenceControl
 
     @NonNull
     private CharSequence generateLabel(@NonNull BatteryInfo info) {
+        final CharSequence batteryStatusLabel =
+                mBatterySettingsFeatureProvider.getBatteryStatusLabel(mContext, info);
+        if (batteryStatusLabel != null) {
+            return batteryStatusLabel;
+        }
         if (Utils.containsIncompatibleChargers(mContext, TAG)) {
             return mContext.getString(
                     com.android.settingslib.R.string.battery_info_status_not_charging);
+        }
+        if (info.isWirelessCharging()
+                && Utils.isWirelessIncompatibleCharging(mContext)) {
+            return mContext.getString(R.string.battery_tip_incompatible_charging_title);
         }
         if (BatteryUtils.isBatteryDefenderOn(info)
                 || FeatureFactory.getFeatureFactory()
@@ -84,6 +94,14 @@ public class BatteryHeaderTextPreferenceController extends BasePreferenceControl
                         .isExtraDefend()) {
             return mContext.getString(
                     com.android.settingslib.R.string.battery_info_status_charging_on_hold);
+        }
+        if (Flags.batteryChargingInfoApi() && info.pluggedStatus != 0
+                && mBatterySettingsFeatureProvider.isForceFullCharge(mContext)) {
+            final CharSequence forceFullChargeLabel =
+                    mBatterySettingsFeatureProvider.getForceFullChargeLabel(mContext);
+            if (forceFullChargeLabel != null) {
+                return forceFullChargeLabel;
+            }
         }
         if (info.remainingLabel != null
                 && mBatterySettingsFeatureProvider.isChargingOptimizationMode(

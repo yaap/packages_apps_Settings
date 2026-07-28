@@ -21,6 +21,7 @@ import com.android.settings.R
 import com.android.settings.accessibility.extradim.data.ExtraDimDataStore
 import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.metadata.ReadWritePermit
+import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.metadata.SwitchPreference
 import com.android.settingslib.widget.MainSwitchPreferenceBinding
 
@@ -28,7 +29,11 @@ class ExtraDimMainSwitchPreference(
     context: Context,
     private val storage: ExtraDimDataStore = ExtraDimDataStore(context),
 ) :
-    SwitchPreference(key = KEY, title = R.string.reduce_bright_colors_switch_title),
+    SwitchPreference(
+        key = KEY,
+        purpose = R.string.reduce_bright_colors_switch_purpose,
+        title = R.string.reduce_bright_colors_switch_title
+    ),
     MainSwitchPreferenceBinding {
 
     override fun storage(context: Context): KeyValueStore = storage
@@ -48,6 +53,9 @@ class ExtraDimMainSwitchPreference(
         callingPid: Int,
         callingUid: Int,
     ): @ReadWritePermit Int = ReadWritePermit.ALLOW
+
+    override val sensitivityLevel: Int
+        get() = SensitivityLevel.NO_SENSITIVITY
 
     companion object {
         const val KEY = "reduce_bright_colors_switch"

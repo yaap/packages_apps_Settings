@@ -17,21 +17,16 @@ package com.android.settings.display
 
 import android.content.ContextWrapper
 import android.content.res.Resources
-import android.platform.test.annotations.DisableFlags
-import com.android.internal.widget.LockPatternUtils
 import com.android.settings.flags.Flags
-import com.android.settings.testutils.FakeFeatureFactory
 import com.android.settings.testutils2.SettingsCatalystTestCase
-import com.android.settings.testutils.SystemProperty
-import com.android.systemui.shared.Flags as SharedFlags
 import com.google.common.truth.Truth.assertThat
 import org.junit.Test
 import org.mockito.ArgumentMatchers.anyInt
-import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stub
 
+// LINT.IfChange
 class DisplayScreenTest : SettingsCatalystTestCase() {
 
     override val preferenceScreenCreator = DisplayScreen()
@@ -61,17 +56,10 @@ class DisplayScreenTest : SettingsCatalystTestCase() {
     }
 
     @Test
-    @DisableFlags(SharedFlags.FLAG_AMBIENT_AOD)
     override fun migration() {
-        // avoid UnsupportedOperationException when getDisplay from context
-        SystemProperty("robolectric.createActivityContexts", "true").use {
-            val lockPatternUtils =
-                mock<LockPatternUtils> { on { isSecure(anyInt()) } doReturn true }
-            FakeFeatureFactory.setupForTest().securityFeatureProvider.stub {
-                on { getLockPatternUtils(any()) } doReturn lockPatternUtils
-            }
-
-            super.migration()
-        }
+        // The Display page has now diverged from the non-catalyst page and cannot be directly
+        // compared
     }
 }
+// LINT.ThenChange(com.android.settings.DisplaySettingsTest.java, DisplayApiScreenTest.kt)
+

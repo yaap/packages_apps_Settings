@@ -17,11 +17,14 @@
 package com.android.settings.network.telephony
 
 import android.content.Context
+import com.android.settings.R
 import com.android.settings.network.SubscriptionsChangeListener
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceGroup
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.preference.PreferenceBinding
 import com.android.settingslib.widget.UntitledPreferenceCategory
 
@@ -36,7 +39,16 @@ class EnabledStateUntitledCategory(val subId: Int) :
     override val key: String
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.enabled_state_container_purpose
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
+
     override fun createWidget(context: Context) = UntitledPreferenceCategory(context)
+
+    override val availabilityDescription = UI_ONLY_PREFERENCE
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context): Boolean =
         context.subscriptionManager?.isActiveSubscriptionId(subId) == true

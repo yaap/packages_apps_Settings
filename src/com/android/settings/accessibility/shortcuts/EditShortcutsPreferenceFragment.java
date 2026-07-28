@@ -21,13 +21,14 @@ import static android.provider.Settings.Secure.ACCESSIBILITY_BUTTON_MODE;
 import static android.provider.Settings.Secure.ACCESSIBILITY_BUTTON_TARGETS;
 import static android.provider.Settings.Secure.ACCESSIBILITY_DISPLAY_MAGNIFICATION_ENABLED;
 import static android.provider.Settings.Secure.ACCESSIBILITY_GESTURE_TARGETS;
-import static android.provider.Settings.Secure.ACCESSIBILITY_MAGNIFICATION_TWO_FINGER_TRIPLE_TAP_ENABLED;
+import static android.provider.Settings.Secure.ACCESSIBILITY_KEY_GESTURE_TARGETS;
 import static android.provider.Settings.Secure.ACCESSIBILITY_QS_TARGETS;
 import static android.provider.Settings.Secure.ACCESSIBILITY_SHORTCUT_TARGET_SERVICE;
 
 import static com.android.internal.accessibility.AccessibilityShortcutController.MAGNIFICATION_COMPONENT_NAME;
 import static com.android.internal.accessibility.AccessibilityShortcutController.MAGNIFICATION_CONTROLLER_NAME;
 import static com.android.settings.SettingsActivity.EXTRA_SHOW_FRAGMENT_TITLE;
+import static com.android.settingslib.metadata.PreferenceScreenBindingKeyProviderKt.EXTRA_BINDING_SCREEN_ARGS;
 
 import android.app.Activity;
 import android.app.settings.SettingsEnums;
@@ -64,21 +65,33 @@ import com.android.internal.accessibility.dialog.AccessibilityTargetHelper;
 import com.android.settings.R;
 import com.android.settings.SetupWizardUtils;
 import com.android.settings.accessibility.AccessibilitySetupWizardUtils;
+import com.android.settings.accessibility.Flags;
 import com.android.settings.accessibility.PreferenceAdapterInSuw;
 import com.android.settings.accessibility.PreferredShortcuts;
+import com.android.settings.accessibility.extensions.ParameterStringArrayUtils;
+import com.android.settings.accessibility.shared.utils.SetupWizardUtilKt;
+import com.android.settings.accessibility.shortcuts.ui.AdvancedPreference;
+import com.android.settings.accessibility.shortcuts.ui.EditShortcutsScreen;
 import com.android.settings.core.SubSettingLauncher;
 import com.android.settings.dashboard.DashboardFragment;
+import com.android.settings.widget.FocusIndicatorDrawable;
 import com.android.settingslib.core.AbstractPreferenceController;
+import com.android.settingslib.metadata.ValidatedKeyParameters;
 import com.android.settingslib.widget.SettingsThemeHelper;
 
 import com.google.android.setupcompat.template.FooterBarMixin;
+import com.google.android.setupcompat.util.DelightHelper;
 import com.google.android.setupcompat.util.WizardManagerHelper;
 import com.google.android.setupdesign.GlifPreferenceLayout;
+import com.google.android.setupdesign.template.IconMixin;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -87,12 +100,13 @@ import java.util.Set;
 public class EditShortcutsPreferenceFragment extends DashboardFragment {
     private static final String TAG = "EditShortcutsPreferenceFragment";
 
-    @VisibleForTesting
-    static final String ARG_KEY_SHORTCUT_TARGETS = "targets";
+    public static final String ARG_KEY_SHORTCUT_TARGETS = "targets";
     @VisibleForTesting
     static final String SAVED_STATE_IS_EXPANDED = "isExpanded";
     private ContentObserver mSettingsObserver;
 
+    private static final Uri KEY_GESTURE_SHORTCUT_SETTING =
+            Settings.Secure.getUriFor(ACCESSIBILITY_KEY_GESTURE_TARGETS);
     private static final Uri VOLUME_KEYS_SHORTCUT_SETTING =
             Settings.Secure.getUriFor(ACCESSIBILITY_SHORTCUT_TARGET_SERVICE);
     private static final Uri BUTTON_SHORTCUT_MODE_SETTING =
@@ -103,11 +117,13 @@ public class EditShortcutsPreferenceFragment extends DashboardFragment {
             Settings.Secure.getUriFor(ACCESSIBILITY_GESTURE_TARGETS);
     private static final Uri TRIPLE_TAP_SHORTCUT_SETTING =
             Settings.Secure.getUriFor(ACCESSIBILITY_DISPLAY_MAGNIFICATION_ENABLED);
-    private static final Uri TWO_FINGERS_DOUBLE_TAP_SHORTCUT_SETTING =
-            Settings.Secure.getUriFor(ACCESSIBILITY_MAGNIFICATION_TWO_FINGER_TRIPLE_TAP_ENABLED);
 
     private static final Uri QUICK_SETTINGS_SHORTCUT_SETTING =
             Settings.Secure.getUriFor(ACCESSIBILITY_QS_TARGETS);
+
+    private static final int FOCUS_INDICATOR_HORIZONTAL_PADDING_ADJUSTMENT_DP = 45;
+    private static final int FOCUS_INDICATOR_VERTICAL_PADDING_ADJUSTMENT_DP = -4;
+    private static final int FOCUS_INDICATOR_CORNER_RADIUS_DP = 20;
 
     @VisibleForTesting
     static final Uri[] SHORTCUT_SETTINGS = {
@@ -116,8 +132,8 @@ public class EditShortcutsPreferenceFragment extends DashboardFragment {
             BUTTON_SHORTCUT_SETTING,
             GESTURE_SHORTCUT_SETTING,
             TRIPLE_TAP_SHORTCUT_SETTING,
-            TWO_FINGERS_DOUBLE_TAP_SHORTCUT_SETTING,
             QUICK_SETTINGS_SHORTCUT_SETTING,
+            KEY_GESTURE_SHORTCUT_SETTING,
     };
 
     private Set<String> mShortcutTargets;
@@ -160,6 +176,9 @@ public class EditShortcutsPreferenceFragment extends DashboardFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
+        if (Flags.catalystEditShortcuts()) {
+            return;
+        }
         initializeArguments();
         initializePreferenceControllerArguments();
     }
@@ -167,6 +186,9 @@ public class EditShortcutsPreferenceFragment extends DashboardFragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (Flags.catalystEditShortcuts()) {
+            return;
+        }
         if (savedInstanceState != null) {
             boolean isExpanded = savedInstanceState.getBoolean(SAVED_STATE_IS_EXPANDED);
             if (isExpanded) {
@@ -185,8 +207,6 @@ public class EditShortcutsPreferenceFragment extends DashboardFragment {
                     refreshPreferenceController(GestureShortcutOptionController.class);
                 } else if (TRIPLE_TAP_SHORTCUT_SETTING.equals(uri)) {
                     refreshPreferenceController(TripleTapShortcutOptionController.class);
-                } else if (TWO_FINGERS_DOUBLE_TAP_SHORTCUT_SETTING.equals(uri)) {
-                    refreshPreferenceController(TwoFingerDoubleTapShortcutOptionController.class);
                 } else if (QUICK_SETTINGS_SHORTCUT_SETTING.equals(uri)) {
                     refreshPreferenceController(QuickSettingsShortcutOptionController.class);
                 }
@@ -204,6 +224,17 @@ public class EditShortcutsPreferenceFragment extends DashboardFragment {
     @Override
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         super.onCreatePreferences(savedInstanceState, rootKey);
+        if (Flags.catalystEditShortcuts()) {
+            Preference preference = findPreference(AdvancedPreference.KEY);
+            boolean isExpanded =
+                    savedInstanceState != null
+                            && savedInstanceState.getBoolean(SAVED_STATE_IS_EXPANDED);
+            if (preference != null) {
+                preference.setVisible(!isExpanded);
+            }
+            return;
+        }
+
 
         // Expand to show the Triple Tap shortcut if the user already has that shortcut enabled.
         // This shortcut affects touch responsiveness so we want to ensure that the user sees that
@@ -261,7 +292,23 @@ public class EditShortcutsPreferenceFragment extends DashboardFragment {
     protected RecyclerView.Adapter onCreateAdapter(PreferenceScreen preferenceScreen) {
         if (SettingsThemeHelper.isExpressiveTheme(requireContext())
                 && WizardManagerHelper.isAnySetupWizard(getIntent())) {
-            return new PreferenceAdapterInSuw(preferenceScreen);
+            return new PreferenceAdapterInSuw(preferenceScreen) {
+                @Override
+                protected void configureFocusIndicator(
+                        @NonNull FocusIndicatorDrawable.Builder builder,
+                        int position,
+                        int count) {
+                    if (!SetupWizardUtilKt.shouldShowFocusRingsInSuw(requireContext())) {
+                        return;
+                    }
+                    builder.withHorizontalPaddingAdjustment(
+                                    FOCUS_INDICATOR_HORIZONTAL_PADDING_ADJUSTMENT_DP)
+                            .withVerticalPaddingAdjustment(
+                                    FOCUS_INDICATOR_VERTICAL_PADDING_ADJUSTMENT_DP)
+                            .withCornerRadius(FOCUS_INDICATOR_CORNER_RADIUS_DP)
+                            .withPositionalCornerRadii(position, count);
+                }
+            };
         }
         return super.onCreateAdapter(preferenceScreen);
     }
@@ -282,6 +329,11 @@ public class EditShortcutsPreferenceFragment extends DashboardFragment {
             AccessibilitySetupWizardUtils.updateGlifPreferenceLayout(getContext(), layout, title,
                     /* description= */ null, icon);
 
+            if (DelightHelper.shouldApplyAnimatedIcon(getContext())) {
+                final IconMixin iconMixin = layout.getMixin(IconMixin.class);
+                iconMixin.setAnimatedIcon(R.raw.icon_visibility);
+            }
+
             FooterBarMixin mixin = layout.getMixin(FooterBarMixin.class);
             AccessibilitySetupWizardUtils.setPrimaryButton(getContext(), mixin, R.string.done,
                     () -> {
@@ -294,6 +346,10 @@ public class EditShortcutsPreferenceFragment extends DashboardFragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (Flags.catalystEditShortcuts()) {
+            return;
+        }
+
         mTouchExplorationStateChangeListener = isTouchExplorationEnabled -> {
             refreshPreferenceController(QuickSettingsShortcutOptionController.class);
             refreshPreferenceController(GestureShortcutOptionController.class);
@@ -308,6 +364,9 @@ public class EditShortcutsPreferenceFragment extends DashboardFragment {
     @Override
     public void onPause() {
         super.onPause();
+        if (Flags.catalystEditShortcuts()) {
+            return;
+        }
 
         if (mTouchExplorationStateChangeListener != null) {
             final AccessibilityManager am = getSystemService(
@@ -319,6 +378,15 @@ public class EditShortcutsPreferenceFragment extends DashboardFragment {
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        if (Flags.catalystEditShortcuts()) {
+            Preference preference = findPreference(AdvancedPreference.KEY);
+            outState.putBoolean(
+                    SAVED_STATE_IS_EXPANDED,
+                    preference != null && !preference.isVisible()
+            );
+            return;
+        }
+
         outState.putBoolean(
                 SAVED_STATE_IS_EXPANDED,
                 use(AdvancedShortcutsPreferenceController.class).isExpanded());
@@ -327,6 +395,10 @@ public class EditShortcutsPreferenceFragment extends DashboardFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+        if (Flags.catalystEditShortcuts()) {
+            return;
+        }
+
         unregisterSettingsObserver();
     }
 
@@ -380,6 +452,10 @@ public class EditShortcutsPreferenceFragment extends DashboardFragment {
 
     @Override
     public boolean onPreferenceTreeClick(Preference preference) {
+        if (Flags.catalystEditShortcuts()) {
+            return super.onPreferenceTreeClick(preference);
+        }
+
         if (getString(R.string.accessibility_shortcuts_advanced_collapsed)
                 .equals(preference.getKey())) {
             onExpanded();
@@ -488,5 +564,59 @@ public class EditShortcutsPreferenceFragment extends DashboardFragment {
                             ListFormatter.getInstance().format(featureLabels))
             );
         }
+    }
+
+    @Nullable
+    @Override
+    public String getPreferenceScreenBindingKey(@NonNull Context context) {
+        return EditShortcutsScreen.KEY;
+    }
+
+    @Nullable
+    @Override
+    @Deprecated(since = "This method will be removed once the catalyst framework stops passing the "
+            + "arguments as a bundle. Use getPreferenceScreenBindingKeyParameters instead.")
+    public Bundle getPreferenceScreenBindingArgs(@NonNull Context context) {
+        return getFragmentArguments();
+    }
+
+    @Nullable
+    @Override
+    public ValidatedKeyParameters getPreferenceScreenBindingKeyParameters(
+            @NotNull Context context
+    ) {
+        // TODO(b/440383851): understand whether we should provide parameters to any caller and
+        // put the shortcutTargets to keyParameters
+        Bundle args = getArguments();
+        String[] targets = args != null ? args.getStringArray(ARG_KEY_SHORTCUT_TARGETS) : null;
+
+        return EditShortcutsScreen.Companion.getParametersSchema().prepare(
+            Map.of(
+                ARG_KEY_SHORTCUT_TARGETS,
+                targets != null ? ParameterStringArrayUtils.toParameterString(targets) : "[]"
+            )
+        );
+    }
+
+    /**
+     * Retrieves the fragment arguments.
+     *
+     * <p>If the arguments contain PreferenceScreenBindingKeyProviderKt#EXTRA_BINDING_SCREEN_ARGS
+     * the nested bundle associated with that key will be returned. Otherwise, the original
+     * arguments are returned.
+     *
+     * @return The fragment arguments, or the nested arguments if
+     * PreferenceScreenBindingKeyProviderKt#EXTRA_BINDING_SCREEN_ARGS is present.
+     * @throws NullPointerException if the initial arguments are null or if the nested argument are
+     *                              null
+     */
+    @NonNull
+    private Bundle getFragmentArguments() {
+        Bundle arguments = getArguments();
+        Objects.requireNonNull(arguments);
+        if (arguments.containsKey(EXTRA_BINDING_SCREEN_ARGS)) {
+            arguments = Objects.requireNonNull(arguments.getBundle(EXTRA_BINDING_SCREEN_ARGS));
+        }
+        return arguments;
     }
 }

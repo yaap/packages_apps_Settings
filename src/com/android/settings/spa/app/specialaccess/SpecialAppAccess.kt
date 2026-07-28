@@ -73,5 +73,19 @@ object SpecialAppAccessPageProvider : SettingsPageProvider {
                 WriteSystemPreferencesAppListProvider,
             )
             .map { it.buildAppListInjectEntry().setLink(fromPage = owner).build() }
+            .runIfHidAccessEnabled {
+                plus(
+                    HidAccessAppListProvider.buildAppListInjectEntry()
+                        .setLink(fromPage = owner)
+                        .build()
+                )
+            }
+            .runIfComputerControlEnabled {
+                plus(
+                    ComputerControlAutomationAppListProvider.buildAppListInjectEntry()
+                        .setLink(fromPage = owner)
+                        .build()
+                )
+            }
     }
 }

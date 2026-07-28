@@ -46,6 +46,7 @@ import com.android.settings.connecteddevice.stylus.StylusFeatureProvider
 import com.android.settings.connecteddevice.stylus.StylusFeatureProviderImpl
 import com.android.settings.connecteddevice.threadnetwork.ThreadNetworkFeatureProvider
 import com.android.settings.connecteddevice.threadnetwork.ThreadNetworkFeatureProviderImpl
+import com.android.settings.connecteddevice.usb.UsbFeatureProviderImpl
 import com.android.settings.core.instrumentation.SettingsMetricsFeatureProvider
 import com.android.settings.dashboard.DashboardFeatureProviderImpl
 import com.android.settings.dashboard.suggestions.SuggestionFeatureProvider
@@ -60,6 +61,8 @@ import com.android.settings.homepage.contextualcards.ContextualCardFeatureProvid
 import com.android.settings.inputmethod.KeyboardSettingsFeatureProvider
 import com.android.settings.inputmethod.KeyboardSettingsFeatureProviderImpl
 import com.android.settings.localepicker.LocaleFeatureProviderImpl
+import com.android.settings.network.telephony.TelephonyFeatureProvider
+import com.android.settings.network.telephony.TelephonyFeatureProviderImpl
 import com.android.settings.notification.syncacrossdevices.SyncAcrossDevicesFeatureProvider
 import com.android.settings.notification.syncacrossdevices.SyncAcrossDevicesFeatureProviderImpl
 import com.android.settings.panel.PanelFeatureProviderImpl
@@ -216,5 +219,11 @@ open class FeatureFactoryImpl : FeatureFactory() {
 
     override val syncAcrossDevicesFeatureProvider: SyncAcrossDevicesFeatureProvider by lazy {
         SyncAcrossDevicesFeatureProviderImpl()
+    }
+
+    override val usbFeatureProvider by lazy { UsbFeatureProviderImpl(appContext) }
+
+    override val telephonyFeatureProvider: TelephonyFeatureProvider by lazy {
+        TelephonyFeatureProviderImpl(appContext)
     }
 }

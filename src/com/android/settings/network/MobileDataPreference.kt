@@ -29,6 +29,7 @@ import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.NoOpKeyedObservable
 import com.android.settingslib.datastore.Permissions
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.ReadWritePermit
 import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.metadata.SwitchPreference
@@ -37,9 +38,10 @@ import kotlinx.coroutines.runBlocking
 
 class MobileDataPreference :
     SwitchPreference(
-        KEY,
-        R.string.mobile_data_settings_title,
-        R.string.mobile_data_settings_summary,
+        key = KEY,
+        purpose = R.string.mobile_data_purpose,
+        title = R.string.mobile_data_settings_title,
+        summary = R.string.mobile_data_settings_summary,
     ),
     PreferenceActionMetricsProvider,
     PreferenceAvailabilityProvider {
@@ -48,6 +50,11 @@ class MobileDataPreference :
         get() = ACTION_MOBILE_DATA
 
     override fun tags(context: Context) = arrayOf(KEY_MOBILE_DATA)
+
+    override val availabilityDescription =
+        "There must be at least one subscription available and visible to the user."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
 
     override fun isAvailable(context: Context) =
         SubscriptionRepository(context).getSelectableSubscriptionInfoList().any {
@@ -82,7 +89,7 @@ class MobileDataPreference :
     ) = ReadWritePermit.ALLOW
 
     override val sensitivityLevel
-        get() = SensitivityLevel.LOW_SENSITIVITY
+        get() = SensitivityLevel.REQUIRES_CONFIRMATION
 
     @Suppress("UNCHECKED_CAST")
     private class MobileDataStorage(private val context: Context) :

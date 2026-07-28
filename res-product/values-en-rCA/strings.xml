@@ -27,28 +27,32 @@
     <string name="bluetooth_footer_mac_message" product="desktop" msgid="8944917742814573320">"Device\'s Bluetooth address: <xliff:g id="BLUETOOTH_MAC_ADDRESS">%1$s</xliff:g>"</string>
     <string name="bluetooth_ask_discovery" product="tablet" msgid="7430581669309228387">"<xliff:g id="APP_NAME">%1$s</xliff:g> wants to make your tablet visible to other Bluetooth devices for <xliff:g id="TIMEOUT">%2$d</xliff:g> seconds."</string>
     <string name="bluetooth_ask_discovery" product="default" msgid="3947027393224406367">"<xliff:g id="APP_NAME">%1$s</xliff:g> wants to make your phone visible to other Bluetooth devices for <xliff:g id="TIMEOUT">%2$d</xliff:g> seconds."</string>
-    <string name="bluetooth_ask_discovery" product="desktop" msgid="5960803243956876943">"<xliff:g id="APP_NAME">%1$s</xliff:g> wants to make your devices visible to other Bluetooth devices for <xliff:g id="TIMEOUT">%2$d</xliff:g> seconds."</string>
+    <string name="bluetooth_ask_discovery" product="desktop" msgid="3067808499809072108">"<xliff:g id="APP_NAME">%1$s</xliff:g> wants to make this device visible to other Bluetooth devices for <xliff:g id="TIMEOUT">%2$d</xliff:g> seconds."</string>
     <string name="bluetooth_ask_discovery_no_name" product="tablet" msgid="440976482246291783">"An app wants to make your tablet visible to other Bluetooth devices for <xliff:g id="TIMEOUT">%1$d</xliff:g> seconds."</string>
     <string name="bluetooth_ask_discovery_no_name" product="default" msgid="5164413774312648842">"An app wants to make your phone visible to other Bluetooth devices for <xliff:g id="TIMEOUT">%1$d</xliff:g> seconds."</string>
-    <string name="bluetooth_ask_discovery_no_name" product="desktop" msgid="3353426051482286017">"An app wants to make your device visible to other Bluetooth devices for <xliff:g id="TIMEOUT">%1$d</xliff:g> seconds."</string>
+    <string name="bluetooth_ask_discovery_no_name" product="desktop" msgid="1777937067593913629">"An app wants to make this device visible to other Bluetooth devices for <xliff:g id="TIMEOUT">%1$d</xliff:g> seconds."</string>
     <string name="bluetooth_ask_lasting_discovery" product="tablet" msgid="750347558570909906">"<xliff:g id="APP_NAME">%1$s</xliff:g> wants to make your tablet visible to other Bluetooth devices. You can change this later in Bluetooth settings."</string>
     <string name="bluetooth_ask_lasting_discovery" product="default" msgid="5844129004156080891">"<xliff:g id="APP_NAME">%1$s</xliff:g> wants to make your phone visible to other Bluetooth devices. You can change this later in Bluetooth settings."</string>
-    <string name="bluetooth_ask_lasting_discovery" product="desktop" msgid="3887794644497572519">"<xliff:g id="APP_NAME">%1$s</xliff:g> wants to make your device visible to other Bluetooth devices. You can change this later in Bluetooth settings."</string>
+    <string name="bluetooth_ask_lasting_discovery" product="desktop" msgid="3640979928435371509">"<xliff:g id="APP_NAME">%1$s</xliff:g> wants to make this device visible to other Bluetooth devices. You can change this later in Bluetooth settings."</string>
     <string name="bluetooth_ask_lasting_discovery_no_name" product="tablet" msgid="1062185767225450964">"An app wants to make your tablet visible to other Bluetooth devices. You can change this later in Bluetooth settings."</string>
     <string name="bluetooth_ask_lasting_discovery_no_name" product="default" msgid="7909547303183236140">"An app wants to make your phone visible to other Bluetooth devices. You can change this later in Bluetooth settings."</string>
     <string name="bluetooth_ask_lasting_discovery_no_name" product="desktop" msgid="6517618973665289643">"An app wants to make your device visible to other Bluetooth devices. You can change this later in Bluetooth settings."</string>
     <string name="bluetooth_ask_enablement_and_discovery" product="tablet" msgid="6187874232925632790">"<xliff:g id="APP_NAME">%1$s</xliff:g> wants to turn on Bluetooth and make your tablet visible to other devices for <xliff:g id="TIMEOUT">%2$d</xliff:g> seconds."</string>
     <string name="bluetooth_ask_enablement_and_discovery" product="default" msgid="1018495685727482700">"<xliff:g id="APP_NAME">%1$s</xliff:g> wants to turn on Bluetooth and make your phone visible to other devices for <xliff:g id="TIMEOUT">%2$d</xliff:g> seconds."</string>
-    <string name="bluetooth_ask_enablement_and_discovery" product="desktop" msgid="4841837610815256531">"<xliff:g id="APP_NAME">%1$s</xliff:g> wants to turn on Bluetooth and make your device visible to other devices for <xliff:g id="TIMEOUT">%2$d</xliff:g> seconds."</string>
+    <string name="bluetooth_ask_enablement_and_discovery" product="desktop" msgid="3963663600685390857">"<xliff:g id="APP_NAME">%1$s</xliff:g> wants to turn on Bluetooth and make this device visible to other devices for <xliff:g id="TIMEOUT">%2$d</xliff:g> seconds."</string>
     <string name="bluetooth_ask_enablement_and_discovery_no_name" product="tablet" msgid="3469927640700478737">"An app wants to turn on Bluetooth and make your tablet visible to other devices for <xliff:g id="TIMEOUT">%1$d</xliff:g> seconds."</string>
     <string name="bluetooth_ask_enablement_and_discovery_no_name" product="default" msgid="4847493437698663706">"An app wants to turn on Bluetooth and make your phone visible to other devices for <xliff:g id="TIMEOUT">%1$d</xliff:g> seconds."</string>
-    <string name="bluetooth_ask_enablement_and_discovery_no_name" product="desktop" msgid="2660699995682598369">"An app wants to turn on Bluetooth and make your device visible to other devices for <xliff:g id="TIMEOUT">%1$d</xliff:g> seconds."</string>
+    <string name="bluetooth_ask_enablement_and_discovery_no_name" product="desktop" msgid="4200605722063705557">"An app wants to turn on Bluetooth and make this device visible to other devices for <xliff:g id="TIMEOUT">%1$d</xliff:g> seconds."</string>
     <string name="bluetooth_ask_enablement_and_lasting_discovery" product="tablet" msgid="487436507630570730">"<xliff:g id="APP_NAME">%1$s</xliff:g> wants to turn on Bluetooth and make your tablet visible to other devices. You can change this later in Bluetooth settings."</string>
     <string name="bluetooth_ask_enablement_and_lasting_discovery" product="default" msgid="5169934906530139494">"<xliff:g id="APP_NAME">%1$s</xliff:g> wants to turn on Bluetooth and make your phone visible to other devices. You can change this later in Bluetooth settings."</string>
-    <string name="bluetooth_ask_enablement_and_lasting_discovery" product="desktop" msgid="2790161567276762264">"<xliff:g id="APP_NAME">%1$s</xliff:g> wants to turn on Bluetooth and make your device visible to other devices. You can change this later in Bluetooth settings."</string>
+    <string name="bluetooth_ask_enablement_and_lasting_discovery" product="desktop" msgid="6083859715114907587">"<xliff:g id="APP_NAME">%1$s</xliff:g> wants to turn on Bluetooth and make this device visible to other devices. You can change this later in Bluetooth settings."</string>
     <string name="bluetooth_ask_enablement_and_lasting_discovery_no_name" product="tablet" msgid="505214056751470551">"An app wants to turn on Bluetooth and make your tablet visible to other devices. You can change this later in Bluetooth settings."</string>
     <string name="bluetooth_ask_enablement_and_lasting_discovery_no_name" product="default" msgid="6187216564831513193">"An app wants to turn on Bluetooth and make your phone visible to other devices. You can change this later in Bluetooth settings."</string>
-    <string name="bluetooth_ask_enablement_and_lasting_discovery_no_name" product="desktop" msgid="5587751002247136990">"An app wants to turn on Bluetooth and make your device visible to other devices. You can change this later in Bluetooth settings."</string>
+    <string name="bluetooth_ask_enablement_and_lasting_discovery_no_name" product="desktop" msgid="1296067140931944135">"An app wants to turn on Bluetooth and make this device visible to other devices. You can change this later in Bluetooth settings."</string>
+    <string name="bluetooth_hearing_device_input_routing_builtin_option" product="default" msgid="604940407490893699">"This phone\'s microphone"</string>
+    <string name="bluetooth_hearing_device_input_routing_builtin_option" product="desktop" msgid="899174913125357494">"This device\'s microphone"</string>
+    <string name="bluetooth_audio_routing_summary" product="default" msgid="7087659154407454242">"Route sounds to your hearing device or phone speaker"</string>
+    <string name="bluetooth_audio_routing_summary" product="desktop" msgid="4537882886747949240">"Route sounds to your hearing device or device speaker"</string>
     <string name="encryption_and_credential_settings_summary" product="default" msgid="3741475436042800617">"Phone encrypted"</string>
     <string name="encryption_and_credential_settings_summary" product="tablet" msgid="2220021007677215054">"Device encrypted"</string>
     <string name="encryption_and_credential_settings_summary" product="desktop" msgid="2220021007677215054">"Device encrypted"</string>
@@ -123,6 +127,26 @@
     <string name="security_settings_face_enroll_introduction_control_consent_message" product="tablet" msgid="6983939010814873996"></string>
     <string name="security_settings_face_enroll_introduction_control_consent_message" product="device" msgid="6983939010814873996"></string>
     <string name="security_settings_face_enroll_introduction_control_consent_message" product="desktop" msgid="6983939010814873996"></string>
+    <string name="security_settings_face_enroll_introduction_message_unlock_disabled" product="default" msgid="8906620058505772369">"Use your face to unlock your phone or approve purchases.\n\nNote: You can’t use your face to unlock this device. For more information, contact your organization’s admin."</string>
+    <string name="security_settings_face_enroll_introduction_message_unlock_disabled" product="desktop" msgid="8527453843561896568">"Use your face to unlock your device or approve purchases.\n\nNote: You can’t use your face to unlock this device. For more information, contact your organization’s admin."</string>
+    <string name="security_settings_face_enroll_introduction_message_setup" product="default" msgid="5667326364825190475">"Use your face to unlock your phone, authorize purchases, or sign in to apps"</string>
+    <string name="security_settings_face_enroll_introduction_message_setup" product="desktop" msgid="8153291564425666563">"Use your face to unlock your device, authorize purchases, or sign in to apps"</string>
+    <string name="security_settings_face_enroll_improve_face_alert_body" product="default" msgid="827881183869443564">"Delete your current face model to set up Face Unlock again.\n\nYour face model will be permanently and securely deleted.\n\nAfter deletion, you will need your PIN, pattern, or password to unlock your phone or for authentication in apps."</string>
+    <string name="security_settings_face_enroll_improve_face_alert_body" product="desktop" msgid="3033159905539587695">"Delete your current face model to set up unlocking with face again.\n\nYour face model will be permanently and securely deleted.\n\nAfter deletion, you will need your PIN, pattern, or password to unlock your device or for authentication in apps."</string>
+    <string name="security_settings_face_enroll_improve_face_alert_body_fingerprint" product="default" msgid="657898108282284896">"Delete your current face model to set up Face Unlock again.\n\nYour face model will be permanently and securely deleted.\n\nAfter deletion, you will need your fingerprint, PIN, pattern, or password to unlock your phone or for authentication in apps."</string>
+    <string name="security_settings_face_enroll_improve_face_alert_body_fingerprint" product="desktop" msgid="4773722047433370821">"Delete your current face model to set up unlocking with face again.\n\nYour face model will be permanently and securely deleted.\n\nAfter deletion, you will need your fingerprint, PIN, pattern, or password to unlock your device or for authentication in apps."</string>
+    <string name="security_settings_face_settings_require_attention_details" product="default" msgid="9055569538299306139">"To unlock the phone, your eyes must be open"</string>
+    <string name="security_settings_face_settings_require_attention_details" product="desktop" msgid="6708465338217767003">"To unlock the device, your eyes must be open"</string>
+    <string name="security_settings_face_settings_remove_dialog_details" product="default" msgid="631912351020557148">"Your face model will be permanently and securely deleted.\n\nAfter deletion, you will need your PIN, pattern, or password to unlock your phone or for authentication in apps."</string>
+    <string name="security_settings_face_settings_remove_dialog_details" product="desktop" msgid="6371830907687898599">"Your face model will be permanently and securely deleted.\n\nAfter deletion, you will need your PIN, pattern, or password to unlock your device or for authentication in apps."</string>
+    <string name="security_settings_face_settings_remove_dialog_details_convenience" product="default" msgid="4067458308624865583">"Your face model will be permanently and securely deleted.\n\nAfter deletion, you will need your PIN, pattern, or password to unlock your phone."</string>
+    <string name="security_settings_face_settings_remove_dialog_details_convenience" product="desktop" msgid="8773532142993444478">"Your face model will be permanently and securely deleted.\n\nAfter deletion, you will need your PIN, pattern, or password to unlock your device."</string>
+    <string name="security_settings_face_remove_dialog_details_fingerprint" product="default" msgid="3697170798827306695">"Your face model will be permanently and securely deleted.\n\nAfter deletion, you will need your fingerprint, PIN, pattern, or password to unlock your phone or for authentication in apps."</string>
+    <string name="security_settings_face_remove_dialog_details_fingerprint" product="desktop" msgid="540277269419613514">"Your face model will be permanently and securely deleted.\n\nAfter deletion, you will need your fingerprint, PIN, pattern, or password to unlock your device or for authentication in apps."</string>
+    <string name="security_settings_face_remove_dialog_details_fingerprint_conv" product="default" msgid="7229672458856399521">"Your face model will be permanently and securely deleted.\n\nAfter deletion, you will need your fingerprint, PIN, pattern, or password to unlock your phone."</string>
+    <string name="security_settings_face_remove_dialog_details_fingerprint_conv" product="desktop" msgid="2106529501669220799">"Your face model will be permanently and securely deleted.\n\nAfter deletion, you will need your fingerprint, PIN, pattern, or password to unlock your device."</string>
+    <string name="security_settings_face_settings_context_subtitle" product="default" msgid="1322898999413079369">"Use Face Unlock to unlock your phone"</string>
+    <string name="security_settings_face_settings_context_subtitle" product="desktop" msgid="2969929877374962497">"Unlock your device with your face"</string>
     <string name="security_settings_face_settings_footer" product="default" msgid="3036403896485044957">"Use your face to unlock your phone or for authentication in apps, like when you sign in or approve a purchase.\n\nKeep in mind:\nYou can only have one face set up at a time. To add another face, delete the current one.\n\nLooking at the phone can unlock it when you don’t intend to.\n\nYour phone can be unlocked by someone else if it’s held up to your face.\n\nYour phone can be unlocked by someone who looks a lot like you, like an identical sibling."</string>
     <string name="security_settings_face_settings_footer" product="tablet" msgid="3467711032275909082">"Use your face to unlock your tablet or for authentication in apps, like when you sign in or approve a purchase.\n\nKeep in mind:\nYou can only have one face set up at a time. To add another face, delete the current one.\n\nLooking at the tablet can unlock it when you don’t intend to.\n\nYour tablet can be unlocked by someone else if it’s held up to your face.\n\nYour tablet can be unlocked by someone who looks a lot like you, like an identical sibling."</string>
     <string name="security_settings_face_settings_footer" product="device" msgid="6237815625247917310">"Use your face to unlock your device or for authentication in apps, like when you sign in or approve a purchase.\n\nKeep in mind:\nYou can only have one face set up at a time. To add another face, delete the current one.\n\nLooking at the device can unlock it when you don’t intend to.\n\nYour device can be unlocked by someone else if it’s held up to your face.\n\nYour device can be unlocked by someone who looks a lot like you, like an identical sibling."</string>
@@ -139,6 +163,7 @@
     <string name="security_settings_face_settings_footer_class3_attention_not_supported" product="tablet" msgid="6790505667764631343">"Use your face to unlock your tablet or verify it’s you, like when you sign in to apps or approve a purchase.\n\nKeep in mind:\nYou can only have one face set up at a time. To add another face, delete the current one.\n\nLooking at the tablet can unlock it when you don’t intend to.\n\nYour tablet can be unlocked by someone else if it’s held up to your face, even if your eyes are closed.\n\nYour tablet can be unlocked by someone who looks a lot like you, like an identical sibling."</string>
     <string name="security_settings_face_settings_footer_class3_attention_not_supported" product="device" msgid="7858917821957779752">"Use your face to unlock your device or verify it’s you, like when you sign in to apps or approve a purchase.\n\nKeep in mind:\nYou can only have one face set up at a time. To add another face, delete the current one.\n\nLooking at the device can unlock it when you don’t intend to.\n\nYour device can be unlocked by someone else if it’s held up to your face, even if your eyes are closed.\n\nYour device can be unlocked by someone who looks a lot like you, like an identical sibling."</string>
     <string name="security_settings_face_settings_footer_class3_attention_not_supported" product="desktop" msgid="7858917821957779752">"Use your face to unlock your device or verify it’s you, like when you sign in to apps or approve a purchase.\n\nKeep in mind:\nYou can only have one face set up at a time. To add another face, delete the current one.\n\nLooking at the device can unlock it when you don’t intend to.\n\nYour device can be unlocked by someone else if it’s held up to your face, even if your eyes are closed.\n\nYour device can be unlocked by someone who looks a lot like you, like an identical sibling."</string>
+    <string name="security_settings_face_footer_description_class3" product="default" msgid="3460502249540215759"></string>
     <string name="security_settings_fingerprint_enroll_introduction_v3_message" msgid="2145273491174234191">"Use your fingerprint to unlock your <xliff:g id="DEVICENAME">%s</xliff:g> or verify it\'s you, like when you sign in to apps or approve a purchase"</string>
     <string name="security_settings_fingerprint_enroll_introduction_consent_message" product="default" msgid="5101253231118659496">"Allow your child to use their fingerprint to unlock their phone or verify it’s them. This happens when they sign in to apps, approve a purchase, and more."</string>
     <string name="security_settings_fingerprint_enroll_introduction_consent_message" product="tablet" msgid="3063978167545799342">"Allow your child to use their fingerprint to unlock their tablet or verify it’s them. This happens when they sign in to apps, approve a purchase, and more."</string>
@@ -176,10 +201,96 @@
     <string name="security_settings_fingerprint_v2_home_screen_text" product="device" msgid="7398339851724524558">"Use your fingerprint to unlock your device or verify it\'s you, like when you sign in to apps"</string>
     <string name="security_settings_fingerprint_v2_home_screen_text" product="default" msgid="5376408603508393038">"Use your fingerprint to unlock your phone or verify it\'s you, like when you sign in to apps"</string>
     <string name="security_settings_fingerprint_v2_home_screen_text" product="desktop" msgid="7398339851724524558">"Use your fingerprint to unlock your device or verify it\'s you, like when you sign in to apps"</string>
+    <string name="security_settings_fingerprint_enroll_introduction_message_unlock_disabled" product="default" msgid="8536395298073746085">"Use your fingerprint to unlock your phone or approve purchases.\n\nNote: You can’t use your fingerprint to unlock this device. For more information, contact your organization’s admin."</string>
+    <string name="security_settings_fingerprint_enroll_introduction_message_unlock_disabled" product="desktop" msgid="1449873608291132102">"Use your fingerprint to unlock your device or approve purchases.\n\nNote: You can’t use your fingerprint to unlock this device. For more information, contact your organization’s admin."</string>
+    <string name="security_settings_remoteauth_enroll_introduction_message" product="default" msgid="548895260855476885">"Watch Unlock is another convenient way to unlock this phone, for example, when your fingers are wet or face isn’t recognized.\n\nYou can use your watch to unlock this phone when you:"</string>
+    <string name="security_settings_remoteauth_enroll_introduction_message" product="desktop" msgid="6975912914017982596">"Watch Unlock is another convenient way to unlock this device, for example, when your fingers are wet or face isn’t recognized.\n\nYou can use your watch to unlock this device when you:"</string>
+    <string name="security_settings_remoteauth_enroll_introduction_info_lock_open" product="default" msgid="5036235531555790028">"Your watch must be unlocked, on your wrist, and within reach of this phone. You won’t need to unlock your watch again while it’s on your wrist."</string>
+    <string name="security_settings_remoteauth_enroll_introduction_info_lock_open" product="desktop" msgid="4379534816294081846">"Your watch must be unlocked, on your wrist, and within reach of this device. You won’t need to unlock your watch again while it’s on your wrist."</string>
+    <string name="security_settings_remoteauth_enroll_introduction_info_notifications" product="default" msgid="8236871030056883849">"When this phone is unlocked, you’ll get notified on your watch. If it was unlocked when you didn’t intend to, tap the notification to lock the phone again."</string>
+    <string name="security_settings_remoteauth_enroll_introduction_info_notifications" product="desktop" msgid="1186235463250896267">"When this device is unlocked, you’ll get notified on your watch. If it was unlocked when you didn’t intend to, tap the notification to lock the device again."</string>
+    <string name="security_settings_remoteauth_enroll_finish_description" product="default" msgid="553477510982159386">"You can now use your watch to unlock this phone when you swipe up on the lock screen or tap a notification"</string>
+    <string name="security_settings_remoteauth_enroll_finish_description" product="desktop" msgid="7745250450395684994">"You can now use your watch to unlock this device when you swipe up on the lock screen or tap a notification"</string>
+    <string name="security_settings_remoteauth_settings_description" product="default" msgid="507676718189793752">"You can use your watch to unlock this phone when you swipe up on the lock screen or tap a notification"</string>
+    <string name="security_settings_remoteauth_settings_description" product="desktop" msgid="4266751960630500666">"You can use your watch to unlock this device when you swipe up on the lock screen or tap a notification"</string>
+    <string name="security_settings_remoteauth_settings_info_footer" product="default" msgid="7176165099467997157">"To use Watch Unlock, your watch must be unlocked, on your wrist, within reach, and connected to this phone. If the connection is interrupted, you’ll need to unlock the phone before you can use Watch Unlock.\n\nKeep in mind:\nYou can only have one watch set up at a time. To add another watch, first remove the current one."</string>
+    <string name="security_settings_remoteauth_settings_info_footer" product="desktop" msgid="4888346924492807836">"To use Watch Unlock, your watch must be unlocked, on your wrist, within reach, and connected to this device. If the connection is interrupted, you’ll need to unlock the device before you can use Watch Unlock.\n\nKeep in mind:\nYou can only have one watch set up at a time. To add another watch, first remove the current one."</string>
     <string name="biometric_settings_hand_back_to_guardian" product="tablet" msgid="9034560319613439593">"Hand the tablet back to your parent"</string>
     <string name="biometric_settings_hand_back_to_guardian" product="device" msgid="2149647165743006307">"Hand the device back to your parent"</string>
     <string name="biometric_settings_hand_back_to_guardian" product="default" msgid="2060265104488529949">"Hand the phone back to your parent"</string>
     <string name="biometric_settings_hand_back_to_guardian" product="desktop" msgid="2149647165743006307">"Hand the device back to your parent"</string>
+    <string name="biometric_settings_intro_with_activeunlock" product="default" msgid="8858463763101227881">"When you set up Face Unlock and Fingerprint Unlock, your phone will ask for your fingerprint when you wear a mask or are in a dark area.\n\nWatch Unlock is another convenient way to unlock your phone, for example, when your fingers are wet or face isn’t recognized."</string>
+    <string name="biometric_settings_intro_with_activeunlock" product="desktop" msgid="8647938561672414067">"When you set up unlocking with face and Fingerprint Unlock, your device will ask for your fingerprint when you wear a mask or are in a dark area.\n\nWatch Unlock is another convenient way to unlock your device, for example, when your fingers are wet or face isn’t recognized."</string>
+    <string name="biometric_settings_intro_with_fingerprint" product="default" msgid="7057949977059277103">"Watch Unlock is another convenient way to unlock your phone, for example, when your fingerprint isn’t recognized."</string>
+    <string name="biometric_settings_intro_with_fingerprint" product="desktop" msgid="3405074735777726953">"Watch Unlock is another convenient way to unlock your device, for example, when your fingerprint isn’t recognized."</string>
+    <string name="biometric_settings_intro_with_face" product="default" msgid="2726655588847229283">"Watch Unlock is another convenient way to unlock your phone, for example, when your face isn’t recognized."</string>
+    <string name="biometric_settings_intro_with_face" product="desktop" msgid="1265319569297304712">"Watch Unlock is another convenient way to unlock your device, for example, when your face isn’t recognized."</string>
+    <string name="biometric_settings_intro" product="default" msgid="1110080686857635531">"When you set up Face Unlock and Fingerprint Unlock, your phone will ask for your fingerprint when you wear a mask or are in a dark area"</string>
+    <string name="biometric_settings_intro" product="desktop" msgid="5958563780867026412">"When you set up unlocking with face and Fingerprint Unlock, your device will ask for your fingerprint when you wear a mask or are in a dark area"</string>
+    <string name="biometric_settings_use_biometric_unlock_phone" product="default" msgid="3409316849691305012">"Unlock your phone"</string>
+    <string name="biometric_settings_use_biometric_unlock_phone" product="desktop" msgid="6393832544950099600">"Unlock your device"</string>
+    <string name="setup_fingerprint_enroll_enrolling_skip_message" product="default" msgid="4979485905634049022">"You’ve chosen to use your fingerprint as one way to unlock your phone. If you skip now, you’ll need to set this up later. Setup takes only a minute or so."</string>
+    <string name="setup_fingerprint_enroll_enrolling_skip_message" product="desktop" msgid="2601670958752026992">"You’ve chosen to use your fingerprint as one way to unlock your device. If you skip now, you’ll need to set this up later. Setup takes only a minute or so."</string>
+    <string name="unlock_disable_frp_warning_content_pattern" product="default" msgid="5070116742207378028">"A pattern protects your phone if it’s lost or stolen"</string>
+    <string name="unlock_disable_frp_warning_content_pattern" product="desktop" msgid="3828076488822985960">"A pattern protects your device if it’s lost or stolen"</string>
+    <string name="unlock_disable_frp_warning_content_pattern_fingerprint" product="default" msgid="7919767908076245408">"A pattern protects your phone if it’s lost or stolen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>This also deletes the fingerprint model stored on your device. You won’t be able to use your fingerprint for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_pattern_fingerprint" product="desktop" msgid="9116397340044675886">"A pattern protects your device if it’s lost or stolen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>This also deletes the fingerprint model stored on your device. You won’t be able to use your fingerprint for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_pattern_face" product="default" msgid="37951657146319620">"A pattern protects your phone if it’s lost or stolen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Your face model will also be permanently and securely deleted. You won’t be able to use your face for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_pattern_face" product="desktop" msgid="5949258661260705528">"A pattern protects your device if it’s lost or stolen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Your face model will also be permanently and securely deleted. You won’t be able to use your face for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_pattern_face_fingerprint" product="default" msgid="2099587344025095004">"A pattern protects your phone if it’s lost or stolen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>This deletes the fingerprint model stored on your device. Your face model will also be permanently and securely deleted. You won’t be able to use your face or fingerprint for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_pattern_face_fingerprint" product="desktop" msgid="1894841959198314076">"A pattern protects your device if it’s lost or stolen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>This deletes the fingerprint model stored on your device. Your face model will also be permanently and securely deleted. You won’t be able to use your face or fingerprint for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_pin" product="default" msgid="4884453290870316484">"A PIN protects your phone if it’s lost or stolen"</string>
+    <string name="unlock_disable_frp_warning_content_pin" product="desktop" msgid="2069572855122085869">"A PIN protects your device if it’s lost or stolen"</string>
+    <string name="unlock_disable_frp_warning_content_pin_fingerprint" product="default" msgid="2874913409506418991">"A PIN protects your phone if it’s lost or stolen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>This also deletes the fingerprint model stored on your device. You won’t be able to use your fingerprint for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_pin_fingerprint" product="desktop" msgid="6361691886708081331">"A PIN protects your device if it’s lost or stolen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>This also deletes the fingerprint model stored on your device. You won’t be able to use your fingerprint for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_pin_face" product="default" msgid="263465132877970450">"A PIN protects your phone if it’s lost or stolen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Your face model will also be permanently and securely deleted. You won’t be able to use your face for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_pin_face" product="desktop" msgid="1495988088469298632">"A PIN protects your device if it’s lost or stolen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Your face model will also be permanently and securely deleted. You won’t be able to use your face for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_pin_face_fingerprint" product="default" msgid="476636556062520667">"A PIN protects your phone if it’s lost or stolen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>This deletes the fingerprint model stored on your device. Your face model will also be permanently and securely deleted. You won’t be able to use your face or fingerprint for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_pin_face_fingerprint" product="desktop" msgid="6813575631983953707">"A PIN protects your device if it’s lost or stolen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>This deletes the fingerprint model stored on your device. Your face model will also be permanently and securely deleted. You won’t be able to use your face or fingerprint for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_password" product="default" msgid="1127164258200398958">"A password protects your phone if it’s lost or stolen"</string>
+    <string name="unlock_disable_frp_warning_content_password" product="desktop" msgid="8367036366524786060">"A password protects your device if it’s lost or stolen"</string>
+    <string name="unlock_disable_frp_warning_content_password_fingerprint" product="default" msgid="4593407083619543775">"A password protects your phone if it’s lost or stolen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>This also deletes the fingerprint model stored on your device. You won’t be able to use your fingerprint for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_password_fingerprint" product="desktop" msgid="1659299201470069003">"A password protects your device if it’s lost or stolen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>This also deletes the fingerprint model stored on your device. You won’t be able to use your fingerprint for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_password_face" product="default" msgid="2765003117110694527">"A password protects your phone if it’s lost or stolen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Your face model will also be permanently and securely deleted. You won’t be able to use your face for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_password_face" product="desktop" msgid="912428236263888131">"A password protects your device if it’s lost or stolen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Your face model will also be permanently and securely deleted. You won’t be able to use your face for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_password_face_fingerprint" product="default" msgid="5660327560346083891">"A password protects your phone if it’s lost or stolen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>This deletes the fingerprint model stored on your device. Your face model will also be permanently and securely deleted. You won’t be able to use your face or fingerprint for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_password_face_fingerprint" product="desktop" msgid="5615430301170627057">"A password protects your device if it’s lost or stolen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>This deletes the fingerprint model stored on your device. Your face model will also be permanently and securely deleted. You won’t be able to use your face or fingerprint for authentication in apps."</string>
     <string name="lock_screen_intro_skip_dialog_text_frp" product="tablet" msgid="7526137517192538870">"Device protection features won’t be turned on. You won’t be able to prevent others from using this tablet if it’s lost, stolen or reset."</string>
     <string name="lock_screen_intro_skip_dialog_text_frp" product="device" msgid="1350434793163709209">"Device protection features won’t be turned on. You won’t be able to prevent others from using this device if it’s lost, stolen or reset."</string>
     <string name="lock_screen_intro_skip_dialog_text_frp" product="default" msgid="8367731653387033354">"Device protection features won’t be turned on. You won’t be able to prevent others from using this phone if it’s lost, stolen or reset."</string>
@@ -233,9 +344,9 @@
     <string name="lock_screen_pin_skip_face_message" product="default" msgid="358903382559327157">"A PIN is required to set up Face Unlock.\n\nA PIN protects the phone if it\'s lost or stolen."</string>
     <string name="lock_screen_pattern_skip_face_message" product="default" msgid="6400426500859622964">"A pattern is required to set up Face Unlock.\n\nA pattern protects the phone if it\'s lost or stolen."</string>
     <string name="lock_screen_password_skip_face_message" product="default" msgid="1555954661782997039">"A password is required to set up Face Unlock.\n\nA password protects the phone if it\'s lost or stolen."</string>
-    <string name="lock_screen_pin_skip_face_message" product="desktop" msgid="1932467886606343431">"A PIN is required to set up Face Unlock.\n\nA PIN protects the device if it\'s lost or stolen."</string>
-    <string name="lock_screen_pattern_skip_face_message" product="desktop" msgid="3670112640345602511">"A pattern is required to set up Face Unlock.\n\nA pattern protects the device if it\'s lost or stolen."</string>
-    <string name="lock_screen_password_skip_face_message" product="desktop" msgid="256847653854178247">"A password is required to set up Face Unlock.\n\nA password protects the device if it\'s lost or stolen."</string>
+    <string name="lock_screen_pin_skip_face_message" product="desktop" msgid="6077624122176446307">"A PIN is required to set up unlocking with face.\n\nA PIN protects the device if it’s lost or stolen."</string>
+    <string name="lock_screen_pattern_skip_face_message" product="desktop" msgid="7817325312874210218">"A pattern is required to set up unlocking with face.\n\nA pattern protects the device if it’s lost or stolen."</string>
+    <string name="lock_screen_password_skip_face_message" product="desktop" msgid="865444733831491817">"A password is required to set up unlocking with face.\n\nA password protects the device if it’s lost or stolen."</string>
     <string name="lock_screen_pin_skip_biometrics_message" product="tablet" msgid="6016574209955764097">"A PIN is required to set up Fingerprint Unlock and Face Unlock.\n\nA PIN protects the tablet if it’s lost or stolen."</string>
     <string name="lock_screen_pattern_skip_biometrics_message" product="tablet" msgid="5193008948766756870">"A pattern is required to set up Fingerprint Unlock and Face Unlock.\n\nA pattern protects the tablet if it’s lost or stolen."</string>
     <string name="lock_screen_password_skip_biometrics_message" product="tablet" msgid="2157871617774498976">"A password is required to set up Fingerprint Unlock and Face Unlock.\n\nA password protects the tablet if it’s lost or stolen."</string>
@@ -245,9 +356,9 @@
     <string name="lock_screen_pin_skip_biometrics_message" product="default" msgid="6614355211073480369">"A PIN is required to set up Fingerprint Unlock and Face Unlock.\n\nA PIN protects the phone if it’s lost or stolen."</string>
     <string name="lock_screen_pattern_skip_biometrics_message" product="default" msgid="969489650005656159">"A pattern is required to set up Fingerprint Unlock and Face Unlock.\n\nA pattern protects the phone if it’s lost or stolen."</string>
     <string name="lock_screen_password_skip_biometrics_message" product="default" msgid="2934343185175325368">"A password is required to set up Fingerprint Unlock and Face Unlock.\n\nA password protects the phone if it’s lost or stolen."</string>
-    <string name="lock_screen_pin_skip_biometrics_message" product="desktop" msgid="3023595865822720071">"A PIN is required to set up Fingerprint Unlock and Face Unlock.\n\nA PIN protects the device if it’s lost or stolen."</string>
-    <string name="lock_screen_pattern_skip_biometrics_message" product="desktop" msgid="3039110875534893916">"A pattern is required to set up Fingerprint Unlock and Face Unlock.\n\nA pattern protects the device if it’s lost or stolen."</string>
-    <string name="lock_screen_password_skip_biometrics_message" product="desktop" msgid="6506194961404887073">"A password is required to set up Fingerprint Unlock and Face Unlock.\n\nA password protects the device if it’s lost or stolen."</string>
+    <string name="lock_screen_pin_skip_biometrics_message" product="desktop" msgid="589104020540379702">"A PIN is required to set up unlocking with face and Fingerprint Unlock.\n\nA PIN protects the device if it’s lost or stolen."</string>
+    <string name="lock_screen_pattern_skip_biometrics_message" product="desktop" msgid="753887465655237435">"A pattern is required to set up unlocking with face and Fingerprint Unlock.\n\nA pattern protects the device if it’s lost or stolen."</string>
+    <string name="lock_screen_password_skip_biometrics_message" product="desktop" msgid="5347114264507215823">"A password is required to set up unlocking with face and Fingerprint Unlock.\n\nA password protects the device if it’s lost or stolen."</string>
     <string name="fingerprint_v2_delete_message" product="default" msgid="8723083814238510088">"This deletes the fingerprint images and model associated with \'<xliff:g id="FINGERPRINT_ID">%1$s</xliff:g>\' that are stored on your phone"</string>
     <string name="fingerprint_v2_delete_message" product="tablet" msgid="527375244730792698">"This deletes the fingerprint images and model associated with \'<xliff:g id="FINGERPRINT_ID">%1$s</xliff:g>\' that are stored on your tablet"</string>
     <string name="fingerprint_v2_delete_message" product="device" msgid="4549780655045100171">"This deletes the fingerprint images and model associated with \'<xliff:g id="FINGERPRINT_ID">%1$s</xliff:g>\' that are stored on your device"</string>
@@ -271,6 +382,8 @@
     <string name="encrypt_title" product="tablet" msgid="8915795247786124547">"Encrypt tablet"</string>
     <string name="encrypt_title" product="default" msgid="511146128799853404">"Encrypt phone"</string>
     <string name="encrypt_title" product="desktop" msgid="7536236095337188236">"Encrypt device"</string>
+    <string name="suggested_lock_settings_title" product="default" msgid="2717909185701554381">"Secure your phone"</string>
+    <string name="suggested_lock_settings_title" product="desktop" msgid="2170600598362998798">"Secure your device"</string>
     <string name="suggested_lock_settings_summary" product="tablet" msgid="8821254377043173267">"Set screen lock to protect tablet"</string>
     <string name="suggested_lock_settings_summary" product="device" msgid="4863929838844014122">"Set screen lock to protect device"</string>
     <string name="suggested_lock_settings_summary" product="default" msgid="8050809409337082738">"Set screen lock to protect phone"</string>
@@ -294,7 +407,7 @@
     <string name="bluetooth_unpair_dialog_with_associations_body" product="default" msgid="5994849277385675452">"Your phone will no longer be paired with <xliff:g id="DEVICE_NAME">%1$s</xliff:g>. <xliff:g id="APP_NAME">%2$s</xliff:g> will no longer manage the device"</string>
     <string name="bluetooth_unpair_dialog_with_associations_body" product="tablet" msgid="1783141603173138886">"Your tablet will no longer be paired with <xliff:g id="DEVICE_NAME">%1$s</xliff:g>. <xliff:g id="APP_NAME">%2$s</xliff:g> will no longer manage the device"</string>
     <string name="bluetooth_unpair_dialog_with_associations_body" product="device" msgid="4096203730149218837">"Your device will no longer be paired with <xliff:g id="DEVICE_NAME">%1$s</xliff:g>. <xliff:g id="APP_NAME">%2$s</xliff:g> will no longer manage the device"</string>
-    <string name="bluetooth_unpair_dialog_with_associations_body" product="desktop" msgid="4096203730149218837">"Your device will no longer be paired with <xliff:g id="DEVICE_NAME">%1$s</xliff:g>. <xliff:g id="APP_NAME">%2$s</xliff:g> will no longer manage the device"</string>
+    <string name="bluetooth_unpair_dialog_with_associations_body" product="desktop" msgid="6878153881802282771">"Your device will no longer be paired with <xliff:g id="DEVICE_NAME_0">%1$s</xliff:g>. <xliff:g id="APP_NAME">%2$s</xliff:g> will no longer manage <xliff:g id="DEVICE_NAME_1">%1$s</xliff:g>"</string>
     <string name="virtual_device_forget_dialog_body" product="default" msgid="2373694955133298944">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g> will no longer be connected to this phone. If you continue, some apps and app streaming may stop working."</string>
     <string name="virtual_device_forget_dialog_body" product="tablet" msgid="6223163028932322388">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g> will no longer be connected to this tablet. If you continue, some apps and app streaming may stop working."</string>
     <string name="virtual_device_forget_dialog_body" product="device" msgid="1888180822338607328">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g> will no longer be connected to this device. If you continue, some apps and app streaming may stop working."</string>
@@ -303,13 +416,15 @@
     <string name="virtual_device_details_footer_title" product="tablet" msgid="1049988675804747535">"If you forget <xliff:g id="DEVICE_NAME">%1$s</xliff:g>, it will no longer be associated to this tablet. Some permissions will be removed and some apps and app streaming may stop working."</string>
     <string name="virtual_device_details_footer_title" product="device" msgid="7548402204973923744">"If you forget <xliff:g id="DEVICE_NAME">%1$s</xliff:g>, it will no longer be associated to this device. Some permissions will be removed and some apps and app streaming may stop working."</string>
     <string name="virtual_device_details_footer_title" product="desktop" msgid="7548402204973923744">"If you forget <xliff:g id="DEVICE_NAME">%1$s</xliff:g>, it will no longer be associated to this device. Some permissions will be removed and some apps and app streaming may stop working."</string>
-    <string name="nfc_secure_toggle_summary" product="default" msgid="3515508978581011683">"Allow NFC use only when screen is unlocked"</string>
+    <string name="nfc_secure_toggle_summary" product="default" msgid="3074277711174185931">"Allow Contactless payments only when screen is unlocked"</string>
     <string name="wifi_add_app_single_network_summary" product="default" msgid="7742934005022827107">"<xliff:g id="APPNAME">%1$s</xliff:g> wants to save a network to your phone"</string>
     <string name="wifi_add_app_single_network_summary" product="tablet" msgid="93466057231937113">"<xliff:g id="APPNAME">%1$s</xliff:g> wants to save a network to your tablet"</string>
     <string name="wifi_add_app_single_network_summary" product="desktop" msgid="2116663141004049983">"<xliff:g id="APPNAME">%1$s</xliff:g> wants to save a network to your device"</string>
     <string name="wifi_add_app_networks_summary" product="default" msgid="7014504084783236696">"<xliff:g id="APPNAME">%1$s</xliff:g> wants to save these networks to your phone"</string>
     <string name="wifi_add_app_networks_summary" product="tablet" msgid="6433255556506891439">"<xliff:g id="APPNAME">%1$s</xliff:g> wants to save these networks to your tablet"</string>
     <string name="wifi_add_app_networks_summary" product="desktop" msgid="4238956725252527159">"<xliff:g id="APPNAME">%1$s</xliff:g> wants to save these networks to your device"</string>
+    <string name="wifi_hidden_network_warning" product="default" msgid="5069866459200615493">"If your router is not broadcasting a network ID but you would like to connect to it in the future, you can set the network as hidden.\n\nThis may create a security risk because your phone will regularly broadcast its signal to find the network.\n\nSetting the network as hidden will not change your router settings."</string>
+    <string name="wifi_hidden_network_warning" product="desktop" msgid="1145969827779463554">"If your router is not broadcasting a network ID but you would like to connect to it in the future, you can set the network as hidden.\n\nThis may create a security risk because your device will regularly broadcast its signal to find the network.\n\nSetting the network as hidden will not change your router settings."</string>
     <string name="auto_rotate_screen_summary" product="default" msgid="5562937346878935483">"Automatically adjust the screen orientation when you move your phone between portrait and landscape"</string>
     <string name="auto_rotate_screen_summary" product="tablet" msgid="3163709742477804994">"Automatically adjust the screen orientation when you move your tablet between portrait and landscape"</string>
     <string name="auto_rotate_screen_summary" product="desktop" msgid="3805199344834364732">"Automatically adjust the screen orientation when you move your device between portrait and landscape"</string>
@@ -319,12 +434,15 @@
     <string name="sim_lock_off" product="tablet" msgid="4619320846576958981">"Require PIN to use tablet"</string>
     <string name="sim_lock_off" product="default" msgid="2064502270875375541">"Require PIN to use phone"</string>
     <string name="sim_lock_off" product="desktop" msgid="903164661366964150">"Require PIN to use device"</string>
-    <string name="status_number" product="tablet" msgid="6746773328312218158">"MDN"</string>
     <string name="status_number" product="default" msgid="2333455505912871374">"Phone number"</string>
-    <string name="status_number_sim_slot" product="tablet" msgid="2595836594107617972">"MDN (SIM slot %1$d)"</string>
-    <string name="status_number_sim_slot" product="default" msgid="7154930998382872847">"Phone number (SIM slot %1$d)"</string>
-    <string name="status_number_sim_status" product="tablet" msgid="9003886361856568694">"MDN on SIM"</string>
+    <string name="status_number" product="tablet" msgid="2610169120378692971">"MSISDN"</string>
+    <string name="status_number" product="desktop" msgid="2610169120378692971">"MSISDN"</string>
+    <string name="status_number_sim_slot" product="default" msgid="8033783200178721660">"Phone number %1$d"</string>
+    <string name="status_number_sim_slot" product="tablet" msgid="105938472243665656">"MSISDN %1$d"</string>
+    <string name="status_number_sim_slot" product="desktop" msgid="105938472243665656">"MSISDN %1$d"</string>
     <string name="status_number_sim_status" product="default" msgid="7536755538266735352">"Phone number on SIM"</string>
+    <string name="status_number_sim_status" product="tablet" msgid="3380909445549639752">"MSISDN on SIM"</string>
+    <string name="status_number_sim_status" product="desktop" msgid="3380909445549639752">"MSISDN on SIM"</string>
     <string name="storage_wizard_init_v2_internal_title" product="tablet" msgid="2049551739429034707">"Format SD card for internal storage"</string>
     <string name="storage_wizard_init_v2_internal_summary" product="tablet" msgid="6130017080675241337">"Store apps &amp; media to use on this tablet only. &lt;a href=https://support.google.com/android/answer/12153449&gt;Learn more about setting up an SD card&lt;/a&gt;."</string>
     <string name="storage_wizard_init_v2_internal_action" product="tablet" msgid="560506072518373839">"Format"</string>
@@ -344,6 +462,7 @@
     <string name="main_clear_desc" product="default" msgid="1888412491866186706">"This will erase all data from your phone’s "<b>"internal storage"</b>", including:\n\n"<li>"Your Google Account"</li>\n<li>"System and app data and settings"</li>\n<li>"Downloaded apps"</li></string>
     <string name="main_clear_desc" product="desktop" msgid="405802272460355609">"This will erase all data from your device’s "<b>"internal storage"</b>", including:\n\n"<li>"Your Google Account"</li>\n<li>"System and app data and settings"</li>\n<li>"Downloaded apps"</li></string>
     <string name="main_clear_accounts" product="default" msgid="3604029744509330786">\n\n"You are currently signed into the following accounts:\n"</string>
+    <string name="main_clear_accounts_count" product="default" msgid="8431492930725475832">"{count,plural, =1{\n\nYou are currently signed into the following account:\n}other{\n\nYou are currently signed into the following accounts:\n}}"</string>
     <string name="main_clear_other_users_present" product="default" msgid="7750368595882863399">\n\n"There are other users present on this device.\n"</string>
     <string name="main_clear_desc_erase_external_storage" product="nosdcard" msgid="5834269984459195918">\n\n"To clear music, pictures, and other user data, the "<b>"USB storage"</b>" needs to be erased."</string>
     <string name="main_clear_desc_erase_external_storage" product="default" msgid="2891180770413959600">\n\n"To clear music, pictures, and other user data, the "<b>"SD card"</b>" needs to be erased."</string>
@@ -386,6 +505,8 @@
     <string name="accessibility_daltonizer_about_intro_text" product="default" msgid="5234458848997942613">"Adjust how colors display on your phone"</string>
     <string name="accessibility_daltonizer_about_intro_text" product="tablet" msgid="5300401841391736534">"Adjust how colors display on your tablet"</string>
     <string name="accessibility_daltonizer_about_intro_text" product="desktop" msgid="8908526728447739478">"Adjust how colors display on your device"</string>
+    <string name="accessibility_hearing_device_ringtone_alarm_routing_title" product="default" msgid="6245455325032243921">"Ringtones and alarms"</string>
+    <string name="accessibility_hearing_device_ringtone_alarm_routing_title" product="desktop" msgid="1096901437012239116">"Alarms"</string>
     <string name="reduce_bright_colors_preference_subtitle" product="default" msgid="9162440023310121356">"Extra dim can be helpful when: &lt;ol&gt; &lt;li&gt; Your phone’s default minimum brightness is still too bright&lt;/li&gt; &lt;li&gt; You’re using your phone in dark situations, like at night or in a dark room before bed&lt;/li&gt; &lt;/ol&gt;"</string>
     <string name="reduce_bright_colors_preference_subtitle" product="tablet" msgid="5747242697890472822">"Extra dim can be helpful when: &lt;ol&gt; &lt;li&gt; Your tablet’s default minimum brightness is still too bright&lt;/li&gt; &lt;li&gt; You’re using your tablet in dark situations, like at night or in a dark room before bed&lt;/li&gt; &lt;/ol&gt;"</string>
     <string name="reduce_bright_colors_preference_subtitle" product="desktop" msgid="3114657547062643684">"Extra dim can be helpful when: &lt;ol&gt; &lt;li&gt; Your device’s default minimum brightness is still too bright&lt;/li&gt; &lt;li&gt; You’re using your device in dark situations, like at night or in a dark room before bed&lt;/li&gt; &lt;/ol&gt;"</string>
@@ -481,9 +602,12 @@
     <string name="lockscreen_trivial_controls_summary" product="default" msgid="42562533085885152">"Without unlocking your phone"</string>
     <string name="lockscreen_trivial_controls_summary" product="tablet" msgid="9052068482124729345">"Without unlocking your tablet"</string>
     <string name="lockscreen_trivial_controls_summary" product="desktop" msgid="8183513643394359332">"Without unlocking your device"</string>
-    <string name="device_supervision_switch_title" product="default" msgid="5711051584668311080">"Controls for this phone"</string>
-    <string name="device_supervision_switch_title" product="tablet" msgid="5400384750840247844">"Controls for this tablet"</string>
-    <string name="device_supervision_switch_title" product="desktop" msgid="2140192989162020111">"Controls for this device"</string>
+    <string name="device_supervision_features_title" product="default" msgid="8612616791672564436">"Controls for this phone"</string>
+    <string name="device_supervision_features_title" product="tablet" msgid="8301949957844501200">"Controls for this tablet"</string>
+    <string name="device_supervision_features_title" product="desktop" msgid="5041758196166273467">"Controls for this device"</string>
+    <string name="supervision_apps_managing_this_device_title" product="default" msgid="8369485156586947413">"Managing this phone"</string>
+    <string name="supervision_apps_managing_this_device_title" product="tablet" msgid="1795086998459265754">"Managing this tablet"</string>
+    <string name="supervision_apps_managing_this_device_title" product="desktop" msgid="3365839381660880395">"Managing this device"</string>
     <string name="supervision_pin_length_message" product="default" msgid="7142997986515800901">"{count,plural, =1{Enter a PIN with at least # digit. You’ll use it to manage controls on this phone.}other{Enter a PIN with at least # digits. You’ll use it to manage controls on this phone.}}"</string>
     <string name="supervision_pin_length_message" product="tablet" msgid="1772471880165492225">"{count,plural, =1{Enter a PIN with at least # digit. You’ll use it to manage controls on this tablet.}other{Enter a PIN with at least # digits. You’ll use it to manage controls on this tablet.}}"</string>
     <string name="supervision_pin_length_message" product="desktop" msgid="7689193597679628648">"{count,plural, =1{Enter a PIN with at least # digit. You’ll use it to manage controls on this device.}other{Enter a PIN with at least # digits. You’ll use it to manage controls on this device.}}"</string>
@@ -493,12 +617,18 @@
     <string name="supervision_delete_pin_confirm_message" product="default" msgid="4142432379507014709">"Your parental controls PIN will be deleted permanently. Any controls you set up for users on this phone using this PIN will be turned off."</string>
     <string name="supervision_delete_pin_confirm_message" product="tablet" msgid="3676061526109959657">"Your parental controls PIN will be deleted permanently. Any controls you set up for users on this tablet using this PIN will be turned off."</string>
     <string name="supervision_delete_pin_confirm_message" product="desktop" msgid="9122403113168273844">"Your parental controls PIN will be deleted permanently. Any controls you set up for users on this device using this PIN will be turned off."</string>
+    <string name="supervision_multiple_providers_delete_pin_confirm_message" product="default" msgid="7121239686502410611">"Your parental controls PIN will be deleted. You can still manage parental controls from the apps &amp; services managing this phone."</string>
+    <string name="supervision_multiple_providers_delete_pin_confirm_message" product="tablet" msgid="1918406961760478041">"Your parental controls PIN will be deleted. You can still manage parental controls from the apps &amp; services managing this tablet."</string>
+    <string name="supervision_multiple_providers_delete_pin_confirm_message" product="desktop" msgid="5187413417226276855">"Your parental controls PIN will be deleted. You can still manage parental controls from the apps &amp; services managing this device."</string>
     <string name="device_supervision_pin_management_footer" product="default" msgid="6890338658180593450">"Your parental controls PIN is the same for all users on this phone"</string>
     <string name="device_supervision_pin_management_footer" product="tablet" msgid="4013172842200145374">"Your parental controls PIN is the same for all users on this tablet"</string>
     <string name="device_supervision_pin_management_footer" product="desktop" msgid="6539340160423866980">"Your parental controls PIN is the same for all users on this device"</string>
     <string name="supervision_multi_profile_error_message" product="default" msgid="4185376425933293903">"Because there are multiple profiles on this phone, parental controls can’t be turned on."</string>
     <string name="supervision_multi_profile_error_message" product="tablet" msgid="5021937906206996760">"Because there are multiple profiles on this tablet, parental controls can’t be turned on."</string>
     <string name="supervision_multi_profile_error_message" product="desktop" msgid="7222938263475617299">"Because there are multiple profiles on this device, parental controls can’t be turned on."</string>
+    <string name="supervision_setup_multi_profile_error_message" product="default" msgid="7949405920898610718">"There are multiple profiles on this phone"</string>
+    <string name="supervision_setup_multi_profile_error_message" product="tablet" msgid="6028864049946511965">"There are multiple profiles on this tablet"</string>
+    <string name="supervision_setup_multi_profile_error_message" product="desktop" msgid="3447724427845313093">"There are multiple profiles on this device"</string>
     <string name="auto_rotate_summary_a11y" product="default" msgid="2813368383309985185">"When you move your phone between portrait and landscape"</string>
     <string name="auto_rotate_summary_a11y" product="tablet" msgid="4708833814245913981">"When you move your tablet between portrait and landscape"</string>
     <string name="auto_rotate_summary_a11y" product="desktop" msgid="1342493478927297535">"When you move your device between portrait and landscape"</string>
@@ -535,4 +665,150 @@
     <string name="audio_sharing_confirm_dialog_content_with_link" product="desktop" msgid="668964968208427465">"To start sharing audio, first connect LE Audio headphones to your device. "<annotation id="link">"Learn more about compatible devices"</annotation></string>
     <string name="network_dashboard_summary_mobile" product="default" msgid="1856501121269595911">"Mobile, Wi‑Fi, hotspot"</string>
     <string name="network_dashboard_summary_mobile" product="desktop" msgid="8770767156162473221">"Wi‑Fi, mobile, hotspot"</string>
+    <string name="top_intro_region_title" product="default" msgid="915184646302419632">"The region you choose affects how your phone displays time, dates, temperature, and more"</string>
+    <string name="top_intro_region_title" product="desktop" msgid="4176286015398594299">"The region you choose affects how your device displays time, dates, temperature, and more"</string>
+    <string name="private_space_fingerprint_enroll_introduction_footer_message" product="default" msgid="5424764618312876122">"Your private space can be unlocked when you don’t intend to, like if someone holds up your phone to your finger."</string>
+    <string name="private_space_fingerprint_enroll_introduction_footer_message" product="desktop" msgid="1777628194784795967">"Your private space can be unlocked when you don’t intend to, like if someone holds up your device to your finger."</string>
+    <string name="private_space_face_enroll_introduction_info_looking" product="default" msgid="305936839337361784">"Looking at the phone can unlock private space even when you don’t intend to. Your private space can also be unlocked by someone who looks a lot like you, like an identical sibling, or if someone holds the device up to your face."</string>
+    <string name="private_space_face_enroll_introduction_info_looking" product="desktop" msgid="7384750093083248112">"Looking at the device can unlock private space even when you don’t intend to. Your private space can also be unlocked by someone who looks a lot like you, like an identical sibling, or if someone holds the device up to your face."</string>
+    <string name="private_space_face_settings_footer" product="default" msgid="212607111539219116">"Use your face to unlock your private space.\n\nKeep in mind:\nYou can only have one face set up at a time. To add another face, delete the current one.\n\nLooking at the phone can unlock it when you don’t intend to.\n\nYour private space can be unlocked by someone else if your device is held up to your face.\n\nYour private space can be unlocked by someone who looks a lot like you, like an identical sibling."</string>
+    <string name="private_space_face_settings_footer" product="desktop" msgid="5379113827824389147">"Use your face to unlock your private space.\n\nKeep in mind:\nYou can only have one face set up at a time. To add another face, delete the current one.\n\nLooking at the device can unlock it when you don’t intend to.\n\nYour private space can be unlocked by someone else if your device is held up to your face.\n\nYour private space can be unlocked by someone who looks a lot like you, like an identical sibling."</string>
+    <string name="private_space_delete_summary" product="default" msgid="6731333342020734606">"Your private space will be permanently deleted from your device. \n\nAll apps in your space and their data will also be permanently deleted from your phone’s "<b>"internal storage"</b>"."</string>
+    <string name="private_space_delete_summary" product="desktop" msgid="2654261524341800235">"Your private space will be permanently deleted from your device. \n\nAll apps in your space and their data will also be permanently deleted from your device’s "<b>"internal storage"</b>"."</string>
+    <string name="reset_private_space_delete_dialog" product="default" msgid="8929854517683078216">"If you have a private space on your device, it will be permanently deleted and the Google Account added to your space will be removed. \n\nAll apps in your space and their data will also be permanently deleted from your phone’s "<b>"internal storage"</b>"."</string>
+    <string name="reset_private_space_delete_dialog" product="desktop" msgid="212701183647817405">"If you have a private space on your device, it will be permanently deleted and the Google Account added to your space will be removed. \n\nAll apps in your space and their data will also be permanently deleted from your device’s "<b>"internal storage"</b>"."</string>
+    <string name="style_suggestion_title" product="default" msgid="5542169058581069091">"Customize your phone"</string>
+    <string name="style_suggestion_title" product="desktop" msgid="6633259602241390541">"Customize your device"</string>
+    <string name="storage_os_detail_dialog_system" product="default" msgid="900519793933569665">"This includes your operating system and the files that are needed to keep your phone running smoothly. To protect their integrity, these files can’t be accessed."</string>
+    <string name="storage_os_detail_dialog_system" product="desktop" msgid="6775876458851128896">"This includes your operating system and the files that are needed to keep your device running smoothly. To protect their integrity, these files can’t be accessed."</string>
+    <string name="activity_not_found" product="default" msgid="6925342827420626978">"Application is not installed on your phone."</string>
+    <string name="activity_not_found" product="desktop" msgid="2440711947892938614">"Application is not installed on your device."</string>
+    <string name="notification_listener_security_warning_summary" product="default" msgid="6430760593378501603">"The <xliff:g id="NOTIFICATION_LISTENER_NAME">%1$s</xliff:g> app will be able to read all notifications, including personal information such as contact names, photos, and the text of messages you receive. This app will also be able to snooze or dismiss notifications or take action on buttons in notifications, including answering phone calls. \n\nThis will also give the app the ability to turn Do Not Disturb on or off and change related settings."</string>
+    <string name="notification_listener_security_warning_summary" product="desktop" msgid="4220921495800674165">"The <xliff:g id="NOTIFICATION_LISTENER_NAME">%1$s</xliff:g> app will be able to read all notifications, including personal information such as contact names, photos, and the text of messages you receive. This app will also be able to snooze or dismiss notifications or take action on buttons in notifications. \n\nThis will also give the app the ability to turn Do Not Disturb on or off and change related settings."</string>
+    <string name="notif_type_ongoing_summary" product="default" msgid="4609736750050399900">"Ongoing communication from apps in use, navigation, phone calls, and more"</string>
+    <string name="notif_type_ongoing_summary" product="desktop" msgid="2095885335561216334">"Ongoing communication from apps in use, navigation, and more"</string>
+    <string name="usb_default_info" product="default" msgid="3102841746337088387">"When another device is connected and your phone is unlocked, these settings will be applied. Only connect to trusted devices."</string>
+    <string name="usb_default_info" product="desktop" msgid="4425262755067415698">"When another device is connected and this device is unlocked, these settings will be applied. Only connect to trusted devices."</string>
+    <string name="disabled_by_policy_content_biometric_parental_consent" product="default" msgid="1632474961586870159">"Hand the phone to your parent to start setting this up"</string>
+    <string name="disabled_by_policy_content_biometric_parental_consent" product="desktop" msgid="7693039404410022862">"Hand the device to your parent to start setting this up"</string>
+    <string name="disabled_by_policy_parental_consent" product="default" msgid="3228137840263314415">"Hand the phone to your parent to allow this setting to be changed."</string>
+    <string name="disabled_by_policy_parental_consent" product="desktop" msgid="1779899136601893549">"Hand the device to your parent to allow this setting to be changed."</string>
+    <string name="condition_zen_summary_phone_muted" product="default" msgid="1107174080067940534">"Phone muted"</string>
+    <string name="condition_zen_summary_phone_muted" product="desktop" msgid="3749597102905584774">"Device muted"</string>
+    <string name="disabled_feature_reason_slow_down_phone" product="default" msgid="8659735491296581891">"This feature has been turned off because it slows down your phone"</string>
+    <string name="disabled_feature_reason_slow_down_phone" product="desktop" msgid="7800573784344580283">"This feature has been turned off because it slows down your device"</string>
+    <string name="mobile_data_settings_summary_auto_switch" product="default" msgid="3598846878817104930">"Phone will automatically switch to this carrier when in range"</string>
+    <string name="mobile_data_settings_summary_auto_switch" product="desktop" msgid="524891657197879512">"Device will automatically switch to this carrier when in range"</string>
+    <string name="thread_network_settings_footer_title" product="default" msgid="1317201778097436182">"Thread helps connect your smart home devices, boosting efficiency, and performance.\n\nWhen enabled, this device is eligible to join a Thread network, allowing control of Matter supported devices through this phone."</string>
+    <string name="thread_network_settings_footer_title" product="desktop" msgid="2799861559795140920">"Thread helps connect your smart home devices, boosting efficiency, and performance.\n\nWhen enabled, this device is eligible to join a Thread network, allowing control of Matter supported devices through this device."</string>
+    <string name="bluetooth_connect_access_dialog_content" product="default" msgid="4057807008863531756">"<xliff:g id="DEVICE_NAME_0">%1$s</xliff:g> wants to connect to this phone.\n\nYou haven’t connected to <xliff:g id="DEVICE_NAME_1">%2$s</xliff:g> before."</string>
+    <string name="bluetooth_connect_access_dialog_content" product="desktop" msgid="6980101860822297332">"<xliff:g id="DEVICE_NAME_0">%1$s</xliff:g> wants to connect to this device.\n\nYou haven’t connected to <xliff:g id="DEVICE_NAME_1">%2$s</xliff:g> before."</string>
+    <string name="bluetooth_details_permissions_sync_title" product="default" msgid="8409065081160402814">"Sync permissions from phone"</string>
+    <string name="bluetooth_details_permissions_sync_title" product="desktop" msgid="2734017312695525620">"Sync permissions from device"</string>
+    <string name="bluetooth_details_permissions_sync_summary" product="default" msgid="8315177725634711706">"Give your watch the same app permissions that you’ve allowed on this phone"</string>
+    <string name="bluetooth_details_permissions_sync_summary" product="desktop" msgid="6376301353616747859">"Give your watch the same app permissions that you’ve allowed on this device"</string>
+    <string name="audio_sharing_comfirm_dialog_content" product="default" msgid="5014698176442588172">"To start sharing audio, first connect LE Audio headphones to your phone"</string>
+    <string name="audio_sharing_comfirm_dialog_content" product="desktop" msgid="162861653770613243">"To start sharing audio, first connect LE Audio headphones to your device"</string>
+    <string name="supervision_web_content_filters_top_intro" product="default" msgid="4953123663358923689">"Help filter explicit content on some apps and browsers on this phone. Explicit content may still show on other apps, devices, or browsers."</string>
+    <string name="supervision_web_content_filters_top_intro" product="desktop" msgid="9032662719049305184">"Help filter explicit content on some apps and browsers on this device. Explicit content may still show on other apps, devices, or browsers."</string>
+    <string name="dream_setup_description" product="default" msgid="8438386366154615008">"Choose what you’ll see on your screen when your tablet is docked. Your device may use more energy when a screen saver is used."</string>
+    <string name="dream_setup_description" product="desktop" msgid="5397812906934631491">"Choose what you’ll see on your screen when your device is docked. Your device may use more energy when a screen saver is used."</string>
+    <string name="display_settings" product="default" msgid="3387606354749476666">"Display"</string>
+    <string name="sound_settings" product="default" msgid="1962377912191328861">"Sound &amp; vibration"</string>
+    <string name="sound_settings" product="desktop" msgid="9077346630096747379">"Sound"</string>
+    <string name="security_settings_face_enroll_consent_introduction_title" product="default" msgid="4756935885820420260">"Allow face unlock"</string>
+    <string name="security_settings_face_enroll_consent_introduction_title" product="desktop" msgid="7194334858085778245">"Allow unlocking with face"</string>
+    <string name="security_settings_face_enroll_introduction_title" product="default" msgid="193847167859538900">"Unlock with your face"</string>
+    <string name="security_settings_face_enroll_introduction_title" product="desktop" msgid="193847167859538900">"Unlock with your face"</string>
+    <string name="security_settings_face_footer_learn_more_description" product="default" msgid="2747425608262449212"></string>
+    <string name="security_settings_face_footer_learn_more_description" product="desktop" msgid="2747425608262449212"></string>
+    <string name="security_settings_fingerprint_description" product="default" msgid="1962781280961450006"></string>
+    <string name="security_settings_fingerprint_description" product="desktop" msgid="1962781280961450006"></string>
+    <string name="security_settings_face_preference_title" product="default" msgid="1088234386271687481">"Face Unlock"</string>
+    <string name="security_settings_face_preference_title" product="desktop" msgid="120316049914434185">"Unlock with face"</string>
+    <string name="security_settings_face_profile_preference_title" product="default" msgid="1915373190432876537">"Face Unlock for work"</string>
+    <string name="security_settings_face_profile_preference_title" product="desktop" msgid="4371857798884456701">"Unlock with face for work"</string>
+    <string name="security_settings_face_enroll_education_title" product="default" msgid="8682081307863421676">"How to set up Face Unlock"</string>
+    <string name="security_settings_face_enroll_education_title" product="desktop" msgid="8858193013681141921">"How to set up unlocking with face"</string>
+    <string name="security_settings_face_enroll_education_title_accessibility" product="default" msgid="3901871844780048667">"Set up Face Unlock"</string>
+    <string name="security_settings_face_enroll_education_title_accessibility" product="desktop" msgid="5399523062928830699">"Set up unlocking with face"</string>
+    <string name="security_settings_face_enroll_education_accessibility_dialog_message" product="default" msgid="2707415907634952273">"If accessibility Face Unlock is turned off, some setup steps may not work properly with TalkBack."</string>
+    <string name="security_settings_face_enroll_education_accessibility_dialog_message" product="desktop" msgid="2684063732021756512">"If accessibility unlocking with face is turned off, some setup steps may not work properly with TalkBack."</string>
+    <string name="security_settings_face_enroll_intro_timeout_dialog_title" product="default" msgid="5745003455521734580">"Can\'t set up Face Unlock"</string>
+    <string name="security_settings_face_enroll_intro_timeout_dialog_title" product="desktop" msgid="3376165761884832052">"Can\'t set up unlocking with face"</string>
+    <string name="security_settings_face_enroll_should_re_enroll_title" product="default" msgid="608503397130033829">"Improve Face Unlock performance"</string>
+    <string name="security_settings_face_enroll_should_re_enroll_title" product="desktop" msgid="6884989592846418817">"Improve unlocking with face performance"</string>
+    <string name="security_settings_face_enroll_should_re_enroll_subtitle" product="default" msgid="4780958925117205199">"Set up Face Unlock again"</string>
+    <string name="security_settings_face_enroll_should_re_enroll_subtitle" product="desktop" msgid="8465796920263573315">"Set up unlocking with face again"</string>
+    <string name="security_settings_face_enroll_must_re_enroll_title" product="default" msgid="6236623084036789183">"Set up Face Unlock again"</string>
+    <string name="security_settings_face_enroll_must_re_enroll_title" product="desktop" msgid="698089042328381491">"Set up unlocking with face again"</string>
+    <string name="security_settings_face_enroll_improve_face_alert_title" product="default" msgid="7920547352014027595">"Set up Face Unlock"</string>
+    <string name="security_settings_face_enroll_improve_face_alert_title" product="desktop" msgid="194826533308033819">"Set up unlocking with face"</string>
+    <string name="security_settings_face_settings_use_face_category" product="default" msgid="6762864609006881666">"Use Face Unlock for"</string>
+    <string name="security_settings_face_settings_use_face_category" product="desktop" msgid="8697471702832224831">"Use unlocking with face for"</string>
+    <string name="security_settings_face_settings_preferences_category" product="default" msgid="1702437691901552436">"When using Face Unlock"</string>
+    <string name="security_settings_face_settings_preferences_category" product="desktop" msgid="8363429360453118065">"When using unlocking with face"</string>
+    <string name="security_settings_face_settings_require_confirmation_details" product="default" msgid="8094562591947583249">"When using Face Unlock in apps, always require confirmation step"</string>
+    <string name="security_settings_face_settings_require_confirmation_details" product="desktop" msgid="3454469557534188210">"When using unlocking with face in apps, always require confirmation step"</string>
+    <string name="security_settings_face_settings_enroll" product="default" msgid="478045480258037112">"Set up Face Unlock"</string>
+    <string name="security_settings_face_settings_enroll" product="desktop" msgid="1975696698406819144">"Set up unlocking with face"</string>
+    <string name="security_settings_activeunlock_require_face_fingerprint_setup_title" product="default" msgid="3091207415358585820">"Set up Face or Fingerprint Unlock first"</string>
+    <string name="security_settings_activeunlock_require_face_fingerprint_setup_title" product="desktop" msgid="3568327776503208253">"Set up to unlock with face or Fingerprint Unlock first"</string>
+    <string name="security_settings_activeunlock_require_face_setup_title" product="default" msgid="5451139327828979605">"Set up Face Unlock first"</string>
+    <string name="security_settings_activeunlock_require_face_setup_title" product="desktop" msgid="491404270155205470">"Set up unlocking with face first"</string>
+    <string name="security_settings_biometric_preference_title" product="default" msgid="301824710578384746">"Face &amp; Fingerprint Unlock"</string>
+    <string name="security_settings_biometric_preference_title" product="desktop" msgid="1931938360990718210">"Unlock with face &amp; Fingerprint Unlock"</string>
+    <string name="security_settings_work_biometric_preference_title" product="default" msgid="5408195383591972572">"Face &amp; Fingerprint Unlock for work"</string>
+    <string name="security_settings_work_biometric_preference_title" product="desktop" msgid="3219742888338830428">"Unlock with face &amp; Fingerprint Unlock for work"</string>
+    <string name="biometric_settings_add_face_in_split_mode_title" product="default" msgid="3738938046173770733">"Can’t set up Face Unlock"</string>
+    <string name="biometric_settings_add_face_in_split_mode_title" product="desktop" msgid="4418550129265286960">"Can’t set up unlocking with face"</string>
+    <string name="biometric_settings_add_face_in_split_mode_message" product="default" msgid="6022144462744038426">"Exit split screen to set up Face Unlock"</string>
+    <string name="biometric_settings_add_face_in_split_mode_message" product="desktop" msgid="3957054157286969169">"Exit split screen to set up unlocking with face"</string>
+    <string name="private_space_biometric_title" product="default" msgid="6023715691209902125">"Face &amp; Fingerprint Unlock"</string>
+    <string name="private_space_biometric_title" product="desktop" msgid="7653829341622235589">"Unlock with face &amp; Fingerprint Unlock"</string>
+    <string name="private_space_biometric_unlock_title" product="default" msgid="4621918727209012807">"Face &amp; Fingerprint Unlock for private space"</string>
+    <string name="private_space_biometric_unlock_title" product="desktop" msgid="8876292883349974060">"Unlocking with face &amp; Fingerprint Unlock for private space"</string>
+    <string name="private_space_face_title" product="default" msgid="6298308773515063762">"Face Unlock"</string>
+    <string name="private_space_face_title" product="desktop" msgid="5330390437157810466">"Unlock with face"</string>
+    <string name="private_space_face_unlock_title" product="default" msgid="6728077494636366004">"Face Unlock for private space"</string>
+    <string name="private_space_face_unlock_title" product="desktop" msgid="5927793887938524983">"Unlocking with face for private space"</string>
+    <string name="private_space_face_enroll_introduction_title" product="default" msgid="2639038889945177295">"Set up Face Unlock for private space"</string>
+    <string name="private_space_face_enroll_introduction_title" product="desktop" msgid="2178134262452414008">"Set up unlocking with face for private space"</string>
+    <string name="private_space_face_settings_require_confirmation_details" product="default" msgid="53946777371581345">"When using Face Unlock, always require confirmation step"</string>
+    <string name="private_space_face_settings_require_confirmation_details" product="desktop" msgid="8714390228758015030">"When unlocking with face, always require confirmation step"</string>
+    <string name="face_unlock_skip_face" product="default" msgid="4637244610483409257">"Continue without Face Unlock"</string>
+    <string name="face_unlock_skip_face" product="desktop" msgid="7830641351453909812">"Continue without unlocking with face"</string>
+    <string name="unlock_disable_frp_warning_content_face_authbound_keys" product="default" msgid="6653509931873771815">"Your screen lock and Face Unlock will be removed.<xliff:g id="EMPTY_LINE_0">
+
+</xliff:g>Tap to pay won’t be available.<xliff:g id="EMPTY_LINE_1">
+
+</xliff:g>Wallet, payment, and other apps that require authentication may not work properly."</string>
+    <string name="unlock_disable_frp_warning_content_face_authbound_keys" product="desktop" msgid="6850817681051261780">"Your screen lock and unlocking with face will be removed.<xliff:g id="EMPTY_LINE_0">
+
+</xliff:g>Tap to pay won’t be available.<xliff:g id="EMPTY_LINE_1">
+
+</xliff:g>Wallet, payment, and other apps that require authentication may not work properly."</string>
+    <string name="unlock_disable_frp_warning_content_face_fingerprint_authbound_keys" product="default" msgid="2154403457672365886">"Your screen lock and Face &amp; Fingerprint Unlock will be removed.<xliff:g id="EMPTY_LINE_0">
+
+</xliff:g>Tap to pay won’t be available.<xliff:g id="EMPTY_LINE_1">
+
+</xliff:g>Wallet, payment, and other apps that require authentication may not work properly."</string>
+    <string name="unlock_disable_frp_warning_content_face_fingerprint_authbound_keys" product="desktop" msgid="6493782879075394085">"Your screen lock, unlocking with face, and Fingerprint Unlock will be removed.<xliff:g id="EMPTY_LINE_0">
+
+</xliff:g>Tap to pay won’t be available.<xliff:g id="EMPTY_LINE_1">
+
+</xliff:g>Wallet, payment, and other apps that require authentication may not work properly."</string>
+    <string name="lockpassword_choose_your_password_header_for_face" product="default" msgid="6148777249889558666">"To use Face Unlock, set password"</string>
+    <string name="lockpassword_choose_your_password_header_for_face" product="desktop" msgid="3207282447348772055">"To unlock with face, set a password"</string>
+    <string name="lockpassword_choose_your_pattern_header_for_face" product="default" msgid="2879540885525976497">"To use Face Unlock, set pattern"</string>
+    <string name="lockpassword_choose_your_pattern_header_for_face" product="desktop" msgid="7936694877510431166">"To unlock with face, set a pattern"</string>
+    <string name="lockpassword_choose_your_pin_header_for_face" product="default" msgid="901192866812262140">"To use Face Unlock, set PIN"</string>
+    <string name="lockpassword_choose_your_pin_header_for_face" product="desktop" msgid="2581974088529231135">"To unlock with face, set PIN"</string>
+    <string name="identity_check_issue_card_summary" product="default" msgid="4376934098421152876">"Identity Check prevents unwanted access to your apps. Now available with any app that uses Fingerprint or Face Unlock."</string>
+    <string name="identity_check_issue_card_summary" product="desktop" msgid="5618480959570778444">"Identity Check prevents unwanted access to your apps. Now available with any app that uses unlocking with face and Fingerprint Unlock."</string>
+    <string name="identity_check_promo_card_summary" product="default" msgid="7603823818908679600">"Updates:\n"<ul><li>"Identity Check adds protection to any app that uses Fingerprint or Face Unlock"</li>\n<li>"Over time, Identity Check may add more ways to verify it\'s you and secure apps on your device. "<a href="https://support.google.com/android?p=identity_check">"Learn more about when and where you’e protected"</a></li></ul></string>
+    <string name="identity_check_promo_card_summary" product="desktop" msgid="1541590147680628039">"Updates:\n"<ul><li>"Identity Check adds protection to any app that uses unlocking with face or Fingerprint Unlock."</li>\n<li>"Over time, Identity Check may add more ways to verify it\'s you and secure apps on your device. "<a href="https://support.google.com/android?p=identity_check">"Learn more about when and where you’e protected"</a></li></ul></string>
+    <string name="identity_check_notification_summary" product="default" msgid="2031507461011469851">"Identity Check prevents unwanted access to your apps. Now available with any app that uses Fingerprint or Face Unlock."</string>
+    <string name="identity_check_notification_summary" product="desktop" msgid="3273054322161095419">"Identity Check prevents unwanted access to your apps. Now available with any app that uses unlocking with face and Fingerprint Unlock."</string>
+    <string name="usb_use_file_transfers" product="desktop" msgid="237241307335820660">"File transfer"</string>
 </resources>

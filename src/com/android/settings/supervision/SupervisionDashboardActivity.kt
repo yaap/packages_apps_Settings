@@ -16,9 +16,17 @@
 
 package com.android.settings.supervision
 
+import android.app.supervision.flags.Flags
 import android.content.Intent
 import android.util.Log
 import com.android.settings.CatalystSettingsActivity
+import com.android.settings.supervision.SupervisionSessionController.Companion.SUPERVISION_AUTH_SESSION_KEY
+import com.android.settings.supervision.shared.SupervisionHelper
+import com.android.settings.supervision.shared.getSupervisionAppInstallActivityInfo
+import com.android.settings.supervision.shared.hasNecessarySupervisionComponent
+import com.android.settings.supervision.shared.isSupervisionPackageProfileOwner
+import com.android.settings.supervision.shared.readDefaultSupervisionPackageNameFromResources
+import com.android.settings.supervision.shared.supervisionRoleHolders
 import com.android.settingslib.supervision.SupervisionLog.TAG
 
 /**
@@ -35,7 +43,7 @@ class SupervisionDashboardActivity :
     override fun onResume() {
         super.onResume()
 
-        if (shouldRedirectToSupervisionApp()) {
+        if (!Flags.enableSupervisionSettingsUiUpdates() && shouldRedirectToSupervisionApp()) {
             val redirectIntent = getSupervisionAppIntent()
             // We don't expect the intent to be null, but if it happens, we just skip the redirect.
             if (redirectIntent != null) {
@@ -78,6 +86,15 @@ class SupervisionDashboardActivity :
             finish()
             return
         }
+    }
+
+    override fun onDestroy() {
+        if (Flags.enableSupervisionSettingsSessionUpdates() && isFinishing) {
+            val sessionsRepository =
+                SupervisionSessionController.getInstance(this@SupervisionDashboardActivity)
+            sessionsRepository.stopSession(SUPERVISION_AUTH_SESSION_KEY)
+        }
+        super.onDestroy()
     }
 
     private fun shouldRedirectToSupervisionApp(): Boolean {

@@ -19,7 +19,9 @@ import android.content.Context
 import androidx.preference.Preference
 import com.android.settings.R
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceMetadata
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.preference.PreferenceBinding
 
 // LINT.IfChange
@@ -27,6 +29,11 @@ class WallpaperAttributionsPreference :
     PreferenceMetadata, PreferenceBinding, PreferenceAvailabilityProvider {
     override val key: String
         get() = KEY
+
+    override val purpose: Int
+        get() = R.string.wallpaper_attributions_purpose
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
 
     override val title: Int
         get() = R.string.wallpaper_attributions
@@ -38,6 +45,10 @@ class WallpaperAttributionsPreference :
         super.bind(preference, metadata)
         preference.isSelectable = false
     }
+
+    override val availabilityDescription = UI_ONLY_PREFERENCE
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context) =
         context.resources.getBoolean(R.bool.config_show_wallpaper_attribution)

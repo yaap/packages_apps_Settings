@@ -18,7 +18,6 @@ package com.android.settings.accessibility;
 
 import static com.android.settingslib.metadata.PreferenceScreenBindingKeyProviderKt.EXTRA_BINDING_SCREEN_ARGS;
 
-import android.accessibilityservice.AccessibilityShortcutInfo;
 import android.content.ComponentName;
 import android.content.Context;
 import android.os.Bundle;
@@ -26,78 +25,21 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
-import com.android.settings.R;
-import com.android.settings.accessibility.data.AccessibilityRepositoryProvider;
-import com.android.settings.accessibility.detail.a11yactivity.AccessibilityActivityFooterPreferenceController;
-import com.android.settings.accessibility.detail.a11yactivity.AccessibilityActivityHtmlFooterPreferenceController;
-import com.android.settings.accessibility.detail.a11yactivity.AccessibilityActivityIllustrationPreferenceController;
-import com.android.settings.accessibility.detail.a11yactivity.LaunchAccessibilityActivityPreferenceController;
-import com.android.settings.accessibility.detail.a11yactivity.SettingsPreferenceController;
-import com.android.settings.accessibility.detail.a11yactivity.ShortcutPreferenceController;
-import com.android.settings.accessibility.detail.a11yactivity.TopIntroPreferenceController;
-import com.android.settings.accessibility.detail.a11yactivity.ui.A11yActivityScreen;
-import com.android.settings.accessibility.shared.LaunchAppInfoPreferenceController;
+import com.android.settings.accessibility.a11yactivity.ui.A11yActivityScreen;
+import com.android.settings.accessibility.extensions.ComponentNameBundleUtils;
+import com.android.settings.dashboard.DashboardFragment;
 import com.android.settings.overlay.FeatureFactory;
+import com.android.settingslib.metadata.CatalystFlagProviderFactory;
+import com.android.settingslib.metadata.ValidatedKeyParameters;
 
+import java.util.Map;
 import java.util.Objects;
 
+
 /** Fragment for providing open activity button. */
-public class LaunchAccessibilityActivityPreferenceFragment extends BaseSupportFragment {
+public class LaunchAccessibilityActivityPreferenceFragment extends DashboardFragment {
 
     private static final String TAG = "LaunchAccessibilityActivityPreferenceFragment";
-    @Nullable
-    private AccessibilityShortcutInfo mAccessibilityShortcutInfo;
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (Flags.catalystA11yActivityDetail()) {
-            return;
-        }
-        ComponentName componentName = getFeatureComponentName();
-        mAccessibilityShortcutInfo = AccessibilityRepositoryProvider.get(
-                context).getAccessibilityShortcutInfo(componentName);
-
-        if (mAccessibilityShortcutInfo != null) {
-            initializePreferenceControllers(mAccessibilityShortcutInfo);
-        }
-    }
-
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (Flags.catalystA11yActivityDetail()) {
-            return;
-        }
-        getActivity().setTitle(getFeatureName());
-    }
-
-    private void initializePreferenceControllers(
-            @NonNull AccessibilityShortcutInfo accessibilityShortcutInfo) {
-        use(TopIntroPreferenceController.class).initialize(accessibilityShortcutInfo);
-        use(AccessibilityActivityIllustrationPreferenceController.class).initialize(
-                accessibilityShortcutInfo);
-        use(LaunchAccessibilityActivityPreferenceController.class).initialize(
-                accessibilityShortcutInfo);
-
-        ShortcutPreferenceController shortcutPreferenceController =
-                use(ShortcutPreferenceController.class);
-        if (shortcutPreferenceController != null) {
-            shortcutPreferenceController.initialize(
-                    accessibilityShortcutInfo,
-                    getChildFragmentManager(),
-                    getFeatureName(),
-                    getMetricsCategory()
-            );
-        }
-        use(SettingsPreferenceController.class).initialize(accessibilityShortcutInfo);
-        use(LaunchAppInfoPreferenceController.class).initialize(
-                accessibilityShortcutInfo.getComponentName());
-        use(AccessibilityActivityHtmlFooterPreferenceController.class).initialize(
-                accessibilityShortcutInfo);
-        use(AccessibilityActivityFooterPreferenceController.class).initialize(
-                accessibilityShortcutInfo);
-    }
 
     @Override
     public int getMetricsCategory() {
@@ -108,7 +50,7 @@ public class LaunchAccessibilityActivityPreferenceFragment extends BaseSupportFr
 
     @Override
     protected int getPreferenceScreenResId() {
-        return R.xml.accessibility_activity_detail_screen;
+        return 0;
     }
 
     @Override
@@ -116,35 +58,52 @@ public class LaunchAccessibilityActivityPreferenceFragment extends BaseSupportFr
         return TAG;
     }
 
-    @NonNull
-    private CharSequence getFeatureName() {
-        if (mAccessibilityShortcutInfo == null
-                || mAccessibilityShortcutInfo.getActivityInfo() == null) {
-            return "";
-        }
-
-        return mAccessibilityShortcutInfo.getActivityInfo().loadLabel(getPackageManager());
-    }
-
     @Nullable
     @Override
-    public String getPreferenceScreenBindingKey(
-            @NonNull Context context) {
+    public String getPreferenceScreenBindingKey(@NonNull Context context) {
         return A11yActivityScreen.KEY;
     }
 
     @Nullable
     @Override
-    public Bundle getPreferenceScreenBindingArgs(
-            @NonNull Context context) {
-        return getFragmentArguments();
+    @Deprecated(since = "This method will be removed once the catalyst framework stops passing the "
+            + "arguments as a bundle. Use getPreferenceScreenBindingKeyParameters instead.")
+    public Bundle getPreferenceScreenBindingArgs(@NonNull Context context) {
+        if (com.android.settings.flags.Flags.catalystUseStringBundle() ||
+                CatalystFlagProviderFactory.INSTANCE.catalystUseKeyParameters()) {
+            Bundle arguments = new Bundle();
+            arguments.putString(
+                    AccessibilitySettings.EXTRA_COMPONENT_NAME,
+                    getFeatureComponentName().flattenToString()
+            );
+            return arguments;
+        } else {
+            return getFragmentArguments();
+        }
+    }
+
+    @Nullable
+    @Override
+    public ValidatedKeyParameters getPreferenceScreenBindingKeyParameters(
+            @NonNull Context context
+    ) {
+        return A11yActivityScreen.Companion.getParametersSchema().prepare(
+                Map.of(
+                    AccessibilitySettings.EXTRA_COMPONENT_NAME,
+                    getFeatureComponentName().flattenToString()
+                )
+        );
     }
 
     @NonNull
     private ComponentName getFeatureComponentName() {
         Bundle arguments = getFragmentArguments();
-        return arguments.getParcelable(
-                AccessibilitySettings.EXTRA_COMPONENT_NAME, ComponentName.class);
+        return Objects.requireNonNull(
+                ComponentNameBundleUtils.getComponentName(
+                        arguments,
+                        AccessibilitySettings.EXTRA_COMPONENT_NAME
+                )
+        );
     }
 
     /**

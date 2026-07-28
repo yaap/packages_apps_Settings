@@ -27,6 +27,7 @@ import com.android.settings.R;
 import com.android.settings.core.TogglePreferenceController;
 import com.android.settings.Utils;
 
+// LINT.IfChange
 public class SwipeToNotificationPreferenceController extends TogglePreferenceController {
 
     private static final int ON = 1;
@@ -89,3 +90,4 @@ public class SwipeToNotificationPreferenceController extends TogglePreferenceCon
     }
 
 }
+// LINT.ThenChange(SwipeToNotificationApiScreen.kt)

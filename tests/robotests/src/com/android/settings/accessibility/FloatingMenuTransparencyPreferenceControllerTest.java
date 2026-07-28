@@ -27,17 +27,19 @@ import static com.android.settings.core.BasePreferenceController.DISABLED_DEPEND
 
 import static com.google.common.truth.Truth.assertThat;
 
-import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import android.content.ContentResolver;
 import android.content.Context;
+import android.platform.test.annotations.EnableFlags;
+import android.platform.test.flag.junit.SetFlagsRule;
 import android.provider.Settings;
 
 import androidx.preference.PreferenceScreen;
 import androidx.test.core.app.ApplicationProvider;
 
+import com.android.settings.testutils.PreferenceExtKt;
 import com.android.settings.testutils.shadow.ShadowInteractionJankMonitor;
 import com.android.settingslib.widget.SliderPreference;
 
@@ -52,6 +54,8 @@ import org.mockito.junit.MockitoRule;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.annotation.Config;
 
+import java.text.NumberFormat;
+
 /** Tests for {@link FloatingMenuTransparencyPreferenceController}. */
 @RunWith(RobolectricTestRunner.class)
 @Config(shadows = {ShadowInteractionJankMonitor.class})
@@ -59,6 +63,8 @@ public class FloatingMenuTransparencyPreferenceControllerTest {
 
     @Rule
     public MockitoRule mocks = MockitoJUnit.rule();
+    @Rule
+    public SetFlagsRule mSetFlagsRule = new SetFlagsRule();
 
     @Spy
     private final Context mContext = ApplicationProvider.getApplicationContext();
@@ -76,7 +82,13 @@ public class FloatingMenuTransparencyPreferenceControllerTest {
         mController = new FloatingMenuTransparencyPreferenceController(mContext, "test_key");
 
         mSliderPreference = new SliderPreference(mContext);
-        doReturn(mSliderPreference).when(mScreen).findPreference("test_key");
+        mSliderPreference.setKey("test_key");
+        when(mScreen.findPreference("test_key")).thenReturn(mSliderPreference);
+
+        Settings.Secure.putInt(mContentResolver, Settings.Secure.ACCESSIBILITY_BUTTON_MODE,
+                ACCESSIBILITY_BUTTON_MODE_FLOATING_MENU);
+        Settings.Secure.putInt(mContentResolver,
+                Settings.Secure.ACCESSIBILITY_FLOATING_MENU_FADE_ENABLED, /* ON */ 1);
     }
 
     @Test
@@ -130,6 +142,23 @@ public class FloatingMenuTransparencyPreferenceControllerTest {
     }
 
     @Test
+    public void displayPreference_stateDescriptionIsSet() {
+        final float transparencyValue = 0.65f;
+        Settings.Secure.putFloat(mContext.getContentResolver(),
+                Settings.Secure.ACCESSIBILITY_FLOATING_MENU_OPACITY,
+                (MAXIMUM_TRANSPARENCY - transparencyValue));
+        PreferenceExtKt.inflateViewHolder(mSliderPreference);
+
+        mController.displayPreference(mScreen);
+
+        NumberFormat numberFormat = NumberFormat.getPercentInstance(
+                mContext.getResources().getConfiguration().getLocales().get(0));
+        final String expected = numberFormat.format(transparencyValue);
+        assertThat(mSliderPreference.getSlider().getStateDescription().toString())
+                .isEqualTo(expected);
+    }
+
+    @Test
     public void onChange_floatingMenuModeChangeToNavigationBar_preferenceDisabled() {
         Settings.Secure.putInt(mContentResolver, Settings.Secure.ACCESSIBILITY_BUTTON_MODE,
                 ACCESSIBILITY_BUTTON_MODE_FLOATING_MENU);
@@ -179,13 +208,65 @@ public class FloatingMenuTransparencyPreferenceControllerTest {
     }
 
     @Test
-    public void setSliderPosition_expectedValue() {
+    public void setSliderPosition_opacityIsSavedToSetting() {
         final float transparencyValue = 0.27f;
         mController.setSliderPosition((int) (transparencyValue * 100));
 
         final float value = Settings.Secure.getFloat(mContext.getContentResolver(),
                 Settings.Secure.ACCESSIBILITY_FLOATING_MENU_OPACITY, -1);
         assertThat(value).isEqualTo((MAXIMUM_TRANSPARENCY - transparencyValue));
+    }
+
+    @Test
+    public void setSliderPosition_stateDescriptionIsSet() {
+        PreferenceExtKt.inflateViewHolder(mSliderPreference);
+        mController.displayPreference(mScreen);
+        final int transparency = 27;
+
+        mController.setSliderPosition(transparency);
+
+        NumberFormat numberFormat = NumberFormat.getPercentInstance(
+                mContext.getResources().getConfiguration().getLocales().get(0));
+        final String expected = numberFormat.format(0.27f);
+        assertThat(mSliderPreference.getSlider().getStateDescription().toString())
+                .isEqualTo(expected);
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_FLOATING_MENU_TRANSPARENCY_SLIDER_ANNOUNCES_DISABLED)
+    public void setSliderPosition_enabled_setsPercentageStateDescription() {
+        Settings.Secure.putInt(mContentResolver, Settings.Secure.ACCESSIBILITY_BUTTON_MODE,
+                ACCESSIBILITY_BUTTON_MODE_FLOATING_MENU);
+        Settings.Secure.putInt(mContentResolver,
+                Settings.Secure.ACCESSIBILITY_FLOATING_MENU_FADE_ENABLED, /* ON */ 1);
+
+        PreferenceExtKt.inflateViewHolder(mSliderPreference);
+        mController.displayPreference(mScreen);
+        final int transparency = 27;
+
+        mController.setSliderPosition(transparency);
+
+        NumberFormat numberFormat = NumberFormat.getPercentInstance(
+                mContext.getResources().getConfiguration().getLocales().get(0));
+        final String expected = numberFormat.format(0.27f);
+        assertThat(mSliderPreference.getSlider().getStateDescription().toString())
+                .isEqualTo(expected);
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_FLOATING_MENU_TRANSPARENCY_SLIDER_ANNOUNCES_DISABLED)
+    public void setSliderPosition_disabled_setsDisabledStateDescription() {
+        Settings.Secure.putInt(mContentResolver, Settings.Secure.ACCESSIBILITY_BUTTON_MODE,
+                ACCESSIBILITY_BUTTON_MODE_FLOATING_MENU);
+        Settings.Secure.putInt(mContentResolver,
+                Settings.Secure.ACCESSIBILITY_FLOATING_MENU_FADE_ENABLED, /* OFF */ 0);
+
+        PreferenceExtKt.inflateViewHolder(mSliderPreference);
+        mController.displayPreference(mScreen);
+
+        final String expected = mContext.getString(com.android.settingslib.R.string.disabled);
+        assertThat(mSliderPreference.getSlider().getStateDescription().toString())
+                .isEqualTo(expected);
     }
 
     @Test

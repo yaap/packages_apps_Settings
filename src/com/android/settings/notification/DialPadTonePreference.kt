@@ -23,22 +23,32 @@ import com.android.settings.Utils
 import com.android.settings.contract.KEY_DIAL_PAD_TONE
 import com.android.settings.metrics.PreferenceActionMetricsProvider
 import com.android.settingslib.datastore.SettingsSystemStore
+import com.android.settingslib.metadata.MUSTPASS_SET
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.ReadWritePermit
 import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.metadata.SwitchPreference
 
 // LINT.IfChange
 class DialPadTonePreference :
-    SwitchPreference(DTMF_TONE_WHEN_DIALING, R.string.dial_pad_tones_title),
+    SwitchPreference(
+        key = DTMF_TONE_WHEN_DIALING,
+        purpose = R.string.dtmf_tone_purpose,
+        title = R.string.dial_pad_tones_title,
+    ),
     PreferenceActionMetricsProvider,
     PreferenceAvailabilityProvider {
     override val preferenceActionMetrics: Int
         get() = ACTION_DIAL_PAD_TONE
 
-    override fun tags(context: Context) = arrayOf(KEY_DIAL_PAD_TONE)
+    override fun tags(context: Context) = arrayOf(KEY_DIAL_PAD_TONE, MUSTPASS_SET)
 
     override fun storage(context: Context) = SettingsSystemStore.get(context)
+
+    override val availabilityDescription = "The device must be voice capable."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context) = Utils.isVoiceCapable(context)
 

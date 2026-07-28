@@ -39,7 +39,6 @@ import org.robolectric.RuntimeEnvironment;
 // LINT.IfChange
 @RunWith(RobolectricTestRunner.class)
 public class AdaptiveConnectivityTogglePreferenceControllerTest {
-
     private static final String PREF_KEY = "adaptive_connectivity_enabled";
 
     @Mock(answer = RETURNS_DEEP_STUBS)
@@ -58,8 +57,10 @@ public class AdaptiveConnectivityTogglePreferenceControllerTest {
     }
 
     @Test
-    public void isAvailable_shouldReturnTrue() {
-        assertThat(mController.isAvailable()).isTrue();
+    public void isAvailable_flagEnabled_shouldReturnFalse() {
+        mController = new AdaptiveConnectivityTogglePreferenceController(mContext, PREF_KEY);
+
+        assertThat(mController.isAvailable()).isFalse();
     }
 
     @Test

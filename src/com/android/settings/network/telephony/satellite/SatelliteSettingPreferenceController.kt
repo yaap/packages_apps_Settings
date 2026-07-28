@@ -17,16 +17,11 @@ package com.android.settings.network.telephony.satellite
 
 import android.content.Context
 import android.content.Intent
-import android.os.PersistableBundle
 import android.provider.Settings
 import android.telephony.CarrierConfigManager.CARRIER_ROAMING_NTN_CONNECT_AUTOMATIC
 import android.telephony.CarrierConfigManager.CARRIER_ROAMING_NTN_CONNECT_HYBRID
 import android.telephony.CarrierConfigManager.CARRIER_ROAMING_NTN_CONNECT_MANUAL
-import android.telephony.CarrierConfigManager.KEY_CARRIER_ROAMING_NTN_CONNECT_TYPE_INT
-import android.telephony.CarrierConfigManager.KEY_SATELLITE_ATTACH_SUPPORTED_BOOL
-import android.telephony.CarrierConfigManager.KEY_SATELLITE_ENTITLEMENT_SUPPORTED_BOOL
 import android.telephony.SubscriptionManager
-import android.telephony.TelephonyManager
 import android.util.Log
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.lifecycleScope
@@ -34,11 +29,11 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceScreen
 import com.android.settings.R
 import com.android.settings.SettingsActivity
-import com.android.settings.network.CarrierConfigCache
 import com.android.settings.network.SatelliteRepository
 import com.android.settings.network.telephony.MobileNetworkSettingsSearchIndex.MobileNetworkSettingsSearchItem
 import com.android.settings.network.telephony.MobileNetworkSettingsSearchIndex.MobileNetworkSettingsSearchResult
 import com.android.settings.network.telephony.TelephonyBasePreferenceController
+import com.android.settings.overlay.FeatureFactory
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
@@ -49,14 +44,10 @@ class SatelliteSettingPreferenceController
 constructor(
     context: Context,
     key: String,
-    private val carrierConfigCache: CarrierConfigCache = CarrierConfigCache.getInstance(context),
     private val satelliteRepository: SatelliteRepository = SatelliteRepository(context),
 ) : TelephonyBasePreferenceController(context, key) {
 
     private lateinit var preference: Preference
-    private var mCarrierConfigs: PersistableBundle = PersistableBundle.EMPTY
-    private val carrierId =
-        context.getSystemService(TelephonyManager::class.java)!!.simSpecificCarrierId
 
     /**
      * Set subId for Satellite Settings page.
@@ -66,7 +57,6 @@ constructor(
     fun initialize(subId: Int) {
         Log.d(TAG, "initialize(), subId= $subId")
         this.mSubId = subId
-        mCarrierConfigs = getCarrierConfigs(subId, carrierConfigCache)
     }
 
     override fun onViewCreated(viewLifecycleOwner: LifecycleOwner) {
@@ -75,24 +65,16 @@ constructor(
         }
 
         viewLifecycleOwner.lifecycleScope.launch {
-            if (!mCarrierConfigs.getBoolean(KEY_SATELLITE_ATTACH_SUPPORTED_BOOL, false)) {
+            val repository =
+                FeatureFactory.featureFactory.telephonyFeatureProvider.satelliteSettingsRepository
+            if (!repository.isSatelliteAttachSupported(mSubId)) {
                 preference.isVisible = false
                 return@launch
             }
 
-            preference.isEnabled =
-                satelliteRepository
-                    .isSatelliteAccessConfigurationForCurrentLocationFlow(mSubId)
-                    .first()
+            val carrierRoamingNtnConnectedType = repository.getSatelliteNtnConnectType(mSubId)
 
-            val carrierRoamingNtnConnectedType =
-                mCarrierConfigs.getInt(
-                    KEY_CARRIER_ROAMING_NTN_CONNECT_TYPE_INT,
-                    CARRIER_ROAMING_NTN_CONNECT_AUTOMATIC,
-                )
-
-            val isSatelliteEntitlementSupported =
-                mCarrierConfigs.getBoolean(KEY_SATELLITE_ENTITLEMENT_SUPPORTED_BOOL, false)
+            val isSatelliteEntitlementSupported = repository.isSatelliteEntitlementSupported(mSubId)
 
             when (carrierRoamingNtnConnectedType) {
                 CARRIER_ROAMING_NTN_CONNECT_MANUAL -> {
@@ -139,6 +121,9 @@ constructor(
                 satelliteRepository.carrierRoamingNtnAvailableServicesChangedFlow(mSubId).first()
         ) {
             preference.setSummary(R.string.satellite_setting_enabled_summary)
+            satelliteRepository
+                .isSatelliteAccessConfigurationForCurrentLocationFlow(mSubId)
+                .collect { preference.isEnabled = it }
             return true
         }
         return false
@@ -174,17 +159,14 @@ constructor(
         class SatelliteConnectivitySearchItem(private val context: Context) :
             MobileNetworkSettingsSearchItem {
             private fun isAvailable(subId: Int): Boolean = runBlocking {
-                val carrierConfigCache = CarrierConfigCache.getInstance(context)
-                val carrierConfigs = getCarrierConfigs(subId, carrierConfigCache)
-                if (!carrierConfigs.getBoolean(KEY_SATELLITE_ATTACH_SUPPORTED_BOOL, false)) {
+                val repository =
+                    FeatureFactory.featureFactory.telephonyFeatureProvider
+                        .satelliteSettingsRepository
+                if (!repository.isSatelliteAttachSupported(subId)) {
                     return@runBlocking false
                 }
 
-                val carrierRoamingNtnConnectedType =
-                    carrierConfigs.getInt(
-                        KEY_CARRIER_ROAMING_NTN_CONNECT_TYPE_INT,
-                        CARRIER_ROAMING_NTN_CONNECT_AUTOMATIC,
-                    )
+                val carrierRoamingNtnConnectedType = repository.getSatelliteNtnConnectType(subId)
                 var available = false
                 when (carrierRoamingNtnConnectedType) {
                     CARRIER_ROAMING_NTN_CONNECT_MANUAL -> {
@@ -202,10 +184,7 @@ constructor(
 
                     CARRIER_ROAMING_NTN_CONNECT_HYBRID -> {
                         if (
-                            carrierConfigs.getBoolean(
-                                KEY_SATELLITE_ENTITLEMENT_SUPPORTED_BOOL,
-                                false,
-                            ) &&
+                            repository.isSatelliteEntitlementSupported(subId) &&
                                 SatelliteCarrierSettingUtils.isSatelliteAccountEligible(
                                     context,
                                     subId,
@@ -232,18 +211,6 @@ constructor(
                     title = context.getString(R.string.title_satellite_setting_connectivity),
                 )
             }
-        }
-
-        fun getCarrierConfigs(
-            subId: Int,
-            carrierConfigCache: CarrierConfigCache,
-        ): PersistableBundle {
-            return carrierConfigCache.getSpecificConfigsForSubId(
-                subId,
-                KEY_SATELLITE_ATTACH_SUPPORTED_BOOL,
-                KEY_SATELLITE_ENTITLEMENT_SUPPORTED_BOOL,
-                KEY_CARRIER_ROAMING_NTN_CONNECT_TYPE_INT,
-            )
         }
     }
 }

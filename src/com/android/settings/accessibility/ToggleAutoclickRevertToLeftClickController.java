@@ -27,10 +27,10 @@ import android.provider.Settings;
 
 import androidx.annotation.NonNull;
 
-import com.android.server.accessibility.Flags;
 import com.android.settings.R;
 import com.android.settings.core.TogglePreferenceController;
 
+// LINT.IfChange
 public class ToggleAutoclickRevertToLeftClickController extends TogglePreferenceController {
 
     private static final String TAG =
@@ -47,7 +47,7 @@ public class ToggleAutoclickRevertToLeftClickController extends TogglePreference
 
     @Override
     public int getAvailabilityStatus() {
-        return Flags.enableAutoclickIndicator() ? AVAILABLE : CONDITIONALLY_UNAVAILABLE;
+        return AVAILABLE;
     }
 
     @Override
@@ -73,3 +73,4 @@ public class ToggleAutoclickRevertToLeftClickController extends TogglePreference
         return R.string.menu_key_accessibility;
     }
 }
+// LINT.ThenChange(autoclick/ui/AutoclickRevertToLeftClickPreference.kt)

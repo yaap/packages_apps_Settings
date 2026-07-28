@@ -17,7 +17,9 @@
 package com.android.settings.accessibility
 
 import android.content.Context
+import android.platform.test.annotations.DisableFlags
 import android.platform.test.annotations.EnableFlags
+import android.platform.test.flag.junit.SetFlagsRule
 import android.provider.Settings
 import android.view.View
 import android.view.accessibility.AccessibilityManager
@@ -30,7 +32,6 @@ import androidx.lifecycle.Lifecycle.State.INITIALIZED
 import androidx.preference.PreferenceManager
 import androidx.preference.PreferenceViewHolder
 import androidx.test.core.app.ApplicationProvider
-import com.android.hardware.input.Flags
 import com.android.internal.accessibility.AccessibilityShortcutController.AUTOCLICK_COMPONENT_NAME
 import com.android.internal.accessibility.common.ShortcutConstants
 import com.android.internal.accessibility.common.ShortcutConstants.UserShortcutType.DEFAULT
@@ -42,6 +43,7 @@ import com.android.internal.accessibility.util.ShortcutUtils
 import com.android.settings.R
 import com.android.settings.testutils.AccessibilityTestUtils
 import com.android.settings.testutils.shadow.ShadowAccessibilityManager
+import com.android.settings.testutils.shadow.ShadowInputDevice
 import com.google.common.truth.Truth.assertThat
 import org.junit.After
 import org.junit.Before
@@ -52,6 +54,7 @@ import org.mockito.junit.MockitoJUnit
 import org.mockito.junit.MockitoRule
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.Shadows.shadowOf
+import org.robolectric.annotation.Config
 import org.robolectric.shadow.api.Shadow
 import org.robolectric.shadows.ShadowLooper
 
@@ -59,8 +62,10 @@ private const val PREFERENCE_KEY = "prefKey"
 private const val PREFERENCE_TITLE = "prefTitle"
 
 /** Tests for [ToggleShortcutPreferenceController] */
+@Config(shadows = [ShadowInputDevice::class])
 @RunWith(RobolectricTestRunner::class)
 class ToggleShortcutPreferenceControllerTest {
+    @get:Rule val setFlagsRule: SetFlagsRule = SetFlagsRule()
     @get:Rule val mockitoRule: MockitoRule = MockitoJUnit.rule()
     private lateinit var shortcutPreference: ShortcutPreference
     private lateinit var controller: ToggleShortcutPreferenceController
@@ -148,6 +153,11 @@ class ToggleShortcutPreferenceControllerTest {
 
     @Test
     fun displayPreferenceAndUpdateState_softwareOrGestureShortcut_updateCheckStateAndSummary() {
+        AccessibilityTestUtils.setSoftwareShortcutMode(
+            context,
+            /* gestureNavEnabled= */ true,
+            /* floatingButtonEnabled= */ false,
+        )
         a11yManager.enableShortcutsForTargets(
             /* enable= */ true,
             SOFTWARE or GESTURE,
@@ -182,9 +192,10 @@ class ToggleShortcutPreferenceControllerTest {
             .isEqualTo(context.getText(R.string.accessibility_shortcut_state_off))
     }
 
-    @EnableFlags(Flags.FLAG_ENABLE_TALKBACK_AND_MAGNIFIER_KEY_GESTURES)
+    @DisableFlags(com.android.server.accessibility.Flags.FLAG_ENABLE_KEY_GESTURE_SHORTCUT_SETTINGS)
     @Test
-    fun displayPreferenceAndUpdateState_keyGestureShortcut_updateCheckStateAndSummary() {
+    fun displayPreferenceAndUpdateState_keyGestureShortcutNoKeyboardFlagOff_doNotUpdateCheckStateAndSummary() {
+        setHardwareKeyboard(false)
         a11yManager.enableShortcutsForTargets(
             /* enable= */ true,
             KEY_GESTURE,
@@ -199,6 +210,66 @@ class ToggleShortcutPreferenceControllerTest {
         assertThat(shortcutPreference.isChecked).isFalse()
         assertThat(shortcutPreference.summary)
             .isEqualTo(context.getText(R.string.accessibility_shortcut_state_off))
+    }
+
+    @DisableFlags(com.android.server.accessibility.Flags.FLAG_ENABLE_KEY_GESTURE_SHORTCUT_SETTINGS)
+    @Test
+    fun displayPreferenceAndUpdateState_keyGestureShortcutHasKeyboardFlagOff_doNotUpdateCheckStateAndSummary() {
+        setHardwareKeyboard(true)
+        a11yManager.enableShortcutsForTargets(
+            /* enable= */ true,
+            KEY_GESTURE,
+            setOf(testComponentString),
+            context.userId,
+        )
+
+        fragmentScenario.moveToState(CREATED)
+        controller.displayPreference(shortcutPreference.preferenceManager.preferenceScreen)
+        controller.updateState(shortcutPreference)
+
+        assertThat(shortcutPreference.isChecked).isFalse()
+        assertThat(shortcutPreference.summary)
+            .isEqualTo(context.getText(R.string.accessibility_shortcut_state_off))
+    }
+
+    @EnableFlags(com.android.server.accessibility.Flags.FLAG_ENABLE_KEY_GESTURE_SHORTCUT_SETTINGS)
+    @Test
+    fun displayPreferenceAndUpdateState_keyGestureShortcutNoKeyboardFlagOn_doNotUpdateCheckStateAndSummary() {
+        setHardwareKeyboard(false)
+        a11yManager.enableShortcutsForTargets(
+            /* enable= */ true,
+            KEY_GESTURE,
+            setOf(testComponentString),
+            context.userId,
+        )
+
+        fragmentScenario.moveToState(CREATED)
+        controller.displayPreference(shortcutPreference.preferenceManager.preferenceScreen)
+        controller.updateState(shortcutPreference)
+
+        assertThat(shortcutPreference.isChecked).isFalse()
+        assertThat(shortcutPreference.summary)
+            .isEqualTo(context.getText(R.string.accessibility_shortcut_state_off))
+    }
+
+    @EnableFlags(com.android.server.accessibility.Flags.FLAG_ENABLE_KEY_GESTURE_SHORTCUT_SETTINGS)
+    @Test
+    fun displayPreferenceAndUpdateState_keyGestureShortcut_updateCheckStateAndSummary() {
+        setHardwareKeyboard(true)
+        a11yManager.enableShortcutsForTargets(
+            /* enable= */ true,
+            KEY_GESTURE,
+            setOf(testComponentString),
+            context.userId,
+        )
+
+        fragmentScenario.moveToState(CREATED)
+        controller.displayPreference(shortcutPreference.preferenceManager.preferenceScreen)
+        controller.updateState(shortcutPreference)
+
+        assertThat(shortcutPreference.isChecked).isTrue()
+        assertThat(shortcutPreference.summary)
+            .isEqualTo(AccessibilityUtil.getShortcutSummaryList(context, KEY_GESTURE))
     }
 
     @Test
@@ -240,7 +311,7 @@ class ToggleShortcutPreferenceControllerTest {
 
         a11yManager.enableShortcutsForTargets(
             /* enable=*/ true,
-            GESTURE,
+            SOFTWARE,
             setOf(testComponentString),
             context.userId,
         )
@@ -248,16 +319,25 @@ class ToggleShortcutPreferenceControllerTest {
             .getContentObserverForTesting()
             .onChange(
                 /* selfChange= */ false,
-                Settings.Secure.getUriFor(Settings.Secure.ACCESSIBILITY_GESTURE_TARGETS),
+                Settings.Secure.getUriFor(Settings.Secure.ACCESSIBILITY_BUTTON_TARGETS),
             )
         ShadowLooper.runUiThreadTasksIncludingDelayedTasks()
 
         assertThat(shortcutPreference.isChecked).isTrue()
         assertThat(shortcutPreference.summary)
-            .isEqualTo(AccessibilityUtil.getShortcutSummaryList(context, GESTURE))
+            .isEqualTo(AccessibilityUtil.getShortcutSummaryList(context, SOFTWARE))
         assertThat(
                 PreferredShortcuts.retrieveUserShortcutType(context, testComponentString, DEFAULT)
             )
-            .isEqualTo(GESTURE)
+            .isEqualTo(SOFTWARE)
+    }
+
+    private fun setHardwareKeyboard(hasConnectedKeyboard: Boolean) {
+        if (hasConnectedKeyboard) {
+            val device = ShadowInputDevice.makeFullKeyboardInputDevicebyId(/* id= */ 1)
+            ShadowInputDevice.addDevice(device.id, device)
+        } else {
+            ShadowInputDevice.reset()
+        }
     }
 }

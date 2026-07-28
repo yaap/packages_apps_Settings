@@ -24,6 +24,7 @@ import androidx.preference.TwoStatePreference
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
 import com.android.settingslib.metadata.SwitchPreference
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.preference.SwitchPreferenceBinding
 
 /**
@@ -42,6 +43,7 @@ import com.android.settingslib.preference.SwitchPreferenceBinding
 open class VibrationIntensitySwitchPreference(
     context: Context,
     key: String,
+    @StringRes purpose: Int,
     val settingsProviderKey: String,
     private val mainSwitchPreferenceKey: String,
     @Usage val vibrationUsage: Int,
@@ -49,7 +51,7 @@ open class VibrationIntensitySwitchPreference(
     @StringRes summary: Int = 0,
     val hasRingerModeDependency: Boolean = false,
 ) :
-    SwitchPreference(key, title, summary),
+    SwitchPreference(key, purpose, title, summary),
     SwitchPreferenceBinding,
     PreferenceSummaryProvider,
     Preference.OnPreferenceChangeListener {
@@ -84,6 +86,10 @@ open class VibrationIntensitySwitchPreference(
         }
         return false // value has been updated
     }
+
+    override fun getEnabledDescription() = "The vibration setting (vibrate_on) must be enabled."
+
+    override fun getEnabledStability() = PreconditionStability.UNSTABLE
 
     @CallSuper override fun isEnabled(context: Context) = storage.isPreferenceEnabled()
 }

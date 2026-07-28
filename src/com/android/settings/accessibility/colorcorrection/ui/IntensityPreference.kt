@@ -32,9 +32,12 @@ import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
 import com.android.settingslib.metadata.ReadWritePermit
+import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.widget.SliderPreference
 import com.android.settingslib.widget.SliderPreferenceBinding
 import kotlin.time.Duration.Companion.milliseconds
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
+
 
 /** A preference that allows the user to adjust the intensity of color correction. */
 class IntensityPreference(context: Context) :
@@ -55,6 +58,9 @@ class IntensityPreference(context: Context) :
     override val key: String
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.accessibility_display_daltonizer_saturation_level_purpose
+
     override val title: Int
         get() = R.string.daltonizer_saturation_title
 
@@ -73,6 +79,11 @@ class IntensityPreference(context: Context) :
 
     override fun getWritePermit(context: Context, callingPid: Int, callingUid: Int) =
         ReadWritePermit.ALLOW
+
+    override val supportsWrite = true
+    override fun getEnabledDescription(): String = "Color correction must be enabled and the mode must not be grayscale."
+
+    override fun getEnabledStability() = PreconditionStability.UNSTABLE
 
     override fun isEnabled(context: Context): Boolean {
         val colorCorrectionEnabled =
@@ -137,6 +148,9 @@ class IntensityPreference(context: Context) :
         debounceCommitController?.cancelPendingCommit()
         debounceCommitController = null
     }
+
+    override val sensitivityLevel: Int
+        get() = SensitivityLevel.NO_SENSITIVITY
 
     companion object {
         internal const val KEY = Settings.Secure.ACCESSIBILITY_DISPLAY_DALTONIZER_SATURATION_LEVEL

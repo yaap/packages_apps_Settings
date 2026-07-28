@@ -30,6 +30,12 @@
     </Preference>
 
     <Preference
+        android:key="computer_control_automation"
+        android:title="@string/computer_control_automation_page_title"
+        android:order="-1850"
+        settings:controller="com.android.settings.spa.app.specialaccess.ComputerControlAutomationPreferenceController" />
+
+    <Preference
         android:key="interact_across_profiles"
         android:title="@string/interact_across_profiles_title"
         android:order="-1800"
@@ -180,6 +186,14 @@
         <extra
             android:name="classname"
             android:value="com.android.settings.Settings$UsageAccessSettingsActivity" />
+    </Preference>
+
+    <Preference
+        android:key="access_hid"
+        android:title="@string/access_hid_title"
+        android:order="-450"
+        settings:controller="com.android.settings.spa.app.specialaccess.HidAccessPreferenceController"
+        settings:keywords="@string/keywords_access_hid">
     </Preference>
 
     <Preference

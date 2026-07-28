@@ -20,18 +20,30 @@ import android.content.Context
 import androidx.preference.Preference
 import com.android.settings.R
 import com.android.settingslib.DeviceInfoUtils
+import com.android.settingslib.datastore.KeyValueStore
+import com.android.settingslib.metadata.PersistentPreference
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
+import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.preference.PreferenceBinding
 
 // LINT.IfChange
-class KernelVersionPreference : PreferenceMetadata, PreferenceSummaryProvider, PreferenceBinding {
+class KernelVersionPreference : PersistentPreference<String>, PreferenceMetadata, PreferenceSummaryProvider, PreferenceBinding {
 
     override val key: String
         get() = "kernel_version"
 
+    override val purpose: Int
+        get() = R.string.kernel_version_purpose
+
     override val title: Int
         get() = R.string.kernel_version
+
+    override val supportsWrite = false
+
+    override val valueType = String::class.javaObjectType
+
+    override fun storage(context: Context): KeyValueStore = createSummaryStorage(context, key)
 
     override fun getSummary(context: Context): CharSequence? =
         DeviceInfoUtils.getFormattedKernelVersion(context)
@@ -41,5 +53,9 @@ class KernelVersionPreference : PreferenceMetadata, PreferenceSummaryProvider, P
         preference.isSelectable = false
         preference.isCopyingEnabled = true
     }
+
+    override val sensitivityLevel
+        get() = SensitivityLevel.NO_SENSITIVITY
+
 }
 // LINT.ThenChange(KernelVersionPreferenceController.java)

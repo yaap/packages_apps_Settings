@@ -18,12 +18,13 @@ package com.android.settings.accessibility.hearingdevices.ui
 
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothProfile
+import android.os.SystemProperties
 import com.android.settings.R
 import com.android.settings.accessibility.Flags
 import com.android.settings.testutils.shadow.ShadowBluetoothAdapter
 import com.android.settings.testutils.shadow.ShadowBluetoothUtils
 import com.android.settings.testutils2.SettingsCatalystTestCase
+import com.android.settingslib.bluetooth.BluetoothEventManager
 import com.android.settingslib.bluetooth.CachedBluetoothDevice
 import com.android.settingslib.bluetooth.CachedBluetoothDeviceManager
 import com.android.settingslib.bluetooth.HapClientProfile
@@ -33,14 +34,13 @@ import com.android.settingslib.bluetooth.LocalBluetoothManager
 import com.android.settingslib.bluetooth.LocalBluetoothProfileManager
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.google.common.truth.Truth.assertThat
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import org.mockito.kotlin.doReturn
 import org.mockito.kotlin.mock
 import org.mockito.kotlin.stub
 import org.robolectric.annotation.Config
-import org.robolectric.shadow.api.Shadow
-import org.robolectric.shadows.ShadowLog
 
 @Config(shadows = [ShadowBluetoothAdapter::class, ShadowBluetoothUtils::class])
 class HearingDevicesScreenTest : SettingsCatalystTestCase() {
@@ -75,17 +75,15 @@ class HearingDevicesScreenTest : SettingsCatalystTestCase() {
         mock<LocalBluetoothManager> {
             on { profileManager } doReturn mockProfileManager
             on { cachedDeviceManager } doReturn mockDeviceManager
+            on { eventManager } doReturn mock<BluetoothEventManager>()
         }
     val mockPreferenceLifecycleContext = mock<PreferenceLifecycleContext>()
     val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
 
     init {
         ShadowBluetoothUtils.sLocalBluetoothManager = mockLocalBluetoothManager
-        val shadowAdapter: ShadowBluetoothAdapter = Shadow.extract(bluetoothAdapter)
-        shadowAdapter.apply {
-            addSupportedProfiles(BluetoothProfile.HEARING_AID)
-            addSupportedProfiles(BluetoothProfile.HAP_CLIENT)
-        }
+        SystemProperties.set(ASHA_PROFILE_CENTRAL_PROPERTY, "true")
+        SystemProperties.set(HAP_PROFILE_CLIENT_PROPERTY, "true")
     }
 
     override val preferenceScreenCreator = HearingDevicesScreen(appContext)
@@ -94,10 +92,13 @@ class HearingDevicesScreenTest : SettingsCatalystTestCase() {
     @Before
     fun setUp() {
         bluetoothAdapter?.enable()
-        ShadowLog.stream = System.out
     }
 
-    @Test override fun migration() {}
+    @After
+    fun tearDown() {
+        SystemProperties.set(ASHA_PROFILE_CENTRAL_PROPERTY, "")
+        SystemProperties.set(HAP_PROFILE_CLIENT_PROPERTY, "")
+    }
 
     @Test
     fun getSummary_connectedAshaHearingAidRightSide_connectedRightSideSummary() {
@@ -210,5 +211,7 @@ class HearingDevicesScreenTest : SettingsCatalystTestCase() {
 
     companion object {
         const val TEST_DEVICE_NAME = "TEST_HEARING_AID_BT_DEVICE_NAME"
+        private const val ASHA_PROFILE_CENTRAL_PROPERTY = "bluetooth.profile.asha.central.enabled"
+        private const val HAP_PROFILE_CLIENT_PROPERTY = "bluetooth.profile.hap.client.enabled"
     }
 }

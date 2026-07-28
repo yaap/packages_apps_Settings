@@ -41,7 +41,6 @@ import android.content.pm.UserInfo;
 import android.content.res.Resources;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.hardware.biometrics.Flags;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemProperties;
@@ -56,6 +55,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnScrollChangeListener;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.ViewTreeObserver.OnGlobalLayoutListener;
 import android.widget.Button;
 import android.widget.CheckBox;
@@ -76,6 +76,7 @@ import com.android.settings.password.ConfirmLockPattern;
 import com.android.settingslib.RestrictedLockUtilsInternal;
 import com.android.settingslib.core.instrumentation.MetricsFeatureProvider;
 import com.android.settingslib.development.DevelopmentSettingsEnabler;
+import com.android.settingslib.utils.StringUtil;
 
 import com.google.android.setupcompat.template.FooterBarMixin;
 import com.google.android.setupcompat.template.FooterButton;
@@ -110,10 +111,12 @@ public class MainClear extends InstrumentedFragment implements OnGlobalLayoutLis
     static final String ERASE_EXTERNAL_EXTRA = "erase_sd";
     static final String ERASE_ESIMS_EXTRA = "erase_esim";
 
-    private View mContentView;
+    @VisibleForTesting
+    View mContentView;
     @VisibleForTesting
     FooterButton mInitiateButton;
-    private View mExternalStorageContainer;
+    @VisibleForTesting
+    View mExternalStorageContainer;
     @VisibleForTesting
     CheckBox mExternalStorage;
     @VisibleForTesting
@@ -122,11 +125,16 @@ public class MainClear extends InstrumentedFragment implements OnGlobalLayoutLis
     CheckBox mEsimStorage;
     @VisibleForTesting
     ScrollView mScrollView;
+    private boolean mHasReachedBottom;
+    private boolean mIsListenerAdded;
 
     @Override
     public void onGlobalLayout() {
-        mInitiateButton.setEnabled(hasReachedBottom(mScrollView));
+        mHasReachedBottom = hasReachedBottom(mScrollView);
+        mInitiateButton.setEnabled(mHasReachedBottom);
     }
+
+    // onSaveInstanceState removed to reset state on rotation as requested
 
     private void setUpActionBarAndTitle() {
         final Activity activity = getActivity();
@@ -197,19 +205,9 @@ public class MainClear extends InstrumentedFragment implements OnGlobalLayoutLis
                     Utils.requestBiometricAuthenticationForMandatoryBiometrics(getActivity(),
                             false /* biometricsAuthenticationRequested */,
                             userId);
-            if (Flags.bpFallbackOptions()) {
-                if (biometricAuthStatus != Utils.BiometricStatus.NOT_ACTIVE) {
-                    Utils.launchBiometricPromptForMandatoryBiometrics(this, BIOMETRICS_REQUEST,
-                            userId, false /* hideBackground */);
-                    return;
-                }
-            } else if (biometricAuthStatus == Utils.BiometricStatus.OK) {
+            if (biometricAuthStatus != Utils.BiometricStatus.NOT_ACTIVE) {
                 Utils.launchBiometricPromptForMandatoryBiometrics(this, BIOMETRICS_REQUEST,
                         userId, false /* hideBackground */);
-                return;
-            } else if (biometricAuthStatus != Utils.BiometricStatus.NOT_ACTIVE) {
-                IdentityCheckBiometricErrorDialog.showBiometricErrorDialog(getActivity(),
-                        biometricAuthStatus, true /* twoFactorAuthentication */);
                 return;
             }
         }
@@ -311,7 +309,8 @@ public class MainClear extends InstrumentedFragment implements OnGlobalLayoutLis
                 AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
                 builder.setTitle(R.string.dsu_is_running);
                 builder.setPositiveButton(R.string.okay, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {}
+                    public void onClick(DialogInterface dialog, int id) {
+                    }
                 });
                 AlertDialog dsuAlertdialog = builder.create();
                 dsuAlertdialog.show();
@@ -345,6 +344,7 @@ public class MainClear extends InstrumentedFragment implements OnGlobalLayoutLis
      */
     @VisibleForTesting
     void establishInitialState() {
+        mHasReachedBottom = false;
         setUpActionBarAndTitle();
         setUpInitiateButton();
 
@@ -353,9 +353,14 @@ public class MainClear extends InstrumentedFragment implements OnGlobalLayoutLis
         mEsimStorageContainer = mContentView.findViewById(R.id.erase_esim_container);
         mEsimStorage = mContentView.findViewById(R.id.erase_esim);
         if (mScrollView != null) {
-            mScrollView.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+            ViewTreeObserver observer = mScrollView.getViewTreeObserver();
+            if (observer != null) {
+                observer.removeOnGlobalLayoutListener(this);
+            }
         }
-        mScrollView = mContentView.findViewById(R.id.main_clear_scrollview);
+        mScrollView = mContentView.findViewById(
+                com.google.android.setupdesign.R.id.sud_scroll_view);
+        mScrollView.setImportantForAccessibility(View.IMPORTANT_FOR_ACCESSIBILITY_YES);
 
         /*
          * If the external storage is emulated, it will be erased with a factory
@@ -406,7 +411,9 @@ public class MainClear extends InstrumentedFragment implements OnGlobalLayoutLis
         }
 
         final UserManager um = (UserManager) getActivity().getSystemService(Context.USER_SERVICE);
-        loadAccountList(um);
+        if (um != null) {
+            loadAccountList(um);
+        }
         final StringBuffer contentDescription = new StringBuffer();
         final View mainClearContainer = mContentView.findViewById(R.id.main_clear_container);
         getContentDescription(mainClearContainer, contentDescription);
@@ -417,15 +424,41 @@ public class MainClear extends InstrumentedFragment implements OnGlobalLayoutLis
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX,
                     int oldScrollY) {
-                if (v instanceof ScrollView && hasReachedBottom((ScrollView) v)) {
+                if (v instanceof ScrollView && (mHasReachedBottom || hasReachedBottom(
+                        (ScrollView) v))) {
+                    mHasReachedBottom = true;
                     mInitiateButton.setEnabled(true);
-                    mScrollView.setOnScrollChangeListener(null);
                 }
             }
         });
 
         // Set the initial state of the initiateButton
         mScrollView.getViewTreeObserver().addOnGlobalLayoutListener(this);
+
+        // Add a focus listener to handle keyboard navigation
+        mScrollView.setOnFocusChangeListener((v, hasFocus) -> {
+            if (hasFocus && hasReachedBottom(mScrollView)) {
+                mInitiateButton.setEnabled(true);
+            }
+        });
+
+        // Also, listen for focus changes on the last focusable element
+        View lastFocusable = mEsimStorageContainer.getVisibility() == View.VISIBLE
+                ? mEsimStorageContainer : mExternalStorageContainer;
+        if (lastFocusable != null) {
+            lastFocusable.setOnFocusChangeListener((v, hasFocus) -> {
+                if (hasFocus) {
+                    mInitiateButton.setEnabled(true);
+                }
+            });
+        }
+        if (!mIsListenerAdded) {
+            ViewTreeObserver observer = mScrollView.getViewTreeObserver();
+            if (observer != null) {
+                observer.addOnGlobalLayoutListener(this);
+                mIsListenerAdded = true;
+            }
+        }
     }
 
     /**
@@ -434,7 +467,7 @@ public class MainClear extends InstrumentedFragment implements OnGlobalLayoutLis
     @VisibleForTesting
     boolean showAnySubscriptionInfo(Context context) {
         return (context != null) && (Utils.isMobileDataCapable(context)
-                                         || Utils.isVoiceCapable(context));
+                || Utils.isVoiceCapable(context));
     }
 
     /**
@@ -468,8 +501,11 @@ public class MainClear extends InstrumentedFragment implements OnGlobalLayoutLis
 
     @VisibleForTesting
     boolean hasReachedBottom(final ScrollView scrollView) {
-        if (scrollView.getChildCount() < 1) {
+        if (mHasReachedBottom) {
             return true;
+        }
+        if (scrollView == null || scrollView.getChildCount() < 1 || scrollView.getHeight() <= 0) {
+            return false;
         }
 
         final View view = scrollView.getChildAt(0);
@@ -478,7 +514,8 @@ public class MainClear extends InstrumentedFragment implements OnGlobalLayoutLis
         return diff <= 0;
     }
 
-    private void setUpInitiateButton() {
+    @VisibleForTesting
+    void setUpInitiateButton() {
         if (mInitiateButton != null) {
             return;
         }
@@ -504,6 +541,7 @@ public class MainClear extends InstrumentedFragment implements OnGlobalLayoutLis
                         .setButtonType(ButtonType.CANCEL)
                         .build());
         mInitiateButton = mixin.getPrimaryButton();
+        mInitiateButton.setEnabled(mHasReachedBottom);
     }
 
     private void getContentDescription(View v, StringBuffer description) {
@@ -620,6 +658,9 @@ public class MainClear extends InstrumentedFragment implements OnGlobalLayoutLis
         }
 
         if (accountsCount > 0) {
+            String accountTitle = StringUtil.getIcuPluralsString(context, accountsCount,
+                R.string.main_clear_accounts_count);
+            ((TextView) accountsLabel).setText(accountTitle);
             accountsLabel.setVisibility(View.VISIBLE);
             contents.setVisibility(View.VISIBLE);
         }

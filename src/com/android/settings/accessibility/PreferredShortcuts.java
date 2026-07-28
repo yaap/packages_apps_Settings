@@ -17,6 +17,8 @@
 package com.android.settings.accessibility;
 
 import static com.android.internal.accessibility.common.ShortcutConstants.UserShortcutType.DEFAULT;
+import static com.android.internal.accessibility.common.ShortcutConstants.UserShortcutType.GESTURE;
+import static com.android.internal.accessibility.common.ShortcutConstants.UserShortcutType.SOFTWARE;
 
 import android.content.ComponentName;
 import android.content.Context;
@@ -67,7 +69,29 @@ public final class PreferredShortcuts {
 
         final String str = info.stream().findFirst().get();
         final PreferredShortcut shortcut = PreferredShortcut.fromString(str);
-        return shortcut.getType();
+        int type = shortcut.getType();
+        if ((type & UserShortcutType.KEY_GESTURE) == UserShortcutType.KEY_GESTURE
+                && !AccessibilityUtil.isKeyboardShortcutSettingAvailable()) {
+            type = AccessibilityUtil.removeTypeFromShortcutTypes(type,
+                    UserShortcutType.KEY_GESTURE);
+        }
+
+        if (type == DEFAULT) {
+            type = defaultTypes;
+        }
+
+        if (Flags.preferredShortcutFiltersNavigationMode()) {
+            // GESTURE is only usable in gesture navigation mode.
+            if ((type & UserShortcutType.GESTURE) == UserShortcutType.GESTURE
+                    && !AccessibilityUtil.isGestureNavigateEnabled(context)) {
+                // Replace GESTURE with SOFTWARE
+                type = type & ~GESTURE;
+                type = type | SOFTWARE;
+            }
+            // SOFTWARE is usable in all navigation modes.
+        }
+
+        return type;
     }
 
     /**

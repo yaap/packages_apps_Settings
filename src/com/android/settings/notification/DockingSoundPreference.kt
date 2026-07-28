@@ -24,13 +24,18 @@ import com.android.settings.metrics.PreferenceActionMetricsProvider
 import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.SettingsGlobalStore
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.ReadWritePermit
 import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.metadata.SwitchPreference
 
 // LINT.IfChange
 class DockingSoundPreference :
-    SwitchPreference(KEY, R.string.docking_sounds_title),
+    SwitchPreference(
+        key = KEY,
+        purpose = R.string.dock_sounds_enabled_purpose,
+        title = R.string.docking_sounds_title
+    ),
     PreferenceActionMetricsProvider,
     PreferenceAvailabilityProvider {
     override val preferenceActionMetrics: Int
@@ -39,6 +44,10 @@ class DockingSoundPreference :
     override fun tags(context: Context) = arrayOf(KEY_DOCKING_SOUNDS)
 
     override fun storage(context: Context) = context.dataStore
+
+    override val availabilityDescription = "The device must support configuring docking sounds in Settings."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context) =
         context.resources.getBoolean(R.bool.has_dock_settings)

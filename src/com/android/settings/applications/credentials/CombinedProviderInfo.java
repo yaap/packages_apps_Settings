@@ -16,6 +16,8 @@
 
 package com.android.settings.applications.credentials;
 
+import android.app.admin.EnforcingAdmin;
+import android.app.admin.PolicyEnforcementInfo;
 import android.content.ActivityNotFoundException;
 import android.content.ComponentName;
 import android.content.Context;
@@ -264,6 +266,21 @@ public final class CombinedProviderInfo {
                 packageName);
     }
 
+    /** Returns whether this credential manager entry has admin restriction. */
+    @Nullable
+    public EnforcingAdmin getAdminRestrictionsOnCredentialManager(Context context, int userId) {
+        final String packageName = getPackageName();
+        if (TextUtils.isEmpty(packageName)) {
+            return null;
+        }
+
+        PolicyEnforcementInfo enforcementInfo =
+                RestrictedLockUtilsInternal.checkIfApplicationCanBeCredentialManagerProvider(
+                        context, packageName, userId);
+
+        return enforcementInfo.getMostImportantEnforcingAdmin();
+    }
+
     /** Returns the provider that gets the top spot. */
     public static @Nullable CombinedProviderInfo getTopProvider(
             List<CombinedProviderInfo> providers) {
@@ -379,21 +396,27 @@ public final class CombinedProviderInfo {
         return intent;
     }
 
-    /** Launches the settings activity intent. */
-    public static void launchSettingsActivityIntent(
+    /**
+     * Launches the settings activity intent.
+     *
+     * @return {@code true} if the activity started successfully, {@code false} otherwise.
+     */
+    public static boolean launchSettingsActivityIntent(
             @NonNull Context context,
             @Nullable CharSequence packageName,
             @Nullable CharSequence settingsActivity,
             int userId) {
         Intent settingsIntent = createSettingsActivityIntent(packageName, settingsActivity);
         if (settingsIntent == null) {
-            return;
+            return false;
         }
 
         try {
             context.startActivityAsUser(settingsIntent, UserHandle.of(userId));
+            return true;
         } catch (ActivityNotFoundException e) {
             Log.e(TAG, "Failed to open settings activity", e);
+            return false;
         }
     }
 }

@@ -17,11 +17,14 @@
 package com.android.settings.safetycenter.ui
 
 import android.annotation.SuppressLint
+import android.app.settings.SettingsEnums
 import android.content.Context
 import android.graphics.drawable.Drawable
-import android.safetycenter.SafetyCenterData
+import android.os.Bundle
+import android.permission.flags.Flags
 import android.safetycenter.SafetyCenterEntry
 import android.safetycenter.SafetyCenterIssue
+import android.text.TextUtils
 import android.util.Log
 import android.view.ContextThemeWrapper
 import androidx.annotation.StringRes
@@ -31,8 +34,12 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceScreen
 import com.android.settings.R
 import com.android.settings.core.BasePreferenceController
+import com.android.settings.core.SubSettingLauncher
 import com.android.settings.safetycenter.SafetyCenterSeverityConverter.toEntrySeverityLevel
+import com.android.settings.safetycenter.ui.SafetyCenterSessionUtils.INVALID_SESSION_ID
+import com.android.settings.safetycenter.ui.SafetyCenterSessionUtils.createSessionArgs
 import com.android.settings.safetycenter.ui.model.LiveSafetyCenterViewModel
+import com.android.settingslib.safetycenter.SafetyCenterUiData
 import kotlin.math.max
 
 /**
@@ -44,78 +51,86 @@ import kotlin.math.max
 // Suppressing MissingPermission lint: The Settings app holds the MANAGE_SAFETY_CENTER permission,
 // which is required by the SafetyCenterManager APIs used by the ViewModel.
 @SuppressLint("MissingPermission")
-class SubpagePreferenceController(context: Context, preferenceKey: String) :
+open class SubpagePreferenceController(context: Context, preferenceKey: String) :
     BasePreferenceController(context, preferenceKey) {
 
     private var preference: Preference? = null
-    private var relatedSafetySources: List<String> = emptyList()
-    private var relatedIssueOnlySafetySources: List<String> = emptyList()
-    private var viewModel: LiveSafetyCenterViewModel? = null
-    @StringRes private var defaultSummaryResId: Int? = null
+    var sessionId = INVALID_SESSION_ID
+    var relatedSafetySources: List<String> = emptyList()
+    var relatedIssueOnlySafetySources: List<String> = emptyList()
+    var viewModel: LiveSafetyCenterViewModel? = null
+    @StringRes var defaultSummaryResId: Int? = null
 
-    /**
-     * Sets the ViewModel instance for this controller and registers the observer to update the
-     * preference state when data changes.
-     *
-     * @param viewModel The LiveSafetyCenterViewModel instance.
-     * @param owner The LifecycleOwner to scope the observation.
-     */
-    fun setViewModelAndLifecycle(viewModel: LiveSafetyCenterViewModel, owner: LifecycleOwner) {
-        this.viewModel = viewModel
-
-        viewModel.safetyCenterUiLiveData.observe(owner) { data ->
+    override fun onViewCreated(owner: LifecycleOwner) {
+        if (viewModel == null) {
+            Log.w(TAG, "[$preferenceKey] ViewModel not set, cannot observe LiveData")
+            return
+        }
+        viewModel!!.safetyCenterUiLiveData.observe(owner) { data ->
             if (data == null) {
-                Log.d(TAG, "SafetyCenterData LiveData received null for $preferenceKey")
+                Log.d(TAG, "[$preferenceKey] LiveData received null")
                 return@observe
             }
-            Log.d(TAG, "safetyCenterUiLiveData observer notified for $preferenceKey")
+            Log.d(TAG, "[$preferenceKey] safetyCenterUiLiveData observer notified")
             preference?.let { updatePreferenceUi(it, data) }
         }
     }
 
-    /**
-     * Sets the list of related safety source IDs for this subpage.
-     *
-     * @param relatedSafetySources The list of safety source IDs.
-     */
-    fun setRelatedSafetySources(relatedSafetySources: List<String>) {
-        this.relatedSafetySources = relatedSafetySources
+    protected open fun setIcon(preference: Preference, icon: Drawable?) {
+        preference.icon = icon
     }
 
-    /**
-     * Sets the list of related safety source IDs for this subpage, which only provide issues.
-     *
-     * @param relatedIssueOnlySafetySources The list of safety source IDs.
-     */
-    fun setRelatedIssueOnlySafetySources(relatedIssueOnlySafetySources: List<String>) {
-        this.relatedIssueOnlySafetySources = relatedIssueOnlySafetySources
-    }
-
-    /**
-     * Sets the resource ID to be used as the default summary for this subpage preference.
-     *
-     * @param resId The string resource ID.
-     */
-    fun setDefaultSummaryResId(@StringRes resId: Int) {
-        this.defaultSummaryResId = resId
+    protected open fun setVisibility(preference: Preference, isVisible: Boolean) {
+        preference.isVisible = isVisible
     }
 
     override fun getAvailabilityStatus(): Int {
-        // TODO: b/424132940 - Add logic to check for preference availability.
         return AVAILABLE
+    }
+
+    override fun handlePreferenceTreeClick(preference: Preference): Boolean {
+        if (!TextUtils.equals(preference.key, preferenceKey)) {
+            return super.handlePreferenceTreeClick(preference)
+        }
+
+        val args: Bundle = createSessionArgs(sessionId)
+        args.putAll(NavigationSource.SAFETY_CENTER.createArgs())
+        SubSettingLauncher(mContext)
+            .setDestination(preference.fragment)
+            .setArguments(args)
+            .setSourceMetricsCategory(SettingsEnums.SAFETY_CENTER)
+            .launch()
+
+        return true
     }
 
     override fun displayPreference(screen: PreferenceScreen) {
         super.displayPreference(screen)
         preference = screen.findPreference(preferenceKey)
+        relatedSafetySources =
+            SafetyCenterSubpageRegistry.getXmlSafetySourceIds(mContext, preferenceKey)
+        relatedIssueOnlySafetySources =
+            SafetyCenterSubpageRegistry.getIssueOnlySafetySourceIds(preferenceKey)
+        defaultSummaryResId = SafetyCenterSubpageRegistry.getDefaultSummaryResId(preferenceKey)
+        val uiData = viewModel?.safetyCenterUiLiveData?.value
+        if (preference != null && uiData != null) {
+            updatePreferenceUi(preference!!, uiData)
+        }
+    }
+
+    override fun updateState(preference: Preference?) {
+        super.updateState(preference)
+        val uiData = viewModel?.safetyCenterUiLiveData?.value
+        if (preference != null && uiData != null) {
+            updatePreferenceUi(preference, uiData)
+        }
     }
 
     /**
      * Updates the preference's UI elements based on the provided data. This method is called by the
      * LiveData observer.
      */
-    private fun updatePreferenceUi(preference: Preference, data: SafetyCenterData) {
-        Log.d(TAG, "updatePreferenceUi with data for $preferenceKey")
+    private fun updatePreferenceUi(preference: Preference, data: SafetyCenterUiData) {
         val relatedSafetySourcesData = getRelatedSafetySourcesData(data)
         val relatedIssueOnlySafetySourcesData = getRelatedIssueOnlySafetySourcesData(data)
 
@@ -125,7 +140,7 @@ class SubpagePreferenceController(context: Context, preferenceKey: String) :
         val highestSeverityIssueOnlySafetySourceIssue =
             relatedIssueOnlySafetySourcesData.maxByOrNull { it.severityLevel }
 
-        preference.icon = getSubpageIcon(subpageMaxSeverity, relatedSafetySourcesData)
+        setIcon(preference, getSubpageIcon(subpageMaxSeverity, relatedSafetySourcesData))
         preference.summary =
             getSubpageSummary(
                 data,
@@ -133,68 +148,69 @@ class SubpagePreferenceController(context: Context, preferenceKey: String) :
                 highestSeverityIssueOnlySafetySourceIssue,
                 subpageMaxSeverity,
             )
+        setVisibility(
+            preference,
+            relatedSafetySourcesData.isNotEmpty() ||
+                SafetyCenterSubpageRegistry.hasInjectedTiles(preferenceKey),
+        )
+        Log.d(TAG, "[$preferenceKey] UI updated with max severity: $subpageMaxSeverity")
     }
 
     private fun getSubpageMaxSeverity(
         relatedSafetySourcesData: List<SafetyCenterEntry>,
         relatedIssueOnlySafetySourcesData: List<SafetyCenterIssue>,
-    ): Int {
-        val maxEntrySeverity =
-            relatedSafetySourcesData.maxOfOrNull { it.severityLevel }
-                ?: SafetyCenterEntry.ENTRY_SEVERITY_LEVEL_UNKNOWN
+    ): Int? {
+        val entrySeverities = relatedSafetySourcesData.map { it.severityLevel }
+        val issueSeverities = relatedIssueOnlySafetySourcesData.map { toEntrySeverityLevel(it.severityLevel) }
 
-        val maxIssueOnlySeverity =
-            relatedIssueOnlySafetySourcesData.maxOfOrNull { toEntrySeverityLevel(it.severityLevel) }
-                ?: SafetyCenterEntry.ENTRY_SEVERITY_LEVEL_UNKNOWN
+        val allSeverities = entrySeverities + issueSeverities
 
-        return max(maxEntrySeverity, maxIssueOnlySeverity)
+        return allSeverities.reduceOrNull { acc, severity -> mergeSeverities(acc, severity) }
     }
 
-    override fun updateState(preference: Preference) {
-        super.updateState(preference)
-        viewModel?.let { vm ->
-            val currentData = vm.getCurrentSafetyCenterDataAsUiData()
-            updatePreferenceUi(preference, currentData)
-        } ?: Log.w(TAG, "ViewModel not set in updateState for $preferenceKey, skipping UI update")
+    private fun mergeSeverities(left: Int, right: Int): Int {
+        // Rule 1: Warnings and Recommendations always win
+        if (left > SafetyCenterEntry.ENTRY_SEVERITY_LEVEL_OK || right > SafetyCenterEntry.ENTRY_SEVERITY_LEVEL_OK) {
+            return max(left, right)
+        }
+
+        // Rule 2: If there are no warnings/recommendations, UNKNOWN trumps OK
+        if (left == SafetyCenterEntry.ENTRY_SEVERITY_LEVEL_UNKNOWN || right == SafetyCenterEntry.ENTRY_SEVERITY_LEVEL_UNKNOWN) {
+            return SafetyCenterEntry.ENTRY_SEVERITY_LEVEL_UNKNOWN
+        }
+
+        // Rule 3: Fallback to standard math for remaining cases (e.g., OK vs UNSPECIFIED)
+        return max(left, right)
     }
 
-    private fun getRelatedSafetySourcesData(data: SafetyCenterData): List<SafetyCenterEntry> {
-        return data.entriesOrGroups
-            .flatMap { entryOrGroup ->
-                // Combines the standalone entry (if it exists) and the list of group entries
-                listOfNotNull(entryOrGroup.entry) +
-                    (entryOrGroup.entryGroup?.entries ?: emptyList())
-            }
-            .filter { entry -> relatedSafetySources.contains(entry.safetySourceId) }
-            .also { filteredList ->
-                Log.d(
-                    TAG,
-                    "getRelatedSafetySourcesData for $preferenceKey: ${filteredList.size} entries found matching $relatedSafetySources",
-                )
-            }
+    private fun getRelatedSafetySourcesData(data: SafetyCenterUiData): List<SafetyCenterEntry> {
+        val entries = data.getDynamicEntriesForSources(relatedSafetySources)
+        Log.d(
+            TAG,
+            "[$preferenceKey] Found ${entries.size} entries for sources: $relatedSafetySources",
+        )
+        return entries
     }
 
     private fun getRelatedIssueOnlySafetySourcesData(
-        data: SafetyCenterData
+        data: SafetyCenterUiData
     ): List<SafetyCenterIssue> {
-        return data.issues
-            .filter { issue -> issue.safetySourceIds.any { it in relatedIssueOnlySafetySources } }
-            .also { filteredList ->
-                Log.d(
-                    TAG,
-                    "getRelatedIssueOnlySafetySourcesData for $preferenceKey: ${filteredList.size} issues found matching $relatedIssueOnlySafetySources",
-                )
-            }
+        val issues = data.getActiveIssuesForSources(relatedIssueOnlySafetySources)
+        Log.d(
+            TAG,
+            "[$preferenceKey] Found ${issues.size} issues for issue-only sources: $relatedIssueOnlySafetySources",
+        )
+        return issues
     }
 
     private fun getSubpageIcon(
-        subpageMaxSeverity: Int,
+        subpageMaxSeverity: Int?,
         relatedSafetySourcesData: List<SafetyCenterEntry>,
     ): Drawable? {
-        Log.d(
-            TAG,
-            "getSubpageIcon called for $preferenceKey with subpageMaxSeverity: $subpageMaxSeverity",
-        )
+        if (subpageMaxSeverity == null) {
+            Log.d(TAG, "[$preferenceKey] getSubpageIcon: Null max severity")
+            return null
+        }
 
         val iconResId: Int? =
             when (subpageMaxSeverity) {
@@ -208,13 +224,13 @@ class SubpagePreferenceController(context: Context, preferenceKey: String) :
                         relatedSafetySourcesData.find { it.severityLevel == subpageMaxSeverity }
                     selectSeverityUnspecifiedIconResId(entryForIcon?.severityUnspecifiedIconType)
                 }
-                SafetyCenterEntry.ENTRY_SEVERITY_LEVEL_UNKNOWN -> null
+                SafetyCenterEntry.ENTRY_SEVERITY_LEVEL_UNKNOWN -> R.drawable.ic_safety_null_state
                 else -> {
                     Log.e(
                         TAG,
-                        "getSubpageIcon: Unknown maxSeverity level '$subpageMaxSeverity' for key '$preferenceKey'",
+                        "[$preferenceKey] getSubpageIcon: Unknown maxSeverity level '$subpageMaxSeverity'",
                     )
-                    null
+                    R.drawable.ic_safety_null_state
                 }
             }
         return iconResId?.let {
@@ -229,29 +245,32 @@ class SubpagePreferenceController(context: Context, preferenceKey: String) :
         return when (severityUnspecifiedIconType) {
             SafetyCenterEntry.SEVERITY_UNSPECIFIED_ICON_TYPE_NO_ICON -> R.drawable.ic_safety_empty
             SafetyCenterEntry.SEVERITY_UNSPECIFIED_ICON_TYPE_PRIVACY -> R.drawable.ic_privacy
+            SafetyCenterEntry.SEVERITY_UNSPECIFIED_ICON_TYPE_NO_RECOMMENDATION ->
+                R.drawable.ic_safety_null_state
             else -> {
                 Log.e(
                     TAG,
-                    String.format(
-                        "Unknown SafetyCenterEntry.SeverityNoneIconType: %s",
-                        severityUnspecifiedIconType,
-                    ),
+                    "[$preferenceKey] Unknown SeverityNoneIconType: $severityUnspecifiedIconType",
                 )
-                null
+                R.drawable.ic_safety_null_state
             }
         }
     }
 
     private fun getSubpageSummary(
-        data: SafetyCenterData,
+        data: SafetyCenterUiData,
         relatedSafetySourcesData: List<SafetyCenterEntry>,
         highestSeverityIssueOnlySafetySourceIssue: SafetyCenterIssue?,
-        subpageMaxSeverity: Int,
+        subpageMaxSeverity: Int?,
     ): CharSequence {
-        Log.d(
-            TAG,
-            "getSubpageSummary called for $preferenceKey with subpageMaxSeverity: $subpageMaxSeverity",
-        )
+        if (subpageMaxSeverity == null) {
+            Log.d(
+                TAG,
+                "[$preferenceKey] getSubpageSummary: Null max severity, returning default summary",
+            )
+            return getDefaultSubpageSummary(relatedSafetySourcesData)
+        }
+
         when (subpageMaxSeverity) {
             SafetyCenterEntry.ENTRY_SEVERITY_LEVEL_CRITICAL_WARNING,
             SafetyCenterEntry.ENTRY_SEVERITY_LEVEL_RECOMMENDATION,
@@ -266,7 +285,7 @@ class SubpagePreferenceController(context: Context, preferenceKey: String) :
                         return entrySummary
                     }
 
-                    if (hasActiveIssues(data, entry.safetySourceId)) {
+                    if (hasActiveIssues(data, entry)) {
                         return entrySummary
                     }
                 }
@@ -280,31 +299,52 @@ class SubpagePreferenceController(context: Context, preferenceKey: String) :
                     return highestSeverityIssueOnlySafetySourceIssue.title
                 }
 
-                return getDefaultSubpageSummary()
+                return getDefaultSubpageSummary(relatedSafetySourcesData)
             }
             SafetyCenterEntry.ENTRY_SEVERITY_LEVEL_UNSPECIFIED -> {
-                return getDefaultSubpageSummary()
+                return getDefaultSubpageSummary(relatedSafetySourcesData)
             }
             SafetyCenterEntry.ENTRY_SEVERITY_LEVEL_UNKNOWN -> {
-                return if (relatedSafetySourcesData.any { it.hasError() }) {
+                val hasError =
+                    if (Flags.openSafetyCenterApis()) {
+                        relatedSafetySourcesData.any { it.hasError() }
+                    } else {
+                        false
+                    }
+                return if (hasError) {
                     mContext.getString(R.string.safety_center_refresh_error)
                 } else {
                     mContext.getString(R.string.safety_center_subpage_unknown_summary)
                 }
             }
             else -> {
-                Log.e(TAG, "Unexpected maxSeverity $subpageMaxSeverity for $preferenceKey summary")
-                return getDefaultSubpageSummary()
+                Log.e(
+                    TAG,
+                    "[$preferenceKey] Unexpected maxSeverity $subpageMaxSeverity, returning default summary",
+                )
+                return getDefaultSubpageSummary(relatedSafetySourcesData)
             }
         }
     }
 
-    private fun hasActiveIssues(data: SafetyCenterData, safetySourceId: String?): Boolean {
-        return data.issues.any { issue -> issue.safetySourceIds.contains(safetySourceId) }
+    private fun hasActiveIssues(data: SafetyCenterUiData, entry: SafetyCenterEntry): Boolean {
+        if (!Flags.openSafetyCenterApis() || entry.safetySourceId == null) {
+            return false
+        }
+        return data.getActiveIssuesForSources(listOf(entry.safetySourceId!!)).isNotEmpty()
     }
 
-    private fun getDefaultSubpageSummary(): CharSequence {
+    protected open fun getDefaultSubpageSummary(
+        safetySourceEntries: List<SafetyCenterEntry>
+    ): CharSequence {
         return defaultSummaryResId?.let { mContext.getString(it) } ?: ""
+    }
+
+    override fun updateNonIndexableKeys(keys: MutableList<String>) {
+        if (!SafetyCenterSubpageRegistry.isSubpageAvailable(mContext, preferenceKey)) {
+            Log.d(TAG, "[$preferenceKey] Subpage is not available, adding to non-indexable keys")
+            keys.add(preferenceKey)
+        }
     }
 
     companion object {

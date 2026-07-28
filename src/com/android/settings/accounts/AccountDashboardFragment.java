@@ -17,6 +17,8 @@ package com.android.settings.accounts;
 
 import static android.provider.Settings.EXTRA_AUTHORITIES;
 
+import static com.android.settings.accounts.TopLevelAccountEntryPreferenceController.maybeAddTopLevelAccountEntryPreferenceController;
+
 import android.accounts.Account;
 import android.accounts.AccountManager;
 import android.app.settings.SettingsEnums;
@@ -41,6 +43,8 @@ import com.android.settings.applications.defaultapps.DefaultPrivateAutofillPrefe
 import com.android.settings.applications.defaultapps.DefaultWorkAutofillPreferenceController;
 import com.android.settings.dashboard.DashboardFragment;
 import com.android.settings.dashboard.profileselector.ProfileSelectFragment;
+import com.android.settings.flags.Flags;
+import com.android.settings.metrics.CredmanMetricsLogger;
 import com.android.settings.search.BaseSearchIndexProvider;
 import com.android.settings.users.AutoSyncDataPreferenceController;
 import com.android.settings.users.AutoSyncPersonalDataPreferenceController;
@@ -82,17 +86,27 @@ public class AccountDashboardFragment extends DashboardFragment {
     public void onAttach(Context context) {
         super.onAttach(context);
         if (CredentialManager.isServiceEnabled(context)) {
+            CredmanMetricsLogger credmanMetricsLogger = new CredmanMetricsLogger(context,
+                    getSettingsLifecycle());
+            use(DefaultCombinedPreferenceController.class).setCredmanMetricsLogger(
+                    credmanMetricsLogger);
+            use(DefaultPrivateCombinedPreferenceController.class).setCredmanMetricsLogger(
+                    credmanMetricsLogger);
+            use(DefaultWorkCombinedPreferenceController.class).setCredmanMetricsLogger(
+                    credmanMetricsLogger);
+
             CredentialManagerPreferenceController cmpp =
                     use(CredentialManagerPreferenceController.class);
             CredentialManagerPreferenceController.Delegate delegate =
                     new CredentialManagerPreferenceController.Delegate() {
-                public void setActivityResult(int resultCode) {
-                    getActivity().setResult(resultCode);
-                }
-                public void forceDelegateRefresh() {
-                    forceUpdatePreferences();
-                }
-            };
+                        public void setActivityResult(int resultCode) {
+                            getActivity().setResult(resultCode);
+                        }
+
+                        public void forceDelegateRefresh() {
+                            forceUpdatePreferences();
+                        }
+                    };
             cmpp.init(this, getFragmentManager(), getIntent(), delegate,
                     /*isWorkProfile=*/false, /*isPrivateSpace=*/ false);
         } else {
@@ -103,6 +117,7 @@ public class AccountDashboardFragment extends DashboardFragment {
     @Override
     protected List<AbstractPreferenceController> createPreferenceControllers(Context context) {
         final List<AbstractPreferenceController> controllers = new ArrayList<>();
+        maybeAddTopLevelAccountEntryPreferenceController(context, controllers);
         buildAutofillPreferenceControllers(context, controllers,
                 /*isWorkProfile=*/false, /*isPrivateSpace=*/ false);
         final String[] authorities = getIntent().getStringArrayExtra(EXTRA_AUTHORITIES);
@@ -142,20 +157,31 @@ public class AccountDashboardFragment extends DashboardFragment {
             DashboardFragment parent,
             String[] authorities,
             List<AbstractPreferenceController> controllers) {
-        final AccountPreferenceController accountPrefController =
-                new AccountPreferenceController(
-                        context, parent, authorities, ProfileSelectFragment.ProfileType.ALL);
-        if (parent != null) {
-            parent.getSettingsLifecycle().addObserver(accountPrefController);
+        boolean enableAccountsAndBackupScreen = Flags.enableAccountsAndBackupScreen();
+        if (!enableAccountsAndBackupScreen) {
+            final AccountPreferenceController accountPrefController =
+                    new AccountPreferenceController(
+                            context, parent, authorities, ProfileSelectFragment.ProfileType.ALL);
+            if (parent != null) {
+                parent.getSettingsLifecycle().addObserver(accountPrefController);
+            }
+            controllers.add(accountPrefController);
         }
-        controllers.add(accountPrefController);
-        controllers.add(new AutoSyncDataPreferenceController(context, parent));
-        controllers.add(new AutoSyncPersonalDataPreferenceController(context, parent));
-        controllers.add(new AutoSyncWorkDataPreferenceController(context, parent));
-        controllers.add(new AutoSyncPrivateDataPreferenceController(context, parent));
+        controllers.add(new AutoSyncDataPreferenceController(context, parent,
+                /* forceDisable */ enableAccountsAndBackupScreen));
+        controllers.add(new AutoSyncPersonalDataPreferenceController(context, parent,
+                /* forceDisable */ enableAccountsAndBackupScreen));
+        controllers.add(new AutoSyncWorkDataPreferenceController(context, parent,
+                /* forceDisable */ enableAccountsAndBackupScreen));
+        controllers.add(new AutoSyncPrivateDataPreferenceController(context, parent,
+                /* forceDisable */ enableAccountsAndBackupScreen));
     }
 
     private static int getPreferenceLayoutResId(Context context) {
+        if (Flags.enableAccountsAndBackupScreen()) {
+            return R.xml.credman_dashboard_settings;
+        }
+
         return (context != null && CredentialManager.isServiceEnabled(context))
                 ? R.xml.accounts_dashboard_settings_credman
                 : R.xml.accounts_dashboard_settings;
@@ -175,8 +201,10 @@ public class AccountDashboardFragment extends DashboardFragment {
                 public List<AbstractPreferenceController> createPreferenceControllers(
                         Context context) {
                     final List<AbstractPreferenceController> controllers = new ArrayList<>();
-                    buildAccountPreferenceControllers(
+                    if (!Flags.enableAccountsAndBackupScreen()) {
+                        buildAccountPreferenceControllers(
                             context, null /* parent */, null /* authorities*/, controllers);
+                    }
                     buildAutofillPreferenceControllers(context, controllers, false, false);
                     return controllers;
                 }
@@ -186,6 +214,9 @@ public class AccountDashboardFragment extends DashboardFragment {
                 public List<SearchIndexableRaw> getDynamicRawDataToIndex(
                         Context context, boolean enabled) {
                     final List<SearchIndexableRaw> indexRaws = new ArrayList<>();
+                    if (Flags.enableAccountsAndBackupScreen()) {
+                        return indexRaws;
+                    }
                     final UserManager userManager =
                             (UserManager) context.getSystemService(Context.USER_SERVICE);
                     final List<UserInfo> profiles = userManager.getProfiles(UserHandle.myUserId());

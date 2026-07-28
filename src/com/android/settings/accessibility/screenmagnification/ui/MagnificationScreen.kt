@@ -19,12 +19,13 @@ package com.android.settings.accessibility.screenmagnification.ui
 import android.app.settings.SettingsEnums
 import android.content.Context
 import android.content.Intent
+import androidx.annotation.StringRes
 import androidx.fragment.app.Fragment
 import com.android.internal.accessibility.AccessibilityShortcutController.MAGNIFICATION_COMPONENT_NAME
 import com.android.settings.R
 import com.android.settings.Settings.MagnificationActivity
 import com.android.settings.accessibility.FeedbackManager
-import com.android.settings.accessibility.Flags
+import com.android.settings.accessibility.extensions.isInSetupWizard
 import com.android.settings.accessibility.shared.ui.AccessibilityShortcutPreference
 import com.android.settings.accessibility.shared.ui.FeedbackButtonPreference
 import com.android.settings.core.PreferenceScreenMixin
@@ -33,12 +34,19 @@ import com.android.settingslib.metadata.PreferenceCategory
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.preferenceHierarchy
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 import kotlinx.coroutines.CoroutineScope
 
 @ProvidePreferenceScreen(MagnificationScreen.KEY)
 open class MagnificationScreen : PreferenceScreenMixin {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED)
+
     override val key: String
         get() = KEY
+
+    // TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.magnification_preference_screen_purpose
 
     override val indexable
         get() = true
@@ -57,10 +65,6 @@ open class MagnificationScreen : PreferenceScreenMixin {
 
     override fun getMetricsCategory() = SettingsEnums.ACCESSIBILITY_TOGGLE_SCREEN_MAGNIFICATION
 
-    override fun isFlagEnabled(context: Context) = Flags.catalystMagnification()
-
-    override fun hasCompleteHierarchy() = Flags.catalystMagnification()
-
     override fun fragmentClass(): Class<out Fragment>? = MagnificationPreferenceFragment::class.java
 
     override fun getLaunchIntent(context: Context, metadata: PreferenceMetadata?): Intent? =
@@ -70,28 +74,39 @@ open class MagnificationScreen : PreferenceScreenMixin {
         preferenceHierarchy(context) {
             +MagnificationTopIntroPreference()
             +MagnificationIllustrationPreference()
-            +PreferenceCategory("general_categories", R.string.accessibility_screen_option) += {
-                +AccessibilityShortcutPreference(
-                    context = context,
-                    key = "magnification_shortcut_preference",
-                    title = R.string.accessibility_screen_magnification_shortcut_title,
-                    componentName = MAGNIFICATION_COMPONENT_NAME,
-                    featureName = R.string.accessibility_screen_magnification_title,
-                    metricsCategory = metricsCategory,
-                )
-                +MagnificationModePreference()
-                +MagnifyKeyboardSwitchPreference()
-                +FollowTypingSwitchPreference()
-                +FollowKeyboardSwitchPreference()
-                +CursorFollowingPreference()
-                +OneFingerPanningSwitchPreference()
-                +AlwaysOnSwitchPreference()
-                +JoystickSwitchPreference()
-            }
-            +MagnificationFooterPreference()
+            +PreferenceCategory(
+                "general_categories",
+                R.string.general_categories_purpose,
+                R.string.accessibility_screen_option,
+            ) +=
+                {
+                    +AccessibilityShortcutPreference(
+                        context = context,
+                        key = "magnification_shortcut_preference",
+                        purpose = R.string.magnification_shortcut_preference_purpose,
+                        title = R.string.accessibility_screen_magnification_shortcut_title,
+                        componentName = MAGNIFICATION_COMPONENT_NAME,
+                        featureName = R.string.accessibility_screen_magnification_title,
+                        metricsCategory = metricsCategory,
+                    )
+                    +MagnificationModePreference()
+                    +MagnifyKeyboardSwitchPreference()
+                    +FollowTypingSwitchPreference()
+                    +FollowKeyboardSwitchPreference()
+                    +CursorFollowingPreference()
+                    +OneFingerPanningSwitchPreference()
+                    +AlwaysOnSwitchPreference()
+                    +JoystickSwitchPreference()
+                }
+            +MagnificationFooterPreference(getHelpResourceUri(context))
             +FeedbackButtonPreference { FeedbackManager(context, metricsCategory) }
             +MagnificationSurveyButtonPreference(metricsCategory)
         }
+
+    @StringRes
+    private fun getHelpResourceUri(context: Context): Int {
+        return if (context.isInSetupWizard()) 0 else R.string.help_url_magnification
+    }
 
     companion object {
         const val KEY = "magnification_preference_screen"

@@ -35,6 +35,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+// LINT.IfChange
 @SearchIndexable
 public class DoubleTapScreenSettings extends DashboardFragment {
 
@@ -87,3 +88,4 @@ public class DoubleTapScreenSettings extends DashboardFragment {
     public static final BaseSearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
             new BaseSearchIndexProvider(R.xml.double_tap_screen_settings);
 }
+// LINT.ThenChange(DoubleTapApiScreen.kt)

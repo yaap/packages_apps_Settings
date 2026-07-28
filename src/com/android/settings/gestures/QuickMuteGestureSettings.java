@@ -31,6 +31,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+// LINT.IfChange
 @SearchIndexable
 public class QuickMuteGestureSettings extends DashboardFragment {
     private static final String TAG = "QuickMuteGestureSettings";
@@ -78,3 +79,4 @@ public class QuickMuteGestureSettings extends DashboardFragment {
                 }
             };
 }
+// LINT.ThenChange(DoubleTwistGestureApiFirstScreen.kt)

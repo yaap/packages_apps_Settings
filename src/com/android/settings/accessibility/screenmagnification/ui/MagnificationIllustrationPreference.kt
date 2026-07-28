@@ -20,24 +20,37 @@ import android.content.Context
 import com.airbnb.lottie.LottieAnimationView
 import com.android.settings.R
 import com.android.settings.accessibility.shared.utils.adjustIllustrationLayoutForSetupWizard
+import com.android.settings.accessibility.shared.utils.handleIllustrationAnimationForSetupWizard
+import com.android.settings.inputmethod.InputPeripheralsSettingsUtils
 import com.android.settingslib.metadata.PreferenceMetadata
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.preference.PreferenceBinding
 import com.android.settingslib.widget.IllustrationPreference
 import com.android.settingslib.widget.SettingsThemeHelper
 
-// LINT.IfChange
 internal class MagnificationIllustrationPreference : PreferenceMetadata, PreferenceBinding {
 
     override val key: String
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.magnification_preference_screen_animated_image_purpose
+
     override val indexable
         get() = false
 
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
+
     override fun createWidget(context: Context): IllustrationPreference {
+        val hasPointingDevice =
+            InputPeripheralsSettingsUtils.isMouse() || InputPeripheralsSettingsUtils.isTouchpad()
         val lottieResId =
             if (SettingsThemeHelper.isExpressiveTheme(context)) {
-                R.raw.accessibility_magnification_banner_expressive
+                if (hasPointingDevice) {
+                    R.raw.accessibility_magnification_with_cursor_banner
+                } else {
+                    R.raw.accessibility_magnification_banner_expressive
+                }
             } else {
                 R.raw.accessibility_magnification_banner
             }
@@ -45,21 +58,28 @@ internal class MagnificationIllustrationPreference : PreferenceMetadata, Prefere
         return IllustrationPreference(context).apply {
             isSelectable = false
             lottieAnimationResId = lottieResId
-            contentDescription =
-                context.getString(
-                    R.string.accessibility_illustration_content_description,
-                    context.getText(R.string.accessibility_screen_magnification_title),
-                )
-            applyDynamicColor()
-
+            contentDescription = getContentDescription(context)
+            if (hasPointingDevice) {
+                applyIlloColors()
+            } else {
+                applyDynamicColor()
+            }
             setOnBindListener { view: LottieAnimationView? ->
-                view?.let { adjustIllustrationLayoutForSetupWizard(it) }
+                view?.let { animationView ->
+                    adjustIllustrationLayoutForSetupWizard(animationView)
+                    handleIllustrationAnimationForSetupWizard(animationView)
+                }
             }
         }
     }
+
+    fun getContentDescription(context: Context): CharSequence =
+        context.getString(
+            R.string.accessibility_illustration_content_description,
+            context.getText(R.string.accessibility_screen_magnification_title),
+        )
 
     companion object {
         const val KEY = "animated_image"
     }
 }
-// LINT.ThenChange(/src/com/android/settings/accessibility/screenmagnification/MagnificationIllustrationPreferenceController.java)

@@ -29,6 +29,7 @@ import android.telephony.satellite.SatelliteModemStateCallback
 import android.util.Log
 import androidx.annotation.VisibleForTesting
 import androidx.concurrent.futures.CallbackToFutureAdapter
+import com.android.internal.telephony.flags.Flags
 import com.android.settings.network.telephony.satellite.SatelliteCarrierSettingUtils
 import com.android.settings.network.telephony.telephonyCallbackFlow
 import com.google.common.util.concurrent.Futures.immediateFuture
@@ -232,7 +233,7 @@ open class SatelliteRepository(private val context: Context) {
     }
 
     /** Gets result of [CarrierRoamingNtnListener.onCarrierRoamingNtnAvailableServicesChanged]. */
-    fun carrierRoamingNtnAvailableServicesChangedFlow(subId: Int): Flow<Boolean> =
+    open fun carrierRoamingNtnAvailableServicesChangedFlow(subId: Int): Flow<Boolean> =
         context.telephonyCallbackFlow(subId) {
             object : TelephonyCallback(), CarrierRoamingNtnListener {
                 override fun onCarrierRoamingNtnAvailableServicesChanged(
@@ -252,7 +253,7 @@ open class SatelliteRepository(private val context: Context) {
         }
 
     /** Gets result of [SatelliteManager.requestIsSupported]. */
-    fun requestIsSupportedFlow(): Flow<Boolean> {
+    open fun requestIsSupportedFlow(): Flow<Boolean> {
         val satelliteManager: SatelliteManager? =
             context.getSystemService(SatelliteManager::class.java)
         if (satelliteManager == null) {
@@ -290,7 +291,7 @@ open class SatelliteRepository(private val context: Context) {
         }
         var carrierId =
             context.getSystemService(TelephonyManager::class.java).let {
-                it.createForSubscriptionId(subid).let { it.simSpecificCarrierId }
+                it.createForSubscriptionId(subid).let { it.simCarrierId }
             }
         return callbackFlow {
                 val callback =
@@ -305,12 +306,24 @@ open class SatelliteRepository(private val context: Context) {
                         }
 
                         override fun onResult(result: SatelliteAccessConfiguration) {
+                            Log.d(
+                                TAG,
+                                "requestSatelliteAccessConfigurationForCurrentLocation result : $result",
+                            )
                             trySend(
-                                SatelliteCarrierSettingUtils.isCarrierSatelliteRegionSupported(
-                                    context,
-                                    result.tagIds,
-                                    carrierId,
-                                )
+                                if (Flags.supportCarrierIdsInGeofence()) {
+                                    SatelliteCarrierSettingUtils
+                                        .isSatelliteRegionSupportedForSpecificCarrier(
+                                            result,
+                                            carrierId,
+                                        )
+                                } else {
+                                    SatelliteCarrierSettingUtils.isCarrierSatelliteRegionSupported(
+                                        context,
+                                        result.tagIds,
+                                        carrierId,
+                                    )
+                                }
                             )
                         }
                     }

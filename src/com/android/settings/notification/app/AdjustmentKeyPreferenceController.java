@@ -56,28 +56,18 @@ public class AdjustmentKeyPreferenceController extends
     }
 
     static boolean isAvailable(String key, NotificationBackend backend, String pkg, int uid) {
-        if (!(Flags.notificationClassificationUi() || Flags.nmSummarizationUi()
-                || Flags.nmSummarization())) {
-            return false;
-        }
         boolean isBundlePref = Adjustment.KEY_TYPE.equals(key);
         boolean isSummarizePref = Adjustment.KEY_SUMMARIZATION.equals(key);
-        if (!Flags.notificationClassificationUi() && isBundlePref) {
-            return false;
-        }
-        if (!(Flags.nmSummarizationUi() || Flags.nmSummarization()) && isSummarizePref) {
-            return false;
-        }
         if (!isSummarizePref && !isBundlePref) {
             return false;
         }
-        if (isSummarizePref && !(backend.hasSentValidMsg(pkg, uid)
-                || backend.isInInvalidMsgState(pkg, uid))) {
-            return false;
-        }
-
-        if (isSummarizePref && !backend.isNotificationSummarizationSupported()) {
-            return false;
+        if (isSummarizePref) {
+            if (!hasSentMessage(backend, pkg, uid) && !Flags.nmSummarizationAll()) {
+                return false;
+            }
+            if (!backend.showSummarizationSettings()) {
+                return false;
+            }
         }
 
         if (isBundlePref && !backend.isNotificationBundlingSupported()) {
@@ -85,6 +75,10 @@ public class AdjustmentKeyPreferenceController extends
         }
 
         return backend.getAllowedAssistantAdjustments().contains(key);
+    }
+
+    private static boolean hasSentMessage(NotificationBackend backend, String pkg, int uid) {
+        return backend.hasSentValidMsg(pkg, uid) || backend.isInInvalidMsgState(pkg, uid);
     }
 
     @Override

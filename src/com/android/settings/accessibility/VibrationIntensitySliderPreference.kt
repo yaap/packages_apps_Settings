@@ -27,6 +27,8 @@ import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.metadata.IntRangeValuePreference
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
+import com.android.settingslib.metadata.ReadWritePermit
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.widget.SliderPreference
 import com.android.settingslib.widget.SliderPreferenceBinding
 import kotlin.math.min
@@ -47,6 +49,7 @@ import kotlin.math.min
 open class VibrationIntensitySliderPreference(
     context: Context,
     override val key: String,
+    @StringRes override val purpose: Int,
     @Usage val vibrationUsage: Int,
     @StringRes override val title: Int = 0,
     @StringRes override val summary: Int = 0,
@@ -80,6 +83,11 @@ open class VibrationIntensitySliderPreference(
 
     override fun createWidget(context: Context) = SliderPreference(context)
 
+    override fun getWritePermit(context: Context, callingPid: Int, callingUid: Int) =
+        ReadWritePermit.ALLOW
+
+    override val supportsWrite = true
+
     @CallSuper
     override fun bind(preference: Preference, metadata: PreferenceMetadata) {
         super.bind(preference, metadata)
@@ -101,6 +109,10 @@ open class VibrationIntensitySliderPreference(
         }
         return false // value has been updated
     }
+
+    override fun getEnabledDescription() = "The vibration setting (vibrate_on) must be enabled."
+
+    override fun getEnabledStability() = PreconditionStability.UNSTABLE
 
     @CallSuper override fun isEnabled(context: Context) = storage.isPreferenceEnabled()
 }

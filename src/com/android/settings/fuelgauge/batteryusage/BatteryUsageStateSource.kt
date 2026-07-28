@@ -18,9 +18,10 @@ package com.android.settings.fuelgauge.batteryusage
 
 import android.content.Context
 import android.util.Log
+import com.android.settings.R
 import com.android.settings.appfunctions.DeviceStateAppFunctionType
-import com.android.settings.appfunctions.providersources.DeviceStateSource
-import com.android.settings.appfunctions.providersources.SharedDeviceStateData
+import com.android.settings.appfunctions.stateprovidersources.DeviceStateSource
+import com.android.settings.appfunctions.stateprovidersources.SharedDeviceStateData
 import com.android.settingslib.Utils
 import com.google.android.appfunctions.schema.common.v1.devicestate.DeviceStateItem
 import com.google.android.appfunctions.schema.common.v1.devicestate.PerScreenDeviceStates
@@ -66,10 +67,9 @@ class BatteryUsageStateSource :
             DataProcessManager.getBatteryLevelData(
                 context,
                 null,
-                UserIdsSeries(context, /* isNonUIRequest= */ false),
+                UserIdsSeries(context, /* isNonUIRequest= */ false, /* excludeProfiles= */ true),
                 /* isFromPeriodJob= */ false,
-                this,
-            )
+                this,            )
         batteryLevelDataFlow.value = batteryLevelData
 
         Log.d(TAG, "Wait for state flow ready...")
@@ -118,7 +118,7 @@ class BatteryUsageStateSource :
         deviceStateItems.add(
             DeviceStateItem(
                 key = "screen_time_since_last_full_charge",
-                purpose = "screen_time_since_last_full_charge",
+                purpose = context.getString(R.string.screen_time_since_last_full_charge_purpose),
                 jsonValue = screenOnTimeMs.millisToSecondsString(),
             )
         )
@@ -137,7 +137,7 @@ class BatteryUsageStateSource :
             deviceStateItems.add(
                 DeviceStateItem(
                     key = "battery_usage_screen_time_package_$packageName",
-                    purpose = "battery_usage_screen_time_package_$packageName",
+                    purpose = context.getString(R.string.battery_usage_screen_time_package_purpose),
                     jsonValue = screenMs.millisToSecondsString(),
                     hintText = "App: $appName",
                 )
@@ -146,7 +146,8 @@ class BatteryUsageStateSource :
             deviceStateItems.add(
                 DeviceStateItem(
                     key = "battery_usage_background_time_package_$packageName",
-                    purpose = "battery_usage_background_time_package_$packageName",
+                    purpose =
+                        context.getString(R.string.battery_usage_background_time_package_purpose),
                     jsonValue = backgroundMs.millisToSecondsString(),
                     hintText = "App: $appName",
                 )
@@ -155,7 +156,7 @@ class BatteryUsageStateSource :
             deviceStateItems.add(
                 DeviceStateItem(
                     key = "battery_usage_percentage_package_$packageName",
-                    purpose = "battery_usage_percentage_package_$packageName",
+                    purpose = context.getString(R.string.battery_usage_percentage_package_purpose),
                     jsonValue = Utils.formatPercentage(percentage, true),
                     hintText = "App: $appName",
                 )

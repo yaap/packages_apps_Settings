@@ -21,18 +21,29 @@ import androidx.fragment.app.Fragment
 import com.android.settings.R
 import com.android.settings.Settings.LanguageAndRegionSettingsActivity
 import com.android.settings.core.PreferenceScreenMixin
-import com.android.settings.flags.Flags
 import com.android.settings.utils.makeLaunchIntent
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ProvidePreferenceScreen
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.metadata.preferenceHierarchy
 import kotlinx.coroutines.CoroutineScope
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 
 // LINT.IfChange
 @ProvidePreferenceScreen(LanguageAndRegionScreen.KEY)
 open class LanguageAndRegionScreen : PreferenceScreenMixin {
+    override fun tags(context: Context) = arrayOf(
+        APP_FUNCTION_UNCATEGORIZED,
+        // exclude this screen from api result since we have the data in api_language_and_region_settings screen
+        UI_ONLY_PREFERENCE,
+    )
+
     override val key: String
         get() = KEY
+
+    // TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.language_and_region_settings_purpose
 
     override val title: Int
         get() = R.string.language_and_region_settings
@@ -47,11 +58,6 @@ open class LanguageAndRegionScreen : PreferenceScreenMixin {
 
     override val highlightMenuKey
         get() = R.string.menu_key_system
-
-    // This item should be added to the parent screen only if both of these flags
-    // match the expected true result.
-    override fun isFlagEnabled(context: Context) =
-        Flags.deeplinkSystem25q4() && !Flags.regionalPreferencesApiEnabled()
 
     override fun hasCompleteHierarchy() = false
 

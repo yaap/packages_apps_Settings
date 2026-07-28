@@ -17,21 +17,23 @@
 package com.android.settings.network.telephony.satellite;
 
 import static android.telephony.CarrierConfigManager.CARRIER_ROAMING_NTN_CONNECT_AUTOMATIC;
-import static android.telephony.CarrierConfigManager.KEY_CARRIER_ROAMING_NTN_CONNECT_TYPE_INT;
-import static android.telephony.CarrierConfigManager.KEY_SATELLITE_ENTITLEMENT_SUPPORTED_BOOL;
+import static android.telephony.CarrierConfigManager.CARRIER_ROAMING_NTN_CONNECT_HYBRID;
+import static android.telephony.CarrierConfigManager.CARRIER_ROAMING_NTN_CONNECT_MANUAL;
 import static android.telephony.CarrierConfigManager.KEY_SATELLITE_INFORMATION_REDIRECT_URL_STRING;
 
 import android.content.Context;
 import android.content.Intent;
-import android.os.PersistableBundle;
 import android.telephony.TelephonyManager;
 import android.text.Html;
+import android.util.Log;
 
 import androidx.annotation.VisibleForTesting;
 import androidx.preference.PreferenceScreen;
 
+import com.android.internal.telephony.flags.Flags;
 import com.android.settings.R;
 import com.android.settings.network.telephony.TelephonyBasePreferenceController;
+import com.android.settings.overlay.FeatureFactory;
 import com.android.settingslib.HelpUtils;
 import com.android.settingslib.widget.FooterPreference;
 
@@ -41,18 +43,24 @@ public class SatelliteSettingFooterController extends TelephonyBasePreferenceCon
     @VisibleForTesting
     static final String KEY_FOOTER_PREFERENCE = "satellite_setting_extra_info_footer_pref";
 
-    private PersistableBundle mConfigBundle = new PersistableBundle();
     private String mSimOperatorName;
+    private boolean mIsSmsAvailable;
+    private boolean mIsSatelliteEligible;
 
     public SatelliteSettingFooterController(Context context, String preferenceKey) {
         super(context, preferenceKey);
     }
 
-    void init(int subId, PersistableBundle configBundle) {
+    void init(int subId) {
         mSubId = subId;
-        mConfigBundle = configBundle;
         mSimOperatorName = mContext.getSystemService(TelephonyManager.class).getSimOperatorName(
                 subId);
+    }
+
+    void setCarrierRoamingNtnAvailability(boolean isSmsAvailable, boolean isDataAvailable,
+            int dataMode) {
+        mIsSmsAvailable = isSmsAvailable;
+        mIsSatelliteEligible = isSatelliteEligible();
     }
 
     @Override
@@ -75,7 +83,7 @@ public class SatelliteSettingFooterController extends TelephonyBasePreferenceCon
         footerPreference.setSummary(
                 Html.fromHtml(getFooterContent(), Html.FROM_HTML_SEPARATOR_LINE_BREAK_LIST_ITEM));
         final String link = readSatelliteMoreInfoString();
-        if (link.isEmpty()) {
+        if (link == null || link.isEmpty()) {
             return;
         }
         footerPreference.setLearnMoreAction(view -> {
@@ -90,10 +98,11 @@ public class SatelliteSettingFooterController extends TelephonyBasePreferenceCon
     }
 
     private String getFooterContent() {
-        boolean isEntitlementSupport = mConfigBundle.getBoolean(
-                KEY_SATELLITE_ENTITLEMENT_SUPPORTED_BOOL);
-        boolean isAUtoType = mConfigBundle.getInt(KEY_CARRIER_ROAMING_NTN_CONNECT_TYPE_INT)
-                == CARRIER_ROAMING_NTN_CONNECT_AUTOMATIC;
+        SatelliteSettingsRepository repository =
+                FeatureFactory.getFeatureFactory().getTelephonyFeatureProvider()
+                        .getSatelliteSettingsRepository();
+        boolean isEntitlementSupport = repository.isSatelliteEntitlementSupported(mSubId);
+        int ntnType = repository.getSatelliteNtnConnectType(mSubId);
 
         String result = "";
         result = mContext.getString(R.string.satellite_footer_content_section_0) + "\n\n";
@@ -103,19 +112,38 @@ public class SatelliteSettingFooterController extends TelephonyBasePreferenceCon
         result += getHtmlStringCombination(R.string.satellite_footer_content_section_4);
 
         if (isEntitlementSupport) {
-            if (isAUtoType) {
-                result += getHtmlStringCombination(R.string.satellite_footer_content_section_5);
-                result += getHtmlStringCombination(R.string.satellite_footer_content_section_7,
-                        mSimOperatorName);
+            switch (ntnType) {
+                case CARRIER_ROAMING_NTN_CONNECT_MANUAL:
+                    result += getHtmlStringCombination(R.string.satellite_footer_content_section_7,
+                            mSimOperatorName);
+                    break;
+                case CARRIER_ROAMING_NTN_CONNECT_HYBRID:
+                    if (mIsSatelliteEligible) {
+                        result += getHtmlStringCombination(
+                                R.string.satellite_footer_content_section_5);
+                    }
+                    result += getHtmlStringCombination(R.string.satellite_footer_content_section_7,
+                            mSimOperatorName);
+                    result += getHtmlStringCombination(R.string.satellite_footer_content_section_8);
+                    break;
+                case CARRIER_ROAMING_NTN_CONNECT_AUTOMATIC:
+                    result += getHtmlStringCombination(R.string.satellite_footer_content_section_5);
+                    result += getHtmlStringCombination(R.string.satellite_footer_content_section_7,
+                            mSimOperatorName);
+                    result += getHtmlStringCombination(R.string.satellite_footer_content_section_8);
+                    break;
+                default:
+                    Log.d(TAG, "Illegible type : " + ntnType);
             }
         } else {
-            if (isAUtoType) {
+            if (ntnType == CARRIER_ROAMING_NTN_CONNECT_AUTOMATIC) {
                 result += getHtmlStringCombination(R.string.satellite_footer_content_section_6);
                 result += getHtmlStringCombination(R.string.satellite_footer_content_section_5);
                 return result;
             }
             result += getHtmlStringCombination(R.string.satellite_footer_content_section_7,
                     mSimOperatorName);
+            result += getHtmlStringCombination(R.string.satellite_footer_content_section_8);
         }
         return result;
     }
@@ -133,6 +161,33 @@ public class SatelliteSettingFooterController extends TelephonyBasePreferenceCon
     }
 
     private String readSatelliteMoreInfoString() {
-        return mConfigBundle.getString(KEY_SATELLITE_INFORMATION_REDIRECT_URL_STRING);
+        String url = FeatureFactory.getFeatureFactory().getTelephonyFeatureProvider()
+                .getCarrierConfigRepository().getString(mSubId,
+                        KEY_SATELLITE_INFORMATION_REDIRECT_URL_STRING);
+        return (url == null) ? "" : url;
+    }
+
+    @VisibleForTesting
+    protected boolean isSatelliteEligible() {
+        SatelliteSettingsRepository repository =
+                FeatureFactory.getFeatureFactory().getTelephonyFeatureProvider()
+                        .getSatelliteSettingsRepository();
+        if (repository.getSatelliteNtnConnectType(mSubId)
+                == CARRIER_ROAMING_NTN_CONNECT_MANUAL) {
+            return mIsSmsAvailable;
+        }
+
+        if (Flags.vzwAstSkyloFallback()
+                && repository.getSatelliteNtnConnectType(mSubId)
+                == CARRIER_ROAMING_NTN_CONNECT_HYBRID) {
+            if (repository.isSatelliteEntitlementSupported(mSubId)) {
+                if (SatelliteCarrierSettingUtils.isSatelliteAccountEligible(mContext, mSubId)) {
+                    return true;
+                } else {
+                    return mIsSmsAvailable;
+                }
+            }
+        }
+        return SatelliteCarrierSettingUtils.isSatelliteAccountEligible(mContext, mSubId);
     }
 }

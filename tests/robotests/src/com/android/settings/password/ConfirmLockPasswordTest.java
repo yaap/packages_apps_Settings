@@ -25,7 +25,7 @@ import static com.android.settings.password.TestUtils.LOCKOUT_RESULT;
 import static com.android.settings.password.TestUtils.NO_REMAINING_ATTEMPTS_RESULT;
 import static com.android.settings.password.TestUtils.PACKAGE_NAME;
 import static com.android.settings.password.TestUtils.SERVICE_NAME;
-import static com.android.settings.password.TestUtils.TIMEOUT_MS;
+import static com.android.settings.password.TestUtils.TIMEOUT;
 import static com.android.settings.password.TestUtils.VALID_REMAINING_ATTEMPTS;
 import static com.android.settings.password.TestUtils.buildConfirmDeviceCredentialBaseActivity;
 import static com.android.settings.password.TestUtils.createRemoteLockscreenValidationIntent;
@@ -47,11 +47,14 @@ import android.app.admin.ManagedSubscriptionsPolicy;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Bundle;
 import android.os.UserHandle;
 import android.service.remotelockscreenvalidation.IRemoteLockscreenValidationCallback;
 import android.service.remotelockscreenvalidation.RemoteLockscreenValidationClient;
 import android.text.InputType;
 import android.util.FeatureFlagUtils;
+import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.widget.ImeAwareEditText;
 
 import androidx.test.core.app.ApplicationProvider;
@@ -59,6 +62,7 @@ import androidx.test.core.app.ApplicationProvider;
 import com.android.internal.widget.LockPatternUtils;
 import com.android.settings.R;
 import com.android.settings.SetupRedactionInterstitial;
+import com.android.settings.testutils.shadow.SettingsShadowResources;
 import com.android.settings.testutils.shadow.ShadowDevicePolicyManager;
 import com.android.settings.testutils.shadow.ShadowLockPatternUtils;
 import com.android.settings.testutils.shadow.ShadowUserManager;
@@ -83,13 +87,16 @@ import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowApplicationPackageManager;
 import org.robolectric.util.ReflectionHelpers;
 
+import java.time.Duration;
+
 @RunWith(RobolectricTestRunner.class)
 @Config(shadows = {
         ShadowLockPatternUtils.class,
         ShadowUtils.class,
         ShadowDevicePolicyManager.class,
         ShadowUserManager.class,
-        ShadowApplicationPackageManager.class
+        ShadowApplicationPackageManager.class,
+        SettingsShadowResources.class
 })
 public class ConfirmLockPasswordTest {
 
@@ -134,6 +141,7 @@ public class ConfirmLockPasswordTest {
     public void tearDown() {
         ShadowLockPatternUtils.reset();
         PartnerConfigHelper.applyGlifExpressiveBundle = null;
+        SettingsShadowResources.reset();
     }
 
     @Test
@@ -210,6 +218,69 @@ public class ConfirmLockPasswordTest {
     }
 
     @Test
+    public void passwordEntry_hasAccessibilityClickAction() {
+        ConfirmLockPassword activity = Robolectric.buildActivity(
+                ConfirmLockPassword.class, new Intent()).setup().get();
+
+        ImeAwareEditText passwordEntry = activity.findViewById(R.id.password_entry);
+        View.AccessibilityDelegate delegate = passwordEntry.getAccessibilityDelegate();
+        assertThat(delegate).isNotNull();
+
+        AccessibilityNodeInfo info = AccessibilityNodeInfo.obtain();
+        delegate.onInitializeAccessibilityNodeInfo(passwordEntry, info);
+        boolean hasClickAction = false;
+        for (AccessibilityNodeInfo.AccessibilityAction action : info.getActionList()) {
+            if (action.getId() == AccessibilityNodeInfo.AccessibilityAction.ACTION_CLICK.getId()) {
+                hasClickAction = true;
+                assertThat(action.getLabel().toString()).isEqualTo(
+                        mContext.getString(R.string.lockpassword_confirm_label));
+                break;
+            }
+        }
+        assertThat(hasClickAction).isTrue();
+    }
+
+    @Test
+    public void passwordEntry_performAccessibilityAction_clickWithEmptyEntry_doesNotValidate() {
+        ConfirmLockPassword activity = Robolectric.buildActivity(
+                ConfirmLockPassword.class, new Intent()).setup().get();
+        ConfirmLockPasswordFragment fragment =
+                (ConfirmLockPasswordFragment) getConfirmDeviceCredentialBaseFragment(activity);
+        ImeAwareEditText passwordEntry = activity.findViewById(R.id.password_entry);
+
+        passwordEntry.setText("");
+
+        boolean result = passwordEntry.getAccessibilityDelegate().performAccessibilityAction(
+                passwordEntry,
+                AccessibilityNodeInfo.ACTION_CLICK,
+                new Bundle());
+        assertThat(result).isTrue();
+
+        Object pendingLockCheck = ReflectionHelpers.getField(fragment, "mPendingLockCheck");
+        assertThat(pendingLockCheck).isNull();
+    }
+
+    @Test
+    public void passwordEntry_performAccessibilityAction_clickWithEntry_startsValidation() {
+        ConfirmLockPassword activity = Robolectric.buildActivity(
+                ConfirmLockPassword.class, new Intent()).setup().get();
+        ConfirmLockPasswordFragment fragment =
+                (ConfirmLockPasswordFragment) getConfirmDeviceCredentialBaseFragment(activity);
+        ImeAwareEditText passwordEntry = activity.findViewById(R.id.password_entry);
+
+        passwordEntry.setText("1234");
+
+        boolean result = passwordEntry.getAccessibilityDelegate().performAccessibilityAction(
+                passwordEntry,
+                AccessibilityNodeInfo.ACTION_CLICK,
+                new Bundle());
+        assertThat(result).isTrue();
+
+        Object pendingLockCheck = ReflectionHelpers.getField(fragment, "mPendingLockCheck");
+        assertThat(pendingLockCheck).isNotNull();
+    }
+
+    @Test
     public void handleNext_normalFlow_doesNotAttemptRemoteLockscreenValidation() {
         ConfirmLockPassword activity = Robolectric.buildActivity(
                 ConfirmLockPassword.class, new Intent()).setup().get();
@@ -244,7 +315,7 @@ public class ConfirmLockPasswordTest {
         mCallbackCaptor.getValue().onSuccess(GUESS_VALID_RESULT);
 
         verify(mCredentialCheckResultTracker).setResult(
-                eq(true), any(), eq(0), eq(fragment.mEffectiveUserId));
+                eq(true), any(), eq(Duration.ZERO), eq(fragment.mEffectiveUserId));
         assertThat(mLockPatternUtils.isSecure(fragment.mEffectiveUserId)).isTrue();
         assertThat(fragment.mRemoteLockscreenValidationFragment.getLockscreenCredential()).isNull();
     }
@@ -271,7 +342,7 @@ public class ConfirmLockPasswordTest {
         mCallbackCaptor.getValue().onSuccess(GUESS_VALID_RESULT);
 
         verify(mCredentialCheckResultTracker).setResult(
-                eq(true), any(), eq(0), eq(fragment.mEffectiveUserId));
+                eq(true), any(), eq(Duration.ZERO), eq(fragment.mEffectiveUserId));
         assertThat(mLockPatternUtils.isSecure(fragment.mEffectiveUserId)).isFalse();
         assertThat(fragment.mRemoteLockscreenValidationFragment.getLockscreenCredential()).isNull();
     }
@@ -297,7 +368,7 @@ public class ConfirmLockPasswordTest {
         mCallbackCaptor.getValue().onSuccess(GUESS_INVALID_RESULT);
 
         verify(mCredentialCheckResultTracker).setResult(
-                eq(false), any(), eq(0), eq(fragment.mEffectiveUserId));
+                eq(false), any(), eq(Duration.ZERO), eq(fragment.mEffectiveUserId));
         assertThat(mLockPatternUtils.isSecure(fragment.mEffectiveUserId)).isFalse();
     }
 
@@ -322,7 +393,7 @@ public class ConfirmLockPasswordTest {
         mCallbackCaptor.getValue().onSuccess(LOCKOUT_RESULT);
 
         verify(mCredentialCheckResultTracker).setResult(
-                eq(false), any(), eq(TIMEOUT_MS), eq(fragment.mEffectiveUserId));
+                eq(false), any(), eq(TIMEOUT), eq(fragment.mEffectiveUserId));
         assertThat(mLockPatternUtils.isSecure(fragment.mEffectiveUserId)).isFalse();
     }
 
@@ -348,7 +419,7 @@ public class ConfirmLockPasswordTest {
 
         assertThat(activity.isFinishing()).isTrue();
         verify(mCredentialCheckResultTracker, never())
-                .setResult(anyBoolean(), any(), anyInt(), anyInt());
+                .setResult(anyBoolean(), any(), any(), anyInt());
         assertThat(mLockPatternUtils.isSecure(fragment.mEffectiveUserId)).isFalse();
     }
 
@@ -376,6 +447,66 @@ public class ConfirmLockPasswordTest {
                 .getComponentEnabledSetting(componentName);
 
         assertThat(isEnabled).isEqualTo(COMPONENT_ENABLED_STATE_ENABLED);
+    }
+
+    @Test
+    public void checkPasswordTransfer_hideCheckboxEnabled_checkboxIsGone() throws Exception {
+        SettingsShadowResources.overrideResource(
+                R.bool.config_disable_remote_lockscreen_transfer_checkbox, true);
+        ConfirmDeviceCredentialBaseActivity activity =
+                buildConfirmDeviceCredentialBaseActivity(
+                        ConfirmLockPassword.class,
+                        createRemoteLockscreenValidationIntent(
+                                KeyguardManager.PASSWORD, VALID_REMAINING_ATTEMPTS));
+        ConfirmLockPasswordFragment fragment =
+                (ConfirmLockPasswordFragment) getConfirmDeviceCredentialBaseFragment(activity);
+        assertThat(fragment.mCheckBox.getVisibility()).isEqualTo(View.GONE);
+        assertThat(fragment.mCheckBox.isChecked()).isFalse();
+    }
+
+    @Test
+    public void checkPasswordTransfer_hideCheckboxDisabled_checkboxIsVisible() throws Exception {
+        SettingsShadowResources.overrideResource(
+                R.bool.config_disable_remote_lockscreen_transfer_checkbox, false);
+        ConfirmDeviceCredentialBaseActivity activity =
+                buildConfirmDeviceCredentialBaseActivity(
+                        ConfirmLockPassword.class,
+                        createRemoteLockscreenValidationIntent(
+                                KeyguardManager.PASSWORD, VALID_REMAINING_ATTEMPTS));
+        ConfirmLockPasswordFragment fragment =
+                (ConfirmLockPasswordFragment) getConfirmDeviceCredentialBaseFragment(activity);
+        assertThat(fragment.mCheckBox.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(fragment.mCheckBox.isChecked()).isTrue();
+    }
+
+    @Test
+    public void checkPinTransfer_hideCheckboxEnabled_checkboxIsGone() throws Exception {
+        SettingsShadowResources.overrideResource(
+                R.bool.config_disable_remote_lockscreen_transfer_checkbox, true);
+        ConfirmDeviceCredentialBaseActivity activity =
+                buildConfirmDeviceCredentialBaseActivity(
+                        ConfirmLockPassword.class,
+                        createRemoteLockscreenValidationIntent(
+                                KeyguardManager.PIN, VALID_REMAINING_ATTEMPTS));
+        ConfirmLockPasswordFragment fragment =
+                (ConfirmLockPasswordFragment) getConfirmDeviceCredentialBaseFragment(activity);
+        assertThat(fragment.mCheckBox.getVisibility()).isEqualTo(View.GONE);
+        assertThat(fragment.mCheckBox.isChecked()).isFalse();
+    }
+
+    @Test
+    public void checkPinTransfer_hideCheckboxDisabled_checkboxIsVisible() throws Exception {
+        SettingsShadowResources.overrideResource(
+                R.bool.config_disable_remote_lockscreen_transfer_checkbox, false);
+        ConfirmDeviceCredentialBaseActivity activity =
+                buildConfirmDeviceCredentialBaseActivity(
+                        ConfirmLockPassword.class,
+                        createRemoteLockscreenValidationIntent(
+                                KeyguardManager.PIN, VALID_REMAINING_ATTEMPTS));
+        ConfirmLockPasswordFragment fragment =
+                (ConfirmLockPasswordFragment) getConfirmDeviceCredentialBaseFragment(activity);
+        assertThat(fragment.mCheckBox.getVisibility()).isEqualTo(View.VISIBLE);
+        assertThat(fragment.mCheckBox.isChecked()).isTrue();
     }
 
     private void triggerHandleNext(

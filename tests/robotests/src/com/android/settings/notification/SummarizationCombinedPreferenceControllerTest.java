@@ -26,7 +26,6 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import android.app.Flags;
 import android.content.Context;
 import android.os.UserHandle;
 import android.platform.test.flag.junit.SetFlagsRule;
@@ -68,8 +67,7 @@ public class SummarizationCombinedPreferenceControllerTest {
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         mContext = RuntimeEnvironment.application;
-        mSetFlagsRule.enableFlags(Flags.FLAG_NM_SUMMARIZATION, Flags.FLAG_NM_SUMMARIZATION_UI);
-        when(mBackend.isNotificationSummarizationSupported()).thenReturn(true);
+        when(mBackend.showSummarizationSettings()).thenReturn(true);
         mController = new SummarizationCombinedPreferenceController(mContext, PREFERENCE_KEY,
                 mBackend);
 
@@ -95,14 +93,7 @@ public class SummarizationCombinedPreferenceControllerTest {
 
     @Test
     public void isAvailable_flagEnabledNasDoesNotSupport_shouldReturnFalse() {
-        when(mBackend.isNotificationSummarizationSupported()).thenReturn(false);
-        assertThat(mController.isAvailable()).isFalse();
-    }
-
-    @Test
-    public void isAvailable_flagDisabledNasSupports_shouldReturnFalse() {
-        mSetFlagsRule.disableFlags(Flags.FLAG_NM_SUMMARIZATION);
-        mSetFlagsRule.disableFlags(Flags.FLAG_NM_SUMMARIZATION_UI);
+        when(mBackend.showSummarizationSettings()).thenReturn(false);
         assertThat(mController.isAvailable()).isFalse();
     }
 

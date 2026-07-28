@@ -54,7 +54,7 @@
     <item msgid="3249903732481917388">"Authentification..."</item>
     <item msgid="7789156794775399931">"Récupération de l\'adresse IP…"</item>
     <item msgid="492518447401534767">"Connecté"</item>
-    <item msgid="4322989558568666518">"Interrompu"</item>
+    <item msgid="4322989558568666518">"Suspendu"</item>
     <item msgid="286164147080824297">"Déconnexion…"</item>
     <item msgid="1628460745311787730">"Déconnecté"</item>
     <item msgid="4013828218541488949">"Échec"</item>
@@ -305,16 +305,6 @@
     <item msgid="3756073389408535680">"Exécuter en arrière-plan"</item>
     <item msgid="2114661179947426734">"Volume d\'accessibilité"</item>
   </string-array>
-  <string-array name="long_press_timeout_selector_titles">
-    <item msgid="6926391290986427331">"Court"</item>
-    <item msgid="5118829513010894576">"Moyen"</item>
-    <item msgid="6740026006576843477">"Long"</item>
-  </string-array>
-  <string-array name="long_press_timeout_selector_list_titles">
-    <item msgid="8908021508913038488">"Court"</item>
-    <item msgid="7397961711906421599">"Moyen"</item>
-    <item msgid="4079132024502041928">"Long"</item>
-  </string-array>
   <string-array name="ethernet_ip_settings">
     <item msgid="7618681915649929019">"DHCP"</item>
     <item msgid="4425163520864432692">"Statique"</item>
@@ -359,14 +349,6 @@
     <item msgid="2836895041823327816">"Jaune sur bleu"</item>
     <item msgid="747238414788976867">"Personnalisé"</item>
   </string-array>
-  <string-array name="accessibility_button_location_selector_titles">
-    <item msgid="6485511780196327736">"Flottant sur les autres applis"</item>
-    <item msgid="3605616699204153590">"Barre de navigation"</item>
-  </string-array>
-  <string-array name="accessibility_button_size_selector_titles">
-    <item msgid="7482952318152486459">"Petite"</item>
-    <item msgid="1666628329913333563">"Grande"</item>
-  </string-array>
   <string-array name="vpn_proxy_settings">
     <item msgid="7165538292837266997">"Aucun"</item>
     <item msgid="2397017538263427575">"Manuel"</item>
@@ -377,7 +359,7 @@
     <item msgid="2234425878608626285">"Connexion en cours..."</item>
     <item msgid="27547778933579155">"Connecté"</item>
     <item msgid="893506841727300393">"Expiration du délai"</item>
-    <item msgid="2974952010554140659">"Échec."</item>
+    <item msgid="2974952010554140659">"Échec"</item>
   </string-array>
   <string-array name="security_settings_premium_sms_values">
     <item msgid="3985605994234635072">"Demander"</item>

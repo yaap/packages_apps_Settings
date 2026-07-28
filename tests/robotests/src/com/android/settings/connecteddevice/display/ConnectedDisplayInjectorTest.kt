@@ -18,18 +18,25 @@ package com.android.settings.connecteddevice.display
 
 import android.content.Context
 import android.hardware.display.DisplayManager
+import android.hardware.display.DisplayTopology
+import android.view.Display.DEFAULT_DISPLAY
 import androidx.core.content.getSystemService
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.android.wm.shell.shared.desktopmode.FakeDesktopState
 import org.junit.Assert.assertEquals
+import org.junit.Assert.assertFalse
+import org.junit.Assert.assertTrue
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.mockito.Mock
+import org.mockito.Mockito
 import org.mockito.MockitoAnnotations
 import org.mockito.Spy
+import org.mockito.kotlin.any
 import org.mockito.kotlin.doReturn
-import org.mockito.kotlin.never
+import org.mockito.kotlin.doThrow
 import org.mockito.kotlin.verify
 import org.mockito.kotlin.whenever
 
@@ -45,13 +52,19 @@ class ConnectedDisplayInjectorTest {
     @Spy private val context: Context = ApplicationProvider.getApplicationContext()
     @Mock private lateinit var mockDisplayManager: DisplayManager
 
+    private lateinit var fakeDesktopState: FakeDesktopState
+
     private lateinit var injector: ConnectedDisplayInjector
 
     @Before
     fun setUp() {
         MockitoAnnotations.openMocks(this)
 
-        injector = ConnectedDisplayInjector(context)
+        fakeDesktopState = FakeDesktopState()
+        injector =
+            object : ConnectedDisplayInjector(context) {
+                override val desktopState = fakeDesktopState
+            }
         doReturn(mockDisplayManager).whenever(context).getSystemService(DisplayManager::class.java)
     }
 
@@ -73,21 +86,6 @@ class ConnectedDisplayInjectorTest {
     }
 
     @Test
-    fun getDisplayConnectionPreference_whenDisplayManagerIsNull_returnsDefaultPreference() {
-        val injectorWithNullContext = ConnectedDisplayInjector(null)
-        val uniqueId = "any_id"
-
-        val result = injectorWithNullContext.getDisplayConnectionPreference(uniqueId)
-
-        verify(mockDisplayManager, never()).getExternalDisplayConnectionPreference(uniqueId)
-        assertEquals(
-            "Should return default 'ASK' preference when DisplayManager is not available",
-            DisplayManager.EXTERNAL_DISPLAY_CONNECTION_PREFERENCE_ASK,
-            result,
-        )
-    }
-
-    @Test
     fun updateDisplayConnectionPreference_withValidId_callsDisplayManager() {
         val uniqueId = "test_display_id_2"
         val newPreference = 2
@@ -98,14 +96,53 @@ class ConnectedDisplayInjectorTest {
     }
 
     @Test
-    fun updateDisplayConnectionPreference_whenDisplayManagerIsNull_doesNotCrash() {
-        val injectorWithNullContext = ConnectedDisplayInjector(null)
-        val uniqueId = "any_id"
-        val newPreference = 1
+    fun isProjectedModeEnabled_canEnterDesktopModeAndNotSupportedOnDefaultDisplay_returnsTrue() {
+        fakeDesktopState.canEnterDesktopMode = true
+        fakeDesktopState.overrideDesktopModeSupportPerDisplay[DEFAULT_DISPLAY] = false
 
-        injectorWithNullContext.updateDisplayConnectionPreference(uniqueId, newPreference)
+        assertTrue(injector.isProjectedModeEnabled())
+    }
 
-        verify(mockDisplayManager, never())
-            .setExternalDisplayConnectionPreference(uniqueId, newPreference)
+    @Test
+    fun isProjectedModeEnabled_canEnterDesktopModeAndSupportedOnDefaultDisplay_returnsFalse() {
+        fakeDesktopState.canEnterDesktopMode = true
+        fakeDesktopState.overrideDesktopModeSupportPerDisplay[DEFAULT_DISPLAY] = true
+
+        assertFalse(injector.isProjectedModeEnabled())
+    }
+
+    @Test
+    fun isProjectedModeEnabled_cannotEnterDesktopMode_returnsFalse() {
+        fakeDesktopState.canEnterDesktopMode = false
+
+        assertFalse(injector.isProjectedModeEnabled())
+    }
+
+    @Test
+    fun isProjectedModeEnabled_desktopStateIsNull_returnsFalse() {
+        val injectorWithNullDesktopState =
+            object : ConnectedDisplayInjector(context) {
+                override val desktopState: FakeDesktopState?
+                    get() = null
+            }
+
+        assertFalse(injectorWithNullDesktopState.isProjectedModeEnabled())
+    }
+
+    @Test
+    fun displayTopology_set_catchesIllegalArgumentException() {
+        // Arrange: Create a mock DisplayTopology and configure the DisplayManager to throw an
+        // IllegalArgumentException when the setter is called.
+        val mockTopology = Mockito.mock(DisplayTopology::class.java)
+        doThrow(IllegalArgumentException("Test Exception"))
+            .whenever(mockDisplayManager)
+            .displayTopology = any()
+
+        // Act: Set the displayTopology on the injector.
+        // The test will fail if an exception is thrown.
+        injector.displayTopology = mockTopology
+
+        // Assert: No crash occurred, which means the exception was caught.
+        // Verification of the setter call is implicit in the setup.
     }
 }

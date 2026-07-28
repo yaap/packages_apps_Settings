@@ -15,15 +15,44 @@
   limitations under the License.
   -->
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:settings="http://schemas.android.com/apk/res-auto">
+    xmlns:settings="http://schemas.android.com/apk/res-auto"
+    android:title="@string/safety_center_title">
+    <com.android.settingslib.widget.StatusBannerPreference
+        android:key="safety_center_status_banner"
+        settings:controller="com.android.settings.safetycenter.ui.StatusBannerPreferenceController" />
+
+    <com.android.settingslib.widget.BannerMessagePreferenceGroup
+        android:key="issues_banner_group" />
+
     <PreferenceCategory
         android:key="security_category"
         android:title="@string/security_header">
-
+        <Preference
+            android:key="app_security_subpage"
+            android:title="@string/app_security_subpage_title"
+            android:fragment="com.android.settings.safetycenter.ui.AppSecuritySubpageFragment"
+            settings:controller="com.android.settings.safetycenter.ui.SubpagePreferenceController"/>
         <Preference
             android:key="device_unlock_subpage"
             android:title="@string/device_unlock_subpage_title"
-            android:fragment="com.android.settings.safetycenter.ui.DeviceUnlockSubPageFragment"
+            android:fragment="com.android.settings.safetycenter.ui.DeviceUnlockSubpageFragment"
+            settings:controller="com.android.settings.safetycenter.ui.SourceListSubpagePreferenceController"/>
+        <Preference
+            android:key="account_security_subpage"
+            android:title="@string/account_security_subpage_title"
+            android:fragment="com.android.settings.safetycenter.ui.AccountSecuritySubpageFragment"
+            settings:controller="com.android.settings.safetycenter.ui.SubpagePreferenceController"/>
+
+        <Preference
+            android:key="device_finders_subpage"
+            android:title="@string/device_finders_subpage_title"
+            android:fragment="com.android.settings.safetycenter.ui.DeviceFindersSubpageFragment"
+            settings:controller="com.android.settings.safetycenter.ui.SourceListSubpagePreferenceController"/>
+
+        <Preference
+            android:key="system_and_updates_subpage"
+            android:title="@string/system_and_updates_subpage_title"
+            android:fragment="com.android.settings.safetycenter.ui.SystemAndUpdatesSubpageFragment"
             settings:controller="com.android.settings.safetycenter.ui.SubpagePreferenceController"/>
     </PreferenceCategory>
     <PreferenceCategory
@@ -32,18 +61,34 @@
         <Preference
             android:key="privacy_controls_page"
             android:title="@string/privacy_sources_title"
-            android:summary="@string/privacy_sources_summary"
-            android:fragment="com.android.settings.safetycenter.ui.PrivacyControlsFragment">
-        </Preference>
+            android:fragment="com.android.settings.safetycenter.ui.PrivacyControlsFragment"
+            settings:controller="com.android.settings.safetycenter.ui.PrivacyControlsPreferenceController"/>
         <Preference
             android:key="privacy_permissions_usage"
             android:summary="@string/permissions_usage_summary"
             android:title="@string/permissions_usage_title"
-            settings:controller="com.android.settings.privacy.PrivacyHubPreferenceController" />
+            settings:controller="com.android.settings.privacy.PrivacyHubPreferenceController"
+            settings:keywords="@string/safety_center_permission_usage_search_terms"/>
+        <com.android.settingslib.safetycenter.SafetySourcePreference
+            android:key="private_space"
+            settings:controller="com.android.settings.safetycenter.ui.SafetySourcePreferenceController"
+            settings:keywords="@string/safety_center_private_space_search_terms"
+            settings:safetySource="AndroidPrivateSpace"
+            settings:profile="personal_profile" />
     </PreferenceCategory>
     <PreferenceCategory
         android:key="more_security_privacy_category"
         android:title="@string/more_security_privacy_category_title">
+        <com.android.settingslib.safetycenter.SafetySourcePreference
+            android:key="advanced_protection"
+            settings:controller="com.android.settings.safetycenter.ui.SafetySourcePreferenceController"
+            settings:safetySource="@string/config_safety_center_advanced_protection_source_id"
+            settings:profile="personal_profile" />
+        <com.android.settingslib.safetycenter.SafetySourcePreference
+            android:key="work_policy_info"
+            settings:controller="com.android.settings.safetycenter.ui.SafetySourcePreferenceController"
+            settings:safetySource="AndroidWorkPolicyInfo"
+            settings:profile="personal_profile" />
         <Preference
             android:key="safety_center_more_security_privacy"
             android:summary="@string/more_security_privacy_summary"

@@ -14,41 +14,56 @@
  * limitations under the License.
  */
 
-package com.android.settings.safetycenter.ui;
+package com.android.settings.safetycenter.ui
 
-import android.app.settings.SettingsEnums;
-import android.content.Context;
-
-import com.android.settings.R;
-import com.android.settings.dashboard.DashboardFragment;
-import com.android.settings.flags.Flags;
-import com.android.settings.search.BaseSearchIndexProvider;
-import com.android.settingslib.search.SearchIndexable;
+import android.content.Context
+import com.android.settings.R
+import com.android.settings.flags.Flags
+import com.android.settings.search.BaseSearchIndexProvider
+import com.android.settingslib.search.SearchIndexable
+import com.android.settingslib.search.SearchIndexableRaw
 
 /**
- * Fragment that displays several privacy toggle controls.
- * This fragment is a sub-page of the main Safety Center UI.
- * It hosts preferences for privacy controls like camera, mic and clipboard access
+ * Fragment that displays various privacy controls. This fragment is a sub-page of the main Safety
+ * Center UI. It hosts preferences for privacy hosts preferences for privacy-related settings`
  */
 @SearchIndexable
-class PrivacyControlsFragment : DashboardFragment() {
+class PrivacyControlsFragment : SafetyCenterSubpageFragment() {
 
-    private val TAG = "PrivacyControlsFragment"
+    override val subpageKey = SafetyCenterSubpageRegistry.PRIVACY_CONTROLS_SUBPAGE_KEY
 
-    override fun getLogTag(): String = TAG
-
-    override fun getPreferenceScreenResId(): Int {
-        return R.xml.safety_center_privacy_controls_settings
+    override fun getLogTag(): String {
+        return TAG
     }
 
-    override fun getMetricsCategory(): Int = SettingsEnums.SAFETY_CENTER
+    override fun redirectIfEmpty() {
+        // Privacy controls subpage shouldn't be hidden even if safety source preferences in it are
+        // not present, because it contains a lot of other preferences.
+        return
+    }
 
     companion object {
+        private const val TAG = "PrivacyControlsFragment"
+
         @JvmField
         val SEARCH_INDEX_DATA_PROVIDER =
             object : BaseSearchIndexProvider(R.xml.safety_center_privacy_controls_settings) {
                 public override fun isPageSearchEnabled(context: Context): Boolean {
                     return Flags.enableSafetyCenterNewUi()
+                }
+
+                override fun getDynamicRawDataToIndex(
+                    context: Context,
+                    enabled: Boolean,
+                ): List<SearchIndexableRaw> {
+                    val rawData = super.getDynamicRawDataToIndex(context, enabled).toMutableList()
+                    rawData.addAll(
+                        SafetyCenterSearchIndexUtils.getDynamicRawDataForIndexingSubpage(
+                            context,
+                            SafetyCenterSubpageRegistry.PRIVACY_CONTROLS_SUBPAGE_KEY,
+                        )
+                    )
+                    return rawData
                 }
             }
     }

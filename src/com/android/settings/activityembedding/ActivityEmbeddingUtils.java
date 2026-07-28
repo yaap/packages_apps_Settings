@@ -16,8 +16,6 @@
 
 package com.android.settings.activityembedding;
 
-import static android.window.DesktopExperienceFlags.ENABLE_ACTIVITY_EMBEDDING_SUPPORT_FOR_CONNECTED_DISPLAYS;
-
 import android.app.Activity;
 import android.content.Context;
 import android.os.SystemProperties;
@@ -51,15 +49,20 @@ public class ActivityEmbeddingUtils {
      */
     private static final boolean SHOULD_ENABLE_LARGE_SCREEN_OPTIMIZATION =
             SystemProperties.getBoolean("persist.settings.large_screen_opt.enabled", false)
-                    || (ENABLE_ACTIVITY_EMBEDDING_SUPPORT_FOR_CONNECTED_DISPLAYS.isTrue()
-                    && SystemProperties.getBoolean(
-                            "persist.settings.large_screen_opt_for_dp.enabled", false));
+                    || SystemProperties.getBoolean(
+                            "persist.settings.large_screen_opt_for_dp.enabled", false);
 
     private static final String TAG = "ActivityEmbeddingUtils";
 
     /** Get the smallest width dp of the window when the split should be used. */
     public static int getMinCurrentScreenSplitWidthDp(Context context) {
         return context.getResources().getInteger(R.integer.config_activity_embed_split_min_cur_dp);
+    }
+
+    /** Get the smallest height dp of the window when the split should be used. */
+    public static int getMinCurrentScreenSplitHeightDp(Context context) {
+        return context.getResources().getInteger(
+                R.integer.config_activity_embed_split_min_height_dp);
     }
 
     /**

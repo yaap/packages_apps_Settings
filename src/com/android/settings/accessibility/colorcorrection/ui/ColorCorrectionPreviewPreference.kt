@@ -17,16 +17,23 @@
 package com.android.settings.accessibility.colorcorrection.ui
 
 import android.content.Context
+import com.android.settings.R
 import com.android.settings.accessibility.PaletteListPreference
 import com.android.settingslib.metadata.PreferenceMetadata
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.preference.PreferenceBinding
 
 class ColorCorrectionPreviewPreference : PreferenceMetadata, PreferenceBinding {
     override val key: String
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.daltonizer_preview_purpose
+
     override val indexable
         get() = false
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
 
     override fun createWidget(context: Context) =
         PaletteListPreference(context, null).apply { isSelectable = false }

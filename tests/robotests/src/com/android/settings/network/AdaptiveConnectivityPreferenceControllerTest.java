@@ -25,6 +25,7 @@ import static org.mockito.Mockito.when;
 import android.content.Context;
 import android.content.res.Resources;
 import android.provider.Settings;
+import android.telephony.TelephonyManager;
 
 import com.android.settings.R;
 
@@ -43,6 +44,7 @@ public class AdaptiveConnectivityPreferenceControllerTest {
 
     private Context mContext;
     @Mock private Resources mResources;
+    @Mock private TelephonyManager mTelephonyManager;
     private AdaptiveConnectivityPreferenceController mController;
 
     @Before
@@ -50,7 +52,18 @@ public class AdaptiveConnectivityPreferenceControllerTest {
         MockitoAnnotations.initMocks(this);
         mContext = spy(RuntimeEnvironment.application);
         doReturn(mResources).when(mContext).getResources();
+        doReturn(mTelephonyManager).when(mContext).getSystemService(TelephonyManager.class);
+        when(mResources.getBoolean(R.bool.config_show_sim_info)).thenReturn(true);
+        when(mTelephonyManager.isDataCapable()).thenReturn(true);
+
         mController = new AdaptiveConnectivityPreferenceController(mContext, PREF_KEY);
+        // Clear settings before each test
+        Settings.Secure.putString(mContext.getContentResolver(),
+                Settings.Secure.ADAPTIVE_CONNECTIVITY_ENABLED, null);
+        Settings.Secure.putString(mContext.getContentResolver(),
+                Settings.Secure.ADAPTIVE_CONNECTIVITY_WIFI_ENABLED, null);
+        Settings.Secure.putString(mContext.getContentResolver(),
+                Settings.Secure.ADAPTIVE_CONNECTIVITY_MOBILE_NETWORK_ENABLED, null);
     }
 
     @Test
@@ -70,19 +83,115 @@ public class AdaptiveConnectivityPreferenceControllerTest {
     }
 
     @Test
-    public void getSummary_adaptiveConnectivityEnabled_shouldShowOn() {
-        Settings.Secure.putInt(mContext.getContentResolver(),
-                Settings.Secure.ADAPTIVE_CONNECTIVITY_ENABLED, 1);
+    public void isAvailable_mobileDataNotCapable_shouldReturnFalse() {
+        when(mResources.getBoolean(R.bool.config_show_adaptive_connectivity))
+                .thenReturn(true);
+        when(mTelephonyManager.isDataCapable()).thenReturn(false);
 
-        assertThat(mController.getSummary()).isEqualTo(mContext.getString(R.string.switch_on_text));
+        assertThat(mController.isAvailable()).isFalse();
     }
 
     @Test
-    public void getSummary_adaptiveConnectivityEnabled_shouldShowOff() {
+    public void getSummary_wifiOn_mobileOff_shouldShowOn() {
+        Settings.Secure.putInt(mContext.getContentResolver(),
+                Settings.Secure.ADAPTIVE_CONNECTIVITY_WIFI_ENABLED, 1);
+        Settings.Secure.putInt(mContext.getContentResolver(),
+                Settings.Secure.ADAPTIVE_CONNECTIVITY_MOBILE_NETWORK_ENABLED, 0);
+
+        assertThat(mController.getSummary()).isEqualTo(
+                mContext.getString(R.string.adaptive_connectivity_switch_on));
+    }
+
+    @Test
+    public void getSummary_wifiOff_mobileOn_shouldShowOn() {
+        Settings.Secure.putInt(mContext.getContentResolver(),
+                Settings.Secure.ADAPTIVE_CONNECTIVITY_WIFI_ENABLED, 0);
+        Settings.Secure.putInt(mContext.getContentResolver(),
+                Settings.Secure.ADAPTIVE_CONNECTIVITY_MOBILE_NETWORK_ENABLED, 1);
+
+        assertThat(mController.getSummary()).isEqualTo(
+                mContext.getString(R.string.adaptive_connectivity_switch_on));
+    }
+
+    @Test
+    public void getSummary_wifiOn_mobileOn_shouldShowOn() {
+        Settings.Secure.putInt(mContext.getContentResolver(),
+                Settings.Secure.ADAPTIVE_CONNECTIVITY_WIFI_ENABLED, 1);
+        Settings.Secure.putInt(mContext.getContentResolver(),
+                Settings.Secure.ADAPTIVE_CONNECTIVITY_MOBILE_NETWORK_ENABLED, 1);
+
+        assertThat(mController.getSummary()).isEqualTo(
+                mContext.getString(R.string.adaptive_connectivity_switch_on));
+    }
+
+    @Test
+    public void getSummary_wifiOff_mobileOff_shouldShowOff() {
+        Settings.Secure.putInt(mContext.getContentResolver(),
+                Settings.Secure.ADAPTIVE_CONNECTIVITY_WIFI_ENABLED, 0);
+        Settings.Secure.putInt(mContext.getContentResolver(),
+                Settings.Secure.ADAPTIVE_CONNECTIVITY_MOBILE_NETWORK_ENABLED, 0);
+
+        assertThat(mController.getSummary()).isEqualTo(
+                mContext.getString(R.string.adaptive_connectivity_switch_off));
+    }
+
+    @Test
+    public void getSummary_wifiOn_mobileNotSet_shouldShowOn() {
+        Settings.Secure.putInt(mContext.getContentResolver(),
+                Settings.Secure.ADAPTIVE_CONNECTIVITY_WIFI_ENABLED, 1);
+
+        assertThat(mController.getSummary()).isEqualTo(
+                mContext.getString(R.string.adaptive_connectivity_switch_on));
+    }
+
+    @Test
+    public void getSummary_wifiNotSet_mobileOn_shouldShowOn() {
+        Settings.Secure.putInt(mContext.getContentResolver(),
+                Settings.Secure.ADAPTIVE_CONNECTIVITY_MOBILE_NETWORK_ENABLED, 1);
+
+        assertThat(mController.getSummary()).isEqualTo(
+                mContext.getString(R.string.adaptive_connectivity_switch_on));
+    }
+
+    @Test
+    public void getSummary_wifiOff_mobileNotSet_shouldShowOff() {
+        Settings.Secure.putInt(mContext.getContentResolver(),
+                Settings.Secure.ADAPTIVE_CONNECTIVITY_WIFI_ENABLED, 0);
+
+        assertThat(mController.getSummary()).isEqualTo(
+                mContext.getString(R.string.adaptive_connectivity_switch_off));
+    }
+
+    @Test
+    public void getSummary_wifiNotSet_mobileOff_shouldShowOff() {
+        Settings.Secure.putInt(mContext.getContentResolver(),
+                Settings.Secure.ADAPTIVE_CONNECTIVITY_MOBILE_NETWORK_ENABLED, 0);
+
+        assertThat(mController.getSummary()).isEqualTo(
+                mContext.getString(R.string.adaptive_connectivity_switch_off));
+    }
+
+    @Test
+    public void getSummary_newSettingsNotSet_fallbackToEnabled_shouldShowOn() {
+        // When the new settings are not set, the controller should fall back to the old global
+        // setting. Set the old setting to ON.
+        Settings.Secure.putInt(mContext.getContentResolver(),
+                Settings.Secure.ADAPTIVE_CONNECTIVITY_ENABLED, 1);
+
+        // Verify the summary shows "On".
+        assertThat(mController.getSummary()).isEqualTo(
+                mContext.getString(R.string.adaptive_connectivity_switch_on));
+    }
+
+    @Test
+    public void getSummary_newSettingsNotSet_fallbackToDisabled_shouldShowOff() {
+        // When the new settings are not set, the controller should fall back to the old global
+        // setting. Set the old setting to OFF.
         Settings.Secure.putInt(mContext.getContentResolver(),
                 Settings.Secure.ADAPTIVE_CONNECTIVITY_ENABLED, 0);
 
-        assertThat(mController.getSummary())
-                .isEqualTo(mContext.getString(R.string.switch_off_text));
+        // Verify the summary shows "Off".
+        assertThat(mController.getSummary()).isEqualTo(
+                mContext.getString(R.string.adaptive_connectivity_switch_off));
     }
 }

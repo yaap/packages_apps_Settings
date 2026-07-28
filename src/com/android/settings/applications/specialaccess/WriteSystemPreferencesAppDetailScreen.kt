@@ -16,26 +16,49 @@
 
 package com.android.settings.applications.specialaccess
 
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import android.Manifest.permission.READ_SYSTEM_PREFERENCES
 import android.Manifest.permission.WRITE_SYSTEM_PREFERENCES
 import android.app.AppOpsManager
 import android.app.settings.SettingsEnums
 import android.content.Context
+import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.os.Bundle
+import androidx.core.net.toUri
 import com.android.settings.R
 import com.android.settings.applications.CatalystAppListFragment.Companion.DEFAULT_SHOW_SYSTEM
 import com.android.settings.applications.getPackageInfoWithPermissions
 import com.android.settings.applications.isPermissionGranted
 import com.android.settings.applications.isPermissionRequested
+import com.android.settingslib.metadata.KeyParametersSchema
+import com.android.settingslib.metadata.ParameterizedPreferenceScreenArgumentsFactory
+import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ProvidePreferenceScreen
+import com.android.settingslib.metadata.ValidatedKeyParameters
 
 @ProvidePreferenceScreen(WriteSystemPreferencesAppDetailScreen.KEY, parameterized = true)
-open class WriteSystemPreferencesAppDetailScreen(context: Context, arguments: Bundle) :
-    SpecialAccessAppDetailScreen(context, arguments) {
+open class WriteSystemPreferencesAppDetailScreen : SpecialAccessAppDetailScreen {
+
+    @Deprecated(
+        "This constructor will be removed once the catalyst framework stops passing the arguments as a bundle. Use the other constructor instead."
+    )
+    constructor(context: Context, arguments: Bundle) : super(context, arguments)
+
+    constructor(
+        context: Context,
+        keyArguments: ValidatedKeyParameters,
+    ) : super(context, keyArguments)
 
     override val key
         get() = KEY
+
+    override val keyParametersSchema: KeyParametersSchema
+        get() = parametersSchema
+
+    //TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.special_access_write_system_preferences_app_detail_purpose
 
     override val bindingKey
         get() = "$KEY-$packageName"
@@ -55,26 +78,48 @@ open class WriteSystemPreferencesAppDetailScreen(context: Context, arguments: Bu
     override val footerPreferenceTitle
         get() = R.string.write_system_preferences_footer_description
 
+    override val availabilityDescription =
+        "The app must be enabled, and must have requested write system preferences permission."
+
     // Edge case: what if the app's read permission is revoked/granted
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
     override fun isAvailable(context: Context) =
         super.isAvailable(context) &&
             writeSystemPreferencesFilter(context, packageInfo?.applicationInfo)
 
     override fun getMetricsCategory() = SettingsEnums.PAGE_UNKNOWN
 
-    companion object {
+    override fun getLaunchIntent(context: Context, metadata: PreferenceMetadata?) =
+        Intent("android.settings.action.WRITE_SYSTEM_PREFERENCES").apply {
+            data = "package:$packageName".toUri()
+        }
+
+    companion object :
+        ParameterizedPreferenceScreenArgumentsFactory by SpecialAccessAppDetailScreen.Companion {
         const val KEY = "special_access_write_system_preferences_app_detail"
         const val PERMISSION = WRITE_SYSTEM_PREFERENCES
 
-        @JvmStatic fun parameters(context: Context) = parameters(context, DEFAULT_SHOW_SYSTEM)
+        @JvmStatic
+        override fun keyParameters(context: Context) = keyParameters(context, DEFAULT_SHOW_SYSTEM)
 
+        fun keyParameters(context: Context, showSystemApp: Boolean) =
+            keyParameters(context, showSystemApp, ::writeSystemPreferencesFilter)
+
+        @JvmStatic
+        @Deprecated(
+            "This method will be removed once the catalyst framework stops passing the arguments as a bundle. Use keyParameters instead."
+        )
+        fun parameters(context: Context) = parameters(context, DEFAULT_SHOW_SYSTEM)
+
+        @JvmStatic
+        @Deprecated(
+            "This method will be removed once the catalyst framework stops passing the arguments as a bundle. Use keyParameters instead."
+        )
         fun parameters(context: Context, showSystemApp: Boolean) =
             parameters(context, showSystemApp, ::writeSystemPreferencesFilter)
 
-        private fun writeSystemPreferencesFilter(
-            context: Context,
-            appInfo: ApplicationInfo?,
-        ): Boolean {
+        fun writeSystemPreferencesFilter(context: Context, appInfo: ApplicationInfo?): Boolean {
             if (appInfo == null) return false
             val packageInfo =
                 context.getPackageInfoWithPermissions(appInfo.packageName) ?: return false

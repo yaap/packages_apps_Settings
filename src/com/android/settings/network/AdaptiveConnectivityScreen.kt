@@ -30,11 +30,18 @@ import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.preferenceHierarchy
 import kotlinx.coroutines.CoroutineScope
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 
 @ProvidePreferenceScreen(AdaptiveConnectivityScreen.KEY)
 open class AdaptiveConnectivityScreen : PreferenceScreenMixin {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED)
+
     override val key
         get() = KEY
+
+    // TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.adaptive_connectivity_purpose
 
     override val title
         get() = R.string.adaptive_connectivity_title
@@ -50,20 +57,16 @@ open class AdaptiveConnectivityScreen : PreferenceScreenMixin {
 
     override fun getPreferenceHierarchy(context: Context, coroutineScope: CoroutineScope) =
         preferenceHierarchy(context) {
-            if (Flags.enableAdaptiveConnectivityToggleSwitches()) {
-                +WifiScorerTogglePreference()
-                val subscriptionManager = context.getSystemService(SubscriptionManager::class.java)
-                val shouldHideMobileNetworkToggle =
-                    subscriptionManager != null &&
-                        SubscriptionUtil.hasSubscriptionForMobileNetworkToggleDisable(
-                            context,
-                            subscriptionManager,
-                        )
-                if (!shouldHideMobileNetworkToggle) {
-                    +AdaptiveMobileNetworkTogglePreference()
-                }
-            } else {
-                +AdaptiveConnectivityTogglePreference()
+            +WifiScorerTogglePreference()
+            val subscriptionManager = context.getSystemService(SubscriptionManager::class.java)
+            val shouldHideMobileNetworkToggle =
+                subscriptionManager != null &&
+                    SubscriptionUtil.hasSubscriptionForMobileNetworkToggleDisable(
+                        context,
+                        subscriptionManager,
+                    )
+            if (!shouldHideMobileNetworkToggle) {
+                +AdaptiveMobileNetworkTogglePreference()
             }
         }
 

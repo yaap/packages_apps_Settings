@@ -59,9 +59,8 @@ public class SecureNfcEnabler extends BaseNfcEnabler {
                 break;
         }
     }
-
     private boolean isToggleable() {
-        if (!mUserManager.isPrimaryUser()) {
+        if (mUserManager.isGuestUser()) {
             return false;
         }
         return true;

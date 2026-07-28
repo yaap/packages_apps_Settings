@@ -29,16 +29,6 @@ flag {
 }
 
 flag {
-  name: "enable_nearby_share_entrypoint"
-  namespace: "cross_device_experiences"
-  description: "Show Nearby Share entrypoint in Bluetooth Sharing page"
-  bug: "381799866"
-  metadata {
-      purpose: PURPOSE_BUGFIX
-  }
-}
-
-flag {
   name: "enable_remove_association_bt_unpair"
   is_exported: true
   namespace: "companion"
@@ -68,16 +58,6 @@ flag {
 }
 
 flag {
-  name: "enable_change_le_profile_broadcast_receiver"
-  namespace: "cross_device_experiences"
-  description: "Enable broadcast receiver to enable/disable LE audio profile"
-  bug: "381353150"
-  metadata {
-      purpose: PURPOSE_BUGFIX
-  }
-}
-
-flag {
   name: "enable_expressive_bluetooth_battery_header"
   namespace: "cross_device_experiences"
   description: "Enable expressive bluetooth battery header."
@@ -89,4 +69,31 @@ flag {
   namespace: "cross_device_experiences"
   description: "Hide phonebook access permission toggle for wearables when pairing."
   bug: "425848384"
+}
+
+flag {
+  name: "add_progress_bar_to_the_positive_button_in_passkey_or_ping_dialog"
+  namespace: "cross_device_experiences"
+  description: "Add a progress bar to the positive button in the passkey or PIN dialog"
+  bug: "347270238"
+}
+
+flag {
+  name: "enable_bonding_loss_ui_fix"
+  namespace: "cross_device_experiences"
+  description: "Gates whether to enable the UI fix for bluetooth bonding loss"
+  bug: "478718607"
+  metadata {
+      purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "enable_dialog_for_user_initiated_android_auto_disconnect"
+  namespace: "cross_device_experiences"
+  description: "Show a confirmation dialog before disconnecting an Android Auto device from bluetooth."
+  bug: "481187402"
+  metadata {
+      purpose: PURPOSE_BUGFIX
+  }
 }

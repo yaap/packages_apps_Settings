@@ -27,7 +27,7 @@ import com.android.settings.R
 import com.android.settings.Settings.DreamSettingsActivity
 import com.android.settings.Utils
 import com.android.settings.core.PreferenceScreenMixin
-import com.android.settings.display.AmbientDisplayAlwaysOnPreferenceController
+import com.android.settings.display.AmbientDisplayAlwaysOnPreferenceScreenController
 import com.android.settings.flags.Flags
 import com.android.settings.utils.makeLaunchIntent
 import com.android.settingslib.datastore.AbstractKeyedDataObservable
@@ -36,13 +36,18 @@ import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.KeyedObserver
 import com.android.settingslib.datastore.SettingsSecureStore
 import com.android.settingslib.dream.DreamBackend
+import com.android.settingslib.metadata.METADATA_IN_UI
+import com.android.settingslib.metadata.PersistentPreference
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceChangeReason
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
 import com.android.settingslib.metadata.ProvidePreferenceScreen
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.metadata.preferenceHierarchy
 import kotlinx.coroutines.CoroutineScope
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 
 // LINT.IfChange
 @ProvidePreferenceScreen(ScreensaverScreen.KEY)
@@ -51,6 +56,12 @@ open class ScreensaverScreen(private val context: Context) :
     AbstractKeyedDataObservable<String>(),
     PreferenceAvailabilityProvider,
     PreferenceSummaryProvider {
+    override fun tags(context: Context) = arrayOf(
+        APP_FUNCTION_UNCATEGORIZED,
+        // exclude this screen from api result since it doesn't contain any relevant data, and we
+        // have data in api_screensaver screen
+        UI_ONLY_PREFERENCE
+    )
 
     private var dreamBackend: DreamBackend = DreamBackend.getInstance(context)
     private var settingsStore: KeyValueStore = SettingsSecureStore.get(context)
@@ -61,7 +72,7 @@ open class ScreensaverScreen(private val context: Context) :
     private var ambientModeSuppressionProvider: AmbientModeSuppressionProvider =
         object : AmbientModeSuppressionProvider {
             override fun isSuppressedByBedtime(context: Context) =
-                AmbientDisplayAlwaysOnPreferenceController.isAodSuppressedByBedtime(context)
+                AmbientDisplayAlwaysOnPreferenceScreenController.isAodSuppressedByBedtime(context)
         }
 
     private var summaryStringsProvider: SummaryStringsProvider =
@@ -85,6 +96,9 @@ open class ScreensaverScreen(private val context: Context) :
     override val key: String
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.screensaver_purpose
+
     override val title: Int
         get() = R.string.screensaver_settings_title
 
@@ -103,7 +117,7 @@ open class ScreensaverScreen(private val context: Context) :
         makeLaunchIntent(context, DreamSettingsActivity::class.java, metadata?.key)
 
     override fun getPreferenceHierarchy(context: Context, coroutineScope: CoroutineScope) =
-        preferenceHierarchy(context) {}
+        preferenceHierarchy(context) { +ScreensaverScreenPreference(this@ScreensaverScreen) }
 
     override fun onFirstObserverAdded() {
         // update summary when any of the screen saver settings has changed
@@ -133,6 +147,11 @@ open class ScreensaverScreen(private val context: Context) :
 
     override val keywords: Int
         get() = R.string.keywords_screensaver
+
+    override val availabilityDescription =
+        "The device must not be in demo mode (unless dreams are enabled in demo mode), dreams must be supported on the device, and either the user must be the 'dock' user or dreams must be supported on all users for this device."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
 
     override fun isAvailable(context: Context) = Utils.areDreamsAvailableToCurrentUser(context)
 
@@ -177,6 +196,38 @@ open class ScreensaverScreen(private val context: Context) :
         fun dreamOn(context: Context, activeDreamName: CharSequence): CharSequence
 
         fun dreamOffBedtime(context: Context): CharSequence
+    }
+
+    class ScreensaverScreenPreference(
+        private val screenMetadata : ScreensaverScreen
+    ) : PreferenceMetadata, PreferenceSummaryProvider, PreferenceAvailabilityProvider,
+        PersistentPreference<String> {
+        override val key : String
+            get() = "screensaver_preference"
+
+        override val purpose : Int
+            get() = screenMetadata.purpose
+
+        override fun tags(context: Context) = arrayOf(METADATA_IN_UI)
+
+        override val indexable = false
+
+        override fun isEnabled(context: Context) : Boolean = screenMetadata.isEnabled(context)
+
+        override fun getSummary(context: Context) : CharSequence? = screenMetadata.getSummary(context)
+
+        override val supportsWrite: Boolean
+            get() = false
+
+        override val valueType = String::class.javaObjectType
+
+        override fun storage(context: Context): KeyValueStore = createSummaryStorage(context, key)
+
+        override val availabilityDescription = screenMetadata.availabilityDescription
+
+        override fun getAvailabilityStability() = screenMetadata.getAvailabilityStability()
+
+        override fun isAvailable(context: Context) : Boolean = screenMetadata.isAvailable(context)
     }
 
     companion object {

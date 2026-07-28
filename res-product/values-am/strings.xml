@@ -27,28 +27,32 @@
     <string name="bluetooth_footer_mac_message" product="desktop" msgid="8944917742814573320">"የመሣሪያ የብሉቱዝ አድራሻ፦ <xliff:g id="BLUETOOTH_MAC_ADDRESS">%1$s</xliff:g>"</string>
     <string name="bluetooth_ask_discovery" product="tablet" msgid="7430581669309228387">"<xliff:g id="APP_NAME">%1$s</xliff:g> ጡባዊዎን ለ<xliff:g id="TIMEOUT">%2$d</xliff:g> ሰከንዶች ያህል ለሌሎች የብሉቱዝ መሣሪያዎች እንዲታይ ይፈልጋል።"</string>
     <string name="bluetooth_ask_discovery" product="default" msgid="3947027393224406367">"<xliff:g id="APP_NAME">%1$s</xliff:g> ስልክዎን ለ<xliff:g id="TIMEOUT">%2$d</xliff:g> ሰከንዶች ያህል ለሌሎች የብሉቱዝ መሣሪያዎች እንዲታይ ይፈልጋል።"</string>
-    <string name="bluetooth_ask_discovery" product="desktop" msgid="5960803243956876943">"<xliff:g id="APP_NAME">%1$s</xliff:g> መሣሪያዎችዎን ለ<xliff:g id="TIMEOUT">%2$d</xliff:g> ሰከንዶች ያህል ለሌሎች የብሉቱዝ መሣሪያዎች እንዲታዩ ማድረግ ይፈልጋል።"</string>
+    <string name="bluetooth_ask_discovery" product="desktop" msgid="3067808499809072108">"<xliff:g id="APP_NAME">%1$s</xliff:g> ይህን መሣሪያ ለ<xliff:g id="TIMEOUT">%2$d</xliff:g> ሰከንዶች ያህል ለሌሎች የብሉቱዝ መሣሪያዎች እንዲታይ ማድረግ ይፈልጋል።"</string>
     <string name="bluetooth_ask_discovery_no_name" product="tablet" msgid="440976482246291783">"አንድ መተግበሪያ ጡባዊዎን ለ<xliff:g id="TIMEOUT">%1$d</xliff:g> ሰከንዶች ያህል ለሌሎች የብሉቱዝ መሣሪያዎች እንዲታይ ሊያደርገው ይፈልጋል።"</string>
     <string name="bluetooth_ask_discovery_no_name" product="default" msgid="5164413774312648842">"አንድ መተግበሪያ ስልክዎን ለ<xliff:g id="TIMEOUT">%1$d</xliff:g> ሰከንዶች ያህል ለሌሎች የብሉቱዝ መሣሪያዎች እንዲታይ ሊያደርገው ይፈልጋል።"</string>
-    <string name="bluetooth_ask_discovery_no_name" product="desktop" msgid="3353426051482286017">"አንድ መተግበሪያ መሣሪያዎን ለ<xliff:g id="TIMEOUT">%1$d</xliff:g> ሰከንዶች ያህል ለሌሎች የብሉቱዝ መሣሪያዎች እንዲታይ ማድረግ ይፈልጋል።"</string>
+    <string name="bluetooth_ask_discovery_no_name" product="desktop" msgid="1777937067593913629">"አንድ መተግበሪያ ይህን መሣሪያ ለ<xliff:g id="TIMEOUT">%1$d</xliff:g> ሰከንዶች ያህል ለሌሎች የብሉቱዝ መሣሪያዎች እንዲታይ ማድረግ ይፈልጋል።"</string>
     <string name="bluetooth_ask_lasting_discovery" product="tablet" msgid="750347558570909906">"<xliff:g id="APP_NAME">%1$s</xliff:g> ጡባዊዎን ለሌሎች የብሉቱዝ መሣሪያዎች እንዲታይ ሊያደርገው ይፈልጋል። ይሄን በኋላ ላይ በብሉቱዝ ቅንብሮች ውስጥ ሊቀይሩት ይችላሉ።"</string>
     <string name="bluetooth_ask_lasting_discovery" product="default" msgid="5844129004156080891">"<xliff:g id="APP_NAME">%1$s</xliff:g> ስልክዎን ለሌሎች የብሉቱዝ መሣሪያዎች እንዲታይ ሊያደርገው ይፈልጋል። ይሄን በኋላ ላይ በብሉቱዝ ቅንብሮች ውስጥ ሊቀይሩት ይችላሉ።"</string>
-    <string name="bluetooth_ask_lasting_discovery" product="desktop" msgid="3887794644497572519">"<xliff:g id="APP_NAME">%1$s</xliff:g> መሣሪያዎን ለሌሎች የብሉቱዝ መሣሪያዎች እንዲታይ ሊያደርገው ይፈልጋል። ይሄን በኋላ ላይ በብሉቱዝ ቅንብሮች ውስጥ ሊቀይሩት ይችላሉ።"</string>
+    <string name="bluetooth_ask_lasting_discovery" product="desktop" msgid="3640979928435371509">"<xliff:g id="APP_NAME">%1$s</xliff:g> መሣሪያዎን ለሌሎች የብሉቱዝ መሣሪያዎች እንዲታይ ማድረግ ይፈልጋል። ይህን በኋላ ላይ በብሉቱዝ ቅንብሮች ውስጥ መቀየር ይችላሉ።"</string>
     <string name="bluetooth_ask_lasting_discovery_no_name" product="tablet" msgid="1062185767225450964">"አንድ መተግበሪያ ጡባዊዎን ለሌሎች የብሉቱዝ መሣሪያዎች እንዲታይ ሊያደርገው ይፈልጋል። ይሄን በኋላ ላይ በብሉቱዝ ቅንብሮች ውስጥ ሊቀይሩት ይችላሉ።"</string>
     <string name="bluetooth_ask_lasting_discovery_no_name" product="default" msgid="7909547303183236140">"አንድ መተግበሪያ ስልክዎን ለሌሎች የብሉቱዝ መሣሪያዎች እንዲታይ ሊያደርገው ይፈልጋል። ይሄን በኋላ ላይ በብሉቱዝ ቅንብሮች ውስጥ ሊቀይሩት ይችላሉ።"</string>
     <string name="bluetooth_ask_lasting_discovery_no_name" product="desktop" msgid="6517618973665289643">"አንድ መተግበሪያ መሣሪያዎን ለሌሎች የብሉቱዝ መሣሪያዎች እንዲታይ ሊያደርገው ይፈልጋል። ይሄን በኋላ ላይ በብሉቱዝ ቅንብሮች ውስጥ ሊቀይሩት ይችላሉ።"</string>
     <string name="bluetooth_ask_enablement_and_discovery" product="tablet" msgid="6187874232925632790">"<xliff:g id="APP_NAME">%1$s</xliff:g> ብሉቱዝን አብርቶ ጡባዊዎ ለ<xliff:g id="TIMEOUT">%2$d</xliff:g> ሰከንዶች ለሌሎች መሣሪያዎች እንዲታይ ሊያደርገው ይፈልጋል።"</string>
     <string name="bluetooth_ask_enablement_and_discovery" product="default" msgid="1018495685727482700">"<xliff:g id="APP_NAME">%1$s</xliff:g> ብሉቱዝን አብርቶ ስልክዎ ለ<xliff:g id="TIMEOUT">%2$d</xliff:g> ሰከንዶች ለሌሎች መሣሪያዎች እንዲታይ ሊያደርገው ይፈልጋል።"</string>
-    <string name="bluetooth_ask_enablement_and_discovery" product="desktop" msgid="4841837610815256531">"<xliff:g id="APP_NAME">%1$s</xliff:g> ብሉቱዝን አብርቶ መሣሪያዎን ለ<xliff:g id="TIMEOUT">%2$d</xliff:g> ሰከንዶች ለሌሎች መሣሪያዎች እንዲታይ ማድረግ ይፈልጋል።"</string>
+    <string name="bluetooth_ask_enablement_and_discovery" product="desktop" msgid="3963663600685390857">"<xliff:g id="APP_NAME">%1$s</xliff:g> ብሉቱዝን አብርቶ ይህን መሣሪያ ለ<xliff:g id="TIMEOUT">%2$d</xliff:g> ሰከንዶች ለሌሎች መሣሪያዎች እንዲታይ ማድረግ ይፈልጋል።"</string>
     <string name="bluetooth_ask_enablement_and_discovery_no_name" product="tablet" msgid="3469927640700478737">"አንድ መተግበሪያ ብሉቱዝን አብርቶ ጡባዊዎን ለ<xliff:g id="TIMEOUT">%1$d</xliff:g> ሰከንዶች ያህል ለሌሎች መሣሪያዎች እንዲታይ ሊያደርገው ይፈልጋል።"</string>
     <string name="bluetooth_ask_enablement_and_discovery_no_name" product="default" msgid="4847493437698663706">"አንድ መተግበሪያ ብሉቱዝን አብርቶ ስልክዎን ለ<xliff:g id="TIMEOUT">%1$d</xliff:g> ሰከንዶች ያህል ለሌሎች መሣሪያዎች እንዲታይ ሊያደርገው ይፈልጋል።"</string>
-    <string name="bluetooth_ask_enablement_and_discovery_no_name" product="desktop" msgid="2660699995682598369">"አንድ መተግበሪያ ብሉቱዝን አብርቶ መሣሪያዎን ለ<xliff:g id="TIMEOUT">%1$d</xliff:g> ሰከንዶች ያህል ለሌሎች መሣሪያዎች እንዲታይ ሊያደርገው ይፈልጋል።"</string>
+    <string name="bluetooth_ask_enablement_and_discovery_no_name" product="desktop" msgid="4200605722063705557">"አንድ መተግበሪያ ብሉቱዝን አብርቶ ይህን መሣሪያ ለ<xliff:g id="TIMEOUT">%1$d</xliff:g> ሰከንዶች ያህል ለሌሎች መሣሪያዎች እንዲታይ ማድረግ ይፈልጋል።"</string>
     <string name="bluetooth_ask_enablement_and_lasting_discovery" product="tablet" msgid="487436507630570730">"<xliff:g id="APP_NAME">%1$s</xliff:g> ብሉቱዝን አብርቶ ጡባዊዎን ለሌሎች መሣሪያዎች እንዲታይ ሊያደርገው ይፈልጋል። ይህን በኋላ ላይ በብሉቱዝ ቅንብሮች ውስጥ መቀየር ይችላሉ።"</string>
     <string name="bluetooth_ask_enablement_and_lasting_discovery" product="default" msgid="5169934906530139494">"<xliff:g id="APP_NAME">%1$s</xliff:g> ብሉቱዝን አብርቶ ስልክዎን ለሌሎች መሣሪያዎች እንዲታይ ሊያደርገው ይፈልጋል። ይህን በኋላ ላይ በብሉቱዝ ቅንብሮች ውስጥ መቀየር ይችላሉ።"</string>
-    <string name="bluetooth_ask_enablement_and_lasting_discovery" product="desktop" msgid="2790161567276762264">"<xliff:g id="APP_NAME">%1$s</xliff:g> ብሉቱዝን አብርቶ መሣሪያዎን ለሌሎች መሣሪያዎች እንዲታይ ሊያደርገው ይፈልጋል። ይህን በኋላ ላይ በብሉቱዝ ቅንብሮች ውስጥ መቀየር ይችላሉ።"</string>
+    <string name="bluetooth_ask_enablement_and_lasting_discovery" product="desktop" msgid="6083859715114907587">"<xliff:g id="APP_NAME">%1$s</xliff:g> ብሉቱዝን አብርቶ ይህን መሣሪያ ለሌሎች መሣሪያዎች እንዲታይ ማድረግ ይፈልጋል። ይህን በኋላ ላይ በብሉቱዝ ቅንብሮች ውስጥ መቀየር ይችላሉ።"</string>
     <string name="bluetooth_ask_enablement_and_lasting_discovery_no_name" product="tablet" msgid="505214056751470551">"አንድ መተግበሪያ ብሉቱዝን አብርቶ ጡባዊዎን ለሌሎች መሣሪያዎች እንዲታይ ሊያደርገው ይፈልጋል። ይሄን በኋላ ላይ በብሉቱዝ ቅንብሮች ውስጥ ሊቀይሩት ይችላሉ።"</string>
     <string name="bluetooth_ask_enablement_and_lasting_discovery_no_name" product="default" msgid="6187216564831513193">"አንድ መተግበሪያ ብሉቱዝን አብርቶ ስልክዎን ለሌሎች መሣሪያዎች እንዲታይ ሊያደርገው ይፈልጋል። ይሄን በኋላ ላይ በብሉቱዝ ቅንብሮች ውስጥ ሊቀይሩት ይችላሉ።"</string>
-    <string name="bluetooth_ask_enablement_and_lasting_discovery_no_name" product="desktop" msgid="5587751002247136990">"አንድ መተግበሪያ ብሉቱዝን አብርቶ መሣሪያዎን ለሌሎች መሣሪያዎች እንዲታይ ሊያደርገው ይፈልጋል። ይሄን በኋላ ላይ በብሉቱዝ ቅንብሮች ውስጥ ሊቀይሩት ይችላሉ።"</string>
+    <string name="bluetooth_ask_enablement_and_lasting_discovery_no_name" product="desktop" msgid="1296067140931944135">"አንድ መተግበሪያ ብሉቱዝን አብርቶ ይህን መሣሪያ ለሌሎች መሣሪያዎች እንዲታይ ማድረግ ይፈልጋል። ይህን በኋላ ላይ በብሉቱዝ ቅንብሮች ውስጥ መቀየር ይችላሉ።"</string>
+    <string name="bluetooth_hearing_device_input_routing_builtin_option" product="default" msgid="604940407490893699">"የዚህ ስልክ ማይክሮፎን"</string>
+    <string name="bluetooth_hearing_device_input_routing_builtin_option" product="desktop" msgid="899174913125357494">"የዚህ መሣሪያ ማይክሮፎን"</string>
+    <string name="bluetooth_audio_routing_summary" product="default" msgid="7087659154407454242">"ድምጾችን ወደ የመስማት ችሎታ መሳሪያዎ ወይም ወደ ስልክዎ ድምጽ ማውጫ ያዙሩ"</string>
+    <string name="bluetooth_audio_routing_summary" product="desktop" msgid="4537882886747949240">"ድምጾችን ወደ የመስማት ችሎታ መሣሪያዎ ወይም ወደ መሣሪያዎ ድምጽ ማውጫ ያዙሩ"</string>
     <string name="encryption_and_credential_settings_summary" product="default" msgid="3741475436042800617">"ስልክ ተመስጥሯል"</string>
     <string name="encryption_and_credential_settings_summary" product="tablet" msgid="2220021007677215054">"መሣሪያ ተመሣጥሯል"</string>
     <string name="encryption_and_credential_settings_summary" product="desktop" msgid="2220021007677215054">"መሣሪያ ተመሣጥሯል"</string>
@@ -123,6 +127,26 @@
     <string name="security_settings_face_enroll_introduction_control_consent_message" product="tablet" msgid="6983939010814873996"></string>
     <string name="security_settings_face_enroll_introduction_control_consent_message" product="device" msgid="6983939010814873996"></string>
     <string name="security_settings_face_enroll_introduction_control_consent_message" product="desktop" msgid="6983939010814873996"></string>
+    <string name="security_settings_face_enroll_introduction_message_unlock_disabled" product="default" msgid="8906620058505772369">"የእርስዎን ስልክ ለመክፈት ወይም ግዢዎችን ለማጽደቅ የእርስዎን ፊት ይጠቀሙ።\n\nማስታወሻ፦ ይህን መሣሪያ ለመክፈት ፊትን መጠቀም አይችሉም። ለተጨማሪ መረጃ፣ የእርስዎን ድርጅት አስተዳዳሪ ያነጋግሩ።"</string>
+    <string name="security_settings_face_enroll_introduction_message_unlock_disabled" product="desktop" msgid="8527453843561896568">"የእርስዎን መሣሪያ ለመክፈት ወይም ግዢዎችን ለማጽደቅ የእርስዎን ፊት ይጠቀሙ።\n\nማስታወሻ፦ ይህን መሣሪያ ለመክፈት ፊትን መጠቀም አይችሉም። ለተጨማሪ መረጃ፣ የእርስዎን ድርጅት አስተዳዳሪ ያነጋግሩ።"</string>
+    <string name="security_settings_face_enroll_introduction_message_setup" product="default" msgid="5667326364825190475">"ስልክዎን ለመክፈት፣ ግዢዎችን ለመፍቀድ ወይም በመለያ ወደ መተግበሪያዎች ለመግባት መልክዎን ይጠቀሙ"</string>
+    <string name="security_settings_face_enroll_introduction_message_setup" product="desktop" msgid="8153291564425666563">"መሣሪያዎን ለመክፈት፣ ግዢዎችን ለመፍቀድ ወይም በመለያ ወደ መተግበሪያዎች ለመግባት መልክዎን ይጠቀሙ"</string>
+    <string name="security_settings_face_enroll_improve_face_alert_body" product="default" msgid="827881183869443564">"በመልክ መክፈትን እንደገና ለማዋቀር የአሁኑን የእርስዎን የመልክ ሞዴል ይሰርዙ።\n\nየእርስዎ የመልክ ሞዴል በቋሚነት እና ደህንነቱ በተጠበቀ መንገድ ይሰረዛል።\n\nከስረዛ በኋላ ስልክዎን ለመክፈት ወይም በመተግበሪያዎች ውስጥ ለማረጋገጫ የእርስዎ ፒን፣ ሥርዓተ-ጥለት ወይም የይለፍ ቃል ያስፈልገዎታል።"</string>
+    <string name="security_settings_face_enroll_improve_face_alert_body" product="desktop" msgid="3033159905539587695">"በመልክ መክፈትን እንደገና ለማዋቀር የአሁኑን የእርስዎን የመልክ ሞዴል ይሰርዙ።\n\nየእርስዎ የመልክ ሞዴል በቋሚነት እና ደኅንነቱ በተጠበቀ መንገድ ይሰረዛል።\n\nከስረዛ በኋላ፣ መሣሪያዎን ለመክፈት ወይም በመተግበሪያዎች ውስጥ ለማረጋገጫ የእርስዎ ፒን፣ ሥርዓተ-ጥለት ወይም የይለፍ ቃል ያስፈልግዎታል።"</string>
+    <string name="security_settings_face_enroll_improve_face_alert_body_fingerprint" product="default" msgid="657898108282284896">"በመልክ መክፈትን እንደገና ለማዋቀር የአሁኑን የእርስዎን የመልክ ሞዴል ይሰርዙ።\n\nየእርስዎ የመልክ ሞዴል በቋሚነት እና ደህንነቱ በተጠበቀ መንገድ ይሰረዛል።\n\nከስረዛ በኋላ ስልክዎን ለመክፈት ወይም በመተግበሪያዎች ውስጥ ለማረጋገጫ የእርስዎ የጣት አሻራ፣ ፒን፣ ሥርዓተ-ጥለት ወይም የይለፍ ቃል ያስፈልገዎታል።"</string>
+    <string name="security_settings_face_enroll_improve_face_alert_body_fingerprint" product="desktop" msgid="4773722047433370821">"በመልክ መክፈትን እንደገና ለማዋቀር የአሁኑን የእርስዎን የመልክ ሞዴል ይሰርዙ።\n\nየእርስዎ የመልክ ሞዴል በቋሚነት እና ደኅንነቱ በተጠበቀ መንገድ ይሰረዛል።\n\nከስረዛ በኋላ፣ መሣሪያዎን ለመክፈት ወይም በመተግበሪያዎች ውስጥ ለማረጋገጫ የእርስዎ የጣት አሻራ፣ ፒን፣ ሥርዓተ-ጥለት ወይም የይለፍ ቃል ያስፈልግዎታል።"</string>
+    <string name="security_settings_face_settings_require_attention_details" product="default" msgid="9055569538299306139">"ስልኩን ለመክፈት ዓይኖችዎ ክፍት መሆን አለባቸው"</string>
+    <string name="security_settings_face_settings_require_attention_details" product="desktop" msgid="6708465338217767003">"መሣሪያውን ለመክፈት ዓይኖችዎ ክፍት መሆን አለባቸው"</string>
+    <string name="security_settings_face_settings_remove_dialog_details" product="default" msgid="631912351020557148">"የእርስዎ የመልክ ሞዴል በቋሚነት እና ደህንነቱ በተጠበቀ ሁኔታ ይሰረዛል።\n\nከስረዛ በኋላ ስልክዎን ለመክፈት ወይም በመተግበሪያዎች ውስጥ ለማረጋገጥ የእርስዎ የጣት አሻራ፣ ፒን፣ ሥርዓተ-ጥለት ወይም የይለፍ ቃል መጠቀም ይኖርብዎታል።"</string>
+    <string name="security_settings_face_settings_remove_dialog_details" product="desktop" msgid="6371830907687898599">"የእርስዎ የመልክ ሞዴል በቋሚነት እና ደህንነቱ በተጠበቀ ሁኔታ ይሰረዛል።\n\nከስረዛ በኋላ መሣሪያዎን ለመክፈት ወይም በመተግበሪያዎች ውስጥ ለማረጋገጥ የእርስዎን የጣት አሻራ፣ ፒን፣ ሥርዓተ-ጥለት ወይም የይለፍ ቃል መጠቀም ይኖርብዎታል።"</string>
+    <string name="security_settings_face_settings_remove_dialog_details_convenience" product="default" msgid="4067458308624865583">"የእርስዎ የመልክ ሞዴል በቋሚነት እና ደህንነቱ በተጠበቀ መንገድ ይሰረዛል።\n\nከስረዛ በኋላ ስልክዎን ለመክፈት የእርስዎ ፒን፣ ሥርዓተ ጥለት ወይም የይለፍ ቃል ያስፈልግዎታል።"</string>
+    <string name="security_settings_face_settings_remove_dialog_details_convenience" product="desktop" msgid="8773532142993444478">"የእርስዎ የመልክ ሞዴል በቋሚነት እና ደህንነቱ በተጠበቀ መንገድ ይሰረዛል።\n\nከስረዛ በኋላ መሣሪያዎን ለመክፈት የእርስዎ ፒን፣ ሥርዓተ-ጥለት ወይም የይለፍ ቃል ያስፈልገዎታል።"</string>
+    <string name="security_settings_face_remove_dialog_details_fingerprint" product="default" msgid="3697170798827306695">"የእርስዎ የመልክ ሞዴል እስከመጨረሻው እና ደህንነቱ በተጠበቀ ሁኔታ ይሰረዛል።\n\nከስረዛ በኋላ ስልክዎን ለመክፈት ወይም በመተግበሪያዎች ውስጥ ለማረጋገጫ የእርስዎ የጣት አሻራ፣ ፒን፣ ሥርዓተ-ጥለት ወይም የይለፍ ቃል መጠቀም ይኖርብዎታል።"</string>
+    <string name="security_settings_face_remove_dialog_details_fingerprint" product="desktop" msgid="540277269419613514">"የእርስዎ የመልክ ሞዴል እስከመጨረሻው እና ደህንነቱ በተጠበቀ ሁኔታ ይሰረዛል።\n\nከስረዛ በኋላ መሣሪያዎን ለመክፈት ወይም በመተግበሪያዎች ውስጥ ለማረጋገጫ የእርስዎን የጣት አሻራ፣ ፒን፣ ሥርዓተ-ጥለት ወይም የይለፍ ቃል መጠቀም ይኖርብዎታል።"</string>
+    <string name="security_settings_face_remove_dialog_details_fingerprint_conv" product="default" msgid="7229672458856399521">"የእርስዎ የመልክ ሞዴል በቋሚነት እና ደህንነቱ በተጠበቀ ሁኔታ ይሰረዛል።\n\nከስረዛ በኋላ ስልክዎን ለመክፈት የእርስዎ የጣት አሻራ፣ ፒን፣ ሥርዓተ-ጥለት ወይም የይለፍ ቃል ያስፈልግዎታል።"</string>
+    <string name="security_settings_face_remove_dialog_details_fingerprint_conv" product="desktop" msgid="2106529501669220799">"የመልክ ሞዴልዎ በቋሚነት እና ደህንነቱ በተጠበቀ ሁኔታ ይሰረዛል።\n\nከስረዛ በኋላ መሣሪያዎን ለመክፈት የእርስዎ የጣት አሻራ፣ ፒን፣ ሥርዓተ ጥለት ወይም የይለፍ ቃል ያስፈልግዎታል።"</string>
+    <string name="security_settings_face_settings_context_subtitle" product="default" msgid="1322898999413079369">"የእርስዎን ስልክ ለመክፈት በመልክ መክፈትን ይጠቀሙ"</string>
+    <string name="security_settings_face_settings_context_subtitle" product="desktop" msgid="2969929877374962497">"መሣሪያዎን በመልክዎ ይክፈቱ"</string>
     <string name="security_settings_face_settings_footer" product="default" msgid="3036403896485044957">"ስልክዎን ለመክፈት ወይም እንደ በመለያ ሲገቡ ወይም ግዢን ሲያጸድቁ ላሉ በመተግበሪያ ውስጥ ለሚደረጉ ማረጋገጫዎች መልክዎን ይጠቀሙ።\n\nከግምት ውስጥ ያስገቡ፦\nበአንድ ጊዜ ማዋቀር የሚችሉት አንድ መልክ ብቻ ነው። ሌላ መልክ ለማከል አሁን ያለውን ይሰርዙ።\n\nስልኩን መመልከት ሳያስቡት ሊከፍተው ይችላል።\n\nየሆነ ሰው ስልክዎን ፊትዎ ላይ ቢይዘው ሊከፈት ይችላል።\n\nስልክዎ እንደ መንታ ወንድም/እህት ያለ እርስዎን በጣም በሚመስል ሰው ሊከፈት ይችላል።"</string>
     <string name="security_settings_face_settings_footer" product="tablet" msgid="3467711032275909082">"ጡባዊዎን ለመክፈት ወይም እንደ በመለያ ሲገቡ ወይም ግዢን ሲያጸድቁ ላሉ በመተግበሪያ ውስጥ ለሚደረጉ ማረጋገጫዎች መልክዎን ይጠቀሙ።\n\nከግምት ውስጥ ያስገቡ፦\nበአንድ ጊዜ ማዋቀር የሚችሉት አንድ መልክ ብቻ ነው። ሌላ መልክ ለማከል አሁን ያለውን ይሰርዙ።\n\nጡባዊውን መመልከት ሳያስቡት ሊከፍተው ይችላል።\n\nየሆነ ሰው ጡባዊዎን ፊትዎ ላይ ቢይዘው ሊከፈት ይችላል።\n\nጡባዊዎ እንደ መንታ ወንድም/እህት ያለ እርስዎን በጣም በሚመስል ሰው ሊከፈት ይችላል።"</string>
     <string name="security_settings_face_settings_footer" product="device" msgid="6237815625247917310">"መሣሪያዎን ለመክፈት ወይም እንደ በመለያ ሲገቡ ወይም ግዢን ሲያጸድቁ ላሉ በመተግበሪያ ውስጥ ለሚደረጉ ማረጋገጫዎች መልክዎን ይጠቀሙ።\n\nከግምት ውስጥ ያስገቡ፦\nበአንድ ጊዜ ማዋቀር የሚችሉት አንድ መልክ ብቻ ነው። ሌላ መልክ ለማከል አሁን ያለውን ይሰርዙ።\n\nመሣሪያውን መመልከት ሳያስቡት ሊከፍተው ይችላል።\n\nየሆነ ሰው መሣሪያዎን ፊትዎ ላይ ቢይዘው ሊከፈት ይችላል።\n\nመሣሪያዎ እንደ መንታ ወንድም/እህት ያለ እርስዎን በጣም በሚመስል ሰው ሊከፈት ይችላል።"</string>
@@ -139,6 +163,7 @@
     <string name="security_settings_face_settings_footer_class3_attention_not_supported" product="tablet" msgid="6790505667764631343">"ጡባዊዎን ለመክፈት ወይም እንደ በመተግበሪያዎች ሲገቡ ወይም ግዢ ሲያጸድቁ እርስዎ መሆንዎን ለማረጋገጥ መልክዎን ይጠቀሙ።\n\nከግምት ውስጥ ያስገቡ፦\nበአንድ ጊዜ ማዋቀር የሚችሉት አንድ መልክ ብቻ ነው። ሌላ መልክ ለማከል አሁን ያለውን ይሰርዙ።\n\nጡባዊውን መመልከት ሳያስቡት ሊከፍተው ይችላል።\n\nአይኖችዎ ቢዘጉ እንኳ የሆነ ሰው ጡባዊዎን ፊትዎ ላይ ቢይዘው ሊከፈት ይችላል።\n\nጡባዊዎ እንደ መንታ ወንድም/እህት ያለ እርስዎን በጣም በሚመስል ሰው ሊከፈት ይችላል።"</string>
     <string name="security_settings_face_settings_footer_class3_attention_not_supported" product="device" msgid="7858917821957779752">"መሣሪያዎን ለመክፈት ወይም እንደ በመተግበሪያዎች ሲገቡ ወይም ግዢ ሲያጸድቁ እርስዎ መሆንዎን ለማረጋገጥ መልክዎን ይጠቀሙ።\n\nከግምት ውስጥ ያስገቡ፦\nበአንድ ጊዜ ማዋቀር የሚችሉት አንድ መልክ ብቻ ነው። ሌላ መልክ ለማከል አሁን ያለውን ይሰርዙ።\n\nመሣሪያውን መመልከት ሳያስቡት ሊከፍተው ይችላል።\n\nአይኖችዎ ቢዘጉ እንኳ የሆነ ሰው መሣሪያዎን ፊትዎ ላይ ቢይዘው ሊከፈት ይችላል።\n\nመሣሪያዎ እንደ መንታ ወንድም/እህት ያለ እርስዎን በጣም በሚመስል ሰው ሊከፈት ይችላል።"</string>
     <string name="security_settings_face_settings_footer_class3_attention_not_supported" product="desktop" msgid="7858917821957779752">"መሣሪያዎን ለመክፈት ወይም እንደ በመተግበሪያዎች ሲገቡ ወይም ግዢ ሲያጸድቁ እርስዎ መሆንዎን ለማረጋገጥ መልክዎን ይጠቀሙ።\n\nከግምት ውስጥ ያስገቡ፦\nበአንድ ጊዜ ማዋቀር የሚችሉት አንድ መልክ ብቻ ነው። ሌላ መልክ ለማከል አሁን ያለውን ይሰርዙ።\n\nመሣሪያውን መመልከት ሳያስቡት ሊከፍተው ይችላል።\n\nአይኖችዎ ቢዘጉ እንኳ የሆነ ሰው መሣሪያዎን ፊትዎ ላይ ቢይዘው ሊከፈት ይችላል።\n\nመሣሪያዎ እንደ መንታ ወንድም/እህት ያለ እርስዎን በጣም በሚመስል ሰው ሊከፈት ይችላል።"</string>
+    <string name="security_settings_face_footer_description_class3" product="default" msgid="3460502249540215759"></string>
     <string name="security_settings_fingerprint_enroll_introduction_v3_message" msgid="2145273491174234191">"እንደ ወደ መተግበሪያዎች ሲገቡ ወይም ግዢን ሲያጸድቁ የእርስዎን <xliff:g id="DEVICENAME">%s</xliff:g> ለመክፈት ወይም እርስዎ እንደሆኑ ለማረጋገጥ አሻራዎን ይጠቀሙ።"</string>
     <string name="security_settings_fingerprint_enroll_introduction_consent_message" product="default" msgid="5101253231118659496">"ልጅዎ ስልካቸውን ለመክፈት ወይም እነሱ መሆናቸውን እንዲያረጋግጡ የጣት አሻራቸውን እንዲጠቀሙ ይፍቀዱ። ይህ የሚሆነው ወደ መተግበሪያዎች ሲገቡ፣ ግዢን ሲያጸድቁ እና ሌሎችም ሲያደርጉ ነው"</string>
     <string name="security_settings_fingerprint_enroll_introduction_consent_message" product="tablet" msgid="3063978167545799342">"ልጅዎ ጡባዊያቸውን ለመክፈት ወይም እርሳቸው መሆናቸውን ለማረጋገጥ የጣት አሻራቸውን እንዲጠቀሙ ይፍቀዱ። ይህ የሚሆነው ወደ መተግበሪያዎች ሲገቡ፣ ግዢን ሲያጸድቁ እና ሌሎችንም ሲያደርጉ ነው።"</string>
@@ -176,10 +201,96 @@
     <string name="security_settings_fingerprint_v2_home_screen_text" product="device" msgid="7398339851724524558">"መሣሪያዎን ለመክፈት ወይም እንደ በመለያ ወደ መተግበሪያዎች ሲገቡ ባለ ጊዜ ላይ እርስዎ መሆንዎን ለማረጋገጥ የጣት አሻራዎን ይጠቀሙ።"</string>
     <string name="security_settings_fingerprint_v2_home_screen_text" product="default" msgid="5376408603508393038">"ስልክዎን ለመክፈት ወይም እንደ በመለያ ወደ መተግበሪያዎች ሲገቡ ባለ ጊዜ ላይ እርስዎ መሆንዎን ለማረጋገጥ የጣት አሻራዎን ይጠቀሙ።"</string>
     <string name="security_settings_fingerprint_v2_home_screen_text" product="desktop" msgid="7398339851724524558">"መሣሪያዎን ለመክፈት ወይም እንደ በመለያ ወደ መተግበሪያዎች ሲገቡ ባለ ጊዜ ላይ እርስዎ መሆንዎን ለማረጋገጥ የጣት አሻራዎን ይጠቀሙ።"</string>
+    <string name="security_settings_fingerprint_enroll_introduction_message_unlock_disabled" product="default" msgid="8536395298073746085">"የእርስዎን ስልክ ለመክፈት ወይም ግዢዎችን ለማጽደቅ የእርስዎን የጣት አሻራ ይጠቀሙ።\n\nማስታወሻ፦ ይህን መሣሪያ ለመክፈት የጣት አሻራን መጠቀም አይችሉም። ለተጨማሪ መረጃ፣ የእርስዎን ድርጅት አስተዳዳሪ ያነጋግሩ።"</string>
+    <string name="security_settings_fingerprint_enroll_introduction_message_unlock_disabled" product="desktop" msgid="1449873608291132102">"የእርስዎን መሣሪያ ለመክፈት ወይም ግዢዎችን ለማጽደቅ የእርስዎን የጣት አሻራ ይጠቀሙ።\n\nማስታወሻ፦ ይህን መሣሪያ ለመክፈት የጣት አሻራን መጠቀም አይችሉም። ለተጨማሪ መረጃ፣ የእርስዎን ድርጅት አስተዳዳሪ ያነጋግሩ።"</string>
+    <string name="security_settings_remoteauth_enroll_introduction_message" product="default" msgid="548895260855476885">"በእጅ ሰዓት መክፈቻ ለምሳሌ ጣቶችዎ እርጥብ ሲሆኑ ወይም ፊትዎ ሳይለይ ሲቀር ይህን ስልክ ለመክፈት ሌላኛው አመቺ መንገድ ነው።\n\nየሚከተሉትን ሲያደርጉ ይህን ስልክ ለመክፈት የእጅ ሰዓትዎን መጠቀም ይችላሉ፦"</string>
+    <string name="security_settings_remoteauth_enroll_introduction_message" product="desktop" msgid="6975912914017982596">"በእጅ ሰዓት መክፈቻ ለምሳሌ ጣቶችዎ እርጥብ ሲሆኑ ወይም ፊትዎ ሳይለይ ሲቀር ይህን መሣሪያ ለመክፈት ሌላኛው አመቺ መንገድ ነው።\n\nየሚከተሉትን ሲያደርጉ ይህን መሣሪያ ለመክፈት የእጅ ሰዓትዎን መጠቀም ይችላሉ፦"</string>
+    <string name="security_settings_remoteauth_enroll_introduction_info_lock_open" product="default" msgid="5036235531555790028">"የእጅ ሰዓትዎ መከፈት፣ አንጓዎ ላይ መሆን እና በዚህ ስልክ ቅርብ ርቀት ላይ መሆን አለበት። በእጅዎ ላይ በሚሆንበት ጊዜ የእጅ ሰዓትዎን በድጋሚ መክፈት አያስፈልግዎትም።"</string>
+    <string name="security_settings_remoteauth_enroll_introduction_info_lock_open" product="desktop" msgid="4379534816294081846">"የእጅ ሰዓትዎ መከፈት፣ አንጓዎ ላይ መሆን እና በዚህ መሣሪያ ቅርብ ርቀት ላይ መሆን አለበት። በእጅዎ ላይ በሚሆንበት ጊዜ የእጅ ሰዓትዎን በድጋሚ መክፈት አያስፈልግዎትም።"</string>
+    <string name="security_settings_remoteauth_enroll_introduction_info_notifications" product="default" msgid="8236871030056883849">"ይህ ስልክ ሲከፈት በእጅ ሰዓትዎ ላይ ማሳወቂያ ይደርስዎታል። የተከፈተው ሳይፈልጉት ከነበረ በድጋሚ ስልኩን ለመቆለፍ ማሳወቂያውን መታ ያድርጉ።"</string>
+    <string name="security_settings_remoteauth_enroll_introduction_info_notifications" product="desktop" msgid="1186235463250896267">"ይህ መሣሪያ ሲከፈት በእጅ ሰዓትዎ ላይ ማሳወቂያ ይደርስዎታል። የተከፈተው ሳይፈልጉት ከነበረ በድጋሚ መሣሪያውን ለመቆለፍ ማሳወቂያውን መታ ያድርጉ።"</string>
+    <string name="security_settings_remoteauth_enroll_finish_description" product="default" msgid="553477510982159386">"አሁን የማያ ገጽ ቁልፉ ላይ ወደ ላይ ሲያንሸራትቱ ወይም ማሳወቂያን መታ ሲያደርጉ ይህን ስልክ ለመክፈት የእጅ ሰዓትዎን መጠቀም ይችላሉ"</string>
+    <string name="security_settings_remoteauth_enroll_finish_description" product="desktop" msgid="7745250450395684994">"አሁን የማያ ገጽ ቁልፉ ላይ ወደ ላይ ሲያንሸራትቱ ወይም ማሳወቂያን መታ ሲያደርጉ ይህን መሣሪያ ለመክፈት የእጅ ሰዓትዎን መጠቀም ይችላሉ"</string>
+    <string name="security_settings_remoteauth_settings_description" product="default" msgid="507676718189793752">"የማያ ገጽ ቁልፉ ላይ ወደ ላይ ሲያንሸራትቱ ወይም ማሳወቂያን መታ ሲያደርጉ ይህን ስልክ ለመክፈት የእጅ ሰዓትዎን መጠቀም ይችላሉ"</string>
+    <string name="security_settings_remoteauth_settings_description" product="desktop" msgid="4266751960630500666">"የማያ ገጽ ቁልፉ ላይ ወደ ላይ ሲያንሸራትቱ ወይም ማሳወቂያን መታ ሲያደርጉ ይህን መሣሪያ ለመክፈት የእጅ ሰዓትዎን መጠቀም ይችላሉ"</string>
+    <string name="security_settings_remoteauth_settings_info_footer" product="default" msgid="7176165099467997157">"በእጅ ሰዓት መክፈቻን ለመጠቀም የእጅ ሰዓትዎ መከፈት፣ በአንጓዎ ላይ መሆን፣ በቅርብ ርቀት ላይ መኖር እና ከዚህ ስልክ ጋር መገናኘት አለበት። ግንኙነቱ ከተቋረጠ በእጅ ሰዓት መክፈቻን መጠቀም ከመቻልዎ በፊት ስልኩን መክፈት ይኖርብዎታል።\n\nያስታውሱ፦\nበአንድ ጊዜ ማዋቀር የሚችሉት አንድ የእጅ ሰዓት ብቻ ነው። ሌላ የእጅ ሰዓት ለማከል በመጀመሪያ የአሁኑን ያስወግዱ።"</string>
+    <string name="security_settings_remoteauth_settings_info_footer" product="desktop" msgid="4888346924492807836">"በእጅ ሰዓት መክፈቻን ለመጠቀም የእጅ ሰዓትዎ መከፈት፣ በአንጓዎ ላይ መሆን፣ በቅርብ ርቀት ላይ መኖር እና ከዚህ መሣሪያ ጋር መገናኘት አለበት። ግንኙነቱ ከተቋረጠ በእጅ ሰዓት መክፈቻን መጠቀም ከመቻልዎ በፊት መሣሪያውን መክፈት ይኖርብዎታል።\n\nያስታውሱ፦\nበአንድ ጊዜ ማዋቀር የሚችሉት አንድ የእጅ ሰዓት ብቻ ነው። ሌላ የእጅ ሰዓት ለማከል በመጀመሪያ የአሁኑን ያስወግዱ።"</string>
     <string name="biometric_settings_hand_back_to_guardian" product="tablet" msgid="9034560319613439593">"ጡባዊውን መልሰው ለወላጅዎ ይስጡ"</string>
     <string name="biometric_settings_hand_back_to_guardian" product="device" msgid="2149647165743006307">"መሣሪያውን መልሰው ለወላጅዎ ይስጡ"</string>
     <string name="biometric_settings_hand_back_to_guardian" product="default" msgid="2060265104488529949">"ስልኩን መልሰው ለወላጅዎ ይስጡት"</string>
     <string name="biometric_settings_hand_back_to_guardian" product="desktop" msgid="2149647165743006307">"መሣሪያውን መልሰው ለወላጅዎ ይስጡ"</string>
+    <string name="biometric_settings_intro_with_activeunlock" product="default" msgid="8858463763101227881">"በመልክ መክፈት እና በጣት አሻራ መክፈቻን ሲያዋቅሩ፣ ጭምብል በለበሱበት ጊዜ ወይም ጨለማ በሆነ ቦታ ውስጥ ሲሆኑ ስልክዎ የጣት አሻራዎን ይጠይቃል።\n\nበእጅ ሰዓት መክፈቻ ስልክዎን ለመክፈት ሌላ ምቹ መንገድ ነው፣ ለምሳሌ፦ ጣቶችዎ እርጥብ ሲሆኑ ወይም መልክ ሳይታወቅ ሲቀር።"</string>
+    <string name="biometric_settings_intro_with_activeunlock" product="desktop" msgid="8647938561672414067">"በመልክ መክፈትን እና በጣት አሻራ መክፈቻን ሲያዋቅሩ፣ ጭምብል በለበሱበት ጊዜ ወይም ጨለማ በሆነ ቦታ ውስጥ ሲሆኑ መሣሪያዎ የጣት አሻራዎን ይጠይቃል።\n\nበእጅ ሰዓት መክፈቻ መሣሪያዎን ለመክፈት ሌላ ምቹ መንገድ ነው፣ ለምሳሌ፣ ጣቶችዎ እርጥብ ሲሆኑ ወይም መልክዎ ሳይታወቅ ሲቀር።"</string>
+    <string name="biometric_settings_intro_with_fingerprint" product="default" msgid="7057949977059277103">"በእጅ ሰዓት መክፈቻ ስልክዎን ለመክፈት ሌላኛው ምቹ መንገድ ነው፣ ለምሳሌ፦ የጣት አሻራዎ ሳይታወቅ ሲቀር።"</string>
+    <string name="biometric_settings_intro_with_fingerprint" product="desktop" msgid="3405074735777726953">"በእጅ ሰዓት መክፈቻ መሣሪያዎን ለመክፈት ሌላኛው ምቹ መንገድ ነው፣ ለምሳሌ፦ የጣት አሻራዎ ሳይታወቅ ሲቀር።"</string>
+    <string name="biometric_settings_intro_with_face" product="default" msgid="2726655588847229283">"በእጅ ሰዓት መክፈቻ ስልክዎን ለመክፈት ሌላኛው ምቹ መንገድ ነው፣ ለምሳሌ፦ መልክዎ ሳይታወቅ ሲቀር።"</string>
+    <string name="biometric_settings_intro_with_face" product="desktop" msgid="1265319569297304712">"በእጅ ሰዓት መክፈቻ መሣሪያዎን ለመክፈት ሌላኛው ምቹ መንገድ ነው፣ ለምሳሌ፦ መልክዎ ሳይታወቅ ሲቀር።"</string>
+    <string name="biometric_settings_intro" product="default" msgid="1110080686857635531">"በመልክ መክፈት እና በጣት አሻራ መክፈቻን ሲያዋቅሩ ጭምብል በለበሱበት ጊዜ ወይም ጨለማ በሆነ ቦታ ውስጥ ሲሆኑ ስልክዎ የጣት አሻራዎን ይጠይቃል"</string>
+    <string name="biometric_settings_intro" product="desktop" msgid="5958563780867026412">"በመልክ መክፈትን እና በጣት አሻራ መክፈቻን ሲያዋቅሩ፣ ጭምብል በለበሱበት ጊዜ ወይም ጨለማ በሆነ ቦታ ውስጥ ሲሆኑ መሣሪያዎ የጣት አሻራዎን ይጠይቃል"</string>
+    <string name="biometric_settings_use_biometric_unlock_phone" product="default" msgid="3409316849691305012">"ስልክዎን ይክፈቱ"</string>
+    <string name="biometric_settings_use_biometric_unlock_phone" product="desktop" msgid="6393832544950099600">"መሣሪያዎን ይክፈቱ"</string>
+    <string name="setup_fingerprint_enroll_enrolling_skip_message" product="default" msgid="4979485905634049022">"ስልክዎን ለመክፈት የጣት አሻራዎችዎን እንደ አንድ መንገድ መርጠዋል። አሁን ከዘለሉት ይህን በኋላ ላይ ማዘጋጀት ይኖርብዎታል። ማዘጋጀት አንድ ወይም ሁለት ደቂቃ ብቻ ይወስዳል።"</string>
+    <string name="setup_fingerprint_enroll_enrolling_skip_message" product="desktop" msgid="2601670958752026992">"መሣሪያዎን ለመክፈት የጣት አሻራዎችዎን እንደ አንድ መንገድ መርጠዋል። አሁን ከዘለሉት በኋላ ላይ ይህን ማዘጋጀት ይኖርብዎታል። ማዘጋጀት አንድ ወይም ሁለት ደቂቃ ብቻ ይወስዳል።"</string>
+    <string name="unlock_disable_frp_warning_content_pattern" product="default" msgid="5070116742207378028">"ስልክዎ ከጠፋ ወይም ከተሰረቀ ሥርዓተ ጥለት ይጠብቀዋል"</string>
+    <string name="unlock_disable_frp_warning_content_pattern" product="desktop" msgid="3828076488822985960">"መሣሪያህ ከጠፋ ወይም ከተሰረቀ ሥርዓተ ጥለት ይጠብቀዋል"</string>
+    <string name="unlock_disable_frp_warning_content_pattern_fingerprint" product="default" msgid="7919767908076245408">"ስልክዎ ከጠፋ ወይም ከተሰረቀ ሥርዓተ ጥለት ይጠብቀዋል።<xliff:g id="EMPTY_LINE">
+
+</xliff:g>ይህ እንዲሁም በመሣሪያዎ ላይ የተከማቸውን የጣት አሻራ ሞዴል ይሰርዛል። በመተግበሪያዎች ውስጥ ማንነትን ለማረጋገጥ የጣት አሻራዎን መጠቀም አይችሉም።"</string>
+    <string name="unlock_disable_frp_warning_content_pattern_fingerprint" product="desktop" msgid="9116397340044675886">"መሣሪያዎ ከጠፋ ወይም ከተሰረቀ ሥርዓተ ጥለት ይጠብቀዋል።<xliff:g id="EMPTY_LINE">
+
+</xliff:g>ይህ እንዲሁም በመሣሪያዎ ላይ የተከማቸውን የጣት አሻራ ሞዴል ይሰርዛል። በመተግበሪያዎች ውስጥ ማንነትን ለማረጋገጥ የጣት አሻራዎን መጠቀም አይችሉም።"</string>
+    <string name="unlock_disable_frp_warning_content_pattern_face" product="default" msgid="37951657146319620">"ስልክዎ ከጠፋ ወይም ከተሰረቀ ሥርዓተ ጥለት ይጠብቀዋል።<xliff:g id="EMPTY_LINE">
+
+</xliff:g>የእርስዎ የመልክ ሞዴል እንዲሁም በቋሚነት እና ደህንነቱ በተጠበቀ ሁኔታ ይሰረዛል። በመተግበሪያዎች ውስጥ ማንነትን ለማረጋገጥ መልክዎን መጠቀም አይችሉም።"</string>
+    <string name="unlock_disable_frp_warning_content_pattern_face" product="desktop" msgid="5949258661260705528">"መሣሪያዎ ከጠፋ ወይም ከተሰረቀ ሥርዓተ ጥለት ይጠብቀዋል።<xliff:g id="EMPTY_LINE">
+
+</xliff:g>የእርስዎ የመልክ ሞዴል እንዲሁም በቋሚነት እና ደህንነቱ በተጠበቀ ሁኔታ ይሰረዛል። በመተግበሪያዎች ውስጥ ማንነትን ለማረጋገጥ መልክዎን መጠቀም አይችሉም።"</string>
+    <string name="unlock_disable_frp_warning_content_pattern_face_fingerprint" product="default" msgid="2099587344025095004">"ስልክዎ ከጠፋ ወይም ከተሰረቀ ሥርዓተ ጥለት ይጠብቀዋል።<xliff:g id="EMPTY_LINE">
+
+</xliff:g>እንዲሁም በእርስዎ ስልክ ላይ የተከማቸውን የጣት አሻራ ሞዴል በቋሚነት እና ደህንነቱ በተጠበቀ ሁኔታ ይሰረዛል። የእርስዎ መልክ ሞዴል በቋሚነት እና ደህንነቱ በተጠበቀ ሁኔታ ይሰረዛል። በመተግበሪያዎች ውስጥ ማንነትን ለማረጋገጥ የእርስዎን መልክ ወይም የጣት አሻራ መጠቀም አይችሉም።"</string>
+    <string name="unlock_disable_frp_warning_content_pattern_face_fingerprint" product="desktop" msgid="1894841959198314076">"መሣሪያዎ ከጠፋ ወይም ከተሰረቀ ሥርዓተ ጥለት ይጠብቀዋል።<xliff:g id="EMPTY_LINE">
+
+</xliff:g>እንዲሁም በእርስዎ ስልክ ላይ የተከማቸውን የጣት አሻራ ሞዴል በቋሚነት እና ደህንነቱ በተጠበቀ ሁኔታ ይሰረዛል። የእርስዎ መልክ ሞዴል በቋሚነት እና ደህንነቱ በተጠበቀ ሁኔታ ይሰረዛል። በመተግበሪያዎች ውስጥ ማንነትን ለማረጋገጥ የእርስዎን መልክ ወይም የጣት አሻራ መጠቀም አይችሉም።"</string>
+    <string name="unlock_disable_frp_warning_content_pin" product="default" msgid="4884453290870316484">"ስልክዎ ከጠፋ ወይም ከተሰረቀ ፒን ይጠብቀዋል"</string>
+    <string name="unlock_disable_frp_warning_content_pin" product="desktop" msgid="2069572855122085869">"መሣሪያዎ ከጠፋ ወይም ከተሰረቀ ፒን ይጠብቀዋል"</string>
+    <string name="unlock_disable_frp_warning_content_pin_fingerprint" product="default" msgid="2874913409506418991">"ስልክዎ ከጠፋ ወይም ከተሰረቀ ፒን ይጠብቀዋል።<xliff:g id="EMPTY_LINE">
+
+</xliff:g>ይህ እንዲሁም በመሣሪያዎ ላይ የተከማቸውን የጣት አሻራ ሞዴል ይሰርዛል። በመተግበሪያዎች ውስጥ ማንነትን ለማረጋገጥ የጣት አሻራዎን መጠቀም አይችሉም።"</string>
+    <string name="unlock_disable_frp_warning_content_pin_fingerprint" product="desktop" msgid="6361691886708081331">"መሣሪያዎ ከጠፋ ወይም ከተሰረቀ ፒን ይጠብቀዋል።<xliff:g id="EMPTY_LINE">
+
+</xliff:g>ይህ እንዲሁም በመሣሪያዎ ላይ የተከማቸውን የጣት አሻራ ሞዴል ይሰርዛል። በመተግበሪያዎች ውስጥ ማንነትን ለማረጋገጥ የጣት አሻራዎን መጠቀም አይችሉም።"</string>
+    <string name="unlock_disable_frp_warning_content_pin_face" product="default" msgid="263465132877970450">"ስልክዎ ከጠፋ ወይም ከተሰረቀ ፒን ይጠብቀዋል።<xliff:g id="EMPTY_LINE">
+
+</xliff:g>እንዲሁም የእርስዎ የመልክ ሞዴል በቋሚነት እና ደህንነቱ በተጠበቀ ሁኔታ ይሰረዛል። በመተግበሪያዎች ውስጥ ማንነትን ለማረጋገጥ መልክዎን መጠቀም አይችሉም።"</string>
+    <string name="unlock_disable_frp_warning_content_pin_face" product="desktop" msgid="1495988088469298632">"መሣሪያዎ ከጠፋ ወይም ከተሰረቀ ፒን ይጠብቀዋል።<xliff:g id="EMPTY_LINE">
+
+</xliff:g>እንዲሁም የእርስዎ የመልክ ሞዴል በቋሚነት እና ደህንነቱ በተጠበቀ ሁኔታ ይሰረዛል። በመተግበሪያዎች ውስጥ ማንነትን ለማረጋገጥ መልክዎን መጠቀም አይችሉም።"</string>
+    <string name="unlock_disable_frp_warning_content_pin_face_fingerprint" product="default" msgid="476636556062520667">"ስልክዎ ከጠፋ ወይም ከተሰረቀ ፒን ይጠብቀዋል።<xliff:g id="EMPTY_LINE">
+
+</xliff:g>ይህ እንዲሁም በመሣሪያዎ ላይ የተከማቸውን የጣት አሻራ ሞዴል ይሰርዛል። የእርስዎ መልክ ሞዴል በቋሚነት እና ደህንነቱ በተጠበቀ ሁኔታ ይሰረዛል። በመተግበሪያዎች ውስጥ ማንነትን ለማረጋገጥ የእርስዎን መልክ ወይም የጣት አሻራ መጠቀም አይችሉም።"</string>
+    <string name="unlock_disable_frp_warning_content_pin_face_fingerprint" product="desktop" msgid="6813575631983953707">"መሣሪያዎ ከጠፋ ወይም ከተሰረቀ ፒን ይጠብቀዋል።<xliff:g id="EMPTY_LINE">
+
+</xliff:g>ይህ እንዲሁም በመሣሪያዎ ላይ የተከማቸውን የጣት አሻራ ሞዴል ይሰርዛል። የእርስዎ መልክ ሞዴል በቋሚነት እና ደህንነቱ በተጠበቀ ሁኔታ ይሰረዛል። በመተግበሪያዎች ውስጥ ማንነትን ለማረጋገጥ የእርስዎን መልክ ወይም የጣት አሻራ መጠቀም አይችሉም።"</string>
+    <string name="unlock_disable_frp_warning_content_password" product="default" msgid="1127164258200398958">"ስልክዎ ከጠፋ ወይም ከተሰረቀ የይለፍ ቃልዎ ይጠብቀዋል"</string>
+    <string name="unlock_disable_frp_warning_content_password" product="desktop" msgid="8367036366524786060">"መሣሪያዎ ከጠፋ ወይም ከተሰረቀ የይለፍ ቃል ይጠብቀዋል"</string>
+    <string name="unlock_disable_frp_warning_content_password_fingerprint" product="default" msgid="4593407083619543775">"ስልክዎ ከጠፋ ወይም ከተሰረቀ የይለፍ ቃል ይጠብቀዋል።<xliff:g id="EMPTY_LINE">
+
+</xliff:g>ይህ እንዲሁም በመሣሪያዎ ላይ የተከማቸውን የጣት አሻራ ሞዴል ይሰርዛል። በመተግበሪያዎች ውስጥ ማንነትን ለማረጋገጥ የጣት አሻራዎን መጠቀም አይችሉም።"</string>
+    <string name="unlock_disable_frp_warning_content_password_fingerprint" product="desktop" msgid="1659299201470069003">"መሣሪያዎ ከጠፋ ወይም ከተሰረቀ የይለፍ ቃል ይጠብቀዋል።<xliff:g id="EMPTY_LINE">
+
+</xliff:g>ይህ እንዲሁም በመሣሪያዎ ላይ የተከማቸውን የጣት አሻራ ሞዴል ይሰርዛል። በመተግበሪያዎች ውስጥ ማንነትን ለማረጋገጥ የጣት አሻራዎን መጠቀም አይችሉም።"</string>
+    <string name="unlock_disable_frp_warning_content_password_face" product="default" msgid="2765003117110694527">"ስልክዎ ከጠፋ ወይም ከተሰረቀ የይለፍ ቃል ይጠብቀዋል።<xliff:g id="EMPTY_LINE">
+
+</xliff:g> እንዲሁም የእርስዎ መልክ ሞዴል በቋሚነት እና ደህንነቱ በተጠበቀ መልኩ ይሰረዛል። በመተግበሪያዎች ውስጥ ማንነትን ለማረጋገጥ መልክዎን መጠቀም አይችሉም።"</string>
+    <string name="unlock_disable_frp_warning_content_password_face" product="desktop" msgid="912428236263888131">"መሣሪያዎ ከጠፋ ወይም ከተሰረቀ የይለፍ ቃል ይጠብቀዋል።<xliff:g id="EMPTY_LINE">
+
+</xliff:g> እንዲሁም የእርስዎ መልክ ሞዴል በቋሚነት እና ደህንነቱ በተጠበቀ መልኩ ይሰረዛል። በመተግበሪያዎች ውስጥ ማንነትን ለማረጋገጥ መልክዎን መጠቀም አይችሉም።"</string>
+    <string name="unlock_disable_frp_warning_content_password_face_fingerprint" product="default" msgid="5660327560346083891">"ስልክዎ ከጠፋ ወይም ከተሰረቀ የይለፍ ቃል ይጠብቀዋል።<xliff:g id="EMPTY_LINE">
+
+</xliff:g> ይህ በመሣሪያዎ ላይ የተከማቸውን የጣት አሻራ ሞዴል ይሰርዛል። የእርስዎ መልክ ሞዴል በቋሚነት እና ደህንነቱ በተጠበቀ ሁኔታ ይሰረዛል። በመተግበሪያዎች ውስጥ ማንነትን ለማረጋገጥ የእርስዎን መልክ ወይም የጣት አሻራ መጠቀም አይችሉም።"</string>
+    <string name="unlock_disable_frp_warning_content_password_face_fingerprint" product="desktop" msgid="5615430301170627057">"መሣሪያዎ ከጠፋ ወይም ከተሰረቀ የይለፍ ቃል ይጠብቀዋል።<xliff:g id="EMPTY_LINE">
+
+</xliff:g> ይህ በመሣሪያዎ ላይ የተከማቸውን የጣት አሻራ ሞዴል ይሰርዛል። የእርስዎ መልክ ሞዴል በቋሚነት እና ደህንነቱ በተጠበቀ ሁኔታ ይሰረዛል። በመተግበሪያዎች ውስጥ ማንነትን ለማረጋገጥ የእርስዎን መልክ ወይም የጣት አሻራ መጠቀም አይችሉም።"</string>
     <string name="lock_screen_intro_skip_dialog_text_frp" product="tablet" msgid="7526137517192538870">"የመሣሪያ ጥበቃ ባህሪያት አይበሩም። ይህ ጡባዊ ቢጠፋ፣ ቢሰረቅ ወይም ዳግም እንዲቀናበር ቢደረግ ሌሎች እንዳይጠቀሙበት መከላከል አይችሉም።"</string>
     <string name="lock_screen_intro_skip_dialog_text_frp" product="device" msgid="1350434793163709209">"የመሣሪያ ጥበቃ ባህሪያት አይበሩም። ይህ መሣሪያ ቢጠፋ፣ ቢሰረቅ ወይም ዳግም እንዲቀናበር ቢደረግ ሌሎች እንዳይጠቀሙበት መከላከል አይችሉም።"</string>
     <string name="lock_screen_intro_skip_dialog_text_frp" product="default" msgid="8367731653387033354">"የመሣሪያ ጥበቃ ባህሪያት አይበሩም። ይህ ስልክ ቢጠፋ፣ ቢሰረቅ ወይም ዳግም እንዲቀናበር ቢደረግ ሌሎች እንዳይጠቀሙበት መከላከል አይችሉም።"</string>
@@ -233,9 +344,9 @@
     <string name="lock_screen_pin_skip_face_message" product="default" msgid="358903382559327157">"በመልክ መክፈትን ለማዋቀር ፒን ያስፈልጋል።\n\nስልኩ ከጠፋ ወይም ከተሰረቀ ፒን ይጠብቀዋል።"</string>
     <string name="lock_screen_pattern_skip_face_message" product="default" msgid="6400426500859622964">"በመልክ መክፈትን ለማዋቀር ስርዓተ ጥለት ያስፈልጋል።\n\nስልኩ ከጠፋ ወይም ከተሰረቀ ስርዓተ ጥለት ይጠብቀዋል።"</string>
     <string name="lock_screen_password_skip_face_message" product="default" msgid="1555954661782997039">"በመልክ መክፈትን ለማዋቀር የይለፍ ቃል ያስፈልጋል።\n\nስልኩ ከጠፋ ወይም ከተሰረቀ የይለፍ ቃል ይጠብቀዋል።"</string>
-    <string name="lock_screen_pin_skip_face_message" product="desktop" msgid="1932467886606343431">"በመልክ መክፈትን ለማዋቀር ፒን ያስፈልጋል።\n\nመሣሪያው ከጠፋ ወይም ከተሰረቀ ፒን ይጠብቀዋል።"</string>
-    <string name="lock_screen_pattern_skip_face_message" product="desktop" msgid="3670112640345602511">"በመልክ መክፈትን ለማዋቀር ስርዓተ ጥለት ያስፈልጋል።\n\nመሣሪያው ከጠፋ ወይም ከተሰረቀ ስርዓተ ጥለት ይጠብቀዋል።"</string>
-    <string name="lock_screen_password_skip_face_message" product="desktop" msgid="256847653854178247">"በመልክ መክፈትን ለማዋቀር የይለፍ ቃል ያስፈልጋል።\n\nመሣሪያው ከጠፋ ወይም ከተሰረቀ የይለፍ ቃል ይጠብቀዋል።"</string>
+    <string name="lock_screen_pin_skip_face_message" product="desktop" msgid="6077624122176446307">"በመልክ መክፈትን ለማዋቀር ፒን ያስፈልጋል።\n\nመሣሪያው ከጠፋ ወይም ከተሰረቀ ፒን ይጠብቀዋል።"</string>
+    <string name="lock_screen_pattern_skip_face_message" product="desktop" msgid="7817325312874210218">"በመልክ መክፈትን ለማዋቀር ሥርዓተ ጥለት ያስፈልጋል።\n\nመሣሪያው ከጠፋ ወይም ከተሰረቀ ሥርዓተ ጥለት ይጠብቀዋል።"</string>
+    <string name="lock_screen_password_skip_face_message" product="desktop" msgid="865444733831491817">"በመልክ መክፈትን ለማዋቀር የይለፍ ቃል ያስፈልጋል።\n\nመሣሪያው ከጠፋ ወይም ከተሰረቀ የይለፍ ቃል ይጠብቀዋል።"</string>
     <string name="lock_screen_pin_skip_biometrics_message" product="tablet" msgid="6016574209955764097">"በጣት አሻራ መክፈቻን እና በመልክ መክፈትን ለማዋቀር ፒን ያስፈልጋል።\n\nጡባዊው ከጠፋ ወይም ከተሰረቀ ፒን ይጠብቀዋል።"</string>
     <string name="lock_screen_pattern_skip_biometrics_message" product="tablet" msgid="5193008948766756870">"በጣት አሻራ መክፈቻን እና በመልክ መክፈትን ለማዋቀር ሥርዓተ ጥለት ያስፈልጋል።\n\nጡባዊው ከጠፋ ወይም ከተሰረቀ ሥርዓተ ጥለት ይጠብቀዋል።"</string>
     <string name="lock_screen_password_skip_biometrics_message" product="tablet" msgid="2157871617774498976">"በጣት አሻራ መክፈቻን እና በመልክ መክፈትን ለማዋቀር የይለፍ ቃል ያስፈልጋል።\n\nጡባዊው ከጠፋ ወይም ከተሰረቀ የይለፍ ቃል ይጠብቀዋል።"</string>
@@ -245,9 +356,9 @@
     <string name="lock_screen_pin_skip_biometrics_message" product="default" msgid="6614355211073480369">"በጣት አሻራ መክፈቻን እና በመልክ መክፈትን ለማዋቀር ፒን ያስፈልጋል።\n\nስልኩ ከጠፋ ወይም ከተሰረቀ ፒን ይጠብቀዋል።"</string>
     <string name="lock_screen_pattern_skip_biometrics_message" product="default" msgid="969489650005656159">"በጣት አሻራ መክፈቻን እና በመልክ መክፈትን ለማዋቀር ሥርዓተ ጥለት ያስፈልጋል።\n\nስልኩ ከጠፋ ወይም ከተሰረቀ ሥርዓተ ጥለት ይጠብቀዋል።"</string>
     <string name="lock_screen_password_skip_biometrics_message" product="default" msgid="2934343185175325368">"በጣት አሻራ መክፈቻን እና በመልክ መክፈትን ለማዋቀር የይለፍ ቃል ያስፈልጋል።\n\nስልኩ ከጠፋ ወይም ከተሰረቀ የይለፍ ቃል ይጠብቀዋል።"</string>
-    <string name="lock_screen_pin_skip_biometrics_message" product="desktop" msgid="3023595865822720071">"በጣት አሻራ መክፈቻን እና በመልክ መክፈትን ለማዋቀር ፒን ያስፈልጋል።\n\nመሣሪያው ከጠፋ ወይም ከተሰረቀ ፒን ይጠብቀዋል።"</string>
-    <string name="lock_screen_pattern_skip_biometrics_message" product="desktop" msgid="3039110875534893916">"በጣት አሻራ መክፈቻን እና በመልክ መክፈትን ለማዋቀር ሥርዓተ ጥለት ያስፈልጋል።\n\nመሣሪያው ከጠፋ ወይም ከተሰረቀ ሥርዓተ ጥለት ይጠብቀዋል።"</string>
-    <string name="lock_screen_password_skip_biometrics_message" product="desktop" msgid="6506194961404887073">"በጣት አሻራ መክፈቻን እና በመልክ መክፈት ለማዋቀር የይለፍ ቃል ያስፈልጋል።\n\nመሣሪያው ከጠፋ ወይም ከተሰረቀ የይለፍ ቃል ይጠብቀዋል።"</string>
+    <string name="lock_screen_pin_skip_biometrics_message" product="desktop" msgid="589104020540379702">"በመልክ መክፈትን ወይም በጣት አሻራ መክፈቻን ለማዋቀር ፒን ያስፈልጋል።\n\nመሣሪያው ከጠፋ ወይም ከተሰረቀ ፒን ይጠብቀዋል።"</string>
+    <string name="lock_screen_pattern_skip_biometrics_message" product="desktop" msgid="753887465655237435">"በመልክ መክፈትን ወይም በጣት አሻራ መክፈቻን ለማዋቀር ሥርዓተ ጥለት ያስፈልጋል።\n\nመሣሪያው ከጠፋ ወይም ከተሰረቀ ሥርዓተ ጥለት ይጠብቀዋል።"</string>
+    <string name="lock_screen_password_skip_biometrics_message" product="desktop" msgid="5347114264507215823">"በመልክ መክፈትን ወይም በጣት አሻራ መክፈቻን ለማዋቀር የይለፍ ቃል ያስፈልጋል።\n\nመሣሪያው ከጠፋ ወይም ከተሰረቀ የይለፍ ቃል ይጠብቀዋል።"</string>
     <string name="fingerprint_v2_delete_message" product="default" msgid="8723083814238510088">"ይህ በስልክዎ ላይ የተከማቹት የጣት አሻራ ምስሎችን እና ከ«<xliff:g id="FINGERPRINT_ID">%1$s</xliff:g>» ጋር የተጎዳኘውን ሞዴል ይሰርዛል"</string>
     <string name="fingerprint_v2_delete_message" product="tablet" msgid="527375244730792698">"ይህ በጡባዊዎ ላይ የተከማቹት የጣት አሻራ ምስሎችን እና ከ«<xliff:g id="FINGERPRINT_ID">%1$s</xliff:g>» ጋር የተጎዳኘውን ሞዴል ይሰርዛል"</string>
     <string name="fingerprint_v2_delete_message" product="device" msgid="4549780655045100171">"ይህ በመሣሪያዎ ላይ ከተከማቸው «<xliff:g id="FINGERPRINT_ID">%1$s</xliff:g>» ጋር የተጎዳኙ የጣት አሻራ ምስሎችን እና ሞዴልን ይሰርዛል"</string>
@@ -271,6 +382,8 @@
     <string name="encrypt_title" product="tablet" msgid="8915795247786124547">"ጡባዊ አመስጥር"</string>
     <string name="encrypt_title" product="default" msgid="511146128799853404">"ስልክ አመስጥር"</string>
     <string name="encrypt_title" product="desktop" msgid="7536236095337188236">"መሣሪያን ያመስጥሩ"</string>
+    <string name="suggested_lock_settings_title" product="default" msgid="2717909185701554381">"የስልክዎን ደህንነት ይጠብቁ"</string>
+    <string name="suggested_lock_settings_title" product="desktop" msgid="2170600598362998798">"የመሣሪያዎን ደህንነት ይጠብቁ"</string>
     <string name="suggested_lock_settings_summary" product="tablet" msgid="8821254377043173267">"ጡባዊን ለመጠበቅ የማያ ገፅ ቁልፍን ያቀናብሩ"</string>
     <string name="suggested_lock_settings_summary" product="device" msgid="4863929838844014122">"መሣሪያን ለመጠበቅ የማያ ገፅ ቁልፍን ያቀናብሩ"</string>
     <string name="suggested_lock_settings_summary" product="default" msgid="8050809409337082738">"ስልክን ለመጠበቅ የማያ ገፅ ቁልፍን ያቀናብሩ"</string>
@@ -294,7 +407,7 @@
     <string name="bluetooth_unpair_dialog_with_associations_body" product="default" msgid="5994849277385675452">"የእርስዎ ስልክ ከእንግዲህ ከ<xliff:g id="DEVICE_NAME">%1$s</xliff:g> ጋር አይጣመርም። <xliff:g id="APP_NAME">%2$s</xliff:g> ከእንግዲህ መሣሪያውን አያስተዳድርም"</string>
     <string name="bluetooth_unpair_dialog_with_associations_body" product="tablet" msgid="1783141603173138886">"የእርስዎ ጡባዊ ከእንግዲህ ከ<xliff:g id="DEVICE_NAME">%1$s</xliff:g> ጋር አይጣመርም <xliff:g id="APP_NAME">%2$s</xliff:g> ከእንግዲህ መሣሪያውን አያስተዳድርም"</string>
     <string name="bluetooth_unpair_dialog_with_associations_body" product="device" msgid="4096203730149218837">"የእርስዎ መሣሪያ ከእንግዲህ ከ<xliff:g id="DEVICE_NAME">%1$s</xliff:g> ጋር አይጣመርም። <xliff:g id="APP_NAME">%2$s</xliff:g> ከእንግዲህ መሣሪያውን አያስተዳድርም"</string>
-    <string name="bluetooth_unpair_dialog_with_associations_body" product="desktop" msgid="4096203730149218837">"የእርስዎ መሣሪያ ከእንግዲህ ከ<xliff:g id="DEVICE_NAME">%1$s</xliff:g> ጋር አይጣመርም። <xliff:g id="APP_NAME">%2$s</xliff:g> ከእንግዲህ መሣሪያውን አያስተዳድርም"</string>
+    <string name="bluetooth_unpair_dialog_with_associations_body" product="desktop" msgid="6878153881802282771">"መሣሪያዎ ከእንግዲህ ከ<xliff:g id="DEVICE_NAME_0">%1$s</xliff:g> ጋር አይጣመርም። <xliff:g id="APP_NAME">%2$s</xliff:g> ከእንግዲህ <xliff:g id="DEVICE_NAME_1">%1$s</xliff:g>ን አያስተዳድርም"</string>
     <string name="virtual_device_forget_dialog_body" product="default" msgid="2373694955133298944">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g> ከረሱ ከእንግዲህ ከዚህ ስልክ ጋር አይጎዳኝም። ከቀጠሉ አንዳንድ መተግበሪያዎች እና የመተግበሪያ ዥረት መልቀቅ መሥራት ሊያቆሙ ይችላሉ።"</string>
     <string name="virtual_device_forget_dialog_body" product="tablet" msgid="6223163028932322388">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g> ከእንግዲህ ከዚህ ጡባዊ ጋር አይገናኝም። ከቀጠሉ አንዳንድ መተግበሪያዎች እና የመተግበሪያ ዥረት መልቀቅ መሥራት ሊያቆሙ ይችላሉ።"</string>
     <string name="virtual_device_forget_dialog_body" product="device" msgid="1888180822338607328">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g> ከእንግዲህ ከዚህ መሣሪያ ጋር አይገናኝም። ከቀጠሉ አንዳንድ መተግበሪያዎች እና የመተግበሪያ ዥረት መልቀቅ መሥራት ሊያቆሙ ይችላሉ።"</string>
@@ -303,13 +416,15 @@
     <string name="virtual_device_details_footer_title" product="tablet" msgid="1049988675804747535">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g> ከረሱ፣ ከእንግዲህ ከዚህ ጡባዊ ጋር አይጎዳኝም። አንዳንድ ፈቃዶች ይወገዳሉ እና አንዳንድ መተግበሪያዎች እና የመተግበሪያ ዥረት መልቀቅ መሥራት ሊያቆሙ ይችላሉ።"</string>
     <string name="virtual_device_details_footer_title" product="device" msgid="7548402204973923744">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g> ከረሱ፣ ከእንግዲህ ከዚህ መሣሪያ ጋር አይጎዳኝም። አንዳንድ ፈቃዶች ይወገዳሉ እና አንዳንድ መተግበሪያዎች እና የመተግበሪያ ዥረት መልቀቅ መሥራት ሊያቆሙ ይችላሉ።"</string>
     <string name="virtual_device_details_footer_title" product="desktop" msgid="7548402204973923744">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g> ከረሱ፣ ከእንግዲህ ከዚህ መሣሪያ ጋር አይጎዳኝም። አንዳንድ ፈቃዶች ይወገዳሉ እና አንዳንድ መተግበሪያዎች እና የመተግበሪያ ዥረት መልቀቅ መሥራት ሊያቆሙ ይችላሉ።"</string>
-    <string name="nfc_secure_toggle_summary" product="default" msgid="3515508978581011683">"ማያ ገፅ ሲከፈት ብቻ የNFCን እንዲጠቀም ይፍቀዱ"</string>
+    <string name="nfc_secure_toggle_summary" product="default" msgid="3074277711174185931">"ማያ ገጽ ሲከፈት ብቻ ንክኪ-አልባ ክፍያዎችን ይፍቀዱ"</string>
     <string name="wifi_add_app_single_network_summary" product="default" msgid="7742934005022827107">"<xliff:g id="APPNAME">%1$s</xliff:g> አውታረ መረብ ወደ የእርስዎ ስልክ ማስቀመጥ ይፈልጋል"</string>
     <string name="wifi_add_app_single_network_summary" product="tablet" msgid="93466057231937113">"<xliff:g id="APPNAME">%1$s</xliff:g> አንድ አውታረ መረብ ወደ የእርስዎ ጡባዊ ማስቀመጥ ይፈልጋል"</string>
     <string name="wifi_add_app_single_network_summary" product="desktop" msgid="2116663141004049983">"<xliff:g id="APPNAME">%1$s</xliff:g> አውታረ መረብን ወደ መሣሪያዎ ማስቀመጥ ይፈልጋል"</string>
     <string name="wifi_add_app_networks_summary" product="default" msgid="7014504084783236696">"<xliff:g id="APPNAME">%1$s</xliff:g> እነዚህን አውታረ መረቦች ወደ የእርስዎ ስልክ ማስቀመጥ ይፈልጋል"</string>
     <string name="wifi_add_app_networks_summary" product="tablet" msgid="6433255556506891439">"<xliff:g id="APPNAME">%1$s</xliff:g> እነዚህን አውታረ መረቦች ወደ የእርስዎ ጡባዊ ማስቀመጥ ይፈልጋል"</string>
     <string name="wifi_add_app_networks_summary" product="desktop" msgid="4238956725252527159">"<xliff:g id="APPNAME">%1$s</xliff:g> እነዚህን አውታረ መረቦች ወደ መሣሪያዎ ማስቀመጥ ይፈልጋል"</string>
+    <string name="wifi_hidden_network_warning" product="default" msgid="5069866459200615493">"የእርስዎ ራውተር የአውታረ መረብ መታወቂያን እያሰራጨ ካልሆነ እና እርስዎ ግን ወደፊት ሊያገናኙት የሚፈልጉ ከሆነ አውታረ መረቡን እንደተደበቀ አድርገው ሊያቀናብሩት ይችላሉ።\n\nስልክዎ በመደበኛነት አውታረ መረቡን ለማግኘት ሲግናሉን ስለሚያሰራጭ የደህንነት ስጋትን ሊፈጥር ይችል ይሆናል።\n\nአውታረ መረቡን እንደ የተደበቀ አድርጎ ማቀናበር የእርስዎን የራውተር ቅንብሮች አይለውጥም።"</string>
+    <string name="wifi_hidden_network_warning" product="desktop" msgid="1145969827779463554">"የእርስዎ ራውተር የአውታረ መረብ መታወቂያን እያሰራጨ ካልሆነ እና እርስዎ ግን ወደፊት ሊያገናኙት የሚፈልጉ ከሆነ አውታረ መረቡን እንደተደበቀ አድርገው ሊያቀናብሩት ይችላሉ።\n\nመሣሪያዎ በመደበኛነት አውታረ መረቡን ለማግኘት ሲግናሉን ስለሚያሰራጭ የደህንነት ስጋትን ሊፈጥር ይችል ይሆናል።\n\nአውታረ መረቡን እንደ የተደበቀ አድርጎ ማቀናበር የእርስዎን የራውተር ቅንብሮች አይለውጥም።"</string>
     <string name="auto_rotate_screen_summary" product="default" msgid="5562937346878935483">"ስልክዎን በቁም ፎቶ እና የመሬት ገጽታዎች መካከል ሲያንቀሳቅሱ የማያ ገጹን አቀማመጠ ገፅ በራስ-ሰር ያስተካክሉ"</string>
     <string name="auto_rotate_screen_summary" product="tablet" msgid="3163709742477804994">"ጡባዊዎን በቁም ፎቶ እና የመሬት ገጽታ መካከል ሲያንቀሳቅሱ የማያ ገጹን አቀማመጠ ገፅ በራስ-ሰር ያስተካክሉ"</string>
     <string name="auto_rotate_screen_summary" product="desktop" msgid="3805199344834364732">"መሣሪያዎን በቁም ፎቶ እና የመሬት ገጽታ መካከል ሲያንቀሳቅሱ የማያ ገፁን አቀማመጠ ገፅ በራስ-ሰር ያስተካክሉ"</string>
@@ -319,12 +434,15 @@
     <string name="sim_lock_off" product="tablet" msgid="4619320846576958981">"ጡባዊ ለመጠቀም ፒን  ጠይቅ"</string>
     <string name="sim_lock_off" product="default" msgid="2064502270875375541">"ስልክ ለመጠቀም ፒን  ጠይቅ"</string>
     <string name="sim_lock_off" product="desktop" msgid="903164661366964150">"መሣሪያን ለመጠቀም ፒን ጠይቅ"</string>
-    <string name="status_number" product="tablet" msgid="6746773328312218158">"MDN"</string>
     <string name="status_number" product="default" msgid="2333455505912871374">"የስልክ ቁጥር"</string>
-    <string name="status_number_sim_slot" product="tablet" msgid="2595836594107617972">"MDN (የሲም ማስገቢያ %1$d)"</string>
-    <string name="status_number_sim_slot" product="default" msgid="7154930998382872847">"የስልክ ቁጥር (የሲም ማስገቢያ %1$d)"</string>
-    <string name="status_number_sim_status" product="tablet" msgid="9003886361856568694">"MDN በሲም ላይ"</string>
+    <string name="status_number" product="tablet" msgid="2610169120378692971">"MSISDN"</string>
+    <string name="status_number" product="desktop" msgid="2610169120378692971">"MSISDN"</string>
+    <string name="status_number_sim_slot" product="default" msgid="8033783200178721660">"የስልክ ቁጥር %1$d"</string>
+    <string name="status_number_sim_slot" product="tablet" msgid="105938472243665656">"MSISDN %1$d"</string>
+    <string name="status_number_sim_slot" product="desktop" msgid="105938472243665656">"MSISDN %1$d"</string>
     <string name="status_number_sim_status" product="default" msgid="7536755538266735352">"ስልክ ቁጥር በሲም ላይ"</string>
+    <string name="status_number_sim_status" product="tablet" msgid="3380909445549639752">"MSISDN በሲም ላይ"</string>
+    <string name="status_number_sim_status" product="desktop" msgid="3380909445549639752">"MSISDN በሲም ላይ"</string>
     <string name="storage_wizard_init_v2_internal_title" product="tablet" msgid="2049551739429034707">"ኤስዲ ካርድን ለውስጣዊ ማህደረ ትውስታ ቅርጸት ይስሩበት"</string>
     <string name="storage_wizard_init_v2_internal_summary" product="tablet" msgid="6130017080675241337">"በዚህ ጡባዊ ላይ ብቻ ለመጠቀም መተግበሪያዎችን እና ሚዲያን ያከማቹ። &lt;a href=https://support.google.com/android/answer/12153449&gt;አንድ ኤስዲ ካርድን ስለማቀናበር የበለጠ ይወቁ&lt;/a&gt;።"</string>
     <string name="storage_wizard_init_v2_internal_action" product="tablet" msgid="560506072518373839">"ቅርጸት"</string>
@@ -344,6 +462,7 @@
     <string name="main_clear_desc" product="default" msgid="1888412491866186706">"ይሄ የሚከተሉትንም ጨምሮ ሁሉንም ውሂብ ከስልክዎ "<b>"ውስጣዊ ማከማቻ"</b>" ይደመስሰዋል፦\n\n"<li>"የእርስዎ Google መለያ"</li>\n<li>"የሥርዓት እና መተግበሪያ ውሂብና ቅንብሮች"</li>\n<li>"የወረዱ መተግበሪያዎች"</li></string>
     <string name="main_clear_desc" product="desktop" msgid="405802272460355609">"ይህ የሚከተሉትን ጨምሮ ሁሉንም ውሂብ ከመሣሪያዎ "<b>"ውስጣዊ ማህደረ ትውስታ"</b>" ይደመስሳል፦\n\n"<li>"የእርስዎ Google መለያ"</li>\n<li>"የሥርዓት እና መተግበሪያ ውሂብ እና ቅንብሮች"</li>\n<li>"የወረዱ መተግበሪያዎች"</li></string>
     <string name="main_clear_accounts" product="default" msgid="3604029744509330786">\n\n"እርስዎ በአሁኑ ጊዜ ወደሚከተሉት መለያዎች ገብተዋል፦\n"</string>
+    <string name="main_clear_accounts_count" product="default" msgid="8431492930725475832">"{count,plural, =1{\n\nእርስዎ በአሁኑ ጊዜ የሚከተለው መለያ ውስጥ ገብተዋል፦\n}one{\n\nእርስዎ በአሁኑ ጊዜ የሚከተለው መለያ ውስጥ ገብተዋል፦\n}other{\n\nእርስዎ በአሁኑ ጊዜ የሚከተሉት መለያዎች ውስጥ ገብተዋል፦\n}}"</string>
     <string name="main_clear_other_users_present" product="default" msgid="7750368595882863399">\n\n"በዚህ መሣሪያ ላይ ያሉ ሌሎች ተጠቃሚዎች አሉ።\n"</string>
     <string name="main_clear_desc_erase_external_storage" product="nosdcard" msgid="5834269984459195918">"ሙዚቃ፣ ምስሎች እና ሌላ ተጠቃሚ ውሂብን \n\nለማጥራት "<b>"የዩኤስቢ ማከማቻ"</b>" መደምሰስ አለበት።"</string>
     <string name="main_clear_desc_erase_external_storage" product="default" msgid="2891180770413959600">\n\n" ሙዚቃ፣ ምስሎች እና ሌላ የተጠቃሚ ውሂብን ለማጥፋት"<b>" የኤስዲ ካርድ "</b>" መደምሰስ አለበት።"</string>
@@ -386,6 +505,8 @@
     <string name="accessibility_daltonizer_about_intro_text" product="default" msgid="5234458848997942613">"ቀለሞች በስልክዎ ላይ እንዴት እንደሚታዩ ያስተካክሉ"</string>
     <string name="accessibility_daltonizer_about_intro_text" product="tablet" msgid="5300401841391736534">"ቀለሞች በጡባዊዎ ላይ እንዴት እንደሚታዩ ያስተካክሉ"</string>
     <string name="accessibility_daltonizer_about_intro_text" product="desktop" msgid="8908526728447739478">"ቀለሞች በመሣሪያዎ ላይ እንዴት እንደሚታዩ ያስተካክሉ"</string>
+    <string name="accessibility_hearing_device_ringtone_alarm_routing_title" product="default" msgid="6245455325032243921">"የጥሪ ቅላጼዎች እና ማንቂያዎች"</string>
+    <string name="accessibility_hearing_device_ringtone_alarm_routing_title" product="desktop" msgid="1096901437012239116">"ማንቂያዎች"</string>
     <string name="reduce_bright_colors_preference_subtitle" product="default" msgid="9162440023310121356">"ተጨማሪ ደብዛዛ በሚከተለው ጊዜ ጠቃሚ ሊሆን ይችላል፡- &lt;ol&gt; &lt;li&gt; የስልክዎ ነባሪ ዝቅተኛ ብሩህነት አሁንም በጣም ብሩህ ሲሆን&lt;/li&gt; &lt;li&gt; ስልክዎን በጨለማ ሁኔታዎች ውስጥ ሲጠቀሙ፣ ለምሳሌ ማታ ላይ ወይም በጨለማ ክፍል ውስጥ ከመተኛትዎ በፊት&lt;/li&gt; &lt;/ol&gt;"</string>
     <string name="reduce_bright_colors_preference_subtitle" product="tablet" msgid="5747242697890472822">"ተጨማሪ ደብዛዛ በሚከተለው ጊዜ ጠቃሚ ሊሆን ይችላል፡- &lt;ol&gt; &lt;li&gt; የጡባዊዎ ነባሪ ዝቅተኛ ብሩህነት አሁንም በጣም ብሩህ ሲሆን&lt;/li&gt; &lt;li&gt; ጡባዊዎን በጨለማ ሁኔታዎች ውስጥ ለምሳሌ ማታ ወይም በጨለማ ክፍል ውስጥ ከመተኛትዎ በፊት ሲጠቀሙ ነው&lt;/li&gt; &lt;/ol&gt;"</string>
     <string name="reduce_bright_colors_preference_subtitle" product="desktop" msgid="3114657547062643684">"ተጨማሪ ደብዛዛ በሚከተለው ጊዜ አጋዥ ሊሆን ይችላል፡- &lt;ol&gt; &lt;li&gt; የመሣሪያዎ ነባሪ ዝቅተኛ ብሩህነት አሁንም በጣም ብሩህ ሲሆን&lt;/li&gt; &lt;li&gt; መሣሪያዎን በጨለማ ሁኔታዎች ውስጥ ለምሳሌ ማታ ወይም በጨለማ ክፍል ውስጥ ከመተኛትዎ በፊት ሲጠቀሙ&lt;/li&gt; &lt;/ol&gt;"</string>
@@ -406,9 +527,9 @@
     <string name="battery_tip_dialog_summary_message" product="desktop" msgid="7885502661524685786">"የእርስዎ መተግበሪያዎች መደበኛ የባትሪ መጠንን በመጠቀም ላይ ናቸው። መተግበሪያዎች ከልክ በላይ ብዙ ባትሪ የሚጠቀሙ ከሆነ፣ የእርስዎ መሣሪያ እርስዎ የሚወስዱዋቸውን እርምጃዎች ጥቆማ ይሰጣል።\n\nባትሪ እየጨረሱ ያሉ ከሆነ ባትሪ ቆጣቢን ሁልጊዜ ማብራት ይችላሉ።"</string>
     <string name="smart_battery_summary" product="default" msgid="1210637215867635435">"ብዙውን ጊዜ ለማይጠቀሙባቸው መተግበሪያዎች ባትሪ ይገድቡ"</string>
     <string name="battery_usage_screen_footer" product="default" msgid="8872101342490341865">"ስልኩ ኃይል እየሞላ ሳለ የባትሪ አጠቃቀም እና የማያ ገፅ ጊዜ አይለኩም"</string>
-    <string name="battery_usage_screen_footer" product="tablet" msgid="1876984641036532124">"ጡባዊው ኃይል እየሞላ ሳለ የባትሪ አጠቃቀም እና የማያ ገፅ ጊዜ አይለኩም"</string>
-    <string name="battery_usage_screen_footer" product="device" msgid="6488857833906266507">"መሣሪያው ኃይል እየሞላ ሳለ የባትሪ አጠቃቀም እና የማያ ገፅ ጊዜ አይለኩም"</string>
-    <string name="battery_usage_screen_footer" product="desktop" msgid="6488857833906266507">"መሣሪያው ኃይል እየሞላ ሳለ የባትሪ አጠቃቀም እና የማያ ገፅ ጊዜ አይለኩም"</string>
+    <string name="battery_usage_screen_footer" product="tablet" msgid="1876984641036532124">"ጡባዊው ኃይል እየሞላ ሳለ የባትሪ አጠቃቀም እና የማያ ገጽ ጊዜ አይለኩም"</string>
+    <string name="battery_usage_screen_footer" product="device" msgid="6488857833906266507">"መሣሪያው ኃይል እየሞላ ሳለ የባትሪ አጠቃቀም እና የማያ ገጽ ጊዜ አይለኩም"</string>
+    <string name="battery_usage_screen_footer" product="desktop" msgid="6488857833906266507">"መሣሪያው ኃይል እየሞላ ሳለ የባትሪ አጠቃቀም እና የማያ ገጽ ጊዜ አይለኩም"</string>
     <string name="credentials_install_summary" product="nosdcard" msgid="8585932964626513863">"ከማከማቻ ምስክሮች ጫን"</string>
     <string name="credentials_install_summary" product="default" msgid="879796378361350092">"ከ SD ካርድ ምስክሮችንጫን"</string>
     <string name="credentials_install_summary" product="desktop" msgid="8585932964626513863">"ከማከማቻ ምስክሮች ጫን"</string>
@@ -481,9 +602,12 @@
     <string name="lockscreen_trivial_controls_summary" product="default" msgid="42562533085885152">"ስልክዎን ሳይከፍቱ"</string>
     <string name="lockscreen_trivial_controls_summary" product="tablet" msgid="9052068482124729345">"ጡባዊዎን ሳይክፍቱ"</string>
     <string name="lockscreen_trivial_controls_summary" product="desktop" msgid="8183513643394359332">"መሣሪያዎን ሳይከፍቱ"</string>
-    <string name="device_supervision_switch_title" product="default" msgid="5711051584668311080">"የዚህ ስልክ መቆጣጠሪያዎች"</string>
-    <string name="device_supervision_switch_title" product="tablet" msgid="5400384750840247844">"የዚህ ጡባዊ መቆጣጠሪያዎች"</string>
-    <string name="device_supervision_switch_title" product="desktop" msgid="2140192989162020111">"የዚህ መሣሪያ መቆጣጠሪያዎች"</string>
+    <string name="device_supervision_features_title" product="default" msgid="8612616791672564436">"የዚህ ስልክ መቆጣጠሪያዎች"</string>
+    <string name="device_supervision_features_title" product="tablet" msgid="8301949957844501200">"የዚህ ጡባዊ መቆጣጠሪያዎች"</string>
+    <string name="device_supervision_features_title" product="desktop" msgid="5041758196166273467">"የዚህ መሣሪያ መቆጣጠሪያዎች"</string>
+    <string name="supervision_apps_managing_this_device_title" product="default" msgid="8369485156586947413">"ይህን ስልክ በማስተዳደር ላይ"</string>
+    <string name="supervision_apps_managing_this_device_title" product="tablet" msgid="1795086998459265754">"ይህን ጡባዊ በማስተዳደር ላይ"</string>
+    <string name="supervision_apps_managing_this_device_title" product="desktop" msgid="3365839381660880395">"ይህን መሣሪያ በማስተዳደር ላይ"</string>
     <string name="supervision_pin_length_message" product="default" msgid="7142997986515800901">"{count,plural, =1{ቢያንስ # አሃዝ ያለው ፒን ያስገቡ። በዚህ ስልክ ላይ መቆጣጠሪያዎችን ለማስተዳደር ይጠቀሙታል።}one{ቢያንስ # አሃዝ ያለው ፒን ያስገቡ። በዚህ ስልክ ላይ መቆጣጠሪያዎችን ለማስተዳደር ይጠቀሙበታል።}other{ቢያንስ # አሃዞች ያሉት ፒን ያስገቡ። በዚህ ስልክ ላይ መቆጣጠሪያዎችን ለማስተዳደር ይጠቀሙበታል።}}"</string>
     <string name="supervision_pin_length_message" product="tablet" msgid="1772471880165492225">"{count,plural, =1{ቢያንስ # አሃዝ ያለው ፒን ያስገቡ። በዚህ ጡባዊ ላይ መቆጣጠሪያዎችን ለማስተዳደር ይጠቀሙበታል።}one{ቢያንስ # አሃዝ ያለው ፒን ያስገቡ። በዚህ ጡባዊ ላይ መቆጣጠሪያዎችን ለማስተዳደር ይጠቀሙበታል።}other{ቢያንስ # አሃዞች ያሉት ፒን ያስገቡ። በዚህ ጡባዊ ላይ መቆጣጠሪያዎችን ለማስተዳደር ይጠቀሙበታል።}}"</string>
     <string name="supervision_pin_length_message" product="desktop" msgid="7689193597679628648">"{count,plural, =1{ቢያንስ # አሃዝ ያለው ፒን ያስገቡ። በዚህ መሣሪያ ላይ መቆጣጠሪያዎችን ለማስተዳደር ይጠቀሙታል።}one{ቢያንስ # አሃዝ ያለው ፒን ያስገቡ። በዚህ መሣሪያ ላይ መቆጣጠሪያዎችን ለማስተዳደር ይጠቀሙታል።}other{ቢያንስ # አሃዞች ያሉት ፒን ያስገቡ። በዚህ መሣሪያ ላይ መቆጣጠሪያዎችን ለማስተዳደር ይጠቀሙታል።}}"</string>
@@ -493,12 +617,18 @@
     <string name="supervision_delete_pin_confirm_message" product="default" msgid="4142432379507014709">"የእርስዎ የወላጅ መቆጣጠሪያዎች ፒን በቋሚነት ይሰረዛል። ይህ ፒን በመጠቀም በዚህ ስልክ ላይ ለተጠቃሚዎች ያዋቀሯቸው ማናቸውም መቆጣጠሪያዎች ይጠፋሉ።"</string>
     <string name="supervision_delete_pin_confirm_message" product="tablet" msgid="3676061526109959657">"የእርስዎ የወላጅ መቆጣጠሪያዎች ፒን በቋሚነት ይሰረዛል። ይህ ፒን በመጠቀም በዚህ ጡባዊ ላይ ለተጠቃሚዎች ያዋቀሯቸው ማናቸውም መቆጣጠሪያዎች ይጠፋሉ።"</string>
     <string name="supervision_delete_pin_confirm_message" product="desktop" msgid="9122403113168273844">"የእርስዎ የወላጅ መቆጣጠሪያዎች ፒን በቋሚነት ይሰረዛል። ይህ ፒን በመጠቀም በዚህ መሣሪያ ላይ ለተጠቃሚዎች ያዋቀሯቸው ማናቸውም መቆጣጠሪያዎች ይጠፋሉ።"</string>
+    <string name="supervision_multiple_providers_delete_pin_confirm_message" product="default" msgid="7121239686502410611">"የእርስዎ የወላጅ መቆጣጠሪያዎች ፒን ይሰረዛል። አሁንም ይህን ስልክ ከሚያስተዳድሩት መተግበሪያዎች እና አገልግሎቶች የወላጅ መቆጣጠሪያዎችን ማስተዳደር ይችላሉ።"</string>
+    <string name="supervision_multiple_providers_delete_pin_confirm_message" product="tablet" msgid="1918406961760478041">"የእርስዎ የወላጅ መቆጣጠሪያዎች ፒን ይሰረዛል። አሁንም የወላጅ መቆጣጠሪያዎችን ከዚህ ጡባዊ ከሚያስተዳድሩ መተግበሪያዎች እና አገልግሎቶች ማስተዳደር ይችላሉ።"</string>
+    <string name="supervision_multiple_providers_delete_pin_confirm_message" product="desktop" msgid="5187413417226276855">"የእርስዎ የወላጅ መቆጣጠሪያዎች ፒን ይሰረዛል። አሁንም የወላጅ መቆጣጠሪያዎችን ከዚህ መሣሪያን ከሚያስተዳድሩ መተግበሪያዎች እና አገልግሎቶች ማስተዳደር ይችላሉ።"</string>
     <string name="device_supervision_pin_management_footer" product="default" msgid="6890338658180593450">"የእርስዎ የወላጅ መቆጣጠሪያዎች ፒን በዚህ ስልክ ላይ ላሉ ሁሉም ተጠቃሚዎች ተመሳሳይ ነው"</string>
     <string name="device_supervision_pin_management_footer" product="tablet" msgid="4013172842200145374">"የእርስዎ የወላጅ መቆጣጠሪያዎች ፒን በዚህ ጡባዊ ላይ ላሉ ሁሉም ተጠቃሚዎች ተመሳሳይ ነው"</string>
     <string name="device_supervision_pin_management_footer" product="desktop" msgid="6539340160423866980">"የእርስዎ የወላጅ መቆጣጠሪያዎች ፒን በዚህ መሣሪያ ላይ ላሉ ሁሉም ተጠቃሚዎች ተመሳሳይ ነው"</string>
     <string name="supervision_multi_profile_error_message" product="default" msgid="4185376425933293903">"በዚህ ስልክ ላይ በርካታ መገለጫዎች ስላሉ የወላጅ መቆጣጠሪያዎች መብራት አይችሉም።"</string>
     <string name="supervision_multi_profile_error_message" product="tablet" msgid="5021937906206996760">"በዚህ ጡባዊ ላይ በርካታ መገለጫዎች ስላሉ የወላጅ መቆጣጠሪያዎች መብራት አይችሉም።"</string>
     <string name="supervision_multi_profile_error_message" product="desktop" msgid="7222938263475617299">"በዚህ መሣሪያ ላይ በርካታ መገለጫዎች ስላሉ የወላጅ መቆጣጠሪያዎች መብራት አይችሉም።"</string>
+    <string name="supervision_setup_multi_profile_error_message" product="default" msgid="7949405920898610718">"በዚህ ስልክ ላይ ብዙ መገለጫዎች አሉ"</string>
+    <string name="supervision_setup_multi_profile_error_message" product="tablet" msgid="6028864049946511965">"በዚህ ጡባዊ ላይ ብዙ መገለጫዎች አሉ"</string>
+    <string name="supervision_setup_multi_profile_error_message" product="desktop" msgid="3447724427845313093">"በዚህ መሣሪያ ላይ ብዙ መገለጫዎች አሉ"</string>
     <string name="auto_rotate_summary_a11y" product="default" msgid="2813368383309985185">"ስልክዎን በቁም ፎቶ እና በወርድ መካከል ሲያንቀሳቅሱ"</string>
     <string name="auto_rotate_summary_a11y" product="tablet" msgid="4708833814245913981">"ጡባዊዎን በቁም ፎቶ እና በወርድ መካከል ሲያንቀሳቅሱ"</string>
     <string name="auto_rotate_summary_a11y" product="desktop" msgid="1342493478927297535">"መሣሪያዎን በቁም ፎቶ እና የመሬት ገጽታ መካከል ሲያንቀሳቅሱ"</string>
@@ -535,4 +665,150 @@
     <string name="audio_sharing_confirm_dialog_content_with_link" product="desktop" msgid="668964968208427465">"ኦዲዮ ማጋራት ለመጀመር፣ መጀመሪያ LE ኦዲዮ የራስ ላይ ማዳመጫዎችን ከመሣሪያዎ ጋር ያገናኙ። "<annotation id="link">"ስለ ተኳዃኝ መሣሪያዎች የበለጠ ይወቁ።"</annotation></string>
     <string name="network_dashboard_summary_mobile" product="default" msgid="1856501121269595911">"ሞባይል፣ Wi-Fi፣ መገናኛ ነጥብ"</string>
     <string name="network_dashboard_summary_mobile" product="desktop" msgid="8770767156162473221">"Wi‑Fi፣ ሞባይል፣ መገናኛ ነጥብ"</string>
+    <string name="top_intro_region_title" product="default" msgid="915184646302419632">"የመረጡት ክልል ስልክዎ ጊዜ፣ ቀናት፣ የሙቀት መጠን እና ሌሎችን የሚያሳይበት መንገድ ላይ ተጽዕኖ ያደርጋል"</string>
+    <string name="top_intro_region_title" product="desktop" msgid="4176286015398594299">"የመረጡት ክልል መሣሪያዎ ጊዜ፣ ቀናት፣ የሙቀት መጠን እና ሌሎችን የሚያሳይበት መንገድ ላይ ተጽዕኖ ያደርጋል"</string>
+    <string name="private_space_fingerprint_enroll_introduction_footer_message" product="default" msgid="5424764618312876122">"የግል ቦታዎ እርስዎ ሳይፈልጉ ለምሳሌ የሆነ ሰው ስልክዎን ወደ ጣትዎ አስጠግቶ ቢይዘው ሊከፈት ይችላል።"</string>
+    <string name="private_space_fingerprint_enroll_introduction_footer_message" product="desktop" msgid="1777628194784795967">"የግል ቦታዎ እርስዎ ሳይፈልጉ ለምሳሌ የሆነ ሰው መሣሪያዎን ወደ ጣትዎ አስጠግቶ ቢይዘው ሊከፈት ይችላል።"</string>
+    <string name="private_space_face_enroll_introduction_info_looking" product="default" msgid="305936839337361784">"እርስዎ ሳይፈልጉ እንኳን ስልኩን መመልከት የግል ቦታን ሊከፍት ይችላል። እንዲሁም የግል ቦታዎ እንደ ተመሳሳይ ወንድም/እህት ባለ እርስዎን በጣም በሚመስል ሰው ወይም የሆነ ሰው ፊትዎ ላይ መሣሪያውን ከያዘ ሊከፈት ይችላል።"</string>
+    <string name="private_space_face_enroll_introduction_info_looking" product="desktop" msgid="7384750093083248112">"እርስዎ ሳይፈልጉ እንኳን መሣሪያዎን መመልከት የግል ቦታን ሊከፍት ይችላል። እንዲሁም የግል ቦታዎ እንደ ተመሳሳይ ወንድም/እህት ባለ እርስዎን በጣም በሚመስል ሰው ወይም የሆነ ሰው ፊትዎ ላይ መሣሪያውን ከያዘ ሊከፈት ይችላል።"</string>
+    <string name="private_space_face_settings_footer" product="default" msgid="212607111539219116">"የግል ቦታዎን ለመክፈት መልክዎን ይጠቀሙ።\n\nይህን ከግምት ውስጥ ያስገቡ፦\nበአንድ ጊዜ ማዋቀር የሚችሉት አንድ መልክ ብቻ ነው። ሌላ መልክ ለማከል አሁን ያለውን ይሰርዙ።\n\nስልኩን መመልከት እርስዎ ሳይፈልጉ ሊከፍተው ይችላል።\n\nመሣሪያዎ ፊትዎ ላይ ቢያዝ የግል ቦታዎ በሌላ ሰው ሊከፈት ይችላል።\n\nየግል ቦታዎ እንደ መንታ ወንድም/እህት ያለ እርስዎን በጣም በሚመስል ሰው ሊከፈት ይችላል።"</string>
+    <string name="private_space_face_settings_footer" product="desktop" msgid="5379113827824389147">"የግል ቦታዎን ለመክፈት መልክዎን ይጠቀሙ።\n\nይህን ከግምት ውስጥ ያስገቡ፦\nበአንድ ጊዜ ማዋቀር የሚችሉት አንድ መልክ ብቻ ነው። ሌላ መልክ ለማከል አሁን ያለውን ይሰርዙ።\n\nመሣሪያውን መመልከት እርስዎ ሳይፈልጉ ሊከፍተው ይችላል።\n\nመሣሪያዎ ፊትዎ ላይ ቢያዝ የግል ቦታዎ በሌላ ሰው ሊከፈት ይችላል።\n\nየግል ቦታዎ እንደ መንታ ወንድም/እህት ያለ እርስዎን በጣም በሚመስል ሰው ሊከፈት ይችላል።"</string>
+    <string name="private_space_delete_summary" product="default" msgid="6731333342020734606">"የግል ቦታዎ በቋሚነት ከመሣሪያዎ ይወገዳል። \n\nበቦታዎ ውስጥ ያሉ ሁሉም መተግበሪያዎች እና ውሂባቸው በቋሚነት ከስልክዎ "<b>"ውስጣዊ ማህደረ ትውስታ"</b>" ላይ ይሰረዛሉ።"</string>
+    <string name="private_space_delete_summary" product="desktop" msgid="2654261524341800235">"የግል ቦታዎ በቋሚነት ከመሣሪያዎ ይወገዳል። \n\nበቦታዎ ውስጥ ያሉ ሁሉም መተግበሪያዎች እና ውሂባቸው በቋሚነት ከመሣሪያዎ "<b>"ውስጣዊ ማህደረ ትውስታ"</b>" ላይ ይሰረዛሉ።"</string>
+    <string name="reset_private_space_delete_dialog" product="default" msgid="8929854517683078216">"በመሣሪያዎ ላይ የግል ቦታ ካለዎት በቋሚነት ይሰረዛል እና በቦታዎ ላይ የታከለው የGoogle መለያ ይወገዳል። \n\nበቦታዎ ውስጥ ያሉ ሁሉም መተግበሪያዎች እና ውሂባቸው በቋሚነት ከስልክዎ "<b>"ውስጣዊ ማህደረ ትውስታ"</b>" ላይ ይሰረዛሉ።"</string>
+    <string name="reset_private_space_delete_dialog" product="desktop" msgid="212701183647817405">"በመሣሪያዎ ላይ የግል ቦታ ካለዎት በቋሚነት ይሰረዛል እና በቦታዎ ላይ የታከለው የGoogle መለያ ይወገዳል። \n\nበቦታዎ ውስጥ ያሉ ሁሉም መተግበሪያዎች እና ውሂባቸው በቋሚነት ከመሣሪያዎ "<b>"ውስጣዊ ማህደረ ትውስታ"</b>" ላይ ይሰረዛሉ።"</string>
+    <string name="style_suggestion_title" product="default" msgid="5542169058581069091">"ስልክዎን ያብጁ"</string>
+    <string name="style_suggestion_title" product="desktop" msgid="6633259602241390541">"የእርስዎን መሣሪያ ያብጁ"</string>
+    <string name="storage_os_detail_dialog_system" product="default" msgid="900519793933569665">"ይህ የእርስዎን ሥርዓተ ክወና እና ስልክዎ ያለችግር እንዲሠራ የሚያስፈልጉትን ፋይሎች ያካትታል። ታማኝነታቸውን ለመጠበቅ እነዚህ ፋይሎች ሊደረስባቸው አይችሉም።"</string>
+    <string name="storage_os_detail_dialog_system" product="desktop" msgid="6775876458851128896">"ይህ የእርስዎን ሥርዓተ ክወና እና መሣሪያዎ ያለችግር እንዲሠራ የሚያስፈልጉትን ፋይሎች ያካትታል። ታማኝነታቸውን ለመጠበቅ እነዚህ ፋይሎች ሊደረስባቸው አይችሉም።"</string>
+    <string name="activity_not_found" product="default" msgid="6925342827420626978">"መተግበሪያ በስልክዎ ላይ አልተጫነም።"</string>
+    <string name="activity_not_found" product="desktop" msgid="2440711947892938614">"መተግበሪያ በመሣሪያዎ ላይ አልተጫነም።"</string>
+    <string name="notification_listener_security_warning_summary" product="default" msgid="6430760593378501603">"የ<xliff:g id="NOTIFICATION_LISTENER_NAME">%1$s</xliff:g> መተግበሪያ እንደ የዕውቂያ ስሞች፣ ፎቶዎች እና እርስዎ የሚቀበሏቸው የመልዕክቶች ጽሑፍ ያለ የግል መረጃን ጨምሮ ሁሉንም ማሳወቂያዎች ማንበብ ይችላል። ይህ መተግበሪያ እንዲሁም ማሳወቂያዎችን ማሸለብ ወይም ማሰናበት ወይም የስልክ ጥሪዎችን ማንሳት ጨምሮ በማሳወቂያዎች ውስጥ ባሉ አዝራሮች ላይ እርምጃዎችን መውሰድ ይችላል። \n\nይህ እንዲሁም አትረብሽን የማብራት ወይም የማጥፋት እና ተዛማጅ ቅንብሮችን የመቀየር ችሎታ ለመተግበሪያው ይሰጣል።"</string>
+    <string name="notification_listener_security_warning_summary" product="desktop" msgid="4220921495800674165">"የ<xliff:g id="NOTIFICATION_LISTENER_NAME">%1$s</xliff:g> መተግበሪያ እንደ የዕውቂያ ስሞች፣ ፎቶዎች እና እርስዎ የሚቀበሏቸው የመልዕክቶች ጽሑፍ ያለ የግል መረጃን ጨምሮ ሁሉንም ማሳወቂያዎች ማንበብ ይችላል። እንዲሁም ይህ መተግበሪያ ማሳወቂያዎችን ማሸለብ ወይም ማሰናበት ወይም የስልክ ጥሪዎችን ማንሳት ጨምሮ በማሳወቂያዎች ውስጥ ባሉ አዝራሮች ላይ እርምጃዎችን መውሰድ ይችላል። \n\nእንዲሁም ይህ አትረብሽን የማብራት ወይም የማጥፋት እና ተዛማጅ ቅንብሮችን የመለወጥ ችሎታን ለመተግበሪያው ይሰጣል።"</string>
+    <string name="notif_type_ongoing_summary" product="default" msgid="4609736750050399900">"ሥራ ላይ እየዋሉ ያሉ መተግበሪያዎች፣ አሰሳ፣ የስልክ ጥሪዎች እና ተጨማሪ ላይ ቀጣይ የመልዕክት ልውውጦች"</string>
+    <string name="notif_type_ongoing_summary" product="desktop" msgid="2095885335561216334">"በመጠቀም ላይ ካሉ መተግበሪያዎች፣ አሰሳ እና ሌሎችም ቀጣይነት ያለው ግንኙነት"</string>
+    <string name="usb_default_info" product="default" msgid="3102841746337088387">"ሌላ መሣሪያ ሲገናኝ እና ስልክዎ ሲከፈት እነዚህ ቅንብሮች ተፈጻሚ ይሆናሉ። ከሚታመኑ መሣሪያዎች ጋር ብቻ ይገናኙ።"</string>
+    <string name="usb_default_info" product="desktop" msgid="4425262755067415698">"ሌላ መሣሪያ ሲገናኝ እና ይህ መሣሪያ ሲከፈት እነዚህ ቅንብሮች ተፈጻሚ ይሆናሉ። ከሚታመኑ መሣሪያዎች ጋር ብቻ ይገናኙ።"</string>
+    <string name="disabled_by_policy_content_biometric_parental_consent" product="default" msgid="1632474961586870159">"ይህን ማዋቀር ለመጀመር ስልኩን ለወላጅዎ ይስጡ"</string>
+    <string name="disabled_by_policy_content_biometric_parental_consent" product="desktop" msgid="7693039404410022862">"ይህን ማዋቀር ለመጀመር መሣሪያውን ለወላጅዎ ይስጡ"</string>
+    <string name="disabled_by_policy_parental_consent" product="default" msgid="3228137840263314415">"ይህ ቅንብር እንዲለውጥ ለመፍቀድ ለወላጅዎ ስልኩን ይስጡ።"</string>
+    <string name="disabled_by_policy_parental_consent" product="desktop" msgid="1779899136601893549">"ይህ ቅንብር እንዲለውጥ ለመፍቀድ ለወላጅዎ መሣሪያውን ይስጡ።"</string>
+    <string name="condition_zen_summary_phone_muted" product="default" msgid="1107174080067940534">"ስልክ ድምጸ-ከል ተደርጓል"</string>
+    <string name="condition_zen_summary_phone_muted" product="desktop" msgid="3749597102905584774">"መሣሪያ ድምጸ-ከል ተደርጓል"</string>
+    <string name="disabled_feature_reason_slow_down_phone" product="default" msgid="8659735491296581891">"የእርስዎን ስልክ ፍጥነት ስለሚቀንስ ይህ ባህሪ ጠፍቷል"</string>
+    <string name="disabled_feature_reason_slow_down_phone" product="desktop" msgid="7800573784344580283">"የመሣሪያዎን ፍጥነት ስለሚቀንስ ይህ ባህሪ ጠፍቷል"</string>
+    <string name="mobile_data_settings_summary_auto_switch" product="default" msgid="3598846878817104930">"በክልል ውስጥ በሚሆንበት ጊዜ ስልክ በራስ ሰር ወደዚህ የአገልግሎት አቅራቢ ይቀይራል"</string>
+    <string name="mobile_data_settings_summary_auto_switch" product="desktop" msgid="524891657197879512">"በክልል ውስጥ በሚሆንበት ጊዜ መሣሪያ በራስ ሰር ወደዚህ የአገልግሎት አቅራቢ ይቀይራል"</string>
+    <string name="thread_network_settings_footer_title" product="default" msgid="1317201778097436182">"Thread ዘመናዊ የቤት መሣሪያዎችዎን ለማገናኘት፣ ውጤታማነት እና አፈጻጸምን ለመጨመር ያግዛል።\n\nሲነቃ ይህ መሣሪያ የThread አውታረ መረብ ለመቀላቀል ብቁ በመሆን በዚህ ስልክ በኩል በMatter የተደገፉ መሣሪያዎችን ቁጥጥር ይፈቅዳል።"</string>
+    <string name="thread_network_settings_footer_title" product="desktop" msgid="2799861559795140920">"Thread ዘመናዊ የቤት መሣሪያዎችዎን ለማገናኘት፣ ውጤታማነት እና አፈጻጸምን ለመጨመር ያግዛል።\n\nሲነቃ ይህ መሣሪያ የThread አውታረ መረብ ለመቀላቀል ብቁ በመሆን በዚህ መሣሪያ በኩል በMatter የተደገፉ መሣሪያዎችን ቁጥጥር ይፈቅዳል።"</string>
+    <string name="bluetooth_connect_access_dialog_content" product="default" msgid="4057807008863531756">"<xliff:g id="DEVICE_NAME_0">%1$s</xliff:g> ከዚህ ስልክ ጋር መገናኘት ይፈልጋል።\n\nከዚህ በፊት ከ<xliff:g id="DEVICE_NAME_1">%2$s</xliff:g> ጋር አልተገናኙም።"</string>
+    <string name="bluetooth_connect_access_dialog_content" product="desktop" msgid="6980101860822297332">"<xliff:g id="DEVICE_NAME_0">%1$s</xliff:g> ከዚህ መሣሪያ ጋር መገናኘት ይፈልጋል።\n\nከዚህ በፊት ከ<xliff:g id="DEVICE_NAME_1">%2$s</xliff:g> ጋር አልተገናኙም።"</string>
+    <string name="bluetooth_details_permissions_sync_title" product="default" msgid="8409065081160402814">"ከስልክ ላይ ፈቃዶች ያስምሩ"</string>
+    <string name="bluetooth_details_permissions_sync_title" product="desktop" msgid="2734017312695525620">"ከመሣሪያ ላይ ፈቃዶችን ያስምሩ"</string>
+    <string name="bluetooth_details_permissions_sync_summary" product="default" msgid="8315177725634711706">"በዚህ ስልክ ላይ የፈቀዱትን ተመሳሳይ የመተግበሪያ ፈቃዶች ለእጅ ሰዓትዎ ይስጡ"</string>
+    <string name="bluetooth_details_permissions_sync_summary" product="desktop" msgid="6376301353616747859">"በዚህ መሣሪያ ላይ የፈቀዱትን ተመሳሳይ የመተግበሪያ ፈቃዶች ለእጅ ሰዓትዎ ይስጡ"</string>
+    <string name="audio_sharing_comfirm_dialog_content" product="default" msgid="5014698176442588172">"ኦዲዮ ማጋራት ለመጀመር፣ በመጀመሪያ LE ኦዲዮ የራስ ላይ ማዳመጫዎችን ከስልክዎ ጋር ያገናኙ"</string>
+    <string name="audio_sharing_comfirm_dialog_content" product="desktop" msgid="162861653770613243">"ኦዲዮ ማጋራት ለመጀመር፣ መጀመሪያ LE ኦዲዮ የራስ ላይ ማዳመጫዎችን ከመሣሪያዎ ጋር ያገናኙ"</string>
+    <string name="supervision_web_content_filters_top_intro" product="default" msgid="4953123663358923689">"በዚህ ስልክ ላይ በአንዳንድ መተግበሪያዎች እና አሳሾች ላይ ግልፅ ይዘትን ለማጣራት ያግዙ። ግልፅ ይዘት አሁንም በሌሎች መተግበሪያዎች፣ መሣሪያዎች ወይም አሳሾች ላይ ሊታይ ይችላል።"</string>
+    <string name="supervision_web_content_filters_top_intro" product="desktop" msgid="9032662719049305184">"በዚህ መሣሪያ ላይ በአንዳንድ መተግበሪያዎች እና አሳሾች ላይ ግልፅ ይዘትን ለማጣራት ያግዙ። ግልፅ ይዘት አሁንም በሌሎች መተግበሪያዎች፣ መሣሪያዎች ወይም አሳሾች ላይ ሊታይ ይችላል።"</string>
+    <string name="dream_setup_description" product="default" msgid="8438386366154615008">"ጡባዊዎ ሲተከል በማያ ገጽዎ ላይ የሚያዩትን ይምረጡ። የማያ ገጽ ቆጣቢ ስራ ላይ ሲውል መሣሪያዎ የበለጠ ኃይል ሊጠቀም ይችላል።"</string>
+    <string name="dream_setup_description" product="desktop" msgid="5397812906934631491">"መሣሪያዎ ሲተከል በማያ ገጽዎ ላይ የሚያዩትን ይምረጡ። የማያ ገጽ ቆጣቢ ስራ ላይ ሲውል መሣሪያዎ የበለጠ ኃይል ሊጠቀም ይችላል።"</string>
+    <string name="display_settings" product="default" msgid="3387606354749476666">"ማሳያ"</string>
+    <string name="sound_settings" product="default" msgid="1962377912191328861">"ድምፅ እና ንዝረት"</string>
+    <string name="sound_settings" product="desktop" msgid="9077346630096747379">"ድምፅ"</string>
+    <string name="security_settings_face_enroll_consent_introduction_title" product="default" msgid="4756935885820420260">"በመልክ መክፈትን ይፍቀዱ"</string>
+    <string name="security_settings_face_enroll_consent_introduction_title" product="desktop" msgid="7194334858085778245">"በመልክ መክፈትን ይፍቀዱ"</string>
+    <string name="security_settings_face_enroll_introduction_title" product="default" msgid="193847167859538900">"በመልክዎ ይክፈቱ"</string>
+    <string name="security_settings_face_enroll_introduction_title" product="desktop" msgid="193847167859538900">"በመልክዎ ይክፈቱ"</string>
+    <string name="security_settings_face_footer_learn_more_description" product="default" msgid="2747425608262449212"></string>
+    <string name="security_settings_face_footer_learn_more_description" product="desktop" msgid="2747425608262449212"></string>
+    <string name="security_settings_fingerprint_description" product="default" msgid="1962781280961450006"></string>
+    <string name="security_settings_fingerprint_description" product="desktop" msgid="1962781280961450006"></string>
+    <string name="security_settings_face_preference_title" product="default" msgid="1088234386271687481">"በመልክ መክፈት"</string>
+    <string name="security_settings_face_preference_title" product="desktop" msgid="120316049914434185">"በመልክ ይክፈቱ"</string>
+    <string name="security_settings_face_profile_preference_title" product="default" msgid="1915373190432876537">"ለሥራ በመልክ መክፈት"</string>
+    <string name="security_settings_face_profile_preference_title" product="desktop" msgid="4371857798884456701">"ለሥራ በመልክ ይክፈቱ"</string>
+    <string name="security_settings_face_enroll_education_title" product="default" msgid="8682081307863421676">"በመልክ መክፈትን እንዴት ማዋቀር እንደሚቻል"</string>
+    <string name="security_settings_face_enroll_education_title" product="desktop" msgid="8858193013681141921">"በመልክ መክፈትን እንዴት ማዋቀር እንደሚቻል"</string>
+    <string name="security_settings_face_enroll_education_title_accessibility" product="default" msgid="3901871844780048667">"በመልክ መክፈትን ያዋቅሩ"</string>
+    <string name="security_settings_face_enroll_education_title_accessibility" product="desktop" msgid="5399523062928830699">"በመልክ መክፈትን ያዋቅሩ"</string>
+    <string name="security_settings_face_enroll_education_accessibility_dialog_message" product="default" msgid="2707415907634952273">"የተደራሽነት በመልክ መክፈት ከጠፋ፣ አንዳንድ የውቅረት እርምጃዎች ከTalkBack ጋር በአግባቡ ላይሠሩ ይችላሉ።"</string>
+    <string name="security_settings_face_enroll_education_accessibility_dialog_message" product="desktop" msgid="2684063732021756512">"በመልክ መክፈት ተደራሽነት ከጠፋ አንዳንድ የውቅረት እርምጃዎች ከTalkBack ጋር በአግባቡ ላይሠሩ ይችላሉ።"</string>
+    <string name="security_settings_face_enroll_intro_timeout_dialog_title" product="default" msgid="5745003455521734580">"በመልክ መክፈትን ማዋቀር አልተቻለም"</string>
+    <string name="security_settings_face_enroll_intro_timeout_dialog_title" product="desktop" msgid="3376165761884832052">"በመልክ መክፈትን ማዋቀር አልተቻለም"</string>
+    <string name="security_settings_face_enroll_should_re_enroll_title" product="default" msgid="608503397130033829">"በመልክ መክፈት አፈጻጸምን ያሻሽሉ"</string>
+    <string name="security_settings_face_enroll_should_re_enroll_title" product="desktop" msgid="6884989592846418817">"በመልክ መክፈት አፈጻጸምን ያሻሽሉ"</string>
+    <string name="security_settings_face_enroll_should_re_enroll_subtitle" product="default" msgid="4780958925117205199">"በመልክ መክፈትን እንደገና ያዋቅሩ"</string>
+    <string name="security_settings_face_enroll_should_re_enroll_subtitle" product="desktop" msgid="8465796920263573315">"በመልክ መክፈትን እንደገና ያዋቅሩ"</string>
+    <string name="security_settings_face_enroll_must_re_enroll_title" product="default" msgid="6236623084036789183">"በመልክ መክፈትን እንደገና ያዋቅሩ"</string>
+    <string name="security_settings_face_enroll_must_re_enroll_title" product="desktop" msgid="698089042328381491">"በመልክ መክፈትን እንደገና ያዋቅሩ"</string>
+    <string name="security_settings_face_enroll_improve_face_alert_title" product="default" msgid="7920547352014027595">"በመልክ መክፈትን ያዋቅሩ"</string>
+    <string name="security_settings_face_enroll_improve_face_alert_title" product="desktop" msgid="194826533308033819">"በመልክ መክፈትን ያዋቅሩ"</string>
+    <string name="security_settings_face_settings_use_face_category" product="default" msgid="6762864609006881666">"በመልክ መክፈትን ለሚከተለው ይጠቀሙ"</string>
+    <string name="security_settings_face_settings_use_face_category" product="desktop" msgid="8697471702832224831">"በመልክ መክፈትን ለሚከተለው ይጠቀሙ"</string>
+    <string name="security_settings_face_settings_preferences_category" product="default" msgid="1702437691901552436">"በመልክ መክፈትን ሲጠቀሙ"</string>
+    <string name="security_settings_face_settings_preferences_category" product="desktop" msgid="8363429360453118065">"በመልክ መክፈትን ሲጠቀሙ"</string>
+    <string name="security_settings_face_settings_require_confirmation_details" product="default" msgid="8094562591947583249">"በመተግበሪያዎች ውስጥ በመልክ መክፈትን ሲጠቀሙ፣ ሁልጊዜ የማረጋገጫ እርምጃን ይጠይቁ"</string>
+    <string name="security_settings_face_settings_require_confirmation_details" product="desktop" msgid="3454469557534188210">"በመተግበሪያዎች ውስጥ በመልክ መክፈትን ሲጠቀሙ፣ ሁልጊዜ የማረጋገጫ እርምጃን ይጠይቁ"</string>
+    <string name="security_settings_face_settings_enroll" product="default" msgid="478045480258037112">"በመልክ መክፈትን አዋቅር"</string>
+    <string name="security_settings_face_settings_enroll" product="desktop" msgid="1975696698406819144">"በመልክ መክፈትን አዋቅር"</string>
+    <string name="security_settings_activeunlock_require_face_fingerprint_setup_title" product="default" msgid="3091207415358585820">"መጀመሪያ በመልክ ወይም በጣት አሻራ መክፈቻ ያዋቅሩ"</string>
+    <string name="security_settings_activeunlock_require_face_fingerprint_setup_title" product="desktop" msgid="3568327776503208253">"መጀመሪያ በመልክ ወይም በጣት አሻራ መክፈቻ ለመክፈት ያዋቅሩ"</string>
+    <string name="security_settings_activeunlock_require_face_setup_title" product="default" msgid="5451139327828979605">"መጀመሪያ በመልክ መክፈትን ያዋቅሩ"</string>
+    <string name="security_settings_activeunlock_require_face_setup_title" product="desktop" msgid="491404270155205470">"መጀመሪያ በመልክ መክፈትን ያዋቅሩ"</string>
+    <string name="security_settings_biometric_preference_title" product="default" msgid="301824710578384746">"በመልክ እና በጣት አሻራ መክፈቻ"</string>
+    <string name="security_settings_biometric_preference_title" product="desktop" msgid="1931938360990718210">"በመልክ መክፈት እና በጣት አሻራ መክፈቻ"</string>
+    <string name="security_settings_work_biometric_preference_title" product="default" msgid="5408195383591972572">"ለሥራ የመልክ እና የጣት አሻራ መክፈቻ"</string>
+    <string name="security_settings_work_biometric_preference_title" product="desktop" msgid="3219742888338830428">"ለሥራ በመልክ እና በጣት አሻራ መክፈቻ ይክፈቱ"</string>
+    <string name="biometric_settings_add_face_in_split_mode_title" product="default" msgid="3738938046173770733">"በመልክ መክፈትን ማዋቀር አልተቻለም"</string>
+    <string name="biometric_settings_add_face_in_split_mode_title" product="desktop" msgid="4418550129265286960">"በመልክ መክፈትን ማዋቀር አልተቻለም"</string>
+    <string name="biometric_settings_add_face_in_split_mode_message" product="default" msgid="6022144462744038426">"በመልክ መክፈትን ለማዋቀር ከተከፈለ የማያ ገጽ ይውጡ"</string>
+    <string name="biometric_settings_add_face_in_split_mode_message" product="desktop" msgid="3957054157286969169">"በመልክ ለማዋቀር ከተከፈለ ማያ ገጽ ይውጡ"</string>
+    <string name="private_space_biometric_title" product="default" msgid="6023715691209902125">"በመልክ እና በጣት አሻራ መክፈቻ"</string>
+    <string name="private_space_biometric_title" product="desktop" msgid="7653829341622235589">"በመልክ እና በጣት አሻራ መክፈቻ ይክፈቱ"</string>
+    <string name="private_space_biometric_unlock_title" product="default" msgid="4621918727209012807">"ለግል ቦታ የመልክ እና የጣት አሻራ መክፈቻ"</string>
+    <string name="private_space_biometric_unlock_title" product="desktop" msgid="8876292883349974060">"ለግል ቦታ በመልክ መክፈት እና በጣት አሻራ መክፈቻ"</string>
+    <string name="private_space_face_title" product="default" msgid="6298308773515063762">"በመልክ መክፈት"</string>
+    <string name="private_space_face_title" product="desktop" msgid="5330390437157810466">"በመልክ ይክፈቱ"</string>
+    <string name="private_space_face_unlock_title" product="default" msgid="6728077494636366004">"ለግል ቦታ በመልክ መክፈት"</string>
+    <string name="private_space_face_unlock_title" product="desktop" msgid="5927793887938524983">"ለግል ቦታ በመልክ መክፈት"</string>
+    <string name="private_space_face_enroll_introduction_title" product="default" msgid="2639038889945177295">"ለግል ቦታ በመልክ መክፈትን ያዋቅሩ"</string>
+    <string name="private_space_face_enroll_introduction_title" product="desktop" msgid="2178134262452414008">"ለግል ቦታ በመልክ መክፈትን ያዋቅሩ"</string>
+    <string name="private_space_face_settings_require_confirmation_details" product="default" msgid="53946777371581345">"በመልክ መክፈትን ሲጠቀሙ፣ ሁልጊዜ የማረጋገጫ እርምጃን ይጠይቁ"</string>
+    <string name="private_space_face_settings_require_confirmation_details" product="desktop" msgid="8714390228758015030">"በመልክ ሲከፍቱ፣ ሁልጊዜ የማረጋገጫ እርምጃን ይጠይቁ"</string>
+    <string name="face_unlock_skip_face" product="default" msgid="4637244610483409257">"ያለ በመልክ መክፈት ይቀጥሉ"</string>
+    <string name="face_unlock_skip_face" product="desktop" msgid="7830641351453909812">"በመልክ ሳይከፍቱ ይቀጥሉ"</string>
+    <string name="unlock_disable_frp_warning_content_face_authbound_keys" product="default" msgid="6653509931873771815">"የእርስዎ የማያ ገጽ መቆለፊያ እና በመልክ መክፈት ይወገዳሉ።<xliff:g id="EMPTY_LINE_0">
+
+</xliff:g>ንክኪ-አልባ መክፈያ አይገኝም።<xliff:g id="EMPTY_LINE_1">
+
+</xliff:g>Wallet፣ ክፍያ እና ሌሎች ማረጋገጫ የሚያስፈልጋቸው መተግበሪያዎች በትክክል ላይሠሩ ይችላሉ።"</string>
+    <string name="unlock_disable_frp_warning_content_face_authbound_keys" product="desktop" msgid="6850817681051261780">"የእርስዎ የማያ ገጽ መቆለፊያ እና በመልክ መክፈት ይወገዳሉ።<xliff:g id="EMPTY_LINE_0">
+
+</xliff:g>ንክኪ-አልባ መክፈያ አይገኝም።<xliff:g id="EMPTY_LINE_1">
+
+</xliff:g>Wallet፣ ክፍያ እና ሌሎች ማረጋገጫ የሚያስፈልጋቸው መተግበሪያዎች በትክክል ላይሠሩ ይችላሉ።"</string>
+    <string name="unlock_disable_frp_warning_content_face_fingerprint_authbound_keys" product="default" msgid="2154403457672365886">"የእርስዎ ማያ ገጽ መቆለፊያ እና የመልክ እና የጣት አሻራ መክፈቻ ይወገዳሉ።<xliff:g id="EMPTY_LINE_0">
+
+</xliff:g>ንክኪ-አልባ መክፈያ አይገኝም።<xliff:g id="EMPTY_LINE_1">
+
+</xliff:g>Wallet፣ ክፍያ እና ሌሎች ማረጋገጫ የሚያስፈልጋቸው መተግበሪያዎች በትክክል ላይሠሩ ይችላሉ።"</string>
+    <string name="unlock_disable_frp_warning_content_face_fingerprint_authbound_keys" product="desktop" msgid="6493782879075394085">"የእርስዎ ማያ ገጽ መቆለፊያ፣ በመልክ መክፈት እና በጣት አሻራ መክፈቻ ይወገዳሉ።<xliff:g id="EMPTY_LINE_0">
+
+</xliff:g>ንክኪ-አልባ መክፈያ አይገኝም።<xliff:g id="EMPTY_LINE_1">
+
+</xliff:g>Wallet፣ ክፍያ እና ሌሎች ማረጋገጫ የሚያስፈልጋቸው መተግበሪያዎች በትክክል ላይሠሩ ይችላሉ።"</string>
+    <string name="lockpassword_choose_your_password_header_for_face" product="default" msgid="6148777249889558666">"በመልክ መክፈትን ለመጠቀም፣ የይለፍ ቃልን ያቀናብሩ"</string>
+    <string name="lockpassword_choose_your_password_header_for_face" product="desktop" msgid="3207282447348772055">"በመልክ ለመክፈት፣ የይለፍ ቃል ያቀናብሩ"</string>
+    <string name="lockpassword_choose_your_pattern_header_for_face" product="default" msgid="2879540885525976497">"በመልክ መክፈትን ለመጠቀም፣ ሥርዓተ-ጥለትን ያቀናብሩ"</string>
+    <string name="lockpassword_choose_your_pattern_header_for_face" product="desktop" msgid="7936694877510431166">"በመልክ ለመክፈት፣ ሥርዓተ ጥለት ያቀናብሩ"</string>
+    <string name="lockpassword_choose_your_pin_header_for_face" product="default" msgid="901192866812262140">"በመልክ መክፈትን ለመጠቀም፣ ፒን ያቀናብሩ"</string>
+    <string name="lockpassword_choose_your_pin_header_for_face" product="desktop" msgid="2581974088529231135">"በመልክ ለመክፈት፣ ፒን ያቀናብሩ"</string>
+    <string name="identity_check_issue_card_summary" product="default" msgid="4376934098421152876">"የማንነት ማረጋገጫ ከመተግበሪያዎችዎ ላይ ያልተፈለገ መዳረሻን ይከላከላል። አሁን የጣት አሻራ ወይም በመልክ መክፈት ከሚጠቀም ማንኛውም መተግበሪያ ጋር ይገኛል።"</string>
+    <string name="identity_check_issue_card_summary" product="desktop" msgid="5618480959570778444">"የማንነት ማረጋገጫ ከመተግበሪያዎችዎ ላይ ያልተፈለገ መዳረሻን ይከላከላል። አሁን በመልክ መክፈት እና በጣት አሻራ መክፈቻ ከሚጠቀም ማንኛውም መተግበሪያ ጋር ይገኛል።"</string>
+    <string name="identity_check_promo_card_summary" product="default" msgid="7603823818908679600">"ዝማኔዎች፦\n"<ul><li>"የማንነት ማረጋገጫ የጣት አሻራን ወይም በመልክ መክፈትን ለሚጠቀም ማንኛውም መተግበሪያ ጥበቃን ይጨምራል"</li>\n<li>"በጊዜ ሂደት፣ የማንነት ማረጋገጫ እርስዎ መሆንዎን ለማረጋገጥ እና መተግበሪያዎችን በመሣሪያዎ ላይ ደኅንነታቸው የተጠበቀ ለማድረግ ተጨማሪ መንገዶችን ሊያክል ይችላል። "<a href="https://support.google.com/android?p=identity_check">"መቼ እና የት ጥበቃ እንደሚደረግልዎ በተመለከተ የበለጠ ይወቁ"</a></li></ul></string>
+    <string name="identity_check_promo_card_summary" product="desktop" msgid="1541590147680628039">"ዝማኔዎች፦\n"<ul><li>"የማንነት ማረጋገጫ በመልክ መክፈትን ወይም በጣት አሻራ መክፈቻን ለሚጠቀም ማንኛውም መተግበሪያ ጥበቃን ይጨምራል።"</li>\n<li>"በጊዜ ሂደት፣ የማንነት ማረጋገጫ እርስዎ መሆንዎን ለማረጋገጥ እና መተግበሪያዎችን በመሣሪያዎ ላይ ደኅንነታቸው የተጠበቀ ለማድረግ ተጨማሪ መንገዶችን ሊያክል ይችላል። "<a href="https://support.google.com/android?p=identity_check">"መቼ እና የት ጥበቃ እንደሚደረግልዎ በተመለከተ የበለጠ ይወቁ"</a></li></ul></string>
+    <string name="identity_check_notification_summary" product="default" msgid="2031507461011469851">"የማንነት ማረጋገጫ ከመተግበሪያዎችዎ ላይ ያልተፈለገ መዳረሻን ይከላከላል። አሁን የጣት አሻራ ወይም በመልክ መክፈት ከሚጠቀም ማንኛውም መተግበሪያ ጋር ይገኛል።"</string>
+    <string name="identity_check_notification_summary" product="desktop" msgid="3273054322161095419">"የማንነት ማረጋገጫ ከመተግበሪያዎችዎ ላይ ያልተፈለገ መዳረሻን ይከላከላል። አሁን በመልክ መክፈት እና በጣት አሻራ መክፈቻ ከሚጠቀም ማንኛውም መተግበሪያ ጋር ይገኛል።"</string>
+    <string name="usb_use_file_transfers" product="desktop" msgid="237241307335820660">"ፋይል ማስተላለፍ"</string>
 </resources>

@@ -196,3 +196,4 @@ public class DoubleTapScreenPreferenceController extends TogglePreferenceControl
         }
     }
 }
+// LINT.ThenChange(DoubleTapApiScreen.kt)

@@ -108,17 +108,4 @@ public class HighTextContrastPreferenceControllerTest {
         assertThat(Settings.Secure.getInt(mContext.getContentResolver(),
                 Settings.Secure.ACCESSIBILITY_HIGH_TEXT_CONTRAST_ENABLED, UNKNOWN)).isEqualTo(OFF);
     }
-
-    @Test
-    public void resetState_shouldDisableTextContrast() {
-        mController.displayPreference(mScreen);
-        mController.setChecked(true);
-        mPreference.setChecked(true);
-
-        mController.resetState();
-
-        assertThat(mPreference.isChecked()).isFalse();
-        assertThat(Settings.Secure.getInt(mContext.getContentResolver(),
-                Settings.Secure.ACCESSIBILITY_HIGH_TEXT_CONTRAST_ENABLED, UNKNOWN)).isEqualTo(OFF);
-    }
 }

@@ -27,12 +27,19 @@ import com.android.settings.flags.Flags
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ProvidePreferenceScreen
 import kotlinx.coroutines.flow.Flow
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
+
 
 @ProvidePreferenceScreen(ManageWriteSettingsAppListScreen.KEY)
 open class ManageWriteSettingsAppListScreen : SpecialAccessAppListScreen() {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED, TAG_DEVICE_STATE_SCREEN)
 
     override val key: String
         get() = KEY
+
+    //TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.special_access_manage_write_settings_app_list_purpose
 
     override val title: Int
         get() = R.string.write_system_settings
@@ -44,7 +51,6 @@ open class ManageWriteSettingsAppListScreen : SpecialAccessAppListScreen() {
 
     override fun isFlagEnabled(context: Context) = Flags.deeplinkApps25q4()
 
-    override fun tags(context: Context) = arrayOf(TAG_DEVICE_STATE_SCREEN)
 
     override fun getLaunchIntent(context: Context, metadata: PreferenceMetadata?) =
         if (metadata == null) Intent(ACTION_MANAGE_WRITE_SETTINGS) else null
@@ -52,8 +58,15 @@ open class ManageWriteSettingsAppListScreen : SpecialAccessAppListScreen() {
     override val appDetailScreenKey
         get() = ManageWriteSettingsAppDetailScreen.KEY
 
+    @Deprecated(
+        message =
+            "This method will be removed once the catalyst framework stops passing the arguments as a bundle. Use keyParameters instead."
+    )
     override fun appDetailParameters(context: Context, hierarchyType: Boolean): Flow<Bundle> =
         ManageWriteSettingsAppDetailScreen.parameters(context, hierarchyType)
+
+    override fun appDetailKeyParameters(context: Context, hierarchyType: Boolean) =
+        ManageWriteSettingsAppDetailScreen.keyParameters(context, hierarchyType)
 
     companion object {
         const val KEY = "special_access_manage_write_settings_app_list"

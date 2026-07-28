@@ -40,13 +40,13 @@ class ExtraDimDataStore(private val context: Context) :
     AbstractKeyedDataObservable<String>(), KeyValueStore, KeyedObserver<String> {
 
     private val colorDisplayManager = context.getSystemService(ColorDisplayManager::class.java)
-    private val settingsSecureStore by lazy { SettingsSecureStore.get(context) }
+    private val settingsSecureStore by lazy { SettingsSecureStore.get(context).apply { setDefaultValue(SETTING_KEY, false) } }
 
     override fun contains(key: String): Boolean = settingsSecureStore.contains(SETTING_KEY)
 
     @Suppress("UNCHECKED_CAST")
     override fun <T : Any> getValue(key: String, valueType: Class<T>): T? {
-        return colorDisplayManager?.isReduceBrightColorsActivated as? T
+        return settingsSecureStore.getBoolean(SETTING_KEY) as? T
     }
 
     override fun <T : Any> setValue(key: String, valueType: Class<T>, value: T?) {

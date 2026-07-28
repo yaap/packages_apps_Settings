@@ -30,18 +30,26 @@ import com.android.settings.wifi.WifiDataUsagePreference
 import com.android.settings.wifi.WifiSwitchPreference
 import com.android.settings.wifi.savedaccesspoints2.SavedAccessPointsWifiScreen
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceCategory
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.preferenceHierarchy
 import com.android.settingslib.widget.UntitledPreferenceCategoryMetadata
 import kotlinx.coroutines.CoroutineScope
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_MOBILE_DATA
 
 @ProvidePreferenceScreen(NetworkProviderScreen.KEY)
 open class NetworkProviderScreen :
     PreferenceScreenMixin, PreferenceAvailabilityProvider, PreferenceRestrictionMixin {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_MOBILE_DATA)
+
     override val key: String
         get() = KEY
+
+    // TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.internet_settings_purpose
 
     override val title: Int
         get() = R.string.provider_internet_settings
@@ -51,6 +59,11 @@ open class NetworkProviderScreen :
 
     override val keywords: Int
         get() = R.string.keywords_internet
+
+    override val availabilityDescription =
+        "The device must support showing internet settings in Settings."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context) =
         context.resources.getBoolean(R.bool.config_show_internet_settings)
@@ -73,13 +86,22 @@ open class NetworkProviderScreen :
 
     override fun getPreferenceHierarchy(context: Context, coroutineScope: CoroutineScope) =
         preferenceHierarchy(context) {
-            +PreferenceCategory("wifi_category", R.string.wifi_settings) += {
-                +WifiSwitchPreference()
-            }
-            +UntitledPreferenceCategoryMetadata("wifi_ext_category") += {
-                if (Flags.deeplinkNetworkAndInternet25q4()) +SavedAccessPointsWifiScreen.KEY
-                +WifiDataUsagePreference(context)
-            }
+            +PreferenceCategory(
+                key = "wifi_category",
+                purpose = R.string.wifi_category_purpose,
+                title = R.string.wifi_settings,
+            ) +=
+                {
+                    +WifiSwitchPreference(coroutineScope)
+                }
+            +UntitledPreferenceCategoryMetadata(
+                key = "wifi_ext_category",
+                purpose = R.string.wifi_ext_category_purpose,
+            ) +=
+                {
+                    +SavedAccessPointsWifiScreen.KEY
+                    +WifiDataUsagePreference(context)
+                }
         }
 
     override fun getLaunchIntent(context: Context, metadata: PreferenceMetadata?): Intent? =

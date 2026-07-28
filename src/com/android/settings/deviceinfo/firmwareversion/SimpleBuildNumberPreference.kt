@@ -23,16 +23,22 @@ import android.view.View.LAYOUT_DIRECTION_RTL
 import androidx.preference.Preference
 import com.android.settings.R
 import com.android.settings.contract.TAG_DEVICE_STATE_PREFERENCE
+import com.android.settingslib.datastore.KeyValueStore
+import com.android.settingslib.metadata.PersistentPreference
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
+import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.preference.PreferenceBinding
 
 // LINT.IfChange
 class SimpleBuildNumberPreference :
-    PreferenceMetadata, PreferenceSummaryProvider, PreferenceBinding {
+    PersistentPreference<String>, PreferenceMetadata, PreferenceSummaryProvider, PreferenceBinding {
 
     override val key: String
         get() = "os_build_number"
+
+    override val purpose: Int
+        get() = R.string.os_build_number_purpose
 
     override val title: Int
         get() = R.string.build_number
@@ -41,6 +47,12 @@ class SimpleBuildNumberPreference :
         get() = false
 
     override fun tags(context: Context) = arrayOf(TAG_DEVICE_STATE_PREFERENCE)
+
+    override val supportsWrite = false
+
+    override val valueType = String::class.javaObjectType
+
+    override fun storage(context: Context): KeyValueStore = createSummaryStorage(context, key)
 
     override fun getSummary(context: Context): CharSequence? {
         val isRtl = context.resources.configuration.layoutDirection == LAYOUT_DIRECTION_RTL
@@ -52,5 +64,9 @@ class SimpleBuildNumberPreference :
         preference.isSelectable = false
         preference.isCopyingEnabled = true
     }
+
+    override val sensitivityLevel
+        get() = SensitivityLevel.NO_SENSITIVITY
+
 }
 // LINT.ThenChange(SimpleBuildNumberPreferenceController.java)

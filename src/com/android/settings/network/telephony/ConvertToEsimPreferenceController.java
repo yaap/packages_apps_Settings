@@ -36,6 +36,7 @@ import android.telephony.euicc.EuiccManager;
 import android.text.TextUtils;
 import android.util.Log;
 
+import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
@@ -57,10 +58,13 @@ import java.util.List;
 public class ConvertToEsimPreferenceController extends TelephonyBasePreferenceController implements
         LifecycleObserver, MobileNetworkRepository.MobileNetworkCallback {
     private static final String TAG = "ConvertToEsimPreference";
+    private static final String KEY_ESIM_CONVERSION_TOGGLE = "esim_conversion_toggle";
+
     private Preference mPreference;
     private LifecycleOwner mLifecycleOwner;
     private MobileNetworkRepository mMobileNetworkRepository;
     private List<SubscriptionInfoEntity> mSubscriptionInfoEntityList = new ArrayList<>();
+    @Nullable
     private SubscriptionInfoEntity mSubscriptionInfoEntity;
     private static int sQueryFlag =
             PackageManager.MATCH_SYSTEM_ONLY | PackageManager.MATCH_DIRECT_BOOT_AUTO
@@ -86,6 +90,11 @@ public class ConvertToEsimPreferenceController extends TelephonyBasePreferenceCo
         mSubscriptionInfoEntity = subInfoEntity;
     }
 
+    public void init(int subId, LifecycleOwner lifecycleOwner) {
+        mSubId = subId;
+        mLifecycleOwner = lifecycleOwner;
+    }
+
     @OnLifecycleEvent(ON_START)
     public void onStart() {
         mMobileNetworkRepository.addRegister(mLifecycleOwner, this, mSubId);
@@ -105,6 +114,11 @@ public class ConvertToEsimPreferenceController extends TelephonyBasePreferenceCo
 
     @Override
     public int getAvailabilityStatus(int subId) {
+        if (TextUtils.equals(getPreferenceKey(), KEY_ESIM_CONVERSION_TOGGLE)
+                && !android.security.Flags.enableAutoSimPinUi()) {
+            return CONDITIONALLY_UNAVAILABLE;
+        }
+
         // TODO(b/315073761) : Add a new API to set whether the profile has been
         // converted/transferred. Remove any confusion to the user according to the set value.
 

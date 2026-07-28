@@ -16,15 +16,42 @@
 package com.android.settings.display;
 
 import android.content.Context;
+import android.hardware.display.AmbientDisplayConfiguration;
+import android.os.PowerManager;
+import android.os.SystemProperties;
+import android.os.UserHandle;
 import android.provider.Settings;
 import android.text.TextUtils;
 
-import com.android.settings.R;
+import androidx.preference.Preference;
 
-public class DozeOnChargePreferenceController extends AmbientDisplayAlwaysOnPreferenceController {
+import com.android.settings.R;
+import com.android.settings.core.TogglePreferenceController;
+
+public class DozeOnChargePreferenceController extends TogglePreferenceController {
+
+    private final int ON = 1;
+    private final int OFF = 0;
+
+    private AmbientDisplayConfiguration mConfig;
+    private static final int MY_USER = UserHandle.myUserId();
+    private static final String PROP_AWARE_AVAILABLE = "ro.vendor.aware_available";
 
     public DozeOnChargePreferenceController(Context context, String key) {
         super(context, key);
+    }
+
+    @Override
+    public void updateState(Preference preference) {
+        super.updateState(preference);
+        refreshSummary(preference);
+    }
+
+    @Override
+    public int getAvailabilityStatus() {
+        return isAvailable(getConfig())
+                && !SystemProperties.getBoolean(PROP_AWARE_AVAILABLE, false) ?
+                AVAILABLE : UNSUPPORTED_ON_DEVICE;
     }
 
     @Override
@@ -50,5 +77,29 @@ public class DozeOnChargePreferenceController extends AmbientDisplayAlwaysOnPref
         return mContext.getText(
                 isAodSuppressedByBedtime(mContext) ? R.string.aware_summary_when_bedtime_on
                         : R.string.doze_on_charge_summary);
+    }
+
+    public DozeOnChargePreferenceController setConfig(
+            AmbientDisplayConfiguration config) {
+        mConfig = config;
+        return this;
+    }
+
+    public static boolean isAvailable(AmbientDisplayConfiguration config) {
+        return config.alwaysOnAvailableForUser(MY_USER);
+    }
+
+    private AmbientDisplayConfiguration getConfig() {
+        if (mConfig == null) {
+            mConfig = new AmbientDisplayConfiguration(mContext);
+        }
+        return mConfig;
+    }
+
+    /**
+     * Returns whether AOD is suppressed by Bedtime mode, a feature of Digital Wellbeing.
+     */
+    public static boolean isAodSuppressedByBedtime(Context context) {
+        return context.getSystemService(PowerManager.class).isAmbientDisplaySuppressed();
     }
 }

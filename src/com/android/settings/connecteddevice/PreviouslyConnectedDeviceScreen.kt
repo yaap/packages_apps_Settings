@@ -29,10 +29,10 @@ import androidx.preference.Preference
 import com.android.settings.R
 import com.android.settings.Settings.PreviouslyConnectedDeviceActivity
 import com.android.settings.core.PreferenceScreenMixin
-import com.android.settings.flags.Flags
 import com.android.settings.overlay.FeatureFactory.Companion.featureFactory
 import com.android.settings.utils.makeLaunchIntent
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceMetadata
@@ -40,6 +40,7 @@ import com.android.settingslib.metadata.PreferenceSummaryProvider
 import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.preferenceHierarchy
 import kotlinx.coroutines.CoroutineScope
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 
 /**
  * This screen (fragment) displays previously connected devices. It is associated with the
@@ -55,11 +56,16 @@ open class PreviouslyConnectedDeviceScreen :
     PreferenceSummaryProvider,
     PreferenceLifecycleProvider,
     DevicePreferenceCallback {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED)
 
     private val bluetoothAdapter: BluetoothAdapter? by lazy { BluetoothAdapter.getDefaultAdapter() }
 
     override val key: String
         get() = KEY
+
+    // TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.previously_connected_devices_see_all_purpose
 
     override val title: Int
         get() = R.string.previous_connected_see_all
@@ -71,8 +77,6 @@ open class PreviouslyConnectedDeviceScreen :
         get() = R.drawable.ic_chevron_right_24dp
 
     private var bluetoothStateReceiver: BroadcastReceiver? = null
-
-    override fun isFlagEnabled(context: Context) = Flags.deeplinkConnectedDevices25q4()
 
     override fun getMetricsCategory() = SettingsEnums.PREVIOUSLY_CONNECTED_DEVICES
 
@@ -89,6 +93,11 @@ open class PreviouslyConnectedDeviceScreen :
 
     override fun getLaunchIntent(context: Context, metadata: PreferenceMetadata?) =
         makeLaunchIntent(context, PreviouslyConnectedDeviceActivity::class.java, metadata?.key)
+
+    override val availabilityDescription =
+        "The device must support bluetooth."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context) =
         context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_BLUETOOTH) ||
@@ -139,4 +148,5 @@ open class PreviouslyConnectedDeviceScreen :
         const val KEY = "previously_connected_devices_see_all"
     }
 }
-// LINT.ThenChange(PreviouslyConnectedDeviceDashboardFragment.java, PreviouslyConnectedDevicePreferenceController.java)
+// LINT.ThenChange(PreviouslyConnectedDeviceDashboardFragment.java,
+// PreviouslyConnectedDevicePreferenceController.java)

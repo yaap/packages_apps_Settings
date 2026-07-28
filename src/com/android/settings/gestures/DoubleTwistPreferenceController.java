@@ -32,6 +32,7 @@ import com.android.settings.R;
 import com.android.settings.Utils;
 import com.android.settings.core.TogglePreferenceController;
 
+// LINT.IfChange
 public class DoubleTwistPreferenceController extends TogglePreferenceController {
 
     private final int ON = 1;
@@ -118,3 +119,4 @@ public class DoubleTwistPreferenceController extends TogglePreferenceController 
     }
 
 }
+// LINT.ThenChange(DoubleTwistGestureApiFirstScreen.kt)

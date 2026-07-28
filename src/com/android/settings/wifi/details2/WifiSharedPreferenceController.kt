@@ -26,6 +26,7 @@ import com.android.settings.R
 import com.android.settings.core.SubSettingLauncher
 import com.android.settings.core.TogglePreferenceController
 import com.android.settings.wifi.WifiPickerTrackerHelper
+import com.android.settings.wifi.WifiUtils;
 import com.android.settings.wifi.details.WifiNetworkDetailsFragment
 import com.android.wifitrackerlib.WifiEntry
 
@@ -37,7 +38,7 @@ class WifiSharedPreferenceController(
 ) : TogglePreferenceController(context, preferenceKey) {
 
     override fun getAvailabilityStatus(): Int {
-        return if (com.android.settings.connectivity.Flags.wifiMultiuser()) {
+        return if (WifiUtils.isWifiMultiuserEnabled()) {
             AVAILABLE
         } else {
             CONDITIONALLY_UNAVAILABLE
@@ -70,27 +71,16 @@ class WifiSharedPreferenceController(
     }
 
     private fun showAlertDialog(ssid: String, shared: Boolean, key: String) {
+        val title =
+            if (shared) mContext.getString(R.string.wifi_share_conflict_dialog_title)
+            else mContext.getString(R.string.wifi_private_conflict_dialog_title)
+        val message =
+            if (shared) mContext.getString(R.string.wifi_share_conflict_dialog_message, ssid)
+            else mContext.getString(R.string.wifi_private_conflict_dialog_message, ssid)
         AlertDialog.Builder(mContext)
-            .setTitle(
-                mContext.getString(
-                    R.string.wifi_conflict_dialog_title,
-                    if (shared) mContext.getString(R.string.shared_message)
-                    else mContext.getString(R.string.private_message),
-                    ssid,
-                )
-            )
-            .setMessage(
-                mContext.getString(
-                    R.string.wifi_conflict_dialog_message,
-                    if (shared) mContext.getString(R.string.private_message)
-                    else mContext.getString(R.string.shared_message),
-                    if (shared) mContext.getString(R.string.private_message)
-                    else mContext.getString(R.string.shared_message),
-                    if (shared) mContext.getString(R.string.shared_message)
-                    else mContext.getString(R.string.private_message),
-                )
-            )
-            .setPositiveButton(mContext.getString(R.string.wifi_conflict_dialog_confirm)) {
+            .setTitle(title)
+            .setMessage(message)
+            .setPositiveButton(mContext.getString(R.string.wifi_conflict_dialog_switch)) {
                 dialog: DialogInterface,
                 which: Int ->
                 launchNetworkDetailsPage(mContext, key, metricsCategory)
@@ -118,7 +108,8 @@ class WifiSharedPreferenceController(
     private fun getMatchingWifiEntry(shared: Boolean): WifiEntry? {
         val wifiPickerTracker = wifiPickerTrackerHelper.getWifiPickerTracker()
         val matchingWifiEntry: WifiEntry? =
-            wifiPickerTracker.wifiEntries
+            (wifiPickerTracker.wifiEntries +
+                    listOfNotNull(wifiPickerTracker.getConnectedWifiEntry()))
                 .stream()
                 .filter { entry: WifiEntry -> TextUtils.equals(wifiEntry.ssid, entry.ssid) }
                 .filter { entry: WifiEntry -> entry.getWifiConfiguration()?.shared == shared }

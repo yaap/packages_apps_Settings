@@ -20,6 +20,7 @@ import android.content.Context
 import androidx.preference.Preference
 import com.android.settings.R
 import com.android.settingslib.metadata.PreferenceMetadata
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.preference.PreferenceBinding
 import com.android.settingslib.widget.IllustrationPreference
 
@@ -27,8 +28,13 @@ class FlashNotificationsIllustrationPreference : PreferenceMetadata, PreferenceB
     override val key: String
         get() = "flash_notifications_illustration"
 
+    override val purpose: Int
+        get() = R.string.flash_notifications_illustration_purpose
+
     override val indexable
         get() = false
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
 
     override fun createWidget(context: Context) =
         IllustrationPreference(context).apply {

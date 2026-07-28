@@ -131,6 +131,7 @@ public class WifiDppQrCodeScannerFragment extends WifiDppQrCodeBaseFragment impl
             switch (msg.what) {
                 case MESSAGE_HIDE_ERROR_MESSAGE:
                     mErrorMessage.setVisibility(View.INVISIBLE);
+                    mErrorMessage.setError(null);
                     break;
 
                 case MESSAGE_SHOW_ERROR_MESSAGE:
@@ -138,8 +139,7 @@ public class WifiDppQrCodeScannerFragment extends WifiDppQrCodeBaseFragment impl
 
                     mErrorMessage.setVisibility(View.VISIBLE);
                     mErrorMessage.setText(errorMessage);
-                    mErrorMessage.sendAccessibilityEvent(
-                            AccessibilityEvent.TYPE_WINDOW_STATE_CHANGED);
+                    mErrorMessage.setError(errorMessage, null);
 
                     // Cancel any pending messages to hide error view and requeue the message so
                     // user has time to see error
@@ -277,9 +277,14 @@ public class WifiDppQrCodeScannerFragment extends WifiDppQrCodeBaseFragment impl
         if (qrSecurity == entrySecurity) {
             return true;
         }
-        // Default security type of PSK/SAE transition mode WifiEntry is SECURITY_PSK and
-        // there is no way to know if a WifiEntry is of transition mode. Give it a chance.
-        if (qrSecurity == WifiEntry.SECURITY_SAE && entrySecurity == WifiEntry.SECURITY_PSK) {
+        // WifiEntry.getSecurity for WPA3 transition may be SAE or PSK depending on connection
+        // state, and there is no way to know if a WifiEntry is of transition mode.
+        // Give it a chance.
+        boolean isQrPskSae = (qrSecurity == WifiEntry.SECURITY_PSK
+                || qrSecurity == WifiEntry.SECURITY_SAE);
+        boolean isEntryPskSae = (entrySecurity == WifiEntry.SECURITY_PSK
+                || entrySecurity == WifiEntry.SECURITY_SAE);
+        if (isQrPskSae && isEntryPskSae) {
             return true;
         }
         // If configured is no password, the Wi-Fi framework will attempt OPEN and OWE security.
@@ -533,7 +538,7 @@ public class WifiDppQrCodeScannerFragment extends WifiDppQrCodeBaseFragment impl
 
     @Override
     public void setTransform(Matrix transform) {
-        mTextureView.setTransform(transform);
+        getActivity().runOnUiThread(() -> mTextureView.setTransform(transform));
     }
 
     @Override

@@ -78,7 +78,7 @@
             android:key="dark_ui_auto_mode"
             android:title="@string/dark_ui_auto_mode_title"
             android:summary="%s"
-            android:persistent="false"
+            android:persistent="true"
             android:entries="@array/dark_ui_scheduler_preference_titles"
             android:entryValues="@array/dark_ui_scheduler_preference_titles"
             settings:controller="com.android.settings.display.darkmode.DarkModeScheduleSelectorController"
@@ -103,6 +103,7 @@
 
     <com.android.settingslib.widget.FooterPreference
         android:key="dark_theme_expanded_footer"
+        android:title="@string/accessibility_expanded_dark_theme_footer"
         settings:searchable="false"
         settings:controller="com.android.settings.display.darkmode.DarkModeExpandedFooterPreferenceController" />
 

@@ -46,7 +46,7 @@ public class AdaptiveConnectivityTogglePreferenceController extends TogglePrefer
 
     @Override
     public int getAvailabilityStatus() {
-        return AVAILABLE;
+        return UNSUPPORTED_ON_DEVICE;
     }
 
     @Override

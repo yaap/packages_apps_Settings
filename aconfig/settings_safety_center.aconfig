@@ -7,3 +7,34 @@ flag {
   description: "Enables the new Safety Center UI in Settings"
   bug: "425902698"
 }
+
+flag {
+  name: "enable_safety_center_quick_settings"
+  namespace: "safety_center"
+  description: "Enables the Settings version of SafetyCenter quick settings"
+  bug: "449933150"
+}
+
+flag {
+  name: "move_safety_source_refresh_to_background"
+  namespace: "safety_center"
+  description: "Moves the Safety Center source refresh to the background"
+  bug: "420734103"
+}
+
+flag {
+  name: "enable_binary_transparency_in_safety_center"
+  namespace: "hardware_backed_security"
+  description: "Enables the binary transparency option in Safety Center"
+  bug: "458810078"
+}
+
+flag {
+  name: "schedule_watch_ranging_availability_with_job_scheduler"
+  namespace: "safety_center"
+  description: "Moves watch ranging availability work to job scheduler"
+  bug: "468398472"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}

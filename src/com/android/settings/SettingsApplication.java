@@ -45,6 +45,8 @@ import com.android.settings.overlay.FeatureFactoryImpl;
 import com.android.settings.spa.SettingsSpaEnvironment;
 import com.android.settingslib.applications.AppIconCacheManager;
 import com.android.settingslib.datastore.BackupRestoreStorageManager;
+import com.android.settingslib.metadata.CatalystFlagProvider;
+import com.android.settingslib.metadata.CatalystFlagProviderFactory;
 import com.android.settingslib.metadata.FixedArrayMap;
 import com.android.settingslib.metadata.PreferenceScreenMetadataFactory;
 import com.android.settingslib.metadata.PreferenceScreenRegistry;
@@ -77,6 +79,15 @@ public class SettingsApplication extends Application {
         super.onCreate();
 
         if (Flags.catalyst()) {
+            CatalystFlagProviderFactory.INSTANCE.setProvider(
+                    new CatalystFlagProvider() {
+                        @Override
+                        public boolean catalystUseKeyParameters() {
+                            return com.android.settingslib.catalyst.flags.Flags.catalystUseKeyParameters() ||
+                                    Flags.catalystMigration26q2();
+                        }
+                    }
+            );
             PreferenceScreenRegistry.INSTANCE.setPreferenceScreenMetadataFactories(
                     preferenceScreenFactories());
             PreferenceScreenRegistry.INSTANCE.setPreferenceUiActionMetricsLogger(
@@ -109,9 +120,7 @@ public class SettingsApplication extends Application {
 
         registerActivityLifecycleCallbacks(new DeveloperOptionsActivityLifecycle());
 
-        if (Flags.msdlFeedback()) {
-            MSDLPlayerWrapper.INSTANCE.createPlayer(this);
-        }
+        MSDLPlayerWrapper.INSTANCE.createPlayer(this);
     }
 
     /** Returns the factories of preference screen metadata. */

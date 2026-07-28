@@ -23,22 +23,12 @@ import android.content.Context;
 import android.provider.Settings;
 import android.view.accessibility.AccessibilityManager;
 
-import com.android.server.accessibility.Flags;
 import com.android.settings.R;
 import com.android.settings.core.BasePreferenceController;
 
+// LINT.IfChange
 /** Preference controller for autoclick (dwell timing). */
 public class AutoclickPreferenceController extends BasePreferenceController {
-
-    /**
-     * Resource ids from which autoclick preference summaries should be derived. The strings have
-     * placeholder for integer delay value.
-     */
-    private static final int[] AUTOCLICK_PREFERENCE_SUMMARIES = {
-            R.string.accessibilty_autoclick_preference_subtitle_short_delay,
-            R.string.accessibilty_autoclick_preference_subtitle_medium_delay,
-            R.string.accessibilty_autoclick_preference_subtitle_long_delay
-    };
 
     public AutoclickPreferenceController(Context context, String preferenceKey) {
         super(context, preferenceKey);
@@ -58,25 +48,9 @@ public class AutoclickPreferenceController extends BasePreferenceController {
         }
         final int delayMillis = Settings.Secure.getInt(mContext.getContentResolver(),
                 Settings.Secure.ACCESSIBILITY_AUTOCLICK_DELAY,
-                Flags.enableAutoclickIndicator()
-                ? AccessibilityManager.AUTOCLICK_DELAY_WITH_INDICATOR_DEFAULT
-                : AccessibilityManager.AUTOCLICK_DELAY_DEFAULT);
-        final int summaryIndex = getAutoclickPreferenceSummaryIndex(delayMillis);
+                AccessibilityManager.AUTOCLICK_DELAY_WITH_INDICATOR_DEFAULT);
         return AutoclickUtils.getAutoclickDelaySummary(mContext,
-                AUTOCLICK_PREFERENCE_SUMMARIES[summaryIndex], delayMillis);
-    }
-
-    /** Finds index of the summary that should be used for the provided autoclick delay. */
-    private int getAutoclickPreferenceSummaryIndex(int delay) {
-        if (delay <= AutoclickUtils.MIN_AUTOCLICK_DELAY_MS) {
-            return 0;
-        }
-        if (delay >= AutoclickUtils.MAX_AUTOCLICK_DELAY_MS) {
-            return AUTOCLICK_PREFERENCE_SUMMARIES.length - 1;
-        }
-        int delayRange =
-                AutoclickUtils.MAX_AUTOCLICK_DELAY_MS - AutoclickUtils.MIN_AUTOCLICK_DELAY_MS;
-        int rangeSize = (delayRange) / (AUTOCLICK_PREFERENCE_SUMMARIES.length - 1);
-        return (delay - AutoclickUtils.MIN_AUTOCLICK_DELAY_MS) / rangeSize;
+                R.string.accessibility_autoclick_delay_unit_second, delayMillis);
     }
 }
+// LINT.ThenChange(autoclick/ui/AutoclickScreen.kt)

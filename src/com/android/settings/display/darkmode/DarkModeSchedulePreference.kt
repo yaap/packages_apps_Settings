@@ -16,38 +16,43 @@
 
 package com.android.settings.display.darkmode
 
-import android.app.UiModeManager
 import android.content.Context
-import android.content.res.Configuration
 import android.location.LocationManager
 import android.os.PowerManager
 import androidx.preference.DropDownPreference
 import androidx.preference.Preference
 import com.android.settings.R
+import com.android.settings.accessibility.Flags
+import com.android.settings.accessibility.extensions.isPowerSaveMode
 import com.android.settings.display.TwilightLocationDialog
+import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.metadata.DiscreteStringValue
-import com.android.settingslib.metadata.PreferenceLifecycleContext
-import com.android.settingslib.metadata.PreferenceLifecycleProvider
+import com.android.settingslib.metadata.PersistentPreference
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
+import com.android.settingslib.metadata.ReadWritePermit
+import com.android.settingslib.metadata.SensitivityLevel
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.preference.PreferenceBinding
 
 // LINT.IfChange
 class DarkModeSchedulePreference(
-    private var uiModeManager: UiModeManager,
-    private var bedtimeSettings: BedtimeSettings,
+    context: Context,
+    val isUiOnly: Boolean,
+    private val scheduleStorage: DarkModeScheduleStorage = DarkModeScheduleStorage(context),
+    private val bedtimeSettings: BedtimeSettings = BedtimeSettings(context),
 ) :
-    PreferenceMetadata,
+    PersistentPreference<String>,
     DiscreteStringValue,
     PreferenceBinding,
     PreferenceSummaryProvider,
-    PreferenceLifecycleProvider,
     Preference.OnPreferenceChangeListener {
-
-    private lateinit var lifecycleContext: PreferenceLifecycleContext
 
     override val key: String
         get() = KEY
+
+    override val purpose: Int
+        get() = R.string.dark_ui_auto_mode_purpose
 
     override val keywords: Int
         get() = R.string.keywords_dark_ui_mode
@@ -71,6 +76,31 @@ class DarkModeSchedulePreference(
                 R.array.dark_ui_scheduler_preference_titles
             }
 
+    override val valueType: Class<String>
+        get() = String::class.javaObjectType
+
+    override val sensitivityLevel
+        get() = SensitivityLevel.NO_SENSITIVITY
+
+    override fun tags(context: Context): Array<String> {
+        if (isUiOnly) {
+            return arrayOf(UI_ONLY_PREFERENCE)
+        }
+        return super.tags(context)
+    }
+
+    override fun storage(context: Context): KeyValueStore = scheduleStorage
+
+    override fun getReadPermissions(context: Context) = DarkModeScheduleStorage.getReadPermissions()
+
+    override fun getWritePermissions(context: Context) =
+        DarkModeScheduleStorage.getWritePermissions()
+
+    override fun getWritePermit(context: Context, callingPid: Int, callingUid: Int) =
+        ReadWritePermit.ALLOW
+
+    override val supportsWrite = true
+
     override fun getSummary(context: Context): CharSequence? = "%s"
 
     override fun createWidget(context: Context) = DropDownPreference(context)
@@ -78,70 +108,35 @@ class DarkModeSchedulePreference(
     override fun bind(preference: Preference, metadata: PreferenceMetadata) {
         super.bind(preference, metadata)
         preference as DropDownPreference
-        preference.setValue(getCurrentMode(preference.context))
+        preference.setValue(scheduleStorage.getString(KEY))
         preference.onPreferenceChangeListener = this
     }
 
-    override fun onCreate(context: PreferenceLifecycleContext) {
-        super.onCreate(context)
-        lifecycleContext = context
-    }
-
-    override fun isEnabled(context: Context) =
-        context.getSystemService(PowerManager::class.java)?.isPowerSaveMode == false
+    override fun isEnabled(context: Context): Boolean =
+        if (Flags.allowToEnterDarkThemeSettingsWhenBatterySaver()) !context.isPowerSaveMode()
+        else context.getSystemService(PowerManager::class.java)?.isPowerSaveMode == false
 
     override fun onPreferenceChange(preference: Preference, newValue: Any?): Boolean {
-        val context = preference.context
-        if (newValue == getCurrentMode(context)) {
+        if (newValue == (preference as DropDownPreference).value) {
             return false
         }
 
-        when (newValue) {
-            context.getString(R.string.dark_ui_auto_mode_never) -> {
-                val active =
-                    (context.resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_YES) !=
-                        0
-                uiModeManager.nightMode =
-                    if (active) UiModeManager.MODE_NIGHT_YES else UiModeManager.MODE_NIGHT_NO
+        val context = preference.context
+        if (newValue == context.getString(R.string.dark_ui_auto_mode_auto)) {
+            val locationManager = context.getSystemService(LocationManager::class.java)
+            if (locationManager?.isLocationEnabled == false) {
+                TwilightLocationDialog.showLocationOff(context)
+                return false
             }
-            context.getString(R.string.dark_ui_auto_mode_auto) -> {
-                val locationManager = context.getSystemService(LocationManager::class.java)
-                if (locationManager?.isLocationEnabled == false) {
-                    TwilightLocationDialog.showLocationOff(context)
-                    return false
-                }
 
-                if (locationManager?.lastLocation == null) {
-                    TwilightLocationDialog.showLocationPending(context)
-                }
-                uiModeManager.nightMode = UiModeManager.MODE_NIGHT_AUTO
-            }
-            context.getString(R.string.dark_ui_auto_mode_custom) -> {
-                uiModeManager.nightMode = UiModeManager.MODE_NIGHT_CUSTOM
-            }
-            context.getString(R.string.dark_ui_auto_mode_custom_bedtime) -> {
-                uiModeManager.nightModeCustomType = UiModeManager.MODE_NIGHT_CUSTOM_TYPE_BEDTIME
+            if (locationManager?.lastLocation == null) {
+                TwilightLocationDialog.showLocationPending(context)
+                return false
             }
         }
+        preference.setValue(newValue as String)
         return true
     }
-
-    private fun getCurrentMode(context: Context): String =
-        context.getString(
-            when (uiModeManager.nightMode) {
-                UiModeManager.MODE_NIGHT_AUTO -> R.string.dark_ui_auto_mode_auto
-                UiModeManager.MODE_NIGHT_CUSTOM -> {
-                    val isCustomBedtime =
-                        bedtimeSettings.getBedtimeSettingsIntent() != null &&
-                            (uiModeManager.nightModeCustomType ==
-                                UiModeManager.MODE_NIGHT_CUSTOM_TYPE_BEDTIME)
-                    if (isCustomBedtime) R.string.dark_ui_auto_mode_custom_bedtime
-                    else R.string.dark_ui_auto_mode_custom
-                }
-
-                else -> R.string.dark_ui_auto_mode_never
-            }
-        )
 
     companion object {
         const val KEY = "dark_ui_auto_mode"

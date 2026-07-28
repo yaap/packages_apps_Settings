@@ -19,13 +19,18 @@ package com.android.settings.deviceinfo.hardwareinfo
 import android.content.Context
 import android.os.SystemProperties
 import com.android.settings.R
+import com.android.settingslib.datastore.KeyValueStore
+import com.android.settingslib.metadata.PersistentPreference
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
+import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.preference.PreferenceBinding
 
 // LINT.IfChange
 class HardwareVersionPreference :
+    PersistentPreference<String>,
     PreferenceMetadata,
     PreferenceBinding,
     PreferenceSummaryProvider,
@@ -33,11 +38,25 @@ class HardwareVersionPreference :
     override val key: String
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.hardware_info_device_revision_purpose
+
     override val title: Int
         get() = R.string.hardware_revision
 
+    override val supportsWrite = false
+
+    override val valueType = String::class.javaObjectType
+
+    override fun storage(context: Context): KeyValueStore = createSummaryStorage(context, key)
+
     override fun getSummary(context: Context): CharSequence? =
         SystemProperties.get("ro.boot.hardware.revision")
+
+    override val availabilityDescription =
+        "The device must support showing the device model and must declare a device revision."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context) =
         context.resources.getBoolean(R.bool.config_show_device_model) &&
@@ -48,6 +67,10 @@ class HardwareVersionPreference :
             isCopyingEnabled = true
             isSelectable = false
         }
+
+    override val sensitivityLevel
+        get() = SensitivityLevel.NO_SENSITIVITY
+
 
     companion object {
         const val KEY = "hardware_info_device_revision"

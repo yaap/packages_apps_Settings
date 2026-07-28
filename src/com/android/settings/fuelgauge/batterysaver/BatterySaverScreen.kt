@@ -23,6 +23,7 @@ import com.android.settings.Settings.BatterySaverSettingsActivity
 import com.android.settings.core.PreferenceScreenMixin
 import com.android.settings.flags.Flags
 import com.android.settings.utils.makeLaunchIntent
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_BATTERY
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.preferenceHierarchy
@@ -30,8 +31,14 @@ import kotlinx.coroutines.CoroutineScope
 
 @ProvidePreferenceScreen(BatterySaverScreen.KEY)
 open class BatterySaverScreen : PreferenceScreenMixin {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_BATTERY)
+
     override val key: String
         get() = KEY
+
+    //TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.battery_saver_screen_purpose
 
     override val title: Int
         get() = R.string.battery_saver

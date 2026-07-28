@@ -31,12 +31,15 @@ import androidx.preference.PreferenceScreen;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.settings.R;
-import com.android.settings.accessibility.detail.a11yservice.A11yServicePreferenceFragment;
-import com.android.settings.accessibility.detail.a11yservice.ui.A11yServiceShortcutPreference;
+import com.android.settings.accessibility.a11yservice.A11yServicePreferenceFragment;
+import com.android.settings.accessibility.a11yservice.ui.A11yServiceShortcutPreference;
+import com.android.settings.accessibility.shared.utils.TogglePreferenceAdapterInSuw;
 import com.android.settingslib.widget.SettingsThemeHelper;
 
 import com.google.android.setupcompat.template.FooterBarMixin;
+import com.google.android.setupcompat.util.DelightHelper;
 import com.google.android.setupdesign.GlifPreferenceLayout;
+import com.google.android.setupdesign.template.IconMixin;
 
 public class ToggleSelectToSpeakPreferenceFragmentForSetupWizard
         extends A11yServicePreferenceFragment {
@@ -55,6 +58,11 @@ public class ToggleSelectToSpeakPreferenceFragmentForSetupWizard
             final Drawable icon = getContext().getDrawable(R.drawable.ic_accessibility_visibility);
             AccessibilitySetupWizardUtils.updateGlifPreferenceLayout(getContext(), layout, title,
                     description, icon);
+
+            if (DelightHelper.shouldApplyAnimatedIcon(getContext())) {
+                final IconMixin iconMixin = layout.getMixin(IconMixin.class);
+                iconMixin.setAnimatedIcon(R.raw.icon_visibility);
+            }
 
             final FooterBarMixin mixin = layout.getMixin(FooterBarMixin.class);
             AccessibilitySetupWizardUtils.setPrimaryButton(getContext(), mixin, R.string.done,
@@ -83,7 +91,7 @@ public class ToggleSelectToSpeakPreferenceFragmentForSetupWizard
     @Override
     protected RecyclerView.Adapter onCreateAdapter(PreferenceScreen preferenceScreen) {
         if (SettingsThemeHelper.isExpressiveTheme(requireContext())) {
-            return new PreferenceAdapterInSuw(preferenceScreen);
+            return new TogglePreferenceAdapterInSuw(preferenceScreen);
         }
         return super.onCreateAdapter(preferenceScreen);
     }

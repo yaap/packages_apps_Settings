@@ -24,6 +24,7 @@ import android.app.settings.SettingsEnums;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.database.ContentObserver;
 import android.graphics.drawable.Drawable;
 import android.hardware.display.ColorDisplayManager;
@@ -32,6 +33,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.provider.Settings.Secure;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -47,11 +49,13 @@ import com.android.settings.R;
 import com.android.settings.search.BaseSearchIndexProvider;
 import com.android.settings.widget.RadioButtonPickerFragment;
 import com.android.settingslib.search.SearchIndexable;
+import com.android.settingslib.search.SearchIndexableRaw;
 import com.android.settingslib.widget.CandidateInfo;
 import com.android.settingslib.widget.LayoutPreference;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -159,9 +163,13 @@ public class ColorModePreferenceFragment extends RadioButtonPickerFragment {
         final ArrayList<Integer> tmpviewPagerList = getViewPagerResource();
         mViewPager = preview.findViewById(R.id.viewpager);
 
+        boolean isRtl = getContext().getResources().getConfiguration().getLayoutDirection()
+                == View.LAYOUT_DIRECTION_RTL;
+
         mViewPagerImages = new View[3];
         for (int idx = 0; idx < tmpviewPagerList.size(); idx++) {
-            mViewPagerImages[idx] =
+            int index = isRtl ? tmpviewPagerList.size() - idx - 1 : idx;
+            mViewPagerImages[index] =
                     getLayoutInflater().inflate(tmpviewPagerList.get(idx), null /* root */);
         }
 
@@ -172,6 +180,18 @@ public class ColorModePreferenceFragment extends RadioButtonPickerFragment {
 
         mViewPager.setAdapter(new ColorPagerAdapter(mPageList));
 
+        int pageMarginPx;
+        try {
+            TypedArray resolvedAttribute = getContext().getTheme().obtainStyledAttributes(
+                    new int[]{android.R.attr.listPreferredItemPaddingStart});
+            pageMarginPx = resolvedAttribute.getDimensionPixelSize(0, 0);
+            resolvedAttribute.recycle();
+        } catch (NullPointerException | Resources.NotFoundException e) {
+            pageMarginPx = (int) (16 * getResources().getDisplayMetrics().density);
+            Log.w(getTag(), "addViewPager: Exception message: " + e.getMessage());
+        }
+
+        mViewPager.setPageMargin(pageMarginPx);
         mViewArrowPrevious = preview.findViewById(R.id.arrow_previous);
         mViewArrowPrevious.setOnClickListener(v -> {
             final int previousPos = mViewPager.getCurrentItem() - 1;
@@ -194,11 +214,14 @@ public class ColorModePreferenceFragment extends RadioButtonPickerFragment {
                     new ViewGroup.MarginLayoutParams(DOT_INDICATOR_SIZE, DOT_INDICATOR_SIZE);
             lp.setMargins(DOT_INDICATOR_LEFT_PADDING, 0, DOT_INDICATOR_RIGHT_PADDING, 0);
             imageView.setLayoutParams(lp);
-            mDotIndicators[i] = imageView;
-
-            viewGroup.addView(mDotIndicators[i]);
+            int dotIndex = isRtl ? mPageList.size() - 1 - i : i;
+            mDotIndicators[dotIndex] = imageView;
+            viewGroup.addView(imageView);
         }
 
+        if (isRtl) {
+            mViewPager.setCurrentItem(mPageList.size() - 1, true);
+        }
         updateIndicator(mViewPager.getCurrentItem());
     }
 
@@ -337,12 +360,13 @@ public class ColorModePreferenceFragment extends RadioButtonPickerFragment {
                 } else {
                     mViewPagerImages[position].setContentDescription(
                             getContext().getString(R.string.colors_viewpager_content_description));
-                    updateIndicator(position);
                 }
             }
 
             @Override
-            public void onPageSelected(int position) {}
+            public void onPageSelected(int position) {
+                updateIndicator(position);
+            }
 
             @Override
             public void onPageScrollStateChanged(int state) {}
@@ -417,6 +441,34 @@ public class ColorModePreferenceFragment extends RadioButtonPickerFragment {
                     return availableColorModes != null && availableColorModes.length > 0
                             && !ColorDisplayManager.areAccessibilityTransformsEnabled(context);
                 }
+
+                @Override
+                public List<SearchIndexableRaw> getRawDataToIndex(
+                        Context context, boolean enabled) {
+                    if (!isPageSearchEnabled(context)) {
+                        return Collections.emptyList();
+                    }
+
+                    final List<SearchIndexableRaw> rawData = new ArrayList<>();
+                    final Resources res = context.getResources();
+                    final String screenTitle = context.getString(R.string.color_mode_title);
+
+                    final Map<Integer, String> colorModesToSummaries =
+                            ColorModeUtils.getColorModeMapping(res);
+
+                    for (int colorMode : ColorModeUtils.getAvailableColorModes(context)) {
+                        String modeName = colorModesToSummaries.get(colorMode);
+                        if (modeName != null) {
+                            SearchIndexableRaw raw = new SearchIndexableRaw(context);
+                            raw.key = KEY_COLOR_MODE_PREFIX + colorMode;
+                            raw.title = modeName;
+                            raw.screenTitle = screenTitle;
+                            raw.className = ColorModePreferenceFragment.class.getName();
+                            rawData.add(raw);
+                        }
+                    }
+                    return rawData;
+                }
             };
 }
-// LINT.ThenChange(ColorModeScreen.kt)
+// LINT.ThenChange(ColorModeScreen.kt, ColorModeApiScreen.kt)

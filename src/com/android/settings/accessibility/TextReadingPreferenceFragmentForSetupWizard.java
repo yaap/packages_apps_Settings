@@ -18,8 +18,6 @@ package com.android.settings.accessibility;
 
 import static android.app.Activity.RESULT_CANCELED;
 
-import static com.android.settings.accessibility.AccessibilityDialogUtils.DialogEnums.DIALOG_RESET_SETTINGS;
-
 import android.app.settings.SettingsEnums;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -35,12 +33,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.android.internal.annotations.VisibleForTesting;
 import com.android.settings.R;
 import com.android.settings.accessibility.textreading.dialogs.TextReadingResetDialog;
-import com.android.settings.flags.Flags;
 import com.android.settingslib.Utils;
 import com.android.settingslib.widget.SettingsThemeHelper;
 
 import com.google.android.setupcompat.template.FooterBarMixin;
+import com.google.android.setupcompat.util.DelightHelper;
 import com.google.android.setupdesign.GlifPreferenceLayout;
+import com.google.android.setupdesign.template.IconMixin;
 
 /**
  * A {@link androidx.preference.PreferenceFragmentCompat} that displays the settings page related
@@ -78,6 +77,11 @@ public class TextReadingPreferenceFragmentForSetupWizard extends TextReadingPref
             AccessibilitySetupWizardUtils.updateGlifPreferenceLayout(getContext(), layout, title,
                     /* description= */ null, icon);
 
+            if (DelightHelper.shouldApplyAnimatedIcon(getContext())) {
+                final IconMixin iconMixin = layout.getMixin(IconMixin.class);
+                iconMixin.setAnimatedIcon(R.raw.icon_visibility);
+            }
+
             final FooterBarMixin mixin = layout.getMixin(FooterBarMixin.class);
             AccessibilitySetupWizardUtils.setPrimaryButton(getContext(), mixin, R.string.done,
                     () -> {
@@ -87,11 +91,7 @@ public class TextReadingPreferenceFragmentForSetupWizard extends TextReadingPref
             AccessibilitySetupWizardUtils.setSecondaryButton(getContext(), mixin,
                     R.string.accessibility_text_reading_reset_button_title,
                     () -> {
-                        if (Flags.catalystTextReadingScreen()) {
-                            TextReadingResetDialog.showDialog(getChildFragmentManager());
-                        } else {
-                            showDialog(DIALOG_RESET_SETTINGS);
-                        }
+                        TextReadingResetDialog.showDialog(getChildFragmentManager());
                     }
             );
         }

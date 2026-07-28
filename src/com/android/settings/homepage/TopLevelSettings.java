@@ -29,7 +29,9 @@ import android.provider.SearchIndexableResource;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowInsets;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.VisibleForTesting;
@@ -52,6 +54,7 @@ import com.android.settings.overlay.FeatureFactory;
 import com.android.settings.search.BaseSearchIndexProvider;
 import com.android.settings.support.SupportPreferenceController;
 import com.android.settings.system.MiscSettings;
+import com.android.settings.utils.DesktopSettingsUtils;
 import com.android.settings.widget.HomepagePreference;
 import com.android.settings.widget.HomepagePreferenceLayoutHelper.HomepagePreferenceLayout;
 import com.android.settingslib.core.instrumentation.Instrumentable;
@@ -161,16 +164,14 @@ public class TopLevelSettings extends DashboardFragment implements SplitLayoutLi
             return;
         }
 
-        boolean activityEmbedded = isActivityEmbedded();
         if (icicle != null) {
             mHighlightMixin = icicle.getParcelable(SAVED_HIGHLIGHT_MIXIN);
             if (mHighlightMixin != null) {
-                mScrollNeeded = !mHighlightMixin.isActivityEmbedded() && activityEmbedded;
-                mHighlightMixin.setActivityEmbedded(activityEmbedded);
+                mScrollNeeded = !mHighlightMixin.isActivityEmbedded() && isActivityEmbedded();
             }
         }
         if (mHighlightMixin == null) {
-            mHighlightMixin = new TopLevelHighlightMixin(activityEmbedded);
+            mHighlightMixin = new TopLevelHighlightMixin();
         }
     }
 
@@ -189,15 +190,18 @@ public class TopLevelSettings extends DashboardFragment implements SplitLayoutLi
             mFirstStarted = false;
             FeatureFactory.getFeatureFactory().getSearchFeatureProvider().sendPreIndexIntent(
                     getContext());
-        } else if (mIsEmbeddingActivityEnabled && isOnlyOneActivityInTask()
-                && !isActivityEmbedded()) {
+        }
+        super.onStart();
+    }
+
+    void setDefaultHighlightIfNeeded() {
+        if (isOnlyOneActivityInTask() && !isActivityEmbedded()) {
             // Set default highlight menu key for 1-pane homepage since it will show the placeholder
             // page once changing back to 2-pane.
             Log.i(TAG, "Set default menu key");
             setHighlightMenuKey(getString(SettingsHomepageActivity.DEFAULT_HIGHLIGHT_MENU_KEY),
                     /* scrollNeeded= */ false);
         }
-        super.onStart();
     }
 
     private boolean isOnlyOneActivityInTask() {
@@ -210,6 +214,7 @@ public class TopLevelSettings extends DashboardFragment implements SplitLayoutLi
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         if (mHighlightMixin != null) {
+            mHighlightMixin.setActivityEmbedded(isActivityEmbedded());
             outState.putParcelable(SAVED_HIGHLIGHT_MIXIN, mHighlightMixin);
         }
     }
@@ -243,7 +248,17 @@ public class TopLevelSettings extends DashboardFragment implements SplitLayoutLi
                 savedInstanceState);
         recyclerView.setVerticalScrollBarEnabled(false);
         recyclerView.setHorizontalScrollBarEnabled(false);
-        recyclerView.setPadding(mPaddingHorizontal, 0, mPaddingHorizontal, 0);
+
+        recyclerView.addOnAttachStateChangeListener(new View.OnAttachStateChangeListener() {
+            @Override
+            public void onViewAttachedToWindow(View v) {
+                setPaddingHorizontal(mPaddingHorizontal);
+            }
+
+            @Override
+            public void onViewDetachedFromWindow(View v) {
+            }
+        });
         return recyclerView;
     }
 
@@ -252,8 +267,25 @@ public class TopLevelSettings extends DashboardFragment implements SplitLayoutLi
         mPaddingHorizontal = padding;
         RecyclerView recyclerView = getListView();
         if (recyclerView != null) {
-            recyclerView.setPadding(padding, 0, padding, 0);
+            int paddingBottom = 0;
+            if (isRunningInFreeformWindow(recyclerView)) {
+                paddingBottom = getResources().getDimensionPixelSize(
+                    R.dimen.dashboard_padding_bottom);
+            }
+            recyclerView.setPadding(padding, 0, padding, paddingBottom);
         }
+    }
+
+    /**
+     * Returns true if the view is running in a freeform window.
+     */
+    @VisibleForTesting
+    boolean isRunningInFreeformWindow(View view) {
+        WindowInsets insets = view.getRootWindowInsets();
+        if (insets != null) {
+            return insets.isVisible(WindowInsets.Type.captionBar());
+        }
+        return false;
     }
 
     /** Returns a {@link TopLevelHighlightMixin} that performs highlighting */
@@ -385,6 +417,10 @@ public class TopLevelSettings extends DashboardFragment implements SplitLayoutLi
     }
 
     private static int getPreferenceLayoutResId(Context context) {
+        if (DesktopSettingsUtils.shouldShowTopLevelDeviceCategory(context)) {
+            return R.xml.top_level_settings_expressive_desktop;
+        }
+
         return SettingsThemeHelper.isExpressiveTheme(context)
                 ? R.xml.top_level_settings_expressive
                 : R.xml.top_level_settings;

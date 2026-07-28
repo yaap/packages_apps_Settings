@@ -20,6 +20,7 @@ import static com.android.settings.localepicker.LocaleDialogFragment.DIALOG_CONF
 import static com.android.settings.localepicker.LocaleDialogFragment.DIALOG_NOT_AVAILABLE_LOCALE_WITH_CANCEL;
 import static com.android.settings.localepicker.LocaleDialogFragment.DIALOG_REMOVE_AND_CHANGE_SYSTEM_LOCALE;
 import static com.android.settings.localepicker.LocaleDialogFragment.DIALOG_REMOVE_LOCALE;
+import static com.android.settings.localepicker.LocaleUtils.getFirstTranslatedLocalePosition;
 import static com.android.settings.localepicker.LocaleUtils.getUserLocaleList;
 
 import android.app.settings.SettingsEnums;
@@ -27,6 +28,16 @@ import android.content.Context;
 import android.os.LocaleList;
 import android.util.ArrayMap;
 import android.util.Log;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.VisibleForTesting;
+import androidx.lifecycle.DefaultLifecycleObserver;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelStoreOwner;
+import androidx.preference.PreferenceCategory;
+import androidx.preference.PreferenceScreen;
 
 import com.android.internal.app.LocalePicker;
 import com.android.internal.app.LocaleStore;
@@ -41,16 +52,6 @@ import com.android.settingslib.widget.OrderMenuPreference;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
-
-import androidx.annotation.NonNull;
-import androidx.annotation.VisibleForTesting;
-import androidx.lifecycle.DefaultLifecycleObserver;
-import androidx.lifecycle.LifecycleObserver;
-import androidx.lifecycle.LifecycleOwner;
-import androidx.lifecycle.ViewModelProvider;
-import androidx.lifecycle.ViewModelStoreOwner;
-import androidx.preference.PreferenceCategory;
-import androidx.preference.PreferenceScreen;
 
 public class UserPreferredLocalePreferenceController extends BasePreferenceController implements
         LifecycleObserver, DefaultLifecycleObserver {
@@ -148,6 +149,21 @@ public class UserPreferredLocalePreferenceController extends BasePreferenceContr
                 } else if (i == (listSize - 1)) {
                     menuId = R.menu.preferred_locale_menu_top;
                 }
+                pref.setOnPostInflateListener((menu, preference) -> {
+                        for (int j = 0; j < menu.size(); j++) {
+                            int itemId = menu.getItem(j).getItemId();
+                            int descriptionId = R.string.description_menu_move_locale_up;
+                            if (itemId == R.id.move_down) {
+                                descriptionId = R.string.description_menu_move_locale_down;
+                            } else if (itemId == R.id.remove) {
+                                descriptionId = R.string.description_menu_remove_locale;
+                            } else if (itemId == R.id.move_top) {
+                                descriptionId = R.string.description_menu_move_locale_top;
+                            }
+                            menu.getItem(j).setContentDescription(mContext.getString(
+                                    descriptionId, localeName));
+                        }
+                });
                 pref.setMenuButtonContentDescription(
                         mContext.getString(R.string.action_label_menu_option,
                                 localeInfo.getFullNameNative()));
@@ -161,17 +177,19 @@ public class UserPreferredLocalePreferenceController extends BasePreferenceContr
                         mSelectedLocaleInfo = saved;
                         int position = localeInfoList.indexOf(localeInfo);
                         localeInfoList.remove(position);
+                        int actionId = SettingsEnums.ACTION_MOVE_LANGUAGE_TOP;
                         int toPosition = 0; // menuItemId is R.id.move_top
                         if (menuItemId == R.id.move_up) {
                             toPosition = position - 1;
+                            actionId = SettingsEnums.ACTION_MOVE_LANGUAGE_UP;
                         } else if (menuItemId == R.id.move_down) {
                             toPosition = position + 1;
+                            actionId = SettingsEnums.ACTION_MOVE_LANGUAGE_DOWN;
                         }
                         localeInfoList.add(toPosition, saved);
                         mUpdatedLocaleInfoList = localeInfoList;
                         showConfirmDialog(localeInfoList);
-                        mMetricsFeatureProvider.action(mContext,
-                                SettingsEnums.ACTION_REORDER_LANGUAGE);
+                        mMetricsFeatureProvider.action(mContext, actionId);
                     } else {
                         NotificationController controller = NotificationController.getInstance(
                                 mContext);
@@ -182,7 +200,7 @@ public class UserPreferredLocalePreferenceController extends BasePreferenceContr
                         localeInfoList.remove(position);
                         mUpdatedLocaleInfoList = localeInfoList;
                         if (localeInfo.isTranslated() && (position == 0 || Locale.getDefault()
-                            .equals(localeInfo.getLocale()))) {
+                                .equals(localeInfo.getLocale()))) {
                             LocaleStore.LocaleInfo defaultAfterChange =
                                     localeInfoList.stream().filter(
                                             first -> first.isTranslated()).findFirst().orElse(
@@ -211,12 +229,12 @@ public class UserPreferredLocalePreferenceController extends BasePreferenceContr
         // LocalePicker.getLocales() is the list before user reorders
         Locale defaultBeforeChange = LocalePicker.getLocales().get(0);
         LocaleStore.LocaleInfo defaultAfterChange = localeInfoList.stream()
-            .filter(i -> i.isTranslated()).findFirst().orElse(firstLocaleInfo);
+                .filter(i -> i.isTranslated()).findFirst().orElse(firstLocaleInfo);
         boolean isSelectedLocaleInfoTranslated = mSelectedLocaleInfo.isTranslated();
         boolean isSameDefaultInList = Locale.getDefault().equals(defaultAfterChange.getLocale());
         if (localeInfoList.size() == 2) {
             boolean allTranslated = localeInfoList.stream()
-                .allMatch(LocaleStore.LocaleInfo::isTranslated);
+                    .allMatch(LocaleStore.LocaleInfo::isTranslated);
             if (allTranslated) {
                 // All languages in the list are translated.
                 setViewModelData(defaultAfterChange, mSelectedLocaleInfo, mMenuItemId,
@@ -241,10 +259,10 @@ public class UserPreferredLocalePreferenceController extends BasePreferenceContr
             }
         } else {
             boolean allNotTranslated = localeInfoList.stream()
-                .noneMatch(LocaleStore.LocaleInfo::isTranslated);
+                    .noneMatch(LocaleStore.LocaleInfo::isTranslated);
             boolean isSystemDefaultChanged =
-                defaultBeforeChange != null && !defaultBeforeChange.equals(
-                    defaultAfterChange.getLocale());
+                    defaultBeforeChange != null && !defaultBeforeChange.equals(
+                            defaultAfterChange.getLocale());
             if (allNotTranslated) {
                 if (isSystemDefaultChanged) {
                     setViewModelData(defaultAfterChange, mSelectedLocaleInfo, mMenuItemId,
@@ -254,10 +272,11 @@ public class UserPreferredLocalePreferenceController extends BasePreferenceContr
                 }
             } else {
                 if (isSameDefaultInList && (
-                    isSelectedLocaleInfoTranslated ||
-                        (defaultBeforeChange.equals(mSelectedLocaleInfo.getLocale())
-                            && firstLocaleInfo.getLocale().equals(defaultAfterChange.getLocale()))
-                        || firstLocaleInfo.getLocale().equals(defaultBeforeChange))) {
+                        isSelectedLocaleInfoTranslated ||
+                                (defaultBeforeChange.equals(mSelectedLocaleInfo.getLocale())
+                                        && firstLocaleInfo.getLocale().equals(
+                                        defaultAfterChange.getLocale()))
+                                || firstLocaleInfo.getLocale().equals(defaultBeforeChange))) {
                     // Case 1: unavailable + supported 1 + supported 2,	Move supported 1 to top
                     // Case 2: supported + unavailable 1 + unavailable 2, Move supported to last
                     // Case 3: unavailable 1 + supported + unavailable 2, Move supported to top
@@ -290,6 +309,11 @@ public class UserPreferredLocalePreferenceController extends BasePreferenceContr
         LocaleList localeList = new LocaleList(mUpdatedLocaleInfoList.stream()
                 .map(LocaleStore.LocaleInfo::getLocale)
                 .toArray(Locale[]::new));
+        mMetricsFeatureProvider.action(mContext,
+                SettingsEnums.ACTION_GET_SYSTEM_LANGUAGE_POSITION,
+                getFirstTranslatedLocalePosition(mUpdatedLocaleInfoList));
+        mMetricsFeatureProvider.action(mContext,
+                SettingsEnums.ACTION_GET_LANGUAGE_LIST_SIZE, mUpdatedLocaleInfoList.size());
         // Update the Settings application to make things feel more responsive.
         LocaleList.setDefault(localeList);
         // Update the system.

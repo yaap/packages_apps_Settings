@@ -18,6 +18,7 @@ package com.android.settings.display.ambient
 import android.content.Context
 import com.android.settings.R
 import com.android.settingslib.metadata.PreferenceMetadata
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.preference.PreferenceBinding
 import com.android.settingslib.widget.TopIntroPreference
 
@@ -26,11 +27,16 @@ class AmbientDisplayTopIntroPreference : PreferenceMetadata, PreferenceBinding {
     override val key: String
         get() = "ambient_display_always_on_intro"
 
+    override val purpose: Int
+        get() = R.string.ambient_display_always_on_intro_purpose
+
     override val title: Int
         get() = R.string.doze_always_on_summary_long
 
     override val indexable
         get() = false
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
 
     override fun createWidget(context: Context) = TopIntroPreference(context)
 }

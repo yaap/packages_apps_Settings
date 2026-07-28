@@ -36,19 +36,19 @@
     <!-- Strings for asking to the user whether to allow an app to enable discovery mode. [CHAR LIMIT=NONE] -->
     <string name="bluetooth_ask_discovery" product="default"><xliff:g id="app_name">%1$s</xliff:g> wants to make your phone visible to other Bluetooth devices for <xliff:g id="timeout">%2$d</xliff:g> seconds.</string>
     <!-- Strings for asking to the user whether to allow an app to enable discovery mode. [CHAR LIMIT=NONE] -->
-    <string name="bluetooth_ask_discovery" product="desktop"><xliff:g id="app_name">%1$s</xliff:g> wants to make your devices visible to other Bluetooth devices for <xliff:g id="timeout">%2$d</xliff:g> seconds.</string>
+    <string name="bluetooth_ask_discovery" product="desktop"><xliff:g id="app_name">%1$s</xliff:g> wants to make this device visible to other Bluetooth devices for <xliff:g id="timeout">%2$d</xliff:g> seconds.</string>
     <!-- Strings for asking to the user whether to allow an app to enable discovery mode. [CHAR LIMIT=NONE] -->
     <string name="bluetooth_ask_discovery_no_name" product="tablet">An app wants to make your tablet visible to other Bluetooth devices for <xliff:g id="timeout">%1$d</xliff:g> seconds.</string>
     <!-- Strings for asking to the user whether to allow an app to enable discovery mode. [CHAR LIMIT=NONE] -->
     <string name="bluetooth_ask_discovery_no_name" product="default">An app wants to make your phone visible to other Bluetooth devices for <xliff:g id="timeout">%1$d</xliff:g> seconds.</string>
     <!-- Strings for asking to the user whether to allow an app to enable discovery mode. [CHAR LIMIT=NONE] -->
-    <string name="bluetooth_ask_discovery_no_name" product="desktop">An app wants to make your device visible to other Bluetooth devices for <xliff:g id="timeout">%1$d</xliff:g> seconds.</string>
+    <string name="bluetooth_ask_discovery_no_name" product="desktop">An app wants to make this device visible to other Bluetooth devices for <xliff:g id="timeout">%1$d</xliff:g> seconds.</string>
     <!-- Strings for asking to the user whether to allow an app to enable lasting discovery mode. [CHAR LIMIT=NONE] -->
     <string name="bluetooth_ask_lasting_discovery" product="tablet"><xliff:g id="app_name">%1$s</xliff:g> wants to make your tablet visible to other Bluetooth devices. You can change this later in Bluetooth settings.</string>
     <!-- Strings for asking to the user whether to allow an app to enable lasting discovery mode. [CHAR LIMIT=NONE] -->
     <string name="bluetooth_ask_lasting_discovery" product="default"><xliff:g id="app_name">%1$s</xliff:g> wants to make your phone visible to other Bluetooth devices. You can change this later in Bluetooth settings.</string>
     <!-- Strings for asking to the user whether to allow an app to enable lasting discovery mode. [CHAR LIMIT=NONE] -->
-    <string name="bluetooth_ask_lasting_discovery" product="desktop"><xliff:g id="app_name">%1$s</xliff:g> wants to make your device visible to other Bluetooth devices. You can change this later in Bluetooth settings.</string>
+    <string name="bluetooth_ask_lasting_discovery" product="desktop"><xliff:g id="app_name">%1$s</xliff:g> wants to make this device visible to other Bluetooth devices. You can change this later in Bluetooth settings.</string>
     <!-- Strings for asking to the user whether to allow an app to enable lasting discovery mode. [CHAR LIMIT=NONE] -->
     <string name="bluetooth_ask_lasting_discovery_no_name" product="tablet">An app wants to make your tablet visible to other Bluetooth devices. You can change this later in Bluetooth settings.</string>
     <!-- Strings for asking to the user whether to allow an app to enable lasting discovery mode. [CHAR LIMIT=NONE] -->
@@ -60,25 +60,32 @@
     <!-- Strings for asking to the user whether to allow an app to enable bluetooth and discovery mode. [CHAR LIMIT=NONE] -->
     <string name="bluetooth_ask_enablement_and_discovery" product="default"><xliff:g id="app_name">%1$s</xliff:g> wants to turn on Bluetooth and make your phone visible to other devices for <xliff:g id="timeout">%2$d</xliff:g> seconds.</string>
     <!-- Strings for asking to the user whether to allow an app to enable bluetooth and discovery mode. [CHAR LIMIT=NONE] -->
-    <string name="bluetooth_ask_enablement_and_discovery" product="desktop"><xliff:g id="app_name">%1$s</xliff:g> wants to turn on Bluetooth and make your device visible to other devices for <xliff:g id="timeout">%2$d</xliff:g> seconds.</string>
+    <string name="bluetooth_ask_enablement_and_discovery" product="desktop"><xliff:g id="app_name">%1$s</xliff:g> wants to turn on Bluetooth and make this device visible to other devices for <xliff:g id="timeout">%2$d</xliff:g> seconds.</string>
     <!-- Strings for asking to the user whether to allow an app to enable bluetooth and discovery mode. [CHAR LIMIT=NONE] -->
     <string name="bluetooth_ask_enablement_and_discovery_no_name" product="tablet">An app wants to turn on Bluetooth and make your tablet visible to other devices for <xliff:g id="timeout">%1$d</xliff:g> seconds.</string>
     <!-- Strings for asking to the user whether to allow an app to enable bluetooth and discovery mode. [CHAR LIMIT=NONE] -->
     <string name="bluetooth_ask_enablement_and_discovery_no_name" product="default">An app wants to turn on Bluetooth and make your phone visible to other devices for <xliff:g id="timeout">%1$d</xliff:g> seconds.</string>
     <!-- Strings for asking to the user whether to allow an app to enable bluetooth and discovery mode. [CHAR LIMIT=NONE] -->
-    <string name="bluetooth_ask_enablement_and_discovery_no_name" product="desktop">An app wants to turn on Bluetooth and make your device visible to other devices for <xliff:g id="timeout">%1$d</xliff:g> seconds.</string>
+    <string name="bluetooth_ask_enablement_and_discovery_no_name" product="desktop">An app wants to turn on Bluetooth and make this device visible to other devices for <xliff:g id="timeout">%1$d</xliff:g> seconds.</string>
     <!-- Strings for asking to the user whether to allow an app to enable bluetooth and discovery mode. [CHAR LIMIT=NONE] -->
     <string name="bluetooth_ask_enablement_and_lasting_discovery" product="tablet"><xliff:g id="app_name">%1$s</xliff:g> wants to turn on Bluetooth and make your tablet visible to other devices. You can change this later in Bluetooth settings.</string>
     <!-- Strings for asking to the user whether to allow an app to enable bluetooth and discovery mode. [CHAR LIMIT=NONE] -->
     <string name="bluetooth_ask_enablement_and_lasting_discovery" product="default"><xliff:g id="app_name">%1$s</xliff:g> wants to turn on Bluetooth and make your phone visible to other devices. You can change this later in Bluetooth settings.</string>
     <!-- Strings for asking to the user whether to allow an app to enable bluetooth and discovery mode. [CHAR LIMIT=NONE] -->
-    <string name="bluetooth_ask_enablement_and_lasting_discovery" product="desktop"><xliff:g id="app_name">%1$s</xliff:g> wants to turn on Bluetooth and make your device visible to other devices. You can change this later in Bluetooth settings.</string>
+    <string name="bluetooth_ask_enablement_and_lasting_discovery" product="desktop"><xliff:g id="app_name">%1$s</xliff:g> wants to turn on Bluetooth and make this device visible to other devices. You can change this later in Bluetooth settings.</string>
     <!-- Strings for asking to the user whether to allow an app to enable bluetooth and discovery mode. [CHAR LIMIT=NONE] -->
     <string name="bluetooth_ask_enablement_and_lasting_discovery_no_name" product="tablet">An app wants to turn on Bluetooth and make your tablet visible to other devices. You can change this later in Bluetooth settings.</string>
     <!-- Strings for asking to the user whether to allow an app to enable bluetooth and discovery mode. [CHAR LIMIT=NONE] -->
     <string name="bluetooth_ask_enablement_and_lasting_discovery_no_name" product="default">An app wants to turn on Bluetooth and make your phone visible to other devices. You can change this later in Bluetooth settings.</string>
     <!-- Strings for asking to the user whether to allow an app to enable bluetooth and discovery mode. [CHAR LIMIT=NONE] -->
-    <string name="bluetooth_ask_enablement_and_lasting_discovery_no_name" product="desktop">An app wants to turn on Bluetooth and make your device visible to other devices. You can change this later in Bluetooth settings.</string>
+    <string name="bluetooth_ask_enablement_and_lasting_discovery_no_name" product="desktop">An app wants to turn on Bluetooth and make this device visible to other devices. You can change this later in Bluetooth settings.</string>
+    <!-- Connected devices settings. One of the input routing option. It will change input routing to this phone's builtin microphone -->
+    <string name="bluetooth_hearing_device_input_routing_builtin_option" product="default">This phone\'s microphone</string>
+    <string name="bluetooth_hearing_device_input_routing_builtin_option" product="desktop">This device\'s microphone</string>
+    <!-- Connected devices settings. Summary of the preference to show the entrance of the audio output page. [CHAR LIMIT=NONE] -->
+    <string name="bluetooth_audio_routing_summary" product="default">Route sounds to your hearing device or phone speaker</string>
+    <string name="bluetooth_audio_routing_summary" product="desktop">Route sounds to your hearing device or device speaker</string>
+
     <!-- Security Settings screen Encryption and credential summary -->
     <string name="encryption_and_credential_settings_summary" product="default">Phone encrypted</string>
     <!-- Security Settings screen Encryption and credential summary -->
@@ -224,6 +231,36 @@
     <string name="security_settings_face_enroll_introduction_control_consent_message" product="device"></string>
     <!-- Message on the face enrollment introduction page that explains privacy controls for face unlock when asking for parental consent. [CHAR LIMIT=NONE] -->
     <string name="security_settings_face_enroll_introduction_control_consent_message" product="desktop"></string>
+    <!-- Introduction detail message shown in face enrollment dialog, when face unlock is disabled by device admin [CHAR LIMIT=NONE] -->
+    <string name="security_settings_face_enroll_introduction_message_unlock_disabled" product="default">Use your face to unlock your phone or approve purchases.\n\nNote: You can\u2019t use your face to unlock this device. For more information, contact your organization\u2019s admin.</string>
+    <string name="security_settings_face_enroll_introduction_message_unlock_disabled" product="desktop">Use your face to unlock your device or approve purchases.\n\nNote: You can\u2019t use your face to unlock this device. For more information, contact your organization\u2019s admin.</string>
+    <!-- Introduction detail message shown in face enrollment screen in setup wizard. [CHAR LIMIT=NONE] -->
+    <string name="security_settings_face_enroll_introduction_message_setup" product="default">Use your face to unlock your phone, authorize purchases, or sign in to apps</string>
+    <string name="security_settings_face_enroll_introduction_message_setup" product="desktop">Use your face to unlock your device, authorize purchases, or sign in to apps</string>
+    <!-- Settings suggestion alert body text for re-enrolling a face. [CHAR LIMIT=300] -->
+    <string name="security_settings_face_enroll_improve_face_alert_body" product="default">Delete your current face model to set up Face Unlock again.\n\nYour face model will be permanently and securely deleted.\n\nAfter deletion, you will need your PIN, pattern, or password to unlock your phone or for authentication in apps.</string>
+    <string name="security_settings_face_enroll_improve_face_alert_body" product="desktop">Delete your current face model to set up unlocking with face again.\n\nYour face model will be permanently and securely deleted.\n\nAfter deletion, you will need your PIN, pattern, or password to unlock your device or for authentication in apps.</string>
+    <!-- Settings suggestion alert body text for re-enrolling a face. [CHAR LIMIT=300] -->
+    <string name="security_settings_face_enroll_improve_face_alert_body_fingerprint" product="default">Delete your current face model to set up Face Unlock again.\n\nYour face model will be permanently and securely deleted.\n\nAfter deletion, you will need your fingerprint, PIN, pattern, or password to unlock your phone or for authentication in apps.</string>
+    <string name="security_settings_face_enroll_improve_face_alert_body_fingerprint" product="desktop">Delete your current face model to set up unlocking with face again.\n\nYour face model will be permanently and securely deleted.\n\nAfter deletion, you will need your fingerprint, PIN, pattern, or password to unlock your device or for authentication in apps.</string>
+    <!-- Text shown on the details of a toggle which disables/enables face unlock, depending if the user's eyes are open. [CHAR LIMIT=70] -->
+    <string name="security_settings_face_settings_require_attention_details" product="default">To unlock the phone, your eyes must be open</string>
+    <string name="security_settings_face_settings_require_attention_details" product="desktop">To unlock the device, your eyes must be open</string>
+    <!-- Dialog contents shown when the user removes an enrollment [CHAR LIMIT=NONE] -->
+    <string name="security_settings_face_settings_remove_dialog_details" product="default">Your face model will be permanently and securely deleted.\n\nAfter deletion, you will need your PIN, pattern, or password to unlock your phone or for authentication in apps.</string>
+    <string name="security_settings_face_settings_remove_dialog_details" product="desktop">Your face model will be permanently and securely deleted.\n\nAfter deletion, you will need your PIN, pattern, or password to unlock your device or for authentication in apps.</string>
+    <!-- Dialog contents shown when the user removes an enrollment when configured as a convenience [CHAR LIMIT=NONE] -->
+    <string name="security_settings_face_settings_remove_dialog_details_convenience" product="default">Your face model will be permanently and securely deleted.\n\nAfter deletion, you will need your PIN, pattern, or password to unlock your phone.</string>
+    <string name="security_settings_face_settings_remove_dialog_details_convenience" product="desktop">Your face model will be permanently and securely deleted.\n\nAfter deletion, you will need your PIN, pattern, or password to unlock your device.</string>
+    <!-- Dialog contents shown when the user removes an enrollment [CHAR LIMIT=NONE] -->
+    <string name="security_settings_face_remove_dialog_details_fingerprint" product="default">Your face model will be permanently and securely deleted.\n\nAfter deletion, you will need your fingerprint, PIN, pattern, or password to unlock your phone or for authentication in apps.</string>
+    <string name="security_settings_face_remove_dialog_details_fingerprint" product="desktop">Your face model will be permanently and securely deleted.\n\nAfter deletion, you will need your fingerprint, PIN, pattern, or password to unlock your device or for authentication in apps.</string>
+    <!-- Dialog contents shown when the user removes an enrollment when configured as a convenience [CHAR LIMIT=NONE] -->
+    <string name="security_settings_face_remove_dialog_details_fingerprint_conv" product="default">Your face model will be permanently and securely deleted.\n\nAfter deletion, you will need your fingerprint, PIN, pattern, or password to unlock your phone.</string>
+    <string name="security_settings_face_remove_dialog_details_fingerprint_conv" product="desktop">Your face model will be permanently and securely deleted.\n\nAfter deletion, you will need your fingerprint, PIN, pattern, or password to unlock your device.</string>
+    <!-- Subtitle shown for contextual setting face enrollment [CHAR LIMIT=NONE] -->
+    <string name="security_settings_face_settings_context_subtitle" product="default">Use Face Unlock to unlock your phone</string>
+    <string name="security_settings_face_settings_context_subtitle" product="desktop">Unlock your device with your face</string>
     <!-- Text shown in face settings explaining what your face can be used for. [CHAR LIMIT=NONE] -->
     <string name="security_settings_face_settings_footer" product="default">Use your face to unlock your phone or for authentication in apps, like when you sign in or approve a purchase.\n\nKeep in mind:\nYou can only have one face set up at a time. To add another face, delete the current one.\n\nLooking at the phone can unlock it when you don\u2019t intend to.\n\nYour phone can be unlocked by someone else if it\u2019s held up to your face.\n\nYour phone can be unlocked by someone who looks a lot like you, like an identical sibling.</string>
     <!-- Text shown in face settings explaining what your face can be used for. [CHAR LIMIT=NONE] -->
@@ -256,6 +293,8 @@
     <string name="security_settings_face_settings_footer_class3_attention_not_supported" product="device">Use your face to unlock your device or verify it\u2019s you, like when you sign in to apps or approve a purchase.\n\nKeep in mind:\nYou can only have one face set up at a time. To add another face, delete the current one.\n\nLooking at the device can unlock it when you don\u2019t intend to.\n\nYour device can be unlocked by someone else if it\u2019s held up to your face, even if your eyes are closed.\n\nYour device can be unlocked by someone who looks a lot like you, like an identical sibling.</string>
     <!-- Text shown in face settings explaining what your face can be used for. Used when face is class 3 and attention checking is not supported. [CHAR LIMIT=NONE] -->
     <string name="security_settings_face_settings_footer_class3_attention_not_supported" product="desktop">Use your face to unlock your device or verify it\u2019s you, like when you sign in to apps or approve a purchase.\n\nKeep in mind:\nYou can only have one face set up at a time. To add another face, delete the current one.\n\nLooking at the device can unlock it when you don\u2019t intend to.\n\nYour device can be unlocked by someone else if it\u2019s held up to your face, even if your eyes are closed.\n\nYour device can be unlocked by someone who looks a lot like you, like an identical sibling.</string>
+    <!-- Footer description shown on face settings page. -->
+    <string name="security_settings_face_footer_description_class3" product="default"></string>
     <!-- Introduction detail message shown in fingerprint enrollment dialog [CHAR LIMIT=NONE]-->
     <string name="security_settings_fingerprint_enroll_introduction_v3_message">Use your fingerprint to unlock your <xliff:g id="deviceName" example="Pixel">%s</xliff:g> or verify it\u2019s you, like when you sign in to apps or approve a purchase</string>
     <!-- Introduction detail message shown in fingerprint enrollment dialog when asking for parental consent [CHAR LIMIT=NONE]-->
@@ -330,6 +369,28 @@
     <string name="security_settings_fingerprint_v2_home_screen_text" product="default">Use your fingerprint to unlock your phone or verify it\u2019s you, like when you sign in to apps</string>
     <!-- Message text only shown in fingerprint security settings home screen. (phone) [CHAR LIMIT=NONE]-->
     <string name="security_settings_fingerprint_v2_home_screen_text" product="desktop">Use your fingerprint to unlock your device or verify it\u2019s you, like when you sign in to apps</string>
+    <!-- Introduction detail message shown in fingerprint enrollment dialog, when fingerprint unlock is disabled by device admin [CHAR LIMIT=NONE]-->
+    <string name="security_settings_fingerprint_enroll_introduction_message_unlock_disabled" product="default">Use your fingerprint to unlock your phone or approve purchases.\n\nNote: You can\u2019t use your fingerprint to unlock this device. For more information, contact your organization\u2019s admin.</string>
+    <string name="security_settings_fingerprint_enroll_introduction_message_unlock_disabled" product="desktop">Use your fingerprint to unlock your device or approve purchases.\n\nNote: You can\u2019t use your fingerprint to unlock this device. For more information, contact your organization\u2019s admin.</string>
+    <!-- Summary of the Watch Unlock feature that allows users to unlock the phone with paired watches [CHAR_LIMIT=NONE]-->
+    <string name="security_settings_remoteauth_enroll_introduction_message" product="default">Watch Unlock is another convenient way to unlock this phone, for example, when your fingers are wet or face isn\u2019t recognized.\n\nYou can use your watch to unlock this phone when you:</string>
+    <string name="security_settings_remoteauth_enroll_introduction_message" product="desktop">Watch Unlock is another convenient way to unlock this device, for example, when your fingers are wet or face isn\u2019t recognized.\n\nYou can use your watch to unlock this device when you:</string>
+    <!-- Explains that paired watches must be unlocked, on-body, and nearby, in order to unlock the phone [CHAR_LIMIT=NONE] -->
+    <string name="security_settings_remoteauth_enroll_introduction_info_lock_open" product="default">Your watch must be unlocked, on your wrist, and within reach of this phone. You won\u2019t need to unlock your watch again while it\u2019s on your wrist.</string>
+    <string name="security_settings_remoteauth_enroll_introduction_info_lock_open" product="desktop">Your watch must be unlocked, on your wrist, and within reach of this device. You won\u2019t need to unlock your watch again while it\u2019s on your wrist.</string>
+    <!-- Explains that users will be notified on the watch when the phone is unlocked by the watch, and they can tap on the notification to lock the phone from the watch [CHAR_LIMIT=NONE] -->
+    <string name="security_settings_remoteauth_enroll_introduction_info_notifications" product="default">When this phone is unlocked, you\u2019ll get notified on your watch. If it was unlocked when you didn’t intend to, tap the notification to lock the phone again.</string>
+    <string name="security_settings_remoteauth_enroll_introduction_info_notifications" product="desktop">When this device is unlocked, you\u2019ll get notified on your watch. If it was unlocked when you didn’t intend to, tap the notification to lock the device again.</string>
+    <!-- Explains when a paired watch can be used to unlock the phone after it has been set up successfully [CHAR_LIMIT=NONE] -->
+    <string name="security_settings_remoteauth_enroll_finish_description" product="default">You can now use your watch to unlock this phone when you swipe up on the lock screen or tap a notification</string>
+    <string name="security_settings_remoteauth_enroll_finish_description" product="desktop">You can now use your watch to unlock this device when you swipe up on the lock screen or tap a notification</string>
+    <!-- Explains when a watch can be used to unlock the phone [CHAR_LIMIT=NONE] -->
+    <string name="security_settings_remoteauth_settings_description" product="default">You can use your watch to unlock this phone when you swipe up on the lock screen or tap a notification</string>
+    <string name="security_settings_remoteauth_settings_description" product="desktop">You can use your watch to unlock this device when you swipe up on the lock screen or tap a notification</string>
+    <!-- Explains how to enable the Watch Unlock feature on a watch [CHAR_LIMIT=NONE] -->
+    <string name="security_settings_remoteauth_settings_info_footer" product="default">To use Watch Unlock, your watch must be unlocked, on your wrist, within reach, and connected to this phone. If the connection is interrupted, you\u2019ll need to unlock the phone before you can use Watch Unlock.\n\nKeep in mind:\nYou can only have one watch set up at a time. To add another watch, first remove the current one.</string>
+    <string name="security_settings_remoteauth_settings_info_footer" product="desktop">To use Watch Unlock, your watch must be unlocked, on your wrist, within reach, and connected to this device. If the connection is interrupted, you\u2019ll need to unlock the device before you can use Watch Unlock.\n\nKeep in mind:\nYou can only have one watch set up at a time. To add another watch, first remove the current one.</string>
+
     <!-- Message shown during enrollment to prompt a child to give the device to a parent or guardian. [CHAR LIMIT=NONE]-->
     <string name="biometric_settings_hand_back_to_guardian" product="tablet">Hand the tablet back to your parent</string>
     <!-- Message shown during enrollment to prompt a child to give the device to a parent or guardian. [CHAR LIMIT=NONE]-->
@@ -338,6 +399,61 @@
     <string name="biometric_settings_hand_back_to_guardian" product="default">Hand the phone back to your parent</string>
     <!-- Message shown during enrollment to prompt a child to give the device to a parent or guardian. [CHAR LIMIT=NONE]-->
     <string name="biometric_settings_hand_back_to_guardian" product="desktop">Hand the device back to your parent</string>
+    <!-- Introduction shown in face and fingerprint page to introduce the biometric feature. [CHAR LIMIT=NONE]-->
+    <string name="biometric_settings_intro_with_activeunlock" product="default">When you set up Face Unlock and Fingerprint Unlock, your phone will ask for your fingerprint when you wear a mask or are in a dark area.\n\nWatch Unlock is another convenient way to unlock your phone, for example, when your fingers are wet or face isn\u2019t recognized.</string>
+    <string name="biometric_settings_intro_with_activeunlock" product="desktop">When you set up unlocking with face and Fingerprint Unlock, your device will ask for your fingerprint when you wear a mask or are in a dark area.\n\nWatch Unlock is another convenient way to unlock your device, for example, when your fingers are wet or face isn\u2019t recognized.</string>
+    <!-- Introduction shown in fingerprint page to explain that watch unlock can be used if fingerprint isn't recognized. [CHAR LIMIT=NONE]-->
+    <string name="biometric_settings_intro_with_fingerprint" product="default">Watch Unlock is another convenient way to unlock your phone, for example, when your fingerprint isn\u2019t recognized.</string>
+    <string name="biometric_settings_intro_with_fingerprint" product="desktop">Watch Unlock is another convenient way to unlock your device, for example, when your fingerprint isn\u2019t recognized.</string>
+    <!-- Introduction shown in face page to explain that watch unlock can be used if face isn't recognized. [CHAR LIMIT=NONE]-->
+    <string name="biometric_settings_intro_with_face" product="default">Watch Unlock is another convenient way to unlock your phone, for example, when your face isn\u2019t recognized.</string>
+    <string name="biometric_settings_intro_with_face" product="desktop">Watch Unlock is another convenient way to unlock your device, for example, when your face isn\u2019t recognized.</string>
+    <!-- Introduction shown in face and fingerprint page to introduce the biometric feature. [CHAR LIMIT=NONE]-->
+    <string name="biometric_settings_intro" product="default">When you set up Face Unlock and Fingerprint Unlock, your phone will ask for your fingerprint when you wear a mask or are in a dark area</string>
+    <string name="biometric_settings_intro" product="desktop">When you set up unlocking with face and Fingerprint Unlock, your device will ask for your fingerprint when you wear a mask or are in a dark area</string>
+    <!-- Text shown on a toggle which allows or disallows the device to use biometric for unlocking the device. [CHAR LIMIT=50] -->
+    <string name="biometric_settings_use_biometric_unlock_phone" product="default">Unlock your phone</string>
+    <string name="biometric_settings_use_biometric_unlock_phone" product="desktop">Unlock your device</string>
+    <!-- Content of the dialog shown when the user tries to skip fingerprint setup, asking them to confirm the action [CHAR LIMIT=NONE] -->
+    <string name="setup_fingerprint_enroll_enrolling_skip_message" product="default">You\u2019ve chosen to use your fingerprint as one way to unlock your phone. If you skip now, you\u2019ll need to set this up later. Setup takes only a minute or so.</string>
+    <string name="setup_fingerprint_enroll_enrolling_skip_message" product="desktop">You\u2019ve chosen to use your fingerprint as one way to unlock your device. If you skip now, you\u2019ll need to set this up later. Setup takes only a minute or so.</string>
+    <!-- Content of the dialog shown when the user removes the device lock pattern [CHAR LIMIT=NONE] -->
+    <string name="unlock_disable_frp_warning_content_pattern" product="default">"A pattern protects your phone if it\u2019s lost or stolen"</string>
+    <string name="unlock_disable_frp_warning_content_pattern" product="desktop">"A pattern protects your device if it\u2019s lost or stolen"</string>
+    <!-- Content of the dialog shown when the user removes the device lock pattern and the user has fingerprints enrolled [CHAR LIMIT=NONE] -->
+    <string name="unlock_disable_frp_warning_content_pattern_fingerprint" product="default">"A pattern protects your phone if it\u2019s lost or stolen.<xliff:g id="empty_line">\n\n</xliff:g>This also deletes the fingerprint model stored on your device. You won\u2019t be able to use your fingerprint for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_pattern_fingerprint" product="desktop">"A pattern protects your device if it\u2019s lost or stolen.<xliff:g id="empty_line">\n\n</xliff:g>This also deletes the fingerprint model stored on your device. You won\u2019t be able to use your fingerprint for authentication in apps."</string>
+    <!-- Content of the dialog shown when the user removes the device lock pattern and the user has face authentication enrolled [CHAR LIMIT=NONE] -->
+    <string name="unlock_disable_frp_warning_content_pattern_face" product="default">"A pattern protects your phone if it\u2019s lost or stolen.<xliff:g id="empty_line">\n\n</xliff:g>Your face model will also be permanently and securely deleted. You won\u2019t be able to use your face for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_pattern_face" product="desktop">"A pattern protects your device if it\u2019s lost or stolen.<xliff:g id="empty_line">\n\n</xliff:g>Your face model will also be permanently and securely deleted. You won\u2019t be able to use your face for authentication in apps."</string>
+    <!-- Content of the dialog shown when the user removes the device lock pattern and the user has face authentication and fingerprint enrolled [CHAR LIMIT=NONE] -->
+    <string name="unlock_disable_frp_warning_content_pattern_face_fingerprint" product="default">"A pattern protects your phone if it\u2019s lost or stolen.<xliff:g id="empty_line">\n\n</xliff:g>This deletes the fingerprint model stored on your device. Your face model will also be permanently and securely deleted. You won\u2019t be able to use your face or fingerprint for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_pattern_face_fingerprint" product="desktop">"A pattern protects your device if it\u2019s lost or stolen.<xliff:g id="empty_line">\n\n</xliff:g>This deletes the fingerprint model stored on your device. Your face model will also be permanently and securely deleted. You won\u2019t be able to use your face or fingerprint for authentication in apps."</string>
+    <!-- Content of the dialog shown when the user removes the device lock PIN [CHAR LIMIT=NONE] -->
+    <string name="unlock_disable_frp_warning_content_pin" product="default">"A PIN protects your phone if it\u2019s lost or stolen"</string>
+    <string name="unlock_disable_frp_warning_content_pin" product="desktop">"A PIN protects your device if it\u2019s lost or stolen"</string>
+    <!-- Content of the dialog shown when the user removes the device lock PIN and the user has fingerprints enrolled [CHAR LIMIT=NONE] -->
+    <string name="unlock_disable_frp_warning_content_pin_fingerprint" product="default">"A PIN protects your phone if it\u2019s lost or stolen.<xliff:g id="empty_line">\n\n</xliff:g>This also deletes the fingerprint model stored on your device. You won\u2019t be able to use your fingerprint for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_pin_fingerprint" product="desktop">"A PIN protects your device if it\u2019s lost or stolen.<xliff:g id="empty_line">\n\n</xliff:g>This also deletes the fingerprint model stored on your device. You won\u2019t be able to use your fingerprint for authentication in apps."</string>
+    <!-- Content of the dialog shown when the user removes the device lock PIN and the user has face enrolled [CHAR LIMIT=NONE] -->
+    <string name="unlock_disable_frp_warning_content_pin_face" product="default">"A PIN protects your phone if it\u2019s lost or stolen.<xliff:g id="empty_line">\n\n</xliff:g>Your face model will also be permanently and securely deleted. You won\u2019t be able to use your face for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_pin_face" product="desktop">"A PIN protects your device if it\u2019s lost or stolen.<xliff:g id="empty_line">\n\n</xliff:g>Your face model will also be permanently and securely deleted. You won\u2019t be able to use your face for authentication in apps."</string>
+    <!-- Content of the dialog shown when the user removes the device lock PIN and the user has face authentication and fingerprint enrolled [CHAR LIMIT=NONE] -->
+    <string name="unlock_disable_frp_warning_content_pin_face_fingerprint" product="default">"A PIN protects your phone if it\u2019s lost or stolen.<xliff:g id="empty_line">\n\n</xliff:g>This deletes the fingerprint model stored on your device. Your face model will also be permanently and securely deleted. You won\u2019t be able to use your face or fingerprint for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_pin_face_fingerprint" product="desktop">"A PIN protects your device if it\u2019s lost or stolen.<xliff:g id="empty_line">\n\n</xliff:g>This deletes the fingerprint model stored on your device. Your face model will also be permanently and securely deleted. You won\u2019t be able to use your face or fingerprint for authentication in apps."</string>
+    <!-- Content of the dialog shown when the user removes the device lock password [CHAR LIMIT=NONE] -->
+    <string name="unlock_disable_frp_warning_content_password" product="default">"A password protects your phone if it\u2019s lost or stolen"</string>
+    <string name="unlock_disable_frp_warning_content_password" product="desktop">"A password protects your device if it\u2019s lost or stolen"</string>
+    <!-- Content of the dialog shown when the user removes the device lock password and the user has fingerprints enrolled [CHAR LIMIT=NONE] -->
+    <string name="unlock_disable_frp_warning_content_password_fingerprint" product="default">"A password protects your phone if it\u2019s lost or stolen.<xliff:g id="empty_line">\n\n</xliff:g>This also deletes the fingerprint model stored on your device. You won\u2019t be able to use your fingerprint for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_password_fingerprint" product="desktop">"A password protects your device if it\u2019s lost or stolen.<xliff:g id="empty_line">\n\n</xliff:g>This also deletes the fingerprint model stored on your device. You won\u2019t be able to use your fingerprint for authentication in apps."</string>
+    <!-- Content of the dialog shown when the user removes the device lock password and the user has face enrolled [CHAR LIMIT=NONE] -->
+    <string name="unlock_disable_frp_warning_content_password_face" product="default">"A password protects your phone if it\u2019s lost or stolen.<xliff:g id="empty_line">\n\n</xliff:g>Your face model will also be permanently and securely deleted. You won\u2019t be able to use your face for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_password_face" product="desktop">"A password protects your device if it\u2019s lost or stolen.<xliff:g id="empty_line">\n\n</xliff:g>Your face model will also be permanently and securely deleted. You won\u2019t be able to use your face for authentication in apps."</string>
+    <!-- Content of the dialog shown when the user removes the device lock password and the user has face authentication and fingerprint enrolled [CHAR LIMIT=NONE] -->
+    <string name="unlock_disable_frp_warning_content_password_face_fingerprint" product="default">"A password protects your phone if it\u2019s lost or stolen.<xliff:g id="empty_line">\n\n</xliff:g>This deletes the fingerprint model stored on your device. Your face model will also be permanently and securely deleted. You won\u2019t be able to use your face or fingerprint for authentication in apps."</string>
+    <string name="unlock_disable_frp_warning_content_password_face_fingerprint" product="desktop">"A password protects your device if it\u2019s lost or stolen.<xliff:g id="empty_line">\n\n</xliff:g>This deletes the fingerprint model stored on your device. Your face model will also be permanently and securely deleted. You won\u2019t be able to use your face or fingerprint for authentication in apps."</string>
+
     <!-- Dialog text shown when the user tries to skip setting up a screen lock, warning them of potential consequences of not doing so, including loss of factory reset protection. (tablet) [CHAR LIMIT=NONE] -->
     <string name="lock_screen_intro_skip_dialog_text_frp" product="tablet">Device protection features won\u2019t be turned on. You won\u2019t be able to prevent others from using this tablet if it\u2019s lost, stolen or reset.</string>
     <!-- Dialog text shown when the user tries to skip setting up a screen lock, warning them of potential consequences of not doing so, including loss of factory reset protection. (device) [CHAR LIMIT=NONE] -->
@@ -445,11 +561,11 @@
     <!-- Dialog text shown when the user tries to skip setting up a screen lock, warning that they can't continue to set up face. (default) [CHAR LIMIT=NONE] -->
     <string name="lock_screen_password_skip_face_message" product="default">A password is required to set up Face Unlock.\n\nA password protects the phone if it\u2019s lost or stolen.</string>
     <!-- Dialog text shown when the user tries to skip setting up a screen lock, warning that they can't continue to set up face. (desktop) [CHAR LIMIT=NONE] -->
-    <string name="lock_screen_pin_skip_face_message" product="desktop">A PIN is required to set up Face Unlock.\n\nA PIN protects the device if it\u2019s lost or stolen.</string>
+    <string name="lock_screen_pin_skip_face_message" product="desktop">A PIN is required to set up unlocking with face.\n\nA PIN protects the device if it\u2019s lost or stolen.</string>
     <!-- Dialog text shown when the user tries to skip setting up a screen lock, warning that they can't continue to set up face. (desktop) [CHAR LIMIT=NONE] -->
-    <string name="lock_screen_pattern_skip_face_message" product="desktop">A pattern is required to set up Face Unlock.\n\nA pattern protects the device if it\u2019s lost or stolen.</string>
+    <string name="lock_screen_pattern_skip_face_message" product="desktop">A pattern is required to set up unlocking with face.\n\nA pattern protects the device if it\u2019s lost or stolen.</string>
     <!-- Dialog text shown when the user tries to skip setting up a screen lock, warning that they can't continue to set up face. (desktop) [CHAR LIMIT=NONE] -->
-    <string name="lock_screen_password_skip_face_message" product="desktop">A password is required to set up Face Unlock.\n\nA password protects the device if it\u2019s lost or stolen.</string>
+    <string name="lock_screen_password_skip_face_message" product="desktop">A password is required to set up unlocking with face.\n\nA password protects the device if it\u2019s lost or stolen.</string>
     <!-- Dialog text shown when the user tries to skip setting up a screen lock, warning that they can't continue to set up face or fingerprint. (tablet) [CHAR LIMIT=NONE] -->
     <string name="lock_screen_pin_skip_biometrics_message" product="tablet">A PIN is required to set up Fingerprint Unlock and Face Unlock.\n\nA PIN protects the tablet if it\u2019s lost or stolen.</string>
     <!-- Dialog text shown when the user tries to skip setting up a screen lock, warning that they can't continue to set up face or fingerprint. (tablet) [CHAR LIMIT=NONE] -->
@@ -469,11 +585,11 @@
     <!-- Dialog text shown when the user tries to skip setting up a screen lock, warning that they can't continue to set up face or fingerprint. (default) [CHAR LIMIT=NONE] -->
     <string name="lock_screen_password_skip_biometrics_message" product="default">A password is required to set up Fingerprint Unlock and Face Unlock.\n\nA password protects the phone if it\u2019s lost or stolen.</string>
     <!-- Dialog text shown when the user tries to skip setting up a screen lock, warning that they can't continue to set up face or fingerprint. (desktop) [CHAR LIMIT=NONE] -->
-    <string name="lock_screen_pin_skip_biometrics_message" product="desktop">A PIN is required to set up Fingerprint Unlock and Face Unlock.\n\nA PIN protects the device if it\u2019s lost or stolen.</string>
+    <string name="lock_screen_pin_skip_biometrics_message" product="desktop">A PIN is required to set up unlocking with face and Fingerprint Unlock.\n\nA PIN protects the device if it\u2019s lost or stolen.</string>
     <!-- Dialog text shown when the user tries to skip setting up a screen lock, warning that they can't continue to set up face or fingerprint. (desktop) [CHAR LIMIT=NONE] -->
-    <string name="lock_screen_pattern_skip_biometrics_message" product="desktop">A pattern is required to set up Fingerprint Unlock and Face Unlock.\n\nA pattern protects the device if it\u2019s lost or stolen.</string>
+    <string name="lock_screen_pattern_skip_biometrics_message" product="desktop">A pattern is required to set up unlocking with face and Fingerprint Unlock.\n\nA pattern protects the device if it\u2019s lost or stolen.</string>
     <!-- Dialog text shown when the user tries to skip setting up a screen lock, warning that they can't continue to set up face or fingerprint. (desktop) [CHAR LIMIT=NONE] -->
-    <string name="lock_screen_password_skip_biometrics_message" product="desktop">A password is required to set up Fingerprint Unlock and Face Unlock.\n\nA password protects the device if it\u2019s lost or stolen.</string>
+    <string name="lock_screen_password_skip_biometrics_message" product="desktop">A password is required to set up unlocking with face and Fingerprint Unlock.\n\nA password protects the device if it\u2019s lost or stolen.</string>
     <!-- Message shown in a dialog which asks the user to confirm when a single fingerprint gets deleted. [CHAR LIMIT=NONE]-->
     <string name="fingerprint_v2_delete_message" product="default">This deletes the fingerprint images and model associated with \'<xliff:g id="fingerprint_id" example="Fingerprint 2">%1$s</xliff:g>\' that are stored on your phone</string>
     <!-- Message shown in a dialog which asks the user to confirm when a single fingerprint gets deleted. [CHAR LIMIT=NONE]-->
@@ -520,6 +636,9 @@
     <string name="encrypt_title" product="default">Encrypt phone</string>
     <!-- Title of the preferences item to control encryption -->
     <string name="encrypt_title" product="desktop">Encrypt device</string>
+    <!-- Title for suggested actions for screen lock [CHAR LIMIT=46] -->
+    <string name="suggested_lock_settings_title" product="default">Secure your phone</string>
+    <string name="suggested_lock_settings_title" product="desktop">Secure your device</string>
     <!-- Summary for suggested actions for screen lock (tablet) [CHAR LIMIT=55] -->
     <string name="suggested_lock_settings_summary" product="tablet">Set screen lock to protect tablet</string>
     <!-- Summary for suggested actions for screen lock (device) [CHAR LIMIT=55] -->
@@ -567,7 +686,7 @@
     <!-- Bluetooth device details. The body of a confirmation dialog for unpairing a paired device if there's any associations associated with this device [CHAR_LIMIT=NONE] -->
     <string name="bluetooth_unpair_dialog_with_associations_body" product="device">Your device will no longer be paired with <xliff:g id="device_name">%1$s</xliff:g>.\u0020<xliff:g id="app_name">%2$s</xliff:g> will no longer manage the device</string>
     <!-- Bluetooth device details. The body of a confirmation dialog for unpairing a paired device if there's any associations associated with this device [CHAR_LIMIT=NONE] -->
-    <string name="bluetooth_unpair_dialog_with_associations_body" product="desktop">Your device will no longer be paired with <xliff:g id="device_name">%1$s</xliff:g>.\u0020<xliff:g id="app_name">%2$s</xliff:g> will no longer manage the device</string>
+    <string name="bluetooth_unpair_dialog_with_associations_body" product="desktop">Your device will no longer be paired with <xliff:g id="device_name">%1$s</xliff:g>.\u0020<xliff:g id="app_name">%2$s</xliff:g> will no longer manage <xliff:g id="device_name">%1$s</xliff:g></string>
     <!--  Virtual device details. The body of a confirmation dialog for unpairing a paired device. [CHAR LIMIT=none] -->
     <string name="virtual_device_forget_dialog_body" product="default"><xliff:g id="device_name">%1$s</xliff:g> will no longer be connected to this phone. If you continue, some apps and app streaming may stop working.</string>
     <!--  Virtual device details. The body of a confirmation dialog for unpairing a paired device. [CHAR LIMIT=none] -->
@@ -585,7 +704,7 @@
     <!--  Virtual device details. Footer [CHAR LIMIT=none] -->
     <string name="virtual_device_details_footer_title" product="desktop">If you forget <xliff:g id="device_name">%1$s</xliff:g>, it will no longer be associated to this device. Some permissions will be removed and some apps and app streaming may stop working.</string>
     <!-- Description of Secure NFC in the 1st level settings screen. [CHAR LIMIT=NONE] -->
-    <string name="nfc_secure_toggle_summary" product="default">Allow NFC use only when screen is unlocked</string>
+    <string name="nfc_secure_toggle_summary" product="default">Allow Contactless payments only when screen is unlocked</string>
     <!-- Summary for the panel of add Wi-Fi network from APP [CHAR LIMIT=NONE] -->
     <string name="wifi_add_app_single_network_summary" product="default"><xliff:g id="appName" example="ThirdPartyAppName">%1$s</xliff:g> wants to save a network to your phone</string>
     <!-- Summary for the panel of add Wi-Fi network from APP [CHAR LIMIT=NONE] -->
@@ -598,6 +717,10 @@
     <string name="wifi_add_app_networks_summary" product="tablet"><xliff:g id="appName" example="ThirdPartyAppName">%1$s</xliff:g> wants to save these networks to your tablet</string>
     <!-- Summary for the panel of add multiple Wi-Fi networks from APP [CHAR LIMIT=NONE] -->
     <string name="wifi_add_app_networks_summary" product="desktop"><xliff:g id="appName" example="ThirdPartyAppName">%1$s</xliff:g> wants to save these networks to your device</string>
+    <!-- Label for the warning shown to users if they try to connect to a network as "hidden" -->
+    <string name="wifi_hidden_network_warning" product="default">If your router is not broadcasting a network ID but you would like to connect to it in the future, you can set the network as hidden.\n\nThis may create a security risk because your phone will regularly broadcast its signal to find the network.\n\nSetting the network as hidden will not change your router settings.</string>
+    <string name="wifi_hidden_network_warning" product="desktop">If your router is not broadcasting a network ID but you would like to connect to it in the future, you can set the network as hidden.\n\nThis may create a security risk because your device will regularly broadcast its signal to find the network.\n\nSetting the network as hidden will not change your router settings.</string>
+
     <!-- Preference summary to enable auto rotate[CHAR_LIMIT=NONE]-->
     <string name="auto_rotate_screen_summary" product="default">Automatically adjust the screen orientation when you move your phone between portrait and landscape</string>
     <!-- Preference summary to enable auto rotate[CHAR_LIMIT=NONE]-->
@@ -616,18 +739,24 @@
     <string name="sim_lock_off" product="default">Require PIN to use phone</string>
     <!-- SIM card lock settings screen, setting option summary text when SIM lock check box is clear  [CHAR LIMIT=40] -->
     <string name="sim_lock_off" product="desktop">Require PIN to use device</string>
-    <!-- About tablet, status item title.  The Mobile Directory Number [CHAR LIMIT=40] -->
-    <string name="status_number" product="tablet">MDN</string>
     <!-- About phone, status item title.  The phone number of the current device [CHAR LIMIT=40] -->
     <string name="status_number" product="default">Phone number</string>
-    <!-- About tablet, status item title for multi-sim devices.  The Mobile Directory Number [CHAR LIMIT=40] -->
-    <string name="status_number_sim_slot" product="tablet">MDN (SIM slot %1$d)</string>
+    <!-- About tablet, status item title.  The Mobile Directory Number [CHAR LIMIT=40] -->
+    <string name="status_number" product="tablet">MSISDN</string>
+    <!-- About tablet, status item title.  The Mobile Directory Number [CHAR LIMIT=40] -->
+    <string name="status_number" product="desktop">MSISDN</string>
     <!-- About phone, status item title for multi-sim devices.  The phone number of the current device [CHAR LIMIT=40] -->
-    <string name="status_number_sim_slot" product="default">Phone number (SIM slot %1$d)</string>
-    <!-- About tablet, status item title.  The Mobile Directory Number [CHAR LIMIT=30] -->
-    <string name="status_number_sim_status" product="tablet">MDN on SIM</string>
+    <string name="status_number_sim_slot" product="default">Phone number %1$d</string>
+    <!-- About tablet, status item title for multi-sim devices.  The Mobile Directory Number [CHAR LIMIT=40] -->
+    <string name="status_number_sim_slot" product="tablet">MSISDN %1$d</string>
+    <!-- About tablet, status item title for multi-sim devices.  The Mobile Directory Number [CHAR LIMIT=40] -->
+    <string name="status_number_sim_slot" product="desktop">MSISDN %1$d</string>
     <!-- About phone, status item title.  The phone number of the current device [CHAR LIMIT=30] -->
     <string name="status_number_sim_status" product="default">Phone number on SIM</string>
+    <!-- About tablet, status item title.  The Mobile Directory Number [CHAR LIMIT=30] -->
+    <string name="status_number_sim_status" product="tablet">MSISDN on SIM</string>
+    <!-- About tablet, status item title.  The Mobile Directory Number [CHAR LIMIT=30] -->
+    <string name="status_number_sim_status" product="desktop">MSISDN on SIM</string>
     <!-- Title of a line item. Below this title, a user can tap a button to select this option if they want to use their SD card as extra device storage. [CHAR LIMIT=50] -->
     <string name="storage_wizard_init_v2_internal_title" product="tablet">Format SD card for internal storage</string>
     <!-- Subtext for a line item. Below this subtext, a user can tap a button to select this option if they want to use their SD card as extra device storage. [CHAR LIMIT=NONE] -->
@@ -669,6 +798,11 @@
     <string name="main_clear_desc" product="desktop">"This will erase all data from your device\u2019s <b>internal storage</b>, including:\n\n<li>Your Google Account</li>\n<li>System and app data and settings</li>\n<li>Downloaded apps</li>"</string>
     <!-- SD card & phone storage settings screen, instructions and list of current accounts.  The list of accounts follows this text[CHAR LIMIT=NONE] -->
     <string name="main_clear_accounts" product="default">"\n\nYou are currently signed into the following accounts:\n"</string>
+    <!-- SD card & phone storage settings screen, instructions and list of current accounts.  The list of accounts follows this text[CHAR LIMIT=NONE] -->
+    <string name="main_clear_accounts_count" product="default">{count, plural,
+        =1    {\n\nYou are currently signed into the following account:\n}
+        other {\n\nYou are currently signed into the following accounts:\n}
+    }</string>
     <!-- SD card & phone storage settings screen, notification if other users are present on the device [CHAR LIMIT=NONE] -->
     <string name="main_clear_other_users_present" product="default">"\n\nThere are other users present on this device.\n"</string>
     <!-- SD card & phone storage settings screen, instructions about whether to also erase the external storage (SD card) when erasing the internal storage [CHAR LIMIT=NONE] -->
@@ -697,7 +831,7 @@
     <string name="bluetooth_tethering_subtext" product="tablet">Share tablet\u2019s internet connection via Bluetooth</string>
     <!-- Bluetooth Tethering subtext for generic device [CHAR LIMIT=70]-->
     <string name="bluetooth_tethering_subtext" product="device">Share device\u2019s internet connection via Bluetooth</string>
-    <!-- Bluetooth Tethering subtext for generic device [CHAR LIMIT=70]-->
+    <!-- Bluetooth Tethering subtext for desktop device [CHAR LIMIT=70]-->
     <string name="bluetooth_tethering_subtext" product="desktop">Share device\u2019s internet connection via Bluetooth</string>
     <!-- Ethernet Tethering subtext [CHAR LIMIT=NONE]-->
     <string name="ethernet_tethering_subtext" product="default">Share phone\u2019s internet connection via Ethernet</string>
@@ -705,15 +839,15 @@
     <string name="ethernet_tethering_subtext" product="tablet">Share tablet\u2019s internet connection via Ethernet</string>
     <!-- Ethernet Tethering subtext for generic device [CHAR LIMIT=NONE]-->
     <string name="ethernet_tethering_subtext" product="device">Share device\u2019s internet connection via Ethernet</string>
-    <!-- Ethernet Tethering subtext for generic device [CHAR LIMIT=NONE]-->
+    <!-- Ethernet Tethering subtext for desktop device [CHAR LIMIT=NONE]-->
     <string name="ethernet_tethering_subtext" product="desktop">Share device\u2019s internet connection via Ethernet</string>
-    <!-- Main settings screen, setting title for the user to go into the About phone screen -->
+    <!-- Main settings screen, setting title for the user to go into the About tablet screen -->
     <string name="about_settings" product="tablet">About tablet</string>
     <!-- Main settings screen, setting title for the user to go into the About phone screen -->
     <string name="about_settings" product="default">About phone</string>
-    <!-- Main settings screen, setting title for the user to go into the About phone screen -->
+    <!-- Main settings screen, setting title for the user to go into the About device screen -->
     <string name="about_settings" product="device">About device</string>
-    <!-- Main settings screen, setting title for the user to go into the About phone screen -->
+    <!-- Main settings screen, setting title for the user to go into the About device screen -->
     <string name="about_settings" product="desktop">About device</string>
     <!-- Main settings screen, setting title for the user to go into the About phone screen -->
     <string name="about_settings" product="emulator">About emulated device</string>
@@ -779,6 +913,11 @@
     <string name="accessibility_daltonizer_about_intro_text" product="tablet">Adjust how colors display on your tablet</string>
     <!-- Intro for color correction settings screen to control turning on/off the feature entirely. [CHAR LIMIT=NONE] -->
     <string name="accessibility_daltonizer_about_intro_text" product="desktop">Adjust how colors display on your device</string>
+    <!-- Title for the "Ringtones and alarms" toggle in the Sounds category. [CHAR LIMIT=35] -->
+    <string name="accessibility_hearing_device_ringtone_alarm_routing_title" product="default">Ringtones and alarms</string>
+    <!-- Title for alarms toggle in the hearing devices section of the accessibility category. [CHAR LIMIT=35] -->
+    <string name="accessibility_hearing_device_ringtone_alarm_routing_title" product="desktop">Alarms</string>
+
     <!-- Subtitle that describes Reduce Brightness. [CHAR LIMIT=NONE] -->
     <string name="reduce_bright_colors_preference_subtitle" product="default">
         <![CDATA[Extra dim can be helpful when:
@@ -1000,11 +1139,18 @@
     <string name="lockscreen_trivial_controls_summary" product="desktop">Without unlocking your device</string>
 
     <!-- Title of toggle to enable or disable device supervision on a phone [CHAR LIMIT=60] -->
-    <string name="device_supervision_switch_title" product="default">Controls for this phone</string>
+    <string name="device_supervision_features_title" product="default">Controls for this phone</string>
     <!-- Title of toggle to enable or disable device supervision on a tablet [CHAR LIMIT=60] -->
-    <string name="device_supervision_switch_title" product="tablet">Controls for this tablet</string>
+    <string name="device_supervision_features_title" product="tablet">Controls for this tablet</string>
     <!-- Title of toggle to enable or disable device supervision on a desktop device [CHAR LIMIT=60] -->
-    <string name="device_supervision_switch_title" product="desktop">Controls for this device</string>
+    <string name="device_supervision_features_title" product="desktop">Controls for this device</string>
+
+    <!-- Title displayed on supervision dashboard to show apps managing the phone. [CHAR LIMIT=NONE] -->
+    <string name="supervision_apps_managing_this_device_title" product="default">Managing this phone</string>
+    <!-- Title displayed on supervision dashboard to show apps managing the tablet. [CHAR LIMIT=NONE] -->
+    <string name="supervision_apps_managing_this_device_title" product="tablet">Managing this tablet</string>
+    <!-- Title displayed on supervision dashboard to show apps managing the desktop device. [CHAR LIMIT=NONE] -->
+    <string name="supervision_apps_managing_this_device_title" product="desktop">Managing this device</string>
 
     <!-- Subheading on activity to choose a PIN for supervision setup on a phone [CHAR LIMIT=NONE] -->
     <string name="supervision_pin_length_message" product="default">{count, plural,
@@ -1022,6 +1168,14 @@
         other   {Enter a PIN with at least # digits. You\u2019ll use it to manage controls on this device.}
         }</string>
 
+    <!-- TODO(b/450908334): Set strings as translatable once copy is finalized. -->
+    <!-- Title on a dialog that informs the user that they cannot delete the PIN because multiple users are supervised [CHAR_LIMIT=NONE]-->
+    <string name="supervision_cant_delete_pin_multi_user_switch_message" product="default" translatable="false">To delete your parental controls PIN, you must turn off controls for all users on this phone.\nYou may turn off controls for the current user, but the PIN can\u2019t be deleted until you also go to other users and turn off controls.</string>
+    <!-- Title on a dialog that informs the user that they cannot delete the PIN because multiple users are supervised [CHAR_LIMIT=NONE]-->
+    <string name="supervision_cant_delete_pin_multi_user_switch_message" product="desktop" translatable="false">To delete your parental controls PIN, you must turn off controls for all users on this device.\nYou may turn off controls for the current user, but the PIN can\u2019t be deleted until you also go to other users and turn off controls.</string>
+    <!-- Title on a dialog that informs the user that they cannot delete the PIN because multiple users are supervised [CHAR_LIMIT=NONE]-->
+    <string name="supervision_cant_delete_pin_multi_user_switch_message" product="tablet" translatable="false">To delete your parental controls PIN, you must turn off controls for all users on this tablet.\nYou may turn off controls for the current user, but the PIN can\u2019t be deleted until you also go to other users and turn off controls.</string>
+
     <!-- Message in dialog that informs the user that they need to disable supervision before deleting the PIN [CHAR LIMIT=NONE] -->
     <string name="supervision_delete_pin_supervision_enabled_message" product="default">Your parental controls PIN is shared across users. To delete your PIN, controls using this PIN must be off for all users on this phone.</string>
     <!-- Message in dialog that informs the user that they need to disable supervision before deleting the PIN [CHAR LIMIT=NONE] -->
@@ -1036,6 +1190,13 @@
     <!-- Message in dialog that confirms whether user wants to delete their supervision PIN [CHAR LIMIT=NONE] -->
     <string name="supervision_delete_pin_confirm_message" product="desktop">Your parental controls PIN will be deleted permanently. Any controls you set up for users on this device using this PIN will be turned off.</string>
 
+    <!-- Message on a dialog that confirms whether the user wants to delete the PIN [CHAR LIMIT=NONE] -->
+    <string name="supervision_multiple_providers_delete_pin_confirm_message" product="default">Your parental controls PIN will be deleted. You can still manage parental controls from the apps &amp; services managing this phone.</string>
+    <!-- Message on a dialog that confirms whether the user wants to delete the PIN [CHAR LIMIT=NONE] -->
+    <string name="supervision_multiple_providers_delete_pin_confirm_message" product="tablet">Your parental controls PIN will be deleted. You can still manage parental controls from the apps &amp; services managing this tablet.</string>
+    <!-- Message on a dialog that confirms whether the user wants to delete the PIN [CHAR LIMIT=NONE] -->
+    <string name="supervision_multiple_providers_delete_pin_confirm_message" product="desktop">Your parental controls PIN will be deleted. You can still manage parental controls from the apps &amp; services managing this device.</string>
+
     <!-- Footer message on device supervision pin management screen on a phone [CHAR LIMIT=NONE] -->
     <string name="device_supervision_pin_management_footer" product="default">Your parental controls PIN is the same for all users on this phone</string>
     <!-- Footer message on device supervision pin management screen on a tablet [CHAR LIMIT=NONE] -->
@@ -1049,6 +1210,13 @@
     <string name="supervision_multi_profile_error_message" product="tablet">Because there are multiple profiles on this tablet, parental controls can\u2019t be turned on.</string>
     <!-- Message in dialog that informs the user that controls cannot be enabled on a device with multiple profiles. [CHAR LIMIT=NONE] -->
     <string name="supervision_multi_profile_error_message" product="desktop">Because there are multiple profiles on this device, parental controls can\u2019t be turned on.</string>
+
+    <!-- Message in dialog that informs the user that controls cannot be used on a device with multiple profiles. [CHAR LIMIT=NONE] -->
+    <string name="supervision_setup_multi_profile_error_message" product="default">There are multiple profiles on this phone</string>
+    <!-- Message in dialog that informs the user that controls cannot be used on a device with multiple profiles. [CHAR LIMIT=NONE] -->
+    <string name="supervision_setup_multi_profile_error_message" product="tablet">There are multiple profiles on this tablet</string>
+    <!-- Message in dialog that informs the user that controls cannot be used on a device with multiple profiles. [CHAR LIMIT=NONE] -->
+    <string name="supervision_setup_multi_profile_error_message" product="desktop">There are multiple profiles on this device</string>
 
     <!-- Accessibility summary text for auto rotate [CHAR LIMIT=NONE] -->
     <string name="auto_rotate_summary_a11y" product="default">When you move your phone between portrait and landscape</string>
@@ -1107,4 +1275,290 @@
     <!-- Summary for Network and Internet settings, explaining it contains mobile, wifi setting and data usage settings [CHAR LIMIT=NONE]-->
     <string name="network_dashboard_summary_mobile" product="default">Mobile, Wi\u2011Fi, hotspot</string>
     <string name="network_dashboard_summary_mobile" product="desktop">Wi\u2011Fi, mobile, hotspot</string>
+
+    <!-- The title for Choose a region page -->
+    <string name="top_intro_region_title" product="default">The region you choose affects how your phone displays time, dates, temperature, and more</string>
+    <string name="top_intro_region_title" product="desktop">The region you choose affects how your device displays time, dates, temperature, and more</string>
+
+    <!-- Introduction description message shown in private space fingerprint enrollment introduction screen. [CHAR LIMIT=NONE] -->
+    <string name="private_space_fingerprint_enroll_introduction_footer_message" product="default">Your private space can be unlocked when you don\u2019t intend to, like if someone holds up your phone to your finger.</string>
+    <string name="private_space_fingerprint_enroll_introduction_footer_message" product="desktop">Your private space can be unlocked when you don\u2019t intend to, like if someone holds up your device to your finger.</string>
+    <!-- Message on the face enrollment introduction page for private space that provides information about what could cause the phone to unlock. [CHAR LIMIT=NONE] -->
+    <string name="private_space_face_enroll_introduction_info_looking" product="default">Looking at the phone can unlock private space even when you don\u2019t intend to. Your private space can also be unlocked by someone who looks a lot like you, like an identical sibling, or if someone holds the device up to your face.</string>
+    <string name="private_space_face_enroll_introduction_info_looking" product="desktop">Looking at the device can unlock private space even when you don\u2019t intend to. Your private space can also be unlocked by someone who looks a lot like you, like an identical sibling, or if someone holds the device up to your face.</string>
+    <!-- Text shown in face settings in private space explaining what your face can be used for. [CHAR LIMIT=NONE] -->
+    <string name="private_space_face_settings_footer" product="default">Use your face to unlock your private space.\n\nKeep in mind:\nYou can only have one face set up at a time. To add another face, delete the current one.\n\nLooking at the phone can unlock it when you don\u2019t intend to.\n\nYour private space can be unlocked by someone else if your device is held up to your face.\n\nYour private space can be unlocked by someone who looks a lot like you, like an identical sibling.</string>
+    <string name="private_space_face_settings_footer" product="desktop">Use your face to unlock your private space.\n\nKeep in mind:\nYou can only have one face set up at a time. To add another face, delete the current one.\n\nLooking at the device can unlock it when you don\u2019t intend to.\n\nYour private space can be unlocked by someone else if your device is held up to your face.\n\nYour private space can be unlocked by someone who looks a lot like you, like an identical sibling.</string>
+    <!-- Description for hide Private Space settings page. [CHAR LIMIT=NONE] -->
+    <string name="private_space_delete_summary" product="default">Your private space will be permanently deleted from your device. \n\nAll apps in your space and their data will also be permanently deleted from your phone\u2019s <b>internal storage</b>.</string>
+    <string name="private_space_delete_summary" product="desktop">Your private space will be permanently deleted from your device. \n\nAll apps in your space and their data will also be permanently deleted from your device\u2019s <b>internal storage</b>.</string>
+    <!-- Delete private space dialog mentioning that private space and the apps in it along with its data will be permanently deleted [CHAR LIMIT=NONE] -->
+    <string name="reset_private_space_delete_dialog" product="default">If you have a private space on your device, it will be permanently deleted and the Google Account added to your space will be removed. \n\nAll apps in your space and their data will also be permanently deleted from your phone\u2019s <b>internal storage</b>.</string>
+    <string name="reset_private_space_delete_dialog" product="desktop">If you have a private space on your device, it will be permanently deleted and the Google Account added to your space will be removed. \n\nAll apps in your space and their data will also be permanently deleted from your device\u2019s <b>internal storage</b>.</string>
+
+    <!-- Styles and Wallpaper settings title [CHAR_LIMIT=46] -->
+    <string name="style_suggestion_title" product="default">Customize your phone</string>
+    <string name="style_suggestion_title" product="desktop">Customize your device</string>
+
+    <!-- New body of dialog informing user about the storage used by the Android System [CHAR LIMIT=NONE]-->
+    <string name="storage_os_detail_dialog_system" product="default">This includes your operating system and the files that are needed to keep your phone running smoothly. To protect their integrity, these files can\u2019t be accessed.</string>
+    <string name="storage_os_detail_dialog_system" product="desktop">This includes your operating system and the files that are needed to keep your device running smoothly. To protect their integrity, these files can\u2019t be accessed.</string>
+
+    <!-- Displayed when user launches a widget configuration activity that was uninstalled -->
+    <string name="activity_not_found" product="default">Application is not installed on your phone.</string>
+    <string name="activity_not_found" product="desktop">Application is not installed on your device.</string>
+
+    <!-- Summary for a warning message about security implications of enabling a notification listener, displayed as a dialog message. [CHAR LIMIT=NONE] -->
+    <string name="notification_listener_security_warning_summary" product="default">
+        The <xliff:g id="notification_listener_name">%1$s</xliff:g> app will be able to read all notifications,
+        including personal information such as contact names, photos, and the text of messages you receive.
+        This app will also be able to snooze or dismiss notifications or take action on buttons in notifications, including answering phone calls.
+        \n\nThis will also give the app the ability to turn Do Not Disturb on or off and change related settings.
+    </string>
+    <string name="notification_listener_security_warning_summary" product="desktop">
+        The <xliff:g id="notification_listener_name">%1$s</xliff:g> app will be able to read all notifications,
+        including personal information such as contact names, photos, and the text of messages you receive.
+        This app will also be able to snooze or dismiss notifications or take action on buttons in notifications.
+        \n\nThis will also give the app the ability to turn Do Not Disturb on or off and change related settings.
+    </string>
+    <!-- Summary for an ongoing notification type. [CHAR LIMIT=NONE] -->
+    <string name="notif_type_ongoing_summary" product="default">Ongoing communication from apps in use, navigation, phone calls, and more</string>
+    <string name="notif_type_ongoing_summary" product="desktop">Ongoing communication from apps in use, navigation, and more</string>
+
+    <!-- Description at the footer of the default USB configuration window that describes how the setting works. -->
+    <string name="usb_default_info" product="default">When another device is connected and your phone is unlocked, these settings will be applied. Only connect to trusted devices.</string>
+    <string name="usb_default_info" product="desktop">When another device is connected and this device is unlocked, these settings will be applied. Only connect to trusted devices.</string>
+
+    <!-- Dialog content shown when parental consent is required for the child to set up biometric authentication. [CHAR LIMIT=NONE] -->
+    <string name="disabled_by_policy_content_biometric_parental_consent" product="default">Hand the phone to your parent to start setting this up</string>
+    <string name="disabled_by_policy_content_biometric_parental_consent" product="desktop">Hand the device to your parent to start setting this up</string>
+
+    <!-- Dialog content shown when parental consent is required for the child to change blocked settings. [CHAR LIMIT=NONE] -->
+    <string name="disabled_by_policy_parental_consent" product="default">Hand the phone to your parent to allow this setting to be changed.</string>
+    <string name="disabled_by_policy_parental_consent" product="desktop">Hand the device to your parent to allow this setting to be changed.</string>
+
+    <!-- Summary of condition that do not disturb is on and all exceptions set to off [CHAR LIMIT=38] -->
+    <string name="condition_zen_summary_phone_muted" product="default">Phone muted</string>
+    <string name="condition_zen_summary_phone_muted" product="desktop">Device muted</string>
+
+    <!-- Part of a message for an empty state screen. A user will see this message if they try to use a certain feature, but the feature was turned off so it won't slow down their phone. [CHAR LIMIT=NONE] -->
+    <string name="disabled_feature_reason_slow_down_phone" product="default">This feature has been turned off because it slows down your phone</string>
+    <string name="disabled_feature_reason_slow_down_phone" product="desktop">This feature has been turned off because it slows down your device</string>
+
+    <!-- Mobile network settings screen, summary of Mobile data switch preference when the network
+         is opportunistic and will always be used when it is in range. [CHAR LIMIT=NONE] -->
+    <string name="mobile_data_settings_summary_auto_switch" product="default">Phone will automatically switch to this carrier when in range</string>
+    <string name="mobile_data_settings_summary_auto_switch" product="desktop">Device will automatically switch to this carrier when in range</string>
+
+    <!-- Title for Thread network settings footer [CHAR_LIMIT=NONE] -->
+    <string name="thread_network_settings_footer_title" product="default">Thread helps connect your smart home devices, boosting efficiency, and performance.\n\nWhen enabled, this device is eligible to join a Thread network, allowing control of Matter supported devices through this phone.</string>
+    <string name="thread_network_settings_footer_title" product="desktop">Thread helps connect your smart home devices, boosting efficiency, and performance.\n\nWhen enabled, this device is eligible to join a Thread network, allowing control of Matter supported devices through this device.</string>
+
+    <!-- Bluetooth connect permission alert for dialog content [CHAR LIMIT=none] -->
+    <string name="bluetooth_connect_access_dialog_content" product="default"><xliff:g id="device_name" example="My device">%1$s</xliff:g> wants to connect to this phone.\n\nYou haven\u2019t connected to <xliff:g id="device_name" example="My device">%2$s</xliff:g> before.</string>
+    <string name="bluetooth_connect_access_dialog_content" product="desktop"><xliff:g id="device_name" example="My device">%1$s</xliff:g> wants to connect to this device.\n\nYou haven\u2019t connected to <xliff:g id="device_name" example="My device">%2$s</xliff:g> before.</string>
+    <!-- The title of CDM Permissions Sync -->
+    <string name="bluetooth_details_permissions_sync_title" product="default">Sync permissions from phone</string>
+    <string name="bluetooth_details_permissions_sync_title" product="desktop">Sync permissions from device</string>
+    <!-- The summary of CDM Permissions Sync -->
+    <string name="bluetooth_details_permissions_sync_summary" product="default">Give your watch the same app permissions that you’ve allowed on this phone</string>
+    <string name="bluetooth_details_permissions_sync_summary" product="desktop">Give your watch the same app permissions that you’ve allowed on this device</string>
+
+    <!-- Content for audio sharing confirm dialog [CHAR LIMIT=none]-->
+    <string name="audio_sharing_comfirm_dialog_content" product="default">To start sharing audio, first connect LE Audio headphones to your phone</string>
+    <string name="audio_sharing_comfirm_dialog_content" product="desktop">To start sharing audio, first connect LE Audio headphones to your device</string>
+
+    <!-- Top intro for web content filters [CHAR LIMIT=NONE] -->
+    <string name="supervision_web_content_filters_top_intro" product="default">Help filter explicit content on some apps and browsers on this phone. Explicit content may still show on other apps, devices, or browsers.</string>
+    <string name="supervision_web_content_filters_top_intro" product="desktop">Help filter explicit content on some apps and browsers on this device. Explicit content may still show on other apps, devices, or browsers.</string>
+
+    <!-- The description of the screen saver setup page [CHAR LIMIT=none] -->
+    <string name="dream_setup_description" product="default">Choose what you’ll see on your screen when your tablet is docked. Your device may use more energy when a screen saver is used.</string>
+    <string name="dream_setup_description" product="desktop">Choose what you’ll see on your screen when your device is docked. Your device may use more energy when a screen saver is used.</string>
+
+    <!-- Title for Display settings [CHAR LIMIT=30] -->
+    <string name="display_settings" product="default">Display</string>
+
+    <!-- Sound and vibration settings screen heading. [CHAR LIMIT=30] -->
+    <string name="sound_settings" product="default">Sound &amp; vibration</string>
+    <string name="sound_settings" product="desktop">Sound</string>
+
+    <!-- Introduction title shown in face enrollment when when asking for parental consent for the face unlock feature [CHAR LIMIT=40] -->
+    <string name="security_settings_face_enroll_consent_introduction_title" product="default">Allow face unlock</string>
+    <!-- Introduction title shown in face enrollment when when asking for parental consent for the face unlock feature [CHAR LIMIT=40] -->
+    <string name="security_settings_face_enroll_consent_introduction_title" product="desktop">Allow unlocking with face</string>
+    <!-- Introduction title shown in face enrollment to introduce the face unlock feature [CHAR LIMIT=40] -->
+    <string name="security_settings_face_enroll_introduction_title" product="default">Unlock with your face</string>
+    <!-- Introduction title shown in face enrollment to introduce the face unlock feature [CHAR LIMIT=40] -->
+    <string name="security_settings_face_enroll_introduction_title" product="desktop">Unlock with your face</string>
+    <!-- Footer learn more description shown on face settings page. -->
+    <string name="security_settings_face_footer_learn_more_description" product="default"></string>
+    <!-- Footer learn more description shown on face settings page. -->
+    <string name="security_settings_face_footer_learn_more_description" product="desktop"></string>
+
+    <!-- Description shown for fingerprint settings page. [CHAR LIMIT=22] -->
+    <string name="security_settings_fingerprint_description" product="default"></string>
+    <!-- Description shown for fingerprint settings page. [CHAR LIMIT=22] -->
+    <string name="security_settings_fingerprint_description" product="desktop"></string>
+
+    <!-- Footer learn more URL shown on face settings page  [DO NOT TRANSLATE] -->
+    <string name="security_settings_face_footer_learn_more_url" product="default" translatable="false"></string>
+    <!-- Footer learn more URL shown on face settings page  [DO NOT TRANSLATE] -->
+    <string name="security_settings_face_footer_learn_more_url" product="desktop" translatable="false"></string>
+
+    <!-- Note: Update FaceEnrollParentalConsent.CONSENT_STRING_RESOURCES when any _consent_ strings are added or removed. -->
+    <!-- Title shown for menu item that launches face settings or enrollment. [CHAR LIMIT=32] -->
+    <string name="security_settings_face_preference_title" product="default">Face Unlock</string>
+    <!-- Title shown for menu item that launches face settings or enrollment. [CHAR LIMIT=32] -->
+    <string name="security_settings_face_preference_title" product="desktop">Unlock with face</string>
+    <!-- Title shown for menu item that launches face settings or enrollment, for work profile [CHAR LIMIT=50] -->
+    <string name="security_settings_face_profile_preference_title" product="default">Face Unlock for work</string>
+    <!-- Title shown for menu item that launches face settings or enrollment, for work profile [CHAR LIMIT=50] -->
+    <string name="security_settings_face_profile_preference_title" product="desktop">Unlock with face for work</string>
+    <!-- Introduction title shown in face enrollment education screen [CHAR LIMIT=50] -->
+    <string name="security_settings_face_enroll_education_title" product="default">How to set up Face Unlock</string>
+    <!-- Introduction title shown in face enrollment education screen [CHAR LIMIT=50] -->
+    <string name="security_settings_face_enroll_education_title" product="desktop">How to set up unlocking with face</string>
+    <!-- Introduction title shown in face enrollment education screen for accessibility [CHAR LIMIT=50]-->
+    <string name="security_settings_face_enroll_education_title_accessibility" product="default">Set up Face Unlock</string>
+    <!-- Introduction title shown in face enrollment education screen for accessibility [CHAR LIMIT=50]-->
+    <string name="security_settings_face_enroll_education_title_accessibility" product="desktop">Set up unlocking with face</string>
+    <!-- Confirmation dialog message shown when users with system accessibility features enabled try to start the non-accessibility version of enrollment [CHAR LIMIT=150] -->
+    <string name="security_settings_face_enroll_education_accessibility_dialog_message" product="default">If accessibility Face Unlock is turned off, some setup steps may not work properly with TalkBack.</string>
+    <!-- Confirmation dialog message shown when users with system accessibility features enabled try to start the non-accessibility version of enrollment [CHAR LIMIT=150] -->
+    <string name="security_settings_face_enroll_education_accessibility_dialog_message" product="desktop">If accessibility unlocking with face is turned off, some setup steps may not work properly with TalkBack.</string>
+
+    <!-- Dialog message for dialog which shows when the Face HAL is not responding. [CHAR LIMIT=45] -->
+    <string name="security_settings_face_enroll_intro_timeout_dialog_title" product="default">Can\'t set up Face Unlock</string>
+    <!-- Dialog message for dialog which shows when the Face HAL is not responding. [CHAR LIMIT=65] -->
+    <string name="security_settings_face_enroll_intro_timeout_dialog_title" product="desktop">Can\'t set up unlocking with face</string>
+    <!-- Settings suggestion title text for re-enrolling a face. [CHAR LIMIT=50] -->
+    <string name="security_settings_face_enroll_should_re_enroll_title" product="default">Improve Face Unlock performance</string>
+    <!-- Settings suggestion title text for re-enrolling a face. [CHAR LIMIT=50] -->
+    <string name="security_settings_face_enroll_should_re_enroll_title" product="desktop">Improve unlocking with face performance</string>
+    <!-- Settings suggestion subtitle text for re-enrolling a face. [CHAR LIMIT=40] -->
+    <string name="security_settings_face_enroll_should_re_enroll_subtitle" product="default">Set up Face Unlock again</string>
+    <!-- Settings suggestion subtitle text for re-enrolling a face. [CHAR LIMIT=40] -->
+    <string name="security_settings_face_enroll_should_re_enroll_subtitle" product="desktop">Set up unlocking with face again</string>
+    <!-- Settings suggestion title text for mandatory re-enrolling of a face. [CHAR LIMIT=50] -->
+    <string name="security_settings_face_enroll_must_re_enroll_title" product="default">Set up Face Unlock again</string>
+    <!-- Settings suggestion title text for mandatory re-enrolling of a face. [CHAR LIMIT=50] -->
+    <string name="security_settings_face_enroll_must_re_enroll_title" product="desktop">Set up unlocking with face again</string>
+    <!-- Settings suggestion alert body title for re-enrolling a face. [CHAR LIMIT=60] -->
+    <string name="security_settings_face_enroll_improve_face_alert_title" product="default">Set up Face Unlock</string>
+    <!-- Settings suggestion alert body title for re-enrolling a face. [CHAR LIMIT=60] -->
+    <string name="security_settings_face_enroll_improve_face_alert_title" product="desktop">Set up unlocking with face</string>
+    <!-- Title for a category shown for the face settings page. [CHAR LIMIT=20] -->
+    <string name="security_settings_face_settings_use_face_category" product="default">Use Face Unlock for</string>
+    <!-- Title for a category shown for the face settings page. [CHAR LIMIT=20] -->
+    <string name="security_settings_face_settings_use_face_category" product="desktop">Use unlocking with face for</string>
+    <!-- Title for a category shown for the face settings page, followed by items that the user can toggle on/off to require/disable. [CHAR LIMIT=50] -->
+    <string name="security_settings_face_settings_preferences_category" product="default">When using Face Unlock</string>
+    <!-- Title for a category shown for the face settings page, followed by items that the user can toggle on/off to require/disable. [CHAR LIMIT=50] -->
+    <string name="security_settings_face_settings_preferences_category" product="desktop">When using unlocking with face</string>
+    <!-- When authenticating in apps, always require confirmation (e.g. confirm button) after a face is authenticated. [CHAR LIMIT=70] -->
+    <string name="security_settings_face_settings_require_confirmation_details" product="default">When using Face Unlock in apps, always require confirmation step</string>
+    <!-- When authenticating in apps, always require confirmation (e.g. confirm button) after a face is authenticated. [CHAR LIMIT=70] -->
+    <string name="security_settings_face_settings_require_confirmation_details" product="desktop">When using unlocking with face in apps, always require confirmation step</string>
+    <!-- Button text in face settings which lets the user enroll their face [CHAR LIMIT=40] -->
+    <string name="security_settings_face_settings_enroll" product="default">Set up Face Unlock</string>
+    <!-- Button text in face settings which lets the user enroll their face [CHAR LIMIT=40] -->
+    <string name="security_settings_face_settings_enroll" product="desktop">Set up unlocking with face</string>
+
+    <!-- Title shown in watch unlock require face or fingerprint setup page [CHAR LIMIT=60] -->
+    <string name="security_settings_activeunlock_require_face_fingerprint_setup_title" product="default">Set up Face or Fingerprint Unlock first</string>
+    <!-- Title shown in watch unlock require face or fingerprint setup page [CHAR LIMIT=60] -->
+    <string name="security_settings_activeunlock_require_face_fingerprint_setup_title" product="desktop">Set up to unlock with face or Fingerprint Unlock first</string>
+    <!-- Title shown in watch unlock require face setup page [CHAR LIMIT=60] -->
+    <string name="security_settings_activeunlock_require_face_setup_title" product="default">Set up Face Unlock first</string>
+    <!-- Title shown in watch unlock require face setup page [CHAR LIMIT=60] -->
+    <string name="security_settings_activeunlock_require_face_setup_title" product="desktop">Set up unlocking with face first</string>
+
+    <!-- Title shown for menu item that launches biometric settings. [CHAR LIMIT=66] -->
+    <string name="security_settings_biometric_preference_title" product="default">Face &amp; Fingerprint Unlock</string>
+    <!-- Title shown for menu item that launches biometric settings. [CHAR LIMIT=66] -->
+    <string name="security_settings_biometric_preference_title" product="desktop">Unlock with face &amp; Fingerprint Unlock</string>
+    <!-- Title shown for work menu item that launches biometric settings. [CHAR LIMIT=66] -->
+    <string name="security_settings_work_biometric_preference_title" product="default">Face &amp; Fingerprint Unlock for work</string>
+    <!-- Title shown for work menu item that launches biometric settings. [CHAR LIMIT=66] -->
+    <string name="security_settings_work_biometric_preference_title" product="desktop">Unlock with face &amp; Fingerprint Unlock for work</string>
+    <!-- Dialog title for dialog which shows when trying to add face in split mode. [CHAR LIMIT=NONE] -->
+    <string name="biometric_settings_add_face_in_split_mode_title" product="default">Can\u2019t set up Face Unlock</string>
+    <!-- Dialog title for dialog which shows when trying to add face in split mode. [CHAR LIMIT=NONE] -->
+    <string name="biometric_settings_add_face_in_split_mode_title" product="desktop">Can\u2019t set up unlocking with face</string>
+    <!-- Dialog message for dialog which shows when trying to add face in split mode. [CHAR LIMIT=NONE] -->
+    <string name="biometric_settings_add_face_in_split_mode_message" product="default">Exit split screen to set up Face Unlock</string>
+    <!-- Dialog message for dialog which shows when trying to add face in split mode. [CHAR LIMIT=NONE] -->
+    <string name="biometric_settings_add_face_in_split_mode_message" product="desktop">Exit split screen to set up unlocking with face</string>
+
+    <!-- Title for the Face and Fingerprint preference. [CHAR LIMIT=60] -->
+    <string name="private_space_biometric_title" product="default">Face &amp; Fingerprint Unlock</string>
+    <!-- Title for the Face and Fingerprint preference. [CHAR LIMIT=60] -->
+    <string name="private_space_biometric_title" product="desktop">Unlock with face &amp; Fingerprint Unlock</string>
+    <!-- Title for the Face and Fingerprint preference for private space. [CHAR LIMIT=60] -->
+    <string name="private_space_biometric_unlock_title" product="default">Face &amp; Fingerprint Unlock for private space</string>
+    <!-- Title for the Face and Fingerprint preference for private space. [CHAR LIMIT=60] -->
+    <string name="private_space_biometric_unlock_title" product="desktop">Unlocking with face &amp; Fingerprint Unlock for private space</string>
+    <!-- Title for the Face preference when fingerprint unlock is not supported on device. [CHAR LIMIT=40] -->
+    <string name="private_space_face_title" product="default">Face Unlock</string>
+    <!-- Title for the Face preference when fingerprint unlock is not supported on device. [CHAR LIMIT=40] -->
+    <string name="private_space_face_title" product="desktop">Unlock with face</string>
+    <!-- Title for the Face unlock for private space preference. [CHAR LIMIT=60] -->
+    <string name="private_space_face_unlock_title" product="default">Face Unlock for private space</string>
+    <!-- Title for the Face unlock for private space preference. [CHAR LIMIT=60] -->
+    <string name="private_space_face_unlock_title" product="desktop">Unlocking with face for private space</string>
+    <!-- Introduction title shown in private space face enrollment [CHAR LIMIT=90] -->
+    <string name="private_space_face_enroll_introduction_title" product="default">Set up Face Unlock for private space</string>
+    <!-- Introduction title shown in private space face enrollment [CHAR LIMIT=90] -->
+    <string name="private_space_face_enroll_introduction_title" product="desktop">Set up unlocking with face for private space</string>
+    <!-- Text shown on the details of a toggle which enables/disables confirmation (i.e. confirm button) each time face unlock is used for private space. [CHAR LIMIT=90] -->
+    <string name="private_space_face_settings_require_confirmation_details" product="default">When using Face Unlock, always require confirmation step</string>
+    <!-- Text shown on the details of a toggle which enables/disables confirmation (i.e. confirm button) each time face unlock is used for private space. [CHAR LIMIT=90] -->
+    <string name="private_space_face_settings_require_confirmation_details" product="desktop">When unlocking with face, always require confirmation step</string>
+
+    <!-- Title for preference that guides the user to skip Face Unlock setup [CHAR LIMIT=60]-->
+    <string name="face_unlock_skip_face" product="default">Continue without Face Unlock</string>
+    <!-- Title for preference that guides the user to skip Face Unlock setup [CHAR LIMIT=60]-->
+    <string name="face_unlock_skip_face" product="desktop">Continue without unlocking with face</string>
+
+    <!-- Content of the dialog shown when the user removes any device screen lock and the user has face enrolled and there are apps with auth-bound keys that will be affected [CHAR LIMIT=NONE] -->
+    <string name="unlock_disable_frp_warning_content_face_authbound_keys" product="default">"Your screen lock and Face Unlock will be removed.<xliff:g id="empty_line">\n\n</xliff:g>Tap to pay won\u2019t be available.<xliff:g id="empty_line">\n\n</xliff:g>Wallet, payment, and other apps that require authentication may not work properly."</string>
+    <!-- Content of the dialog shown when the user removes any device screen lock and the user has face enrolled and there are apps with auth-bound keys that will be affected [CHAR LIMIT=NONE] -->
+    <string name="unlock_disable_frp_warning_content_face_authbound_keys" product="desktop">"Your screen lock and unlocking with face will be removed.<xliff:g id="empty_line">\n\n</xliff:g>Tap to pay won\u2019t be available.<xliff:g id="empty_line">\n\n</xliff:g>Wallet, payment, and other apps that require authentication may not work properly."</string>
+    <!-- Content of the dialog shown when the user removes any device screen lock and the user has face authentication and fingerprint enrolled and there are apps with auth-bound keys that will be affected [CHAR LIMIT=NONE] -->
+    <string name="unlock_disable_frp_warning_content_face_fingerprint_authbound_keys" product="default">"Your screen lock and Face &amp; Fingerprint Unlock will be removed.<xliff:g id="empty_line">\n\n</xliff:g>Tap to pay won\u2019t be available.<xliff:g id="empty_line">\n\n</xliff:g>Wallet, payment, and other apps that require authentication may not work properly."</string>
+    <!-- Content of the dialog shown when the user removes any device screen lock and the user has face authentication and fingerprint enrolled and there are apps with auth-bound keys that will be affected [CHAR LIMIT=NONE] -->
+    <string name="unlock_disable_frp_warning_content_face_fingerprint_authbound_keys" product="desktop">"Your screen lock, unlocking with face, and Fingerprint Unlock will be removed.<xliff:g id="empty_line">\n\n</xliff:g>Tap to pay won\u2019t be available.<xliff:g id="empty_line">\n\n</xliff:g>Wallet, payment, and other apps that require authentication may not work properly."</string>
+
+    <!-- Header on first screen of choose password/PIN as backup for Face Unlock flow. If this string cannot be translated in under 40 characters, please translate "Set Face Unlock backup" [CHAR LIMIT=40] -->
+    <string name="lockpassword_choose_your_password_header_for_face" product="default">To use Face Unlock, set password</string>
+    <!-- Header on first screen of choose password/PIN as backup for Face Unlock flow. If this string cannot be translated in under 40 characters, please translate "Set Face Unlock backup" [CHAR LIMIT=40] -->
+    <string name="lockpassword_choose_your_password_header_for_face" product="desktop">To unlock with face, set a password</string>
+    <!-- Header on first screen of choose pattern as backup for Face Unlock flow. If this string cannot be translated in under 40 characters, please translate "Set Face Unlock backup" [CHAR LIMIT=40] -->
+    <string name="lockpassword_choose_your_pattern_header_for_face" product="default">To use Face Unlock, set pattern</string>
+    <!-- Header on first screen of choose pattern as backup for Face Unlock flow. If this string cannot be translated in under 40 characters, please translate "Set Face Unlock backup" [CHAR LIMIT=40] -->
+    <string name="lockpassword_choose_your_pattern_header_for_face" product="desktop">To unlock with face, set a pattern</string>
+    <!-- Header on first screen of choose password/PIN as backup for Face Unlock flow. If this string cannot be translated in under 40 characters, please translate "Set Face Unlock backup" [CHAR LIMIT=40] -->
+    <string name="lockpassword_choose_your_pin_header_for_face" product="default">To use Face Unlock, set PIN</string>
+    <!-- Header on first screen of choose password/PIN as backup for Face Unlock flow. If this string cannot be translated in under 40 characters, please translate "Set Face Unlock backup" [CHAR LIMIT=40] -->
+    <string name="lockpassword_choose_your_pin_header_for_face" product="desktop">To unlock with face, set PIN</string>
+
+    <!-- Summary on issue card for Identity Check in Safety Center [CHAR LIMIT=NONE] -->
+    <string name="identity_check_issue_card_summary" product="default">Identity Check prevents unwanted access to your apps. Now available with any app that uses Fingerprint or Face Unlock.</string>
+    <!-- Summary on issue card for Identity Check in Safety Center [CHAR LIMIT=NONE] -->
+    <string name="identity_check_issue_card_summary" product="desktop">Identity Check prevents unwanted access to your apps. Now available with any app that uses unlocking with face and Fingerprint Unlock.</string>
+    <!-- Summary for Identity Check promo card in Safety Center [CHAR LIMIT=NONE] -->
+    <string name="identity_check_promo_card_summary" product="default">Updates:\n<ul><li>Identity Check adds protection to any app that uses Fingerprint or Face Unlock</li>\n<li>Over time, Identity Check may add more ways to verify it\'s you and secure apps on your device. <a href="https://support.google.com/android?p=identity_check">Learn more about when and where you’\re protected</a></li></ul></string>
+    <!-- Summary for Identity Check promo card in Safety Center [CHAR LIMIT=NONE] -->
+    <string name="identity_check_promo_card_summary" product="desktop">Updates:\n<ul><li>Identity Check adds protection to any app that uses unlocking with face or Fingerprint Unlock.</li>\n<li>Over time, Identity Check may add more ways to verify it\'s you and secure apps on your device. <a href="https://support.google.com/android?p=identity_check">Learn more about when and where you’\re protected</a></li></ul></string>
+
+    <!-- Summary for promo notification for Identity Check -->
+    <string name="identity_check_notification_summary" product="default">Identity Check prevents unwanted access to your apps. Now available with any app that uses Fingerprint or Face Unlock.</string>
+    <!-- Summary for promo notification for Identity Check -->
+    <string name="identity_check_notification_summary" product="desktop">Identity Check prevents unwanted access to your apps. Now available with any app that uses unlocking with face and Fingerprint Unlock.</string>
+
+    <!-- Title of one of the choices in a dialog (with title defined in usb_use) that lets the user
+         select what the USB connection for this device should be used for. This choice
+         is for transferring files via MTP. -->
+    <string name="usb_use_file_transfers" product="desktop">File transfer</string>
 </resources>

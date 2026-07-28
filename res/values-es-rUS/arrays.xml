@@ -216,7 +216,7 @@
     <item msgid="5099026183238335900">"controlar ubicación"</item>
     <item msgid="2297727967385895059">"supervisar ubicación de alta potencia"</item>
     <item msgid="8700593962030471569">"obtener estadísticas de uso"</item>
-    <item msgid="4140820386622184831">"silenciar/dejar de silenciar micrófono"</item>
+    <item msgid="4140820386622184831">"silenciar/activar micrófono"</item>
     <item msgid="317746827951691657">"mostrar notificación"</item>
     <item msgid="5679422988212309779">"proyectar contenido multimedia"</item>
     <item msgid="6454031639780101439">"activar VPN"</item>
@@ -283,7 +283,7 @@
     <item msgid="8482874682804856549">"Ubicación"</item>
     <item msgid="5186169827582545242">"Ubicación"</item>
     <item msgid="6122293931012635638">"Obtener estadísticas de uso"</item>
-    <item msgid="2526677383312751932">"Silenciar/dejar de silenciar micrófono"</item>
+    <item msgid="2526677383312751932">"Silenciar/activar micrófono"</item>
     <item msgid="4000577305179914546">"Mostrar notificación"</item>
     <item msgid="8660207174515570558">"Proyectar contenido multimedia"</item>
     <item msgid="3904996949561946108">"Activar VPN"</item>
@@ -304,16 +304,6 @@
     <item msgid="346122795998225472">"Obtener cuentas"</item>
     <item msgid="3756073389408535680">"Ejecutar en segundo plano"</item>
     <item msgid="2114661179947426734">"Volumen de accesibilidad"</item>
-  </string-array>
-  <string-array name="long_press_timeout_selector_titles">
-    <item msgid="6926391290986427331">"Corto"</item>
-    <item msgid="5118829513010894576">"Medio"</item>
-    <item msgid="6740026006576843477">"Largo"</item>
-  </string-array>
-  <string-array name="long_press_timeout_selector_list_titles">
-    <item msgid="8908021508913038488">"Corto"</item>
-    <item msgid="7397961711906421599">"Medio"</item>
-    <item msgid="4079132024502041928">"Largo"</item>
   </string-array>
   <string-array name="ethernet_ip_settings">
     <item msgid="7618681915649929019">"DHCP"</item>
@@ -358,14 +348,6 @@
     <item msgid="1119043472912497241">"Amarillo sobre negro"</item>
     <item msgid="2836895041823327816">"Amarillo sobre azul"</item>
     <item msgid="747238414788976867">"Personalizado"</item>
-  </string-array>
-  <string-array name="accessibility_button_location_selector_titles">
-    <item msgid="6485511780196327736">"Flotando encima de otras apps"</item>
-    <item msgid="3605616699204153590">"Barra de navegación"</item>
-  </string-array>
-  <string-array name="accessibility_button_size_selector_titles">
-    <item msgid="7482952318152486459">"Pequeño"</item>
-    <item msgid="1666628329913333563">"Grande"</item>
   </string-array>
   <string-array name="vpn_proxy_settings">
     <item msgid="7165538292837266997">"Ninguno"</item>
@@ -420,7 +402,7 @@
     <item msgid="741680937828608749">"Usar MAC del dispositivo"</item>
   </string-array>
   <string-array name="wifi_dhcp_entries">
-    <item msgid="2532836996945493932">"Enviar nombre del dispositivo a la red"</item>
+    <item msgid="2532836996945493932">"Enviar nombre de dispositivo a red"</item>
     <item msgid="7928900271137707489">"No enviar nombre del dispositivo a la red"</item>
   </string-array>
   <string-array name="wifi_hidden_entries">

@@ -22,16 +22,19 @@ import android.graphics.RectF
 import android.hardware.display.DisplayTopology
 import android.hardware.display.DisplayTopology.TreeNode
 import android.os.SystemClock
+import android.util.DisplayMetrics
 import android.util.Log
 import android.util.Size
 import android.view.Display.DEFAULT_DISPLAY
 import android.view.MotionEvent
 import android.view.View
+import android.view.View.IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
+import android.view.View.IMPORTANT_FOR_ACCESSIBILITY_YES
 import android.widget.FrameLayout
-import android.widget.TextView
 import androidx.annotation.VisibleForTesting
 import com.android.settings.R
 import com.android.settings.core.instrumentation.SettingsStatsLog
+import com.android.settings.inputmethod.InputPeripheralsSettingsUtils
 import java.util.function.Consumer
 import kotlin.math.abs
 import kotlin.math.min
@@ -41,12 +44,23 @@ import kotlin.math.min
  * This class is framework-agnostic and can be used by both a Preference and a custom View.
  */
 class DisplayTopologyPreferenceController(
-    private val context: Context,
+    private val uiContext: Context,
+    private val appContext: Context,
     private val injector: ConnectedDisplayInjector,
 ) {
+
+    private val displayBlockToPaneMarginPx =
+        uiContext.resources.getDimensionPixelSize(R.dimen.display_block_to_pane_margin)
+    private val topologyHintHeightPx =
+        uiContext.resources.getDimensionPixelSize(R.dimen.topology_hint_text_view_height)
+    private val isViewOnDisplaySupportingDesktopMode =
+        injector.desktopState?.isDesktopModeSupportedOnDisplay(uiContext.displayId) ?: false
+    private val isCursorPointingDeviceAvailable =
+        InputPeripheralsSettingsUtils.isMouse() || InputPeripheralsSettingsUtils.isTouchpad()
+
     @VisibleForTesting lateinit var paneContent: FrameLayout
     @VisibleForTesting lateinit var paneHolder: FrameLayout
-    @VisibleForTesting lateinit var topologyHint: TextView
+    @VisibleForTesting lateinit var topologyHint: TopologyHintTextView
 
     /**
      * How many physical pixels to move in pane coordinates (Pythagorean distance) before a drag is
@@ -56,12 +70,14 @@ class DisplayTopologyPreferenceController(
      */
     @VisibleForTesting
     val accidentalDragDistancePx
-        get() = DisplayTopology.dpToPx(4f, injector.densityDpi)
+        get() = DisplayTopology.dpToPx(4f, currentDisplayDensityDpi)
 
     /** How long before until a tap is considered a drag regardless of distance moved. */
     @VisibleForTesting val accidentalDragTimeLimitMs = 800L
     @VisibleForTesting var timesRefreshedBlocks = 0
 
+    // Decide density based on the display this view is currently placed on
+    private var currentDisplayDensityDpi: Int = DisplayMetrics.DENSITY_DEFAULT
     private val topologyListener = Consumer<DisplayTopology> { applyTopology(it) }
     private val displayListener =
         object : ExternalDisplaySettingsConfiguration.DisplayListener() {
@@ -88,6 +104,9 @@ class DisplayTopologyPreferenceController(
     private var blockDrag: BlockDrag? = null
     private var revealedWallpapers: List<RevealedWallpaper> = emptyList()
     private var selectedDisplayId: Int = -1
+    // Don't modify the value directly, use `setDisplayToShowArrows()`
+    private var showArrowMovementDisplayId: Int = -1
+    private var isAttached = false
 
     var onDisplayBlockSelectedListener: OnDisplayBlockSelectedListener? = null
 
@@ -137,36 +156,56 @@ class DisplayTopologyPreferenceController(
     )
 
     /** Binds the views from the concrete implementation (Preference or View). */
-    fun bindViews(holder: FrameLayout, content: FrameLayout, hint: TextView) {
-        if (this::paneContent.isInitialized && this.paneContent != content) {
+    fun bindViews(holder: FrameLayout, content: FrameLayout, hint: TopologyHintTextView) {
+        if (isAttached && this.paneContent != content) {
             this.paneContent.removeOnLayoutChangeListener(paneContentLayoutListener)
         }
         paneHolder = holder
         paneContent = content
         topologyHint = hint
+        paneContent.isFocusable = false
         paneContent.addOnLayoutChangeListener(paneContentLayoutListener)
+        paneContent.setOnClickListener { _ -> setDisplayToShowArrows(-1) }
     }
 
     /** Called by the host when it is attached to the window/screen. */
     fun attach() {
+        isAttached = true
         injector.registerTopologyListener(topologyListener)
         injector.registerDisplayListener(displayListener)
     }
 
     /** Called by the host when it is detached from the window/screen. */
     fun detach() {
-        if (this::paneContent.isInitialized) {
+        if (isAttached) {
             paneContent.removeOnLayoutChangeListener(paneContentLayoutListener)
+            paneContent.setOnClickListener(null)
         }
+        isAttached = false
         // No longer need to reveal wallpapers since the blocks are not visible; these will be
         // revealed again upon invocation of refreshPane.
-        revealedWallpapers.forEach { it.viewManager.removeView(it.revealer) }
+        revealedWallpapers.forEach {
+            it.viewManager.removeView(it.revealer)
+            Log.d(TAG, "View detached, removed wallpaper window for display#${it.displayId}")
+        }
         revealedWallpapers = listOf()
         injector.unregisterTopologyListener(topologyListener)
         injector.unregisterDisplayListener(displayListener)
     }
 
-    fun selectDisplay(displayId: Int) {
+    fun selectDisplay(displayId: Int, showDisplayArrows: Boolean = false) {
+        if (!isAttached) {
+            // ViewModel from fragments outlive the fragment and view reconfigurations, ensure View
+            // has been setup
+            return
+        }
+        if (showDisplayArrows && displayId == selectedDisplayId) {
+            setDisplayToShowArrows(displayId)
+        } else {
+            // Different display is selected, hide arrows. Don't immediately show arrow on the
+            // selectedDisplay, because arrow should only be shown after second tap
+            setDisplayToShowArrows(-1)
+        }
         selectedDisplayId = displayId
         val displayTopology = injector.displayTopology
         if (displayTopology == null || !displayTopology.allNodesIdMap().containsKey(displayId)) {
@@ -178,18 +217,20 @@ class DisplayTopologyPreferenceController(
 
     @VisibleForTesting
     fun refreshPane() {
-        if (!this::paneContent.isInitialized) {
+        if (!isAttached) {
             return
         }
         val topology = injector.displayTopology
         if (topology == null) {
             // This occurs when no topology is active.
             // TODO(b/352648432): show main display or mirrored displays rather than an empty pane.
-            topologyHint.text = ""
+            topologyHint.updateState(arrowsShown = false, displayCount = 0)
             paneContent.removeAllViews()
             topologyInfo = null
             return
         }
+        val currentDisplayId = paneContent.display?.displayId ?: DEFAULT_DISPLAY
+        currentDisplayDensityDpi = topology.getLogicalDensityForDisplay(currentDisplayId)
         applyTopology(topology)
         applyDisplayUpdateInMirroringMode()
     }
@@ -202,19 +243,17 @@ class DisplayTopologyPreferenceController(
      * 4. Ensure wallpapers are revealed
      */
     private fun applyTopology(topology: DisplayTopology) {
-        // If stacked mirroring display is turned on, updates will come from DisplayListener since
-        // there's no more topology update when display is added / removed
-        if (!this::paneContent.isInitialized || showStackedMirroringDisplay()) {
+        // If mirroring display is turned on, updates will come from DisplayListener since there's
+        // no more topology update when display is added / removed
+        if (!isAttached || isDisplayInMirroringMode(appContext)) {
             return
         }
         val topologyBounds = topology.absoluteBounds
         // Step 1
-        topologyHint.text =
-            if (topologyBounds.size() > 1) {
-                context.getString(R.string.external_display_topology_hint)
-            } else {
-                ""
-            }
+        topologyHint.updateState(
+            arrowsShown = (showArrowMovementDisplayId != -1),
+            displayCount = topologyBounds.size(),
+        )
         // Step 2
         val oldBounds = topologyInfo?.positions
         val newBounds = buildList {
@@ -237,8 +276,12 @@ class DisplayTopologyPreferenceController(
         val scaling =
             TopologyScale(
                 paneContent.width,
-                minEdgeLength = DisplayTopology.dpToPx(MIN_EDGE_LENGTH_DP, injector.densityDpi),
-                maxEdgeLength = DisplayTopology.dpToPx(MAX_EDGE_LENGTH_DP, injector.densityDpi),
+                minEdgeLength =
+                    DisplayTopology.dpToPx(getMinEdgeLengthDp(), currentDisplayDensityDpi),
+                maxEdgeLength =
+                    DisplayTopology.dpToPx(getMaxEdgeLengthDp(), currentDisplayDensityDpi),
+                displayBlockToPaneMarginPx + if (newBounds.size > 1) topologyHintHeightPx else 0,
+                displayBlockToPaneMarginPx,
                 newBounds.map { it.second },
             )
         setupDisplayPaneAndBlocks(
@@ -246,6 +289,7 @@ class DisplayTopologyPreferenceController(
             newBounds,
             logicalDisplaySizeFetcher,
             /* isMirroring= */ false,
+            calculateDisplayArrowMovement(topology.graph),
         )
         topologyInfo = TopologyInfo(topology, scaling, newBounds)
         // Step 4
@@ -260,12 +304,12 @@ class DisplayTopologyPreferenceController(
      * 4. Ensure wallpapers are revealed for mirrored display and removed for other displays
      */
     private fun applyDisplayUpdateInMirroringMode() {
-        // If stacked mirroring display is turned off, update will be handled by topology update
-        if (!this::paneContent.isInitialized || !showStackedMirroringDisplay()) {
+        // If mirroring display is turned off, update will be handled by topology update
+        if (!isAttached || !isDisplayInMirroringMode(appContext)) {
             return
         }
         // Step 1
-        topologyHint.text = ""
+        topologyHint.updateState(arrowsShown = false, displayCount = 0)
         // Step 2
         val logicalDisplaySizeFetcher = LogicalDisplaySizeFetcher(injector, emptyMap())
         val newBounds = processDisplayBoundsMirroringMode(logicalDisplaySizeFetcher)
@@ -273,8 +317,12 @@ class DisplayTopologyPreferenceController(
         val scaling =
             TopologyScale(
                 paneContent.width,
-                minEdgeLength = DisplayTopology.dpToPx(MIN_EDGE_LENGTH_DP, injector.densityDpi),
-                maxEdgeLength = DisplayTopology.dpToPx(MAX_EDGE_LENGTH_DP, injector.densityDpi),
+                minEdgeLength =
+                    DisplayTopology.dpToPx(getMinEdgeLengthDp(), currentDisplayDensityDpi),
+                maxEdgeLength =
+                    DisplayTopology.dpToPx(getMaxEdgeLengthDp(), currentDisplayDensityDpi),
+                displayBlockToPaneMarginPx,
+                displayBlockToPaneMarginPx,
                 newBounds.map { it.second },
             )
         setupDisplayPaneAndBlocks(
@@ -282,6 +330,7 @@ class DisplayTopologyPreferenceController(
             newBounds,
             logicalDisplaySizeFetcher,
             /* isMirroring= */ true,
+            newBounds.associate { (id, _) -> id to ArrowMovement.immovable() },
         )
         topologyInfo = null
         // Step 4
@@ -298,6 +347,7 @@ class DisplayTopologyPreferenceController(
                         put(r.displayId, r)
                     } else {
                         r.viewManager.removeView(r.revealer)
+                        Log.d(TAG, "Removed wallpaper window for display#${r.displayId}")
                     }
                 }
             }
@@ -320,7 +370,7 @@ class DisplayTopologyPreferenceController(
 
         val bounds = mutableListOf<Pair<Int, RectF>>()
         val mirroringDiagonalStackOffsetPx =
-            DisplayTopology.dpToPx(MIRRORING_DIAGONAL_STACK_OFFSET_DP, injector.densityDpi)
+            DisplayTopology.dpToPx(MIRRORING_DIAGONAL_STACK_OFFSET_DP, currentDisplayDensityDpi)
 
         // Displays are arranged 45 degrees diagonally, with DEFAULT_DISPLAY on the front and
         // leftmost, and other displays on the back, top-right of the display on the front.
@@ -345,6 +395,7 @@ class DisplayTopologyPreferenceController(
         newBounds: List<Pair<Int, RectF>>,
         logicalDisplaySizeFetcher: LogicalDisplaySizeFetcher,
         isMirroring: Boolean,
+        displaysArrowMovement: Map<Int, ArrowMovement>,
     ) {
         // Resize pane holder
         paneHolder.layoutParams.let {
@@ -360,7 +411,7 @@ class DisplayTopologyPreferenceController(
         newBounds.forEach { (id, pos) ->
             val block =
                 displayBlocks.removeFirstOrNull()
-                    ?: DisplayBlock(injector).apply { paneContent.addView(this) }
+                    ?: DisplayBlock(uiContext, injector).apply { paneContent.addView(this) }
 
             // Mirroring is only supported for DEFAULT_DISPLAY for now
             val displayIdToShowWallpaper = if (isMirroring) DEFAULT_DISPLAY else id
@@ -386,6 +437,7 @@ class DisplayTopologyPreferenceController(
                 bottomRight,
                 displaySurfaceToBlockScale,
                 displaySize,
+                displaysArrowMovement.get(id) ?: ArrowMovement.immovable(),
             )
 
             block.onA11yMoveListener = { direction -> simulateA11yDrag(id, pos, block, direction) }
@@ -394,13 +446,24 @@ class DisplayTopologyPreferenceController(
             // Example scenario would be when Display#2 is selected from the tab, and there's
             // another display added, Display#2 should still be highlighted.
             block.setHighlighted(id == selectedDisplayId)
+            block.setArrowVisible(id == showArrowMovementDisplayId)
 
             if (isMirroring) {
-                block.setOnTouchListener(null)
+                block.isFocusable = false
+                block.isClickable = false
+                block.setOnClickListener(null)
+                block.setTouchListener(null)
             } else {
-                block.setOnTouchListener { view, ev ->
+                block.isFocusable = true
+                block.isClickable = true
+                block.isFocusableInTouchMode = true
+                block.setOnClickListener { _ ->
+                    selectDisplay(block.logicalDisplayId, /* showDisplayArrows= */ true)
+                    onDisplayBlockSelectedListener?.onSelected(block.logicalDisplayId)
+                }
+                block.setTouchListener { view, ev ->
                     if (ev.isSynthesizedTouchpadGesture()) {
-                        return@setOnTouchListener false
+                        return@setTouchListener false
                     }
                     when (ev.actionMasked) {
                         MotionEvent.ACTION_DOWN -> onBlockTouchDown(id, pos, block, ev)
@@ -410,6 +473,11 @@ class DisplayTopologyPreferenceController(
                     }
                 }
             }
+        }
+        if (isMirroring) {
+            paneContent.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_NO_HIDE_DESCENDANTS
+        } else {
+            paneContent.importantForAccessibility = IMPORTANT_FOR_ACCESSIBILITY_YES
         }
         paneContent.removeViews(newBounds.size, displayBlocks.size)
         timesRefreshedBlocks++
@@ -423,7 +491,7 @@ class DisplayTopologyPreferenceController(
         block: DisplayBlock,
         direction: Direction,
     ) {
-        val moveDistancePx = DisplayTopology.dpToPx(A11Y_MOVE_DISTANCE_DP, injector.densityDpi)
+        val moveDistancePx = DisplayTopology.dpToPx(A11Y_MOVE_DISTANCE_DP, currentDisplayDensityDpi)
 
         val startPoint = PointF(block.x + block.width / 2, block.y + block.height / 2)
         val endPoint =
@@ -473,6 +541,34 @@ class DisplayTopologyPreferenceController(
 
         onBlockTouchUp(upEvent)
         upEvent.recycle()
+
+        val announcement =
+            when (direction) {
+                Direction.UP ->
+                    uiContext.getString(
+                        R.string.external_display_topology_a11y_display_moved_up,
+                        displayId,
+                    )
+
+                Direction.DOWN ->
+                    uiContext.getString(
+                        R.string.external_display_topology_a11y_display_moved_down,
+                        displayId,
+                    )
+
+                Direction.LEFT ->
+                    uiContext.getString(
+                        R.string.external_display_topology_a11y_display_moved_left,
+                        displayId,
+                    )
+
+                Direction.RIGHT ->
+                    uiContext.getString(
+                        R.string.external_display_topology_a11y_display_moved_right,
+                        displayId,
+                    )
+            }
+        paneContent.stateDescription = announcement
     }
 
     private fun onBlockTouchDown(
@@ -490,7 +586,7 @@ class DisplayTopologyPreferenceController(
 
         val stationaryDisps = positions.filter { it.first != displayId }
 
-        selectDisplay(displayId)
+        selectDisplay(displayId, /* showDisplayArrows= */ true)
 
         // We have to use rawX and rawY for the coordinates since the view receiving the event is
         // also the view that is moving. We need coordinates relative to something that isn't
@@ -543,10 +639,6 @@ class DisplayTopologyPreferenceController(
         val drag = blockDrag ?: return false
         val topology = topologyInfo ?: return false
         paneContent.requestDisallowInterceptTouchEvent(false)
-        if (!injector.flags.showTabbedConnectedDisplaySetting()) {
-            // Highlight must be removed after drag finished in non-tabbed setting
-            selectDisplay(-1)
-        }
         // DisplayBlock has been highlighted on touch down, touch up should only notify the listener
         onDisplayBlockSelectedListener?.onSelected(drag.displayId)
 
@@ -585,13 +677,9 @@ class DisplayTopologyPreferenceController(
         return true
     }
 
-    private fun showStackedMirroringDisplay() =
-        isDisplayInMirroringMode(context) &&
-            injector.flags.showStackedMirroringDisplayConnectedDisplaySetting()
-
     private fun displayBlocks(): ArrayDeque<DisplayBlock> {
         val blocks = ArrayDeque<DisplayBlock>()
-        if (this::paneContent.isInitialized) {
+        if (isAttached) {
             for (i in 0..paneContent.childCount - 1) {
                 // Recycle existing views
                 val view = paneContent.getChildAt(i)
@@ -612,6 +700,23 @@ class DisplayTopologyPreferenceController(
             abs(a.right - b.right) < EPSILON &&
             abs(a.top - b.top) < EPSILON &&
             abs(a.bottom - b.bottom) < EPSILON
+    }
+
+    private fun setDisplayToShowArrows(displayId: Int) {
+        showArrowMovementDisplayId = displayId
+        topologyHint.updateState(
+            arrowsShown = (showArrowMovementDisplayId != -1),
+            displayCount = topologyInfo?.positions?.size ?: 0,
+        )
+
+        val displayTopology = injector.displayTopology
+        if (displayTopology == null || !displayTopology.allNodesIdMap().containsKey(displayId)) {
+            displayBlocks().forEach { it.setArrowVisible(false) }
+            return
+        }
+        displayBlocks().forEach {
+            it.setArrowVisible(it.logicalDisplayId == showArrowMovementDisplayId)
+        }
     }
 
     /**
@@ -636,10 +741,29 @@ class DisplayTopologyPreferenceController(
         }
     }
 
+    private fun useDesktopModeLayout() =
+        isViewOnDisplaySupportingDesktopMode && isCursorPointingDeviceAvailable
+
+    private fun getMinEdgeLengthDp(): Float {
+        return if (useDesktopModeLayout()) MIN_EDGE_LENGTH_DESKTOP_MODE_DP else MIN_EDGE_LENGTH_DP
+    }
+
+    private fun getMaxEdgeLengthDp(): Float {
+        return if (useDesktopModeLayout()) MAX_EDGE_LENGTH_DESKTOP_MODE_DP else MAX_EDGE_LENGTH_DP
+    }
+
     private companion object {
-        private const val MIN_EDGE_LENGTH_DP = 60f
+
+        private fun DisplayTopology.getLogicalDensityForDisplay(displayId: Int): Int {
+            val displayNode = DisplayTopology.findDisplay(displayId, this.root)
+            return displayNode?.logicalDensity ?: DisplayMetrics.DENSITY_DEFAULT
+        }
+
+        private const val MIN_EDGE_LENGTH_DP = 48f
         private const val MAX_EDGE_LENGTH_DP = 256f
+        private const val MIN_EDGE_LENGTH_DESKTOP_MODE_DP = 32f
+        private const val MAX_EDGE_LENGTH_DESKTOP_MODE_DP = 192f
         private const val MIRRORING_DIAGONAL_STACK_OFFSET_DP = 120f
-        private const val TAG = "DisplayTopologyPreferenceController"
+        private const val TAG = "DisplayTopologyPref"
     }
 }

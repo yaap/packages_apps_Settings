@@ -24,15 +24,12 @@ import static android.content.pm.PackageManager.USER_MIN_ASPECT_RATIO_DISPLAY_SI
 import static android.content.pm.PackageManager.USER_MIN_ASPECT_RATIO_FULLSCREEN;
 import static android.content.pm.PackageManager.USER_MIN_ASPECT_RATIO_SPLIT_SCREEN;
 import static android.content.pm.PackageManager.USER_MIN_ASPECT_RATIO_UNSET;
-import static android.platform.test.flag.junit.SetFlagsRule.DefaultInitValueType.DEVICE_DEFAULT;
 import static android.view.WindowManager.PROPERTY_COMPAT_ALLOW_ORIENTATION_OVERRIDE;
 import static android.view.WindowManager.PROPERTY_COMPAT_ALLOW_USER_ASPECT_RATIO_FULLSCREEN_OVERRIDE;
 import static android.view.WindowManager.PROPERTY_COMPAT_ALLOW_USER_ASPECT_RATIO_OVERRIDE;
 
 import static com.android.settings.applications.appcompat.UserAspectRatioManager.KEY_ENABLE_USER_ASPECT_RATIO_FULLSCREEN;
 import static com.android.settings.applications.appcompat.UserAspectRatioManager.KEY_ENABLE_USER_ASPECT_RATIO_SETTINGS;
-import static com.android.window.flags.Flags.FLAG_BACKUP_AND_RESTORE_FOR_USER_ASPECT_RATIO_SETTINGS;
-import static com.android.window.flags.Flags.FLAG_UNIVERSAL_RESIZABLE_BY_DEFAULT;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -59,11 +56,6 @@ import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.os.RemoteException;
-import android.platform.test.annotations.DisableFlags;
-import android.platform.test.annotations.RequiresFlagsEnabled;
-import android.platform.test.flag.junit.CheckFlagsRule;
-import android.platform.test.flag.junit.DeviceFlagsValueProvider;
-import android.platform.test.flag.junit.SetFlagsRule;
 import android.provider.DeviceConfig;
 
 import androidx.annotation.NonNull;
@@ -75,7 +67,6 @@ import com.android.settings.testutils.ResourcesUtils;
 
 import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -86,10 +77,6 @@ import java.util.List;
  */
 @RunWith(AndroidJUnit4.class)
 public class UserAspectRatioManagerTest {
-    @Rule
-    public final CheckFlagsRule mCheckFlagsRule = DeviceFlagsValueProvider.createCheckFlagsRule();
-    @Rule
-    public final SetFlagsRule mSetFlagsRule = new SetFlagsRule(DEVICE_DEFAULT);
     private final String mPackageName = "com.test.mypackage";
     private Context mContext;
     private Resources mResources;
@@ -414,12 +401,6 @@ public class UserAspectRatioManagerTest {
     }
 
     @Test
-    @DisableFlags({FLAG_UNIVERSAL_RESIZABLE_BY_DEFAULT})
-    public void testIsOverrideToFullscreenEnabledUnivRes_flagDisabled_returnsFalse() {
-        assertFalse(mUtils.isOverrideToFullscreenEnabled(mPackageName, mContext.getUserId()));
-    }
-
-    @Test
     public void testIsOverrideToFullscreenEnabled_optionDisabled_returnsFalse() {
         mUtils.setFullscreenCompatChange(true);
         when(mUtils.hasAspectRatioOption(USER_MIN_ASPECT_RATIO_FULLSCREEN, mPackageName))
@@ -428,7 +409,6 @@ public class UserAspectRatioManagerTest {
     }
 
     @Test
-    @RequiresFlagsEnabled(FLAG_BACKUP_AND_RESTORE_FOR_USER_ASPECT_RATIO_SETTINGS)
     public void testSetUserMinAspectRatio_notifiesBackupManager() throws Exception {
         mUtils.setUserMinAspectRatio(mPackageName, 0, USER_MIN_ASPECT_RATIO_FULLSCREEN);
 

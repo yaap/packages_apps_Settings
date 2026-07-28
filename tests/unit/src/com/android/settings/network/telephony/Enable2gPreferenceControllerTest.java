@@ -17,34 +17,51 @@ package com.android.settings.network.telephony;
 
 import static com.android.settings.core.BasePreferenceController.AVAILABLE;
 import static com.android.settings.core.BasePreferenceController.CONDITIONALLY_UNAVAILABLE;
+import static com.android.settings.core.BasePreferenceController.UNSUPPORTED_ON_DEVICE;
 
 import static com.google.common.truth.Truth.assertThat;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.mockito.Mockito.anyInt;
+import static org.mockito.Mockito.anyLong;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.os.Bundle;
 import android.os.Looper;
+import android.os.PersistableBundle;
+import android.platform.test.annotations.EnableFlags;
+import android.platform.test.flag.junit.SetFlagsRule;
+import android.telephony.CarrierConfigManager;
+import android.telephony.RadioAccessFamily;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceManager;
 import androidx.preference.PreferenceScreen;
 import androidx.test.core.app.ApplicationProvider;
 import androidx.test.ext.junit.runners.AndroidJUnit4;
 
+import com.android.internal.telephony.RILConstants;
+import com.android.internal.telephony.flags.Flags;
 import com.android.settings.R;
 import com.android.settingslib.RestrictedSwitchPreference;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -66,11 +83,22 @@ public final class Enable2gPreferenceControllerTest {
     private TelephonyManager mInvalidTelephonyManager;
     @Mock
     private SubscriptionManager mSubscriptionManager;
+    @Mock
+    private Fragment mFragment;
+    @Mock
+    private FragmentManager mFragmentManager;
+    @Rule
+    public final SetFlagsRule mSetFlagsRule = new SetFlagsRule();
 
     private RestrictedSwitchPreference mPreference;
     private PreferenceScreen mPreferenceScreen;
     private Enable2gPreferenceController mController;
     private Context mContext;
+    @Mock
+    private CarrierConfigManager mCarrierConfigManager;
+    @Mock
+    private NotificationManager mNotificationManager;
+    private PersistableBundle mCarrierConfig;
 
     @Before
     public void setUp() {
@@ -81,8 +109,15 @@ public final class Enable2gPreferenceControllerTest {
         MockitoAnnotations.initMocks(this);
 
         mContext = spy(ApplicationProvider.getApplicationContext());
+        when(mContext.getSystemService(Context.NOTIFICATION_SERVICE)).thenReturn(
+                mNotificationManager);
+        when(mContext.getSystemService(NotificationManager.class)).thenReturn(mNotificationManager);
         when(mContext.getSystemService(Context.TELEPHONY_SERVICE)).thenReturn(mTelephonyManager);
         when(mContext.getSystemService(TelephonyManager.class)).thenReturn(mTelephonyManager);
+        when(mContext.getSystemService(CarrierConfigManager.class)).thenReturn(
+                mCarrierConfigManager);
+        mCarrierConfig = new PersistableBundle();
+        when(mCarrierConfigManager.getConfigForSubId(SUB_ID)).thenReturn(mCarrierConfig);
         Resources resources = spy(mContext.getResources());
         when(mContext.getResources()).thenReturn(resources);
         when(resources.getString(R.string.enable_2g_summary)).thenReturn(ENABLE_2G_SUMMARY);
@@ -91,8 +126,21 @@ public final class Enable2gPreferenceControllerTest {
         when(mContext.getSystemService(SubscriptionManager.class)).thenReturn(mSubscriptionManager);
 
         doReturn(mTelephonyManager).when(mTelephonyManager).createForSubscriptionId(SUB_ID);
+        doReturn(true).when(mTelephonyManager).isRadioInterfaceCapabilitySupported(
+                mTelephonyManager.CAPABILITY_USES_ALLOWED_NETWORK_TYPES_BITMASK);
+        doReturn((long) RadioAccessFamily.getRafFromNetworkType(
+                    TelephonyManager.NETWORK_MODE_LTE_GSM_WCDMA)) // 2G+3G+4G
+                .when(mTelephonyManager)
+                .getSupportedRadioAccessFamily();
+
         doReturn(mInvalidTelephonyManager).when(mTelephonyManager).createForSubscriptionId(
                 SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+        doReturn(true).when(mInvalidTelephonyManager).isRadioInterfaceCapabilitySupported(
+                mTelephonyManager.CAPABILITY_USES_ALLOWED_NETWORK_TYPES_BITMASK);
+        doReturn((long) RadioAccessFamily.getRafFromNetworkType(
+                    TelephonyManager.NETWORK_MODE_LTE_GSM_WCDMA)) // 2G+3G+4G
+                .when(mInvalidTelephonyManager)
+                .getSupportedRadioAccessFamily();
 
         mController = new Enable2gPreferenceController(mContext, PREFERENCE_KEY);
 
@@ -100,42 +148,71 @@ public final class Enable2gPreferenceControllerTest {
         mPreference.setKey(PREFERENCE_KEY);
         mPreferenceScreen = new PreferenceManager(mContext).createPreferenceScreen(mContext);
         mPreferenceScreen.addPreference(mPreference);
-        mController.init(SUB_ID);
+        mController.init(mFragment, SUB_ID);
     }
 
     @Test
     public void getAvailabilityStatus_invalidSubId_returnUnavailable() {
-        mController.init(SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+        mController.init(mFragment, SubscriptionManager.INVALID_SUBSCRIPTION_ID);
 
         assertThat(mController.getAvailabilityStatus()).isEqualTo(CONDITIONALLY_UNAVAILABLE);
     }
 
     @Test
-    public void getAvailabilityStatus_capabilityNotSupported_returnUnavailable() {
+    public void getAvailabilityStatus_capabilityNotSupported_returnUnsupported() {
         doReturn(false).when(mTelephonyManager).isRadioInterfaceCapabilitySupported(
                 mTelephonyManager.CAPABILITY_USES_ALLOWED_NETWORK_TYPES_BITMASK);
 
-        assertThat(mController.getAvailabilityStatus()).isEqualTo(CONDITIONALLY_UNAVAILABLE);
+        assertThat(mController.getAvailabilityStatus()).isEqualTo(UNSUPPORTED_ON_DEVICE);
+    }
+
+    @Test
+    public void getAvailabilityStatus_2gUnsupported_returnUnsupported() {
+        doReturn((long) RadioAccessFamily.getRafFromNetworkType(
+                    TelephonyManager.NETWORK_MODE_NR_LTE_WCDMA)) // 3G+4G+5G (No 2G)
+                .when(mTelephonyManager)
+                .getSupportedRadioAccessFamily();
+
+        assertThat(mController.getAvailabilityStatus()).isEqualTo(
+                Enable2gPreferenceController.UNSUPPORTED_ON_DEVICE);
     }
 
     @Test
     public void getAvailabilityStatus_returnAvailable() {
-        doReturn(true).when(mTelephonyManager).isRadioInterfaceCapabilitySupported(
-                mTelephonyManager.CAPABILITY_USES_ALLOWED_NETWORK_TYPES_BITMASK);
-
+        // Use defaults
         assertThat(mController.getAvailabilityStatus()).isEqualTo(AVAILABLE);
     }
 
     @Test
     public void setChecked_invalidSubIdAndIsCheckedTrue_returnFalse() {
-        mController.init(SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+        mController.init(mFragment, SubscriptionManager.INVALID_SUBSCRIPTION_ID);
         assertThat(mController.setChecked(true)).isFalse();
     }
 
     @Test
     public void setChecked_invalidSubIdAndIsCheckedFalse_returnFalse() {
-        mController.init(SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+        mController.init(mFragment, SubscriptionManager.INVALID_SUBSCRIPTION_ID);
         assertThat(mController.setChecked(false)).isFalse();
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_KEY_CARRIER_2G_TOGGLE)
+    public void setCheckedWithFalse_carrierDisabled2gNetwork() {
+        mCarrierConfig.putBoolean(
+                CarrierConfigManager.KEY_CARRIER_DEFAULT_2G_PROTECTION_ENABLED_BOOL, true);
+
+        assertThat(mController.setChecked(false)).isTrue();
+        verify(mPreference, never()).isDisabledByAdmin();
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_KEY_CARRIER_2G_TOGGLE)
+    public void setCheckedWithTrue_carrierDisabled2gNetwork() {
+        when2gIsDisabledByAdmin(false);
+        mCarrierConfig.putBoolean(
+                CarrierConfigManager.KEY_CARRIER_DEFAULT_2G_PROTECTION_ENABLED_BOOL, true);
+
+        assertThat(mController.setChecked(true)).isFalse();
     }
 
     @Test
@@ -165,6 +242,36 @@ public final class Enable2gPreferenceControllerTest {
         when2gIsEnabledForReasonEnable2g();
         when2gIsDisabledByAdmin(true);
         assertThat(mController.isChecked()).isTrue();
+    }
+
+    @Test
+    public void isChecked_invalidSubId_returnsFalse() {
+        mController.init(mFragment, SubscriptionManager.INVALID_SUBSCRIPTION_ID);
+        when2gIsDisabledByAdmin(false);
+
+        assertThat(mController.isChecked()).isFalse();
+    }
+
+    @Test
+    public void isChecked_corruptedNetworkType_resetsAndReturnsCorrectState() {
+        // When allowed network types for 2G is corrupted (i.e. 0), it should be reset to the
+        // default network types. The default includes 2G, so isChecked() should return false.
+        when2gIsDisabledByAdmin(false);
+        when(mTelephonyManager.getAllowedNetworkTypesForReason(
+                TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_ENABLE_2G)).thenReturn(0L);
+
+        // Action
+        boolean isChecked = mController.isChecked();
+
+        // Verify that the allowed network types are reset to default.
+        long defaultNetworkTypes = RadioAccessFamily.getRafFromNetworkType(
+                RILConstants.PREFERRED_NETWORK_MODE);
+        verify(mTelephonyManager).setAllowedNetworkTypesForReason(
+                TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_ENABLE_2G, defaultNetworkTypes);
+
+        // The default network mode includes 2G, so 2G is enabled.
+        // The "disable 2G" toggle should be OFF (isChecked() == false).
+        assertThat(isChecked).isFalse();
     }
 
     @Test
@@ -203,7 +310,7 @@ public final class Enable2gPreferenceControllerTest {
 
     @Test
     public void updateState_notUsableSubscriptionId() {
-        mController.init(-1);
+        mController.init(mFragment, SubscriptionManager.INVALID_SUBSCRIPTION_ID);
         when2gIsDisabledByAdmin(false);
 
         mController.updateState((Preference) mPreference);
@@ -222,6 +329,33 @@ public final class Enable2gPreferenceControllerTest {
     }
 
     @Test
+    public void onDialogResult_positiveButtonEvent() {
+        when2gIsDisabledByAdmin(false);
+        when(mTelephonyManager.getAllowedNetworkTypesForReason(
+                TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_ENABLE_2G)).thenReturn(0L);
+        Bundle bundle = new Bundle();
+        bundle.putInt(Enable2gPreferenceController.REQUEST_KEY, DialogInterface.BUTTON_POSITIVE);
+        mPreference.setChecked(true);
+
+        mController.onDialogResult(bundle);
+
+        assertFalse(mPreference.isChecked());
+        verify(mNotificationManager).cancel(anyInt());
+        verify(mTelephonyManager).setAllowedNetworkTypesForReason(anyInt(), anyLong());
+    }
+    @Test
+    public void onDialogResult_NegariveButtonEvent() {
+        mController.displayPreference(mPreferenceScreen);
+        Bundle bundle = new Bundle();
+        bundle.putInt(Enable2gPreferenceController.REQUEST_KEY, DialogInterface.BUTTON_NEGATIVE);
+        mPreference.setChecked(false);
+
+        mController.onDialogResult(bundle);
+
+        assertTrue(mPreference.isChecked());
+    }
+
+    @Test
     public void updateState_simNameAsSummary() {
         when2gIsDisabledByAdmin(false);
         String simName = "SIM1";
@@ -232,7 +366,7 @@ public final class Enable2gPreferenceControllerTest {
         List<SubscriptionInfo> subInfos = new ArrayList();
         subInfos.add(subscriptionInfo);
         when(mSubscriptionManager.getAllSubscriptionInfoList()).thenReturn(subInfos);
-        mController.init(SUB_ID, true);
+        mController.init(mFragment, SUB_ID, true);
 
         mController.updateState((Preference) mPreference);
 
@@ -250,7 +384,7 @@ public final class Enable2gPreferenceControllerTest {
         List<SubscriptionInfo> subInfos = new ArrayList();
         subInfos.add(subscriptionInfo);
         when(mSubscriptionManager.getAllSubscriptionInfoList()).thenReturn(subInfos);
-        mController.init(SUB_ID, true);
+        mController.init(mFragment, SUB_ID, true);
 
         mController.updateState((Preference) mPreference);
 

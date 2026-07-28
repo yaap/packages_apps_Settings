@@ -88,31 +88,20 @@ public class AdjustmentKeyPreferenceControllerTest {
     }
 
     @Test
-    @DisableFlags({Flags.FLAG_NM_SUMMARIZATION, Flags.FLAG_NM_SUMMARIZATION_UI,
-            Flags.FLAG_NOTIFICATION_CLASSIFICATION_UI})
-    public void testIsAvailable_flagOff() {
-        assertThat(mPrefController.isAvailable()).isFalse();
-    }
-
-    @Test
-    @EnableFlags({Flags.FLAG_NM_SUMMARIZATION, Flags.FLAG_NM_SUMMARIZATION_UI,
-            Flags.FLAG_NOTIFICATION_CLASSIFICATION_UI})
     public void testIsAvailable_globalFeatureOff() {
         when(mBackend.getAllowedAssistantAdjustments()).thenReturn(new ArrayList<>());
         assertThat(mPrefController.isAvailable()).isFalse();
     }
 
     @Test
-    @EnableFlags({Flags.FLAG_NM_SUMMARIZATION, Flags.FLAG_NM_SUMMARIZATION_UI,
-            Flags.FLAG_NOTIFICATION_CLASSIFICATION_UI})
     public void testIsAvailable_flagOn() {
         assertThat(mPrefController.isAvailable()).isTrue();
     }
 
     @Test
-    @EnableFlags({Flags.FLAG_NM_SUMMARIZATION, Flags.FLAG_NM_SUMMARIZATION_UI,
-            Flags.FLAG_NOTIFICATION_CLASSIFICATION_UI})
+    @DisableFlags(Flags.FLAG_NM_SUMMARIZATION_ALL)
     public void testIsAvailable_summarization_notMsgApp() {
+        when(mBackend.getAllowedAssistantAdjustments()).thenReturn(List.of(KEY_SUMMARIZATION));
         when(mBackend.hasSentValidMsg(anyString(), anyInt())).thenReturn(false);
 
         mPrefController = new AdjustmentKeyPreferenceController(
@@ -123,7 +112,6 @@ public class AdjustmentKeyPreferenceControllerTest {
     }
 
     @Test
-    @EnableFlags({Flags.FLAG_NOTIFICATION_CLASSIFICATION_UI})
     public void testIsAvailable_bundle_NasNotSupported() {
         when(mBackend.isNotificationBundlingSupported()).thenReturn(false);
 
@@ -134,9 +122,11 @@ public class AdjustmentKeyPreferenceControllerTest {
     }
 
     @Test
-    @EnableFlags({Flags.FLAG_NM_SUMMARIZATION, Flags.FLAG_NM_SUMMARIZATION_UI})
+    @DisableFlags({Flags.FLAG_NM_SUMMARIZATION_ALL})
     public void testIsAvailable_summarization_NasNotSupported() {
+        when(mBackend.getAllowedAssistantAdjustments()).thenReturn(List.of(KEY_SUMMARIZATION));
         when(mBackend.isNotificationSummarizationSupported()).thenReturn(false);
+        when(mBackend.showSummarizationSettings()).thenReturn(false);
 
         mPrefController = new AdjustmentKeyPreferenceController(
                 mContext, mBackend, KEY_SUMMARIZATION);
@@ -146,8 +136,20 @@ public class AdjustmentKeyPreferenceControllerTest {
     }
 
     @Test
-    @EnableFlags({Flags.FLAG_NM_SUMMARIZATION, Flags.FLAG_NM_SUMMARIZATION_UI,
-            Flags.FLAG_NOTIFICATION_CLASSIFICATION_UI})
+    @EnableFlags({Flags.FLAG_NM_SUMMARIZATION_ALL})
+    public void testIsAvailable_summarization_NasNotSupported_appSummarizationIs() {
+        when(mBackend.getAllowedAssistantAdjustments()).thenReturn(List.of(KEY_SUMMARIZATION));
+        when(mBackend.isNotificationSummarizationSupported()).thenReturn(false);
+        when(mBackend.showSummarizationSettings()).thenReturn(true);
+
+        mPrefController = new AdjustmentKeyPreferenceController(
+                mContext, mBackend, KEY_SUMMARIZATION);
+        mPrefController.onResume(mAppRow, null, null, null, null, null, null);
+
+        assertThat(mPrefController.isAvailable()).isTrue();
+    }
+
+    @Test
     public void testChecked_adjustmentAllowed() {
         when(mBackend.isAdjustmentSupportedForPackage(mAppRow.userId, KEY_TYPE,
                 mAppRow.pkg)).thenReturn(true);
@@ -158,8 +160,6 @@ public class AdjustmentKeyPreferenceControllerTest {
     }
 
     @Test
-    @EnableFlags({Flags.FLAG_NM_SUMMARIZATION, Flags.FLAG_NM_SUMMARIZATION_UI,
-            Flags.FLAG_NOTIFICATION_CLASSIFICATION_UI})
     public void testChecked_adjustmentNotAllowed() {
         when(mBackend.isAdjustmentSupportedForPackage(mAppRow.userId, KEY_TYPE,
                 mAppRow.pkg)).thenReturn(false);
@@ -170,8 +170,6 @@ public class AdjustmentKeyPreferenceControllerTest {
     }
 
     @Test
-    @EnableFlags({Flags.FLAG_NM_SUMMARIZATION, Flags.FLAG_NM_SUMMARIZATION_UI,
-            Flags.FLAG_NOTIFICATION_CLASSIFICATION_UI})
     public void testOnPreferenceChange_changeOnAndOff() {
         when(mBackend.isAdjustmentSupportedForPackage(mAppRow.userId, KEY_TYPE,
                 mAppRow.pkg)).thenReturn(true);
@@ -190,8 +188,6 @@ public class AdjustmentKeyPreferenceControllerTest {
     }
 
     @Test
-    @EnableFlags({Flags.FLAG_NM_SUMMARIZATION, Flags.FLAG_NM_SUMMARIZATION_UI,
-            Flags.FLAG_NOTIFICATION_CLASSIFICATION_UI})
     public void testHandlePreferenceTreeClick_wrongPrefKey() {
         Preference pref = mock(Preference.class);
         when(pref.getKey()).thenReturn("some_key_that_is_not_relevant");

@@ -41,6 +41,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
+
 
 // LINT.IfChange
 class BatterySaverPreference :
@@ -48,6 +50,9 @@ class BatterySaverPreference :
 
     override val key
         get() = KEY
+
+    override val purpose: Int
+        get() = R.string.battery_saver_purpose
 
     override val title
         get() = R.string.battery_saver_master_switch_title
@@ -74,8 +79,13 @@ class BatterySaverPreference :
         callingUid: Int,
     ) = ReadWritePermit.ALLOW
 
+    override val supportsWrite = true
     override val sensitivityLevel
         get() = SensitivityLevel.NO_SENSITIVITY
+
+    override fun getEnabledDescription(): String = "This device must not be plugged in."
+
+    override fun getEnabledStability() = PreconditionStability.UNSTABLE
 
     override fun isEnabled(context: Context) =
         !BatteryStatus(BatteryUtils.getBatteryIntent(context)).isPluggedIn
@@ -129,7 +139,7 @@ class BatterySaverPreference :
     }
 
     companion object {
-        private const val KEY = "battery_saver"
+        const val KEY = "battery_saver"
         private const val SWITCH_ANIMATION_DURATION: Long = 350L
     }
 }

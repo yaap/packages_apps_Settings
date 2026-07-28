@@ -20,9 +20,7 @@ import android.app.backup.BackupHelper
 import android.app.backup.BackupRestoreEventLogger
 import android.content.Context
 
-/**
- * Provider for I18N related features.
- */
+/** Provider for I18N related features. */
 interface RegionalCustomizationFeatureProvider {
     /**
      * Return a BackupHelper for backup movement related settings.

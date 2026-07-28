@@ -16,12 +16,13 @@
 
 package com.android.settings.spa.app.appinfo
 
+import android.app.Activity
 import android.app.settings.SettingsEnums
 import android.content.pm.ApplicationInfo
-import android.content.pm.FeatureFlags as PmFeatureFlags
-import android.content.pm.FeatureFlagsImpl as PmFeatureFlagsImpl
+import android.os.Build
 import android.os.Bundle
 import android.os.UserHandle
+import android.os.UserManager
 import android.util.FeatureFlagUtils
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
@@ -36,15 +37,19 @@ import com.android.settings.R
 import com.android.settings.applications.AppInfoBase
 import com.android.settings.applications.appinfo.AppInfoDashboardFragment
 import com.android.settings.flags.Flags
+import com.android.settings.personalcontext.PersonalContextAppPreference
 import com.android.settings.spa.SpaActivity.Companion.startSpaActivity
 import com.android.settings.spa.app.appcompat.UserAspectRatioAppPreference
 import com.android.settings.spa.app.specialaccess.AlarmsAndRemindersAppListProvider
+import com.android.settings.spa.app.specialaccess.ComputerControlAutomationAppListProvider
+import com.android.settings.spa.app.specialaccess.ComputerControlTargetAppPageProvider
 import com.android.settings.spa.app.specialaccess.DisplayOverOtherAppsAppListProvider
 import com.android.settings.spa.app.specialaccess.InstallUnknownAppsListProvider
 import com.android.settings.spa.app.specialaccess.ModifySystemSettingsAppListProvider
 import com.android.settings.spa.app.specialaccess.PictureInPictureListProvider
 import com.android.settings.spa.app.specialaccess.UsageDataAppListProvider
 import com.android.settings.spa.app.specialaccess.WriteSystemPreferencesAppListProvider
+import com.android.settings.utils.HsuUtils
 import com.android.settingslib.spa.framework.common.SettingsPageProvider
 import com.android.settingslib.spa.framework.compose.navigator
 import com.android.settingslib.spa.widget.scaffold.RegularScaffold
@@ -122,21 +127,30 @@ object AppInfoSettingsProvider : SettingsPageProvider {
 @Composable
 private fun AppInfoSettings(packageInfoPresenter: PackageInfoPresenter) {
     val packageInfoState = packageInfoPresenter.flow.collectAsStateWithLifecycle()
-    val featureFlags: PmFeatureFlags = PmFeatureFlagsImpl()
+    val context = LocalContext.current
     RegularScaffold(
         title = stringResource(R.string.application_info_label),
         actions = {
             packageInfoState.value?.applicationInfo?.let { app ->
-                if (isArchivingEnabled(featureFlags))
-                    TopBarAppLaunchButton(packageInfoPresenter, app)
+                if (isArchivingEnabled()) TopBarAppLaunchButton(packageInfoPresenter, app)
                 AppInfoSettingsMoreOptions(packageInfoPresenter, app)
             }
         },
     ) {
         val packageInfo = packageInfoState.value ?: return@RegularScaffold
         val app = packageInfo.applicationInfo ?: return@RegularScaffold
+
+        // In Headless System User Mode, non-admin users are restricted from controlling HSU apps
+        // to prevent system-wide impact. Block access to the App Info page for these users.
+        if (android.multiuser.Flags.hsuAppManagement() && !HsuUtils.canControlHsuApp(context, app)) {
+            val activity = context as? Activity
+            activity?.finish()
+            return@RegularScaffold
+        }
+
         val appInfoProvider = remember(packageInfo) { AppInfoProvider(packageInfo) }
         val isHibernationSwitchEnabledStateFlow = MutableStateFlow(false)
+        val isContinueAcrossDevicesSwitchEnabledStateFlow = MutableStateFlow(false)
 
         appInfoProvider.AppInfo()
 
@@ -159,11 +173,39 @@ private fun AppInfoSettings(packageInfoPresenter: PackageInfoPresenter) {
             DefaultAppShortcuts(app)
         }
 
+        if (com.android.window.flags.Flags.virtualGamepadOverride()) {
+            Category(title = stringResource(R.string.app_info_experience_category)) {
+                VirtualGamepadPreference(app)
+            }
+        }
+
         Category(title = stringResource(R.string.unused_apps_category)) {
             HibernationSwitchPreference(app, isHibernationSwitchEnabledStateFlow)
         }
 
+        if (android.companion.Flags.taskContinuity()) {
+            Category(title = stringResource(R.string.task_continuity_category)) {
+                ContinueAcrossDevicesSwitchPreference(
+                    app,
+                    isContinueAcrossDevicesSwitchEnabledStateFlow,
+                )
+            }
+        }
+            
+        Category(title = stringResource(R.string.ai_assist_category)) {
+            PersonalContextAppPreference(app)
+            if (
+                android.companion.virtualdevice.flags.Flags.computerControlAccess() &&
+                    android.companion.virtualdevice.flags.Flags.computerControlPerAppConsent()
+            ) {
+                ComputerControlTargetAppPageProvider.InfoPageEntryItem(app)
+            }
+        }
+
         Category(title = stringResource(R.string.advanced_apps)) {
+            if (android.companion.virtualdevice.flags.Flags.computerControlAccess()) {
+                ComputerControlAutomationAppListProvider.InfoPageEntryItem(app)
+            }
             UserAspectRatioAppPreference(app)
             DisplayOverOtherAppsAppListProvider.InfoPageEntryItem(app)
             ModifySystemSettingsAppListProvider.InfoPageEntryItem(app)
@@ -180,9 +222,10 @@ private fun AppInfoSettings(packageInfoPresenter: PackageInfoPresenter) {
         Category(title = stringResource(R.string.app_install_details_group_title)) {
             AppInstallerInfoPreference(app)
         }
+
         appInfoProvider.FooterAppVersion()
     }
 }
 
-fun isArchivingEnabled(featureFlags: PmFeatureFlags) =
-    featureFlags.archiving() || Flags.appArchiving()
+fun isArchivingEnabled() =
+    Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM || Flags.appArchiving()

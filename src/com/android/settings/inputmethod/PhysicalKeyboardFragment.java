@@ -28,10 +28,8 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.UserHandle;
-import android.provider.SearchIndexableResource;
 import android.provider.Settings.Secure;
 import android.text.TextUtils;
-import android.util.FeatureFlagUtils;
 import android.view.InputDevice;
 import android.view.inputmethod.InputMethodManager;
 
@@ -45,6 +43,7 @@ import androidx.preference.TwoStatePreference;
 
 import com.android.internal.util.Preconditions;
 import com.android.settings.R;
+import com.android.settings.Utils;
 import com.android.settings.core.SubSettingLauncher;
 import com.android.settings.dashboard.DashboardFragment;
 import com.android.settings.overlay.FeatureFactory;
@@ -54,7 +53,6 @@ import com.android.settingslib.utils.ThreadUtils;
 
 import java.text.Collator;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -72,12 +70,9 @@ public final class PhysicalKeyboardFragment extends DashboardFragment
     private static final String ACCESSIBILITY_MOUSE_KEYS = "accessibility_mouse_keys";
     private static final String ACCESSIBILITY_PHYSICAL_KEYBOARD_A11Y = "physical_keyboard_a11y";
     private static final String KEYBOARD_SHORTCUTS_HELPER = "keyboard_shortcuts_helper";
-    private static final String MODIFIER_KEYS_SETTINGS = "modifier_keys_settings";
     private static final String EXTRA_AUTO_SELECTION = "auto_selection";
     public static final String EXTRA_INPUT_DEVICE_IDENTIFIER = "input_device_identifier";
     private static final String TAG = "KeyboardAndTouchA11yFragment";
-    private static final Uri sVirtualKeyboardSettingsUri = Secure.getUriFor(
-            Secure.SHOW_IME_WITH_HARD_KEYBOARD);
     private static final Uri sAccessibilityBounceKeysUri = Secure.getUriFor(
             Secure.ACCESSIBILITY_BOUNCE_KEYS);
     private static final Uri sAccessibilitySlowKeysUri = Secure.getUriFor(
@@ -127,6 +122,15 @@ public final class PhysicalKeyboardFragment extends DashboardFragment
     }
 
     @Override
+    public void onStart() {
+        super.onStart();
+        // TODO(b/483182050): Temporary mitigation by disabling keyboard settings.
+        if (Utils.shouldDisableKeyboardSettingsInDemoMode(getPrefContext())) {
+            getPreferenceScreen().setEnabled(false);
+        }
+    }
+
+    @Override
     public void onCreatePreferences(Bundle bundle, String s) {
         super.onCreatePreferences(bundle, s);
         Activity activity = Preconditions.checkNotNull(getActivity());
@@ -156,11 +160,6 @@ public final class PhysicalKeyboardFragment extends DashboardFragment
         mSupportsFirmwareUpdate = mFeatureProvider.supportsFirmwareUpdate();
         if (mSupportsFirmwareUpdate) {
             mFeatureProvider.registerKeyboardInformationCategory(getPreferenceScreen());
-        }
-        boolean isModifierKeySettingsEnabled = FeatureFlagUtils
-                .isEnabled(getContext(), FeatureFlagUtils.SETTINGS_NEW_KEYBOARD_MODIFIER_KEY);
-        if (!isModifierKeySettingsEnabled) {
-            mKeyboardAssistanceCategory.removePreference(findPreference(MODIFIER_KEYS_SETTINGS));
         }
         mKeyboardA11yCategory.removePreference(mAccessibilityBounceKeys);
         mKeyboardA11yCategory.removePreference(mAccessibilitySlowKeys);
@@ -279,7 +278,7 @@ public final class PhysicalKeyboardFragment extends DashboardFragment
         final PreferenceScreen preferenceScreen = getPreferenceScreen();
         preferenceScreen.removeAll();
         final PreferenceCategory category = new PreferenceCategory(getPrefContext());
-        category.setTitle(R.string.builtin_keyboard_settings_title);
+        category.setTitle(R.string.physical_keyboards_list_title);
         category.setOrder(0);
         preferenceScreen.addPreference(category);
 
@@ -340,11 +339,6 @@ public final class PhysicalKeyboardFragment extends DashboardFragment
     private void registerSettingsObserver() {
         unregisterSettingsObserver();
         ContentResolver contentResolver = getActivity().getContentResolver();
-        contentResolver.registerContentObserver(
-                sVirtualKeyboardSettingsUri,
-                false,
-                mContentObserver,
-                UserHandle.myUserId());
         contentResolver.registerContentObserver(
                 sAccessibilityBounceKeysUri,
                 false,
@@ -453,7 +447,7 @@ public final class PhysicalKeyboardFragment extends DashboardFragment
         }
         for (int deviceId : InputDevice.getDeviceIds()) {
             final InputDevice device = InputDevice.getDevice(deviceId);
-            if (device == null || device.isVirtual() || !device.isFullKeyboard()) {
+            if (device == null || !device.isPhysicalDevice() || !device.isFullKeyboard()) {
                 continue;
             }
             keyboards.add(new HardKeyboardDeviceInfo(
@@ -525,18 +519,12 @@ public final class PhysicalKeyboardFragment extends DashboardFragment
     }
 
     public static final BaseSearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
-            new BaseSearchIndexProvider() {
-                @Override
-                public List<SearchIndexableResource> getXmlResourcesToIndex(
-                        Context context, boolean enabled) {
-                    final SearchIndexableResource sir = new SearchIndexableResource(context);
-                    sir.xmlResId = R.xml.physical_keyboard_settings;
-                    return Arrays.asList(sir);
-                }
-
+            new BaseSearchIndexProvider(R.xml.physical_keyboard_settings) {
                 @Override
                 protected boolean isPageSearchEnabled(Context context) {
-                    return !getHardKeyboards(context).isEmpty();
+                    // TODO(b/483182050): Temporary mitigation by hiding keyboard settings.
+                    return !Utils.shouldDisableKeyboardSettingsInDemoMode(context)
+                            && !getHardKeyboards(context).isEmpty();
                 }
             };
 }

@@ -30,20 +30,27 @@ import com.android.settings.flags.Flags
 import com.android.settings.security.LockScreenPreferenceScreen
 import com.android.settings.utils.makeLaunchIntent
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceCategory as Category
 import com.android.settingslib.metadata.PreferenceIconProvider
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.preferenceHierarchy
 import com.android.settingslib.widget.SettingsThemeHelper.isExpressiveTheme
-import com.android.systemui.shared.Flags.ambientAod
 import kotlinx.coroutines.CoroutineScope
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 
+// LINT.IfChange
 @ProvidePreferenceScreen(DisplayScreen.KEY)
 open class DisplayScreen :
     PreferenceScreenMixin, PreferenceAvailabilityProvider, PreferenceIconProvider {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED)
+
     override val key: String
         get() = KEY
+
+    override val purpose: Int
+        get() = R.string.display_settings_screen_purpose
 
     override val title: Int
         get() = R.string.display_settings
@@ -67,26 +74,52 @@ open class DisplayScreen :
 
     override fun getPreferenceHierarchy(context: Context, coroutineScope: CoroutineScope) =
         preferenceHierarchy(context) {
-            +Category("category_brightness", R.string.category_name_brightness) order -200 += {
-                +BrightnessLevelPreference()
-                if (Flags.catalystScreenBrightnessMode()) +AutoBrightnessScreen.KEY
-            }
-            +Category("category_lock_display", R.string.category_name_lock_display) order -190 += {
-                if (Flags.catalystLockscreenFromDisplaySettings()) +LockScreenPreferenceScreen.KEY
-                if (ambientAod()) +AmbientDisplayAlwaysOnPreferenceScreen.KEY
-            }
-            +Category("category_key_appearance", R.string.category_name_appearance) order -180 += {
-                if (AccessibilityFlags.catalystDarkUiMode()) +DarkModeScreen.KEY
-                if (Flags.catalystTextReadingScreen()) +TextReadingScreen.KEY
-            }
-            +Category("category_other", R.string.category_name_display_controls) order -150 += {
-                +PeakRefreshRateSwitchPreference()
-                if (Flags.catalystScreensaver()) +ScreensaverScreen.KEY
-            }
+            +Category(
+                "category_brightness",
+                R.string.category_brightness_purpose,
+                R.string.category_name_brightness,
+            ) order -200 +=
+                {
+                    +BrightnessLevelPreference()
+                    if (Flags.catalystScreenBrightnessMode()) +AutoBrightnessScreen.KEY
+                }
+            +Category(
+                "category_lock_display",
+                R.string.category_lock_display_purpose,
+                R.string.category_name_lock_display,
+            ) order -190 +=
+                {
+                    if (Flags.catalystLockscreenFromDisplaySettings())
+                        +LockScreenPreferenceScreen.KEY
+                    +AmbientDisplayAlwaysOnPreferenceScreen.KEY
+                }
+            +Category(
+                "category_key_appearance",
+                R.string.category_key_appearance_purpose,
+                R.string.category_name_appearance,
+            ) order -180 +=
+                {
+                    if (AccessibilityFlags.catalystDarkUiMode()) +DarkModeScreen.KEY
+                    +TextReadingScreen.KEY
+                }
+            +Category(
+                "category_other",
+                R.string.category_other_purpose,
+                R.string.category_name_display_controls,
+            ) order -150 +=
+                {
+                    +PeakRefreshRateSwitchPreference()
+                    if (Flags.catalystScreensaver()) +ScreensaverScreen.KEY
+                }
         }
 
     override fun getLaunchIntent(context: Context, metadata: PreferenceMetadata?) =
         makeLaunchIntent(context, DisplaySettingsActivity::class.java, metadata?.key)
+
+    override val availabilityDescription =
+        "The device must support showing the top level display preference."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context) =
         context.resources.getBoolean(R.bool.config_show_top_level_display)
@@ -95,3 +128,4 @@ open class DisplayScreen :
         const val KEY = "display_settings_screen"
     }
 }
+// LINT.ThenChange(com.android.settings.DisplaySettings.java, DisplayApiScreen.kt)

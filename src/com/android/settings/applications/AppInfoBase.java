@@ -22,7 +22,11 @@ import android.Manifest;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.Dialog;
+import android.app.admin.DevicePolicyIdentifiers;
 import android.app.admin.DevicePolicyManager;
+import android.app.admin.EnforcingAdmin;
+import android.app.admin.PolicyEnforcementInfo;
+import android.app.admin.flags.Flags;
 import android.app.settings.SettingsEnums;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -54,11 +58,14 @@ import com.android.settings.applications.manageapplications.ManageApplications;
 import com.android.settings.core.SubSettingLauncher;
 import com.android.settings.core.instrumentation.InstrumentedDialogFragment;
 import com.android.settings.overlay.FeatureFactory;
+import com.android.settings.utils.HsuUtils;
 import com.android.settingslib.RestrictedLockUtilsInternal;
 import com.android.settingslib.applications.ApplicationsState;
 import com.android.settingslib.applications.ApplicationsState.AppEntry;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public abstract class AppInfoBase extends SettingsPreferenceFragment
         implements ApplicationsState.Callbacks {
@@ -68,6 +75,7 @@ public abstract class AppInfoBase extends SettingsPreferenceFragment
 
     private static final String TAG = "AppInfoBase";
 
+    protected EnforcingAdmin mAppsControlEnforcingAdmin;
     protected EnforcedAdmin mAppsControlDisallowedAdmin;
     protected boolean mAppsControlDisallowedBySystem;
 
@@ -112,14 +120,56 @@ public abstract class AppInfoBase extends SettingsPreferenceFragment
     @Override
     public void onResume() {
         super.onResume();
-        mAppsControlDisallowedAdmin = RestrictedLockUtilsInternal.checkIfRestrictionEnforced(
-                getActivity(), UserManager.DISALLOW_APPS_CONTROL, mUserId);
-        mAppsControlDisallowedBySystem = RestrictedLockUtilsInternal.hasBaseUserRestriction(
-                getActivity(), UserManager.DISALLOW_APPS_CONTROL, mUserId);
-
+        if (Flags.policyTransparencyRefactorEnabled()) {
+            DevicePolicyManager dpm = getActivity().getSystemService(DevicePolicyManager.class);
+            PolicyEnforcementInfo appsControlEnforcementInfo;
+            if (Flags.userControlDisabledPackagesSettingsFix()) {
+                PolicyEnforcementInfo userRestrictionEnforcement = dpm.getEnforcingAdminsForPolicy(
+                        DevicePolicyIdentifiers.getIdentifierForUserRestriction(
+                                UserManager.DISALLOW_APPS_CONTROL), mUserId);
+                PolicyEnforcementInfo policyEnforcement = getUserControlDisabledPolicyForPackage();
+                List<EnforcingAdmin> combinedAdmins = new ArrayList<>(
+                        userRestrictionEnforcement.getAllAdmins());
+                combinedAdmins.addAll(policyEnforcement.getAllAdmins());
+                appsControlEnforcementInfo = new PolicyEnforcementInfo(combinedAdmins);
+            } else {
+                appsControlEnforcementInfo = dpm.getEnforcingAdminsForPolicy(
+                        DevicePolicyIdentifiers.getIdentifierForUserRestriction(
+                                UserManager.DISALLOW_APPS_CONTROL), mUserId);
+            }
+            mAppsControlEnforcingAdmin =
+                    appsControlEnforcementInfo.getMostImportantEnforcingAdmin();
+            mAppsControlDisallowedBySystem = appsControlEnforcementInfo.isEnforcedBySystem();
+        } else {
+            mAppsControlDisallowedBySystem = RestrictedLockUtilsInternal.hasBaseUserRestriction(
+                    getActivity(), UserManager.DISALLOW_APPS_CONTROL, mUserId);
+            mAppsControlDisallowedAdmin = RestrictedLockUtilsInternal.checkIfRestrictionEnforced(
+                    getActivity(), UserManager.DISALLOW_APPS_CONTROL, mUserId);
+            if (Flags.userControlDisabledPackagesSettingsFix()
+                    // If the admin is not null, it means the user restriction
+                    // DISALLOW_APPS_CONTROL is already enforced by an admin. This will show up
+                    // in as restricted by admin already so we don't need to do check for user
+                    // control disabled packages policy.
+                    && mAppsControlDisallowedAdmin == null) {
+                if (getUserControlDisabledPolicyForPackage().isEnforced()) {
+                    mAppsControlDisallowedAdmin = new EnforcedAdmin();
+                }
+            }
+        }
         if (!refreshUi()) {
             setIntentAndFinish(true /* appChanged */);
         }
+    }
+
+    private PolicyEnforcementInfo getUserControlDisabledPolicyForPackage() {
+        DevicePolicyManager dpm = getActivity().getSystemService(DevicePolicyManager.class);
+        List<String> userControlDisabledPackages = dpm.getUserControlDisabledPackages(null);
+        if (userControlDisabledPackages.isEmpty()
+                || !userControlDisabledPackages.contains(mPackageName)) {
+            return new PolicyEnforcementInfo(Collections.emptyList());
+        }
+        return dpm.getEnforcingAdminsForPolicy(
+                DevicePolicyIdentifiers.USER_CONTROL_DISABLED_PACKAGES_POLICY, mUserId);
     }
 
 
@@ -141,18 +191,31 @@ public abstract class AppInfoBase extends SettingsPreferenceFragment
                 mPackageName = intent.getData().getSchemeSpecificPart();
             }
         }
-        if (intent != null && intent.hasExtra(Intent.EXTRA_USER_HANDLE)) {
+        if (android.multiuser.Flags.hsuAppManagement()
+                && args != null && args.containsKey(ARG_PACKAGE_UID)) {
+            // For HSU (Headless System User) apps, we intentionally avoid setting EXTRA_USER_HANDLE
+            // when launching sub-settings to prevent framework attempts to launch activities
+            // directly on the headless user. Instead, we explicitly pass the UID as an argument.
+            mUserId = UserHandle.getUserId(args.getInt(ARG_PACKAGE_UID));
+        } else if (intent != null && intent.hasExtra(Intent.EXTRA_USER_HANDLE)) {
             mUserId = ((UserHandle) intent.getParcelableExtra(Intent.EXTRA_USER_HANDLE))
                     .getIdentifier();
-            if (mUserId != UserHandle.myUserId() && !hasInteractAcrossUsersFullPermission()) {
-                Log.w(TAG, "Intent not valid.");
-                finish();
-                return "";
-            }
         } else {
             mUserId = UserHandle.myUserId();
         }
+
+        if (mUserId != UserHandle.myUserId() && !hasInteractAcrossUsersFullPermission()) {
+            Log.w(TAG, "Intent not valid.");
+            finish();
+            return "";
+        }
         mAppEntry = mState.getEntry(mPackageName, mUserId);
+        if (mAppEntry != null && android.multiuser.Flags.hsuAppManagement()
+                && !HsuUtils.canControlHsuApp(getContext(), mAppEntry.info)) {
+            Log.w(TAG, "Non-admin user cannot open App info page for HSU app.");
+            finish();
+            return "";
+        }
         if (mAppEntry != null) {
             // Get application info again to refresh changed properties of application
             try {

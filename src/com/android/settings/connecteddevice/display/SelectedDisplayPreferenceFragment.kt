@@ -20,6 +20,7 @@ import android.app.ActivityManager.LOCK_TASK_MODE_LOCKED
 import android.app.admin.EnforcingAdmin
 import android.app.settings.SettingsEnums
 import android.hardware.display.DisplayManager
+import android.icu.text.NumberFormat
 import android.os.Bundle
 import android.provider.Settings
 import android.provider.Settings.Secure.INCLUDE_DEFAULT_DISPLAY_IN_TOPOLOGY
@@ -37,6 +38,8 @@ import com.android.settings.Utils.createAccessibleSequence
 import com.android.settings.accessibility.TextReadingPreferenceFragment
 import com.android.settings.connecteddevice.display.ExternalDisplaySettingsConfiguration.EXTERNAL_DISPLAY_HELP_URL
 import com.android.settings.core.SubSettingLauncher
+import com.android.settings.core.instrumentation.SettingsStatsLog
+import java.util.Locale
 
 /**
  * Fragment containing list of preferences for a single display, which gets updated dynamically,
@@ -58,6 +61,13 @@ open class SelectedDisplayPreferenceFragment(
     private var shouldShowDisplayConnectionPref: Boolean = false
 
     private val prefComponents = mutableListOf<PrefComponent>()
+    private val numberFormatter: NumberFormat = NumberFormat.getNumberInstance(Locale.getDefault())
+    private val refreshRateFormatter =
+        NumberFormat.getNumberInstance(Locale.getDefault()).apply {
+            isGroupingUsed = false
+            minimumFractionDigits = 2
+            maximumFractionDigits = 2
+        }
 
     override fun getMetricsCategory(): Int {
         return SettingsEnums.SETTINGS_EXTERNAL_DISPLAY_CATEGORY
@@ -77,7 +87,13 @@ open class SelectedDisplayPreferenceFragment(
                 putInt(ExternalDisplaySettingsConfiguration.DISPLAY_ID_ARG, displayId)
             }
         SubSettingLauncher(requireContext())
-            .setDestination(ResolutionPreferenceFragment::class.java.name)
+            .setDestination(
+                if (ConnectedDisplayInjector.isRefreshRateFlagsEnabled()) {
+                    ResolutionRefreshRatePreferenceFragment::class.java.name
+                } else {
+                    ResolutionPreferenceFragment::class.java.name
+                }
+            )
             .setArguments(args)
             .setSourceMetricsCategory(metricsCategory)
             .launch()
@@ -108,9 +124,8 @@ open class SelectedDisplayPreferenceFragment(
                 ViewModelProvider(requireParentFragment())
                     .get(DisplayPreferenceViewModel::class.java)
         }
-        shouldShowDisplayConnectionPref =
-            DesktopExperienceFlags.ENABLE_UPDATED_DISPLAY_CONNECTION_DIALOG.isTrue() &&
-                viewModel.injector.isProjectedModeEnabled()
+        shouldShowDisplayConnectionPref = viewModel.injector.isProjectedModeEnabled()
+        numberFormatter.isGroupingUsed = false
         setup()
     }
 
@@ -119,7 +134,8 @@ open class SelectedDisplayPreferenceFragment(
     }
 
     override fun onStopCallback() {
-        // No-op, viewModel observer should be managed by view lifecycle
+        // viewModel observer cleanup should be managed by view lifecycle
+        ExternalDisplaySettingsLoggerStore.removeAllLoggers()
     }
 
     private fun setup() {
@@ -127,7 +143,9 @@ open class SelectedDisplayPreferenceFragment(
         preferenceScreen.addPreference(selectedDisplayPreference)
 
         // Built-in display preferences
-        prefComponents.add(PrefComponent(mirroringPreference(), PrefInfo.DISPLAY_MIRRORING))
+        if (viewModel.injector.desktopState?.canEnterDesktopMode == true) {
+            prefComponents.add(PrefComponent(mirroringPreference(), PrefInfo.DISPLAY_MIRRORING))
+        }
         prefComponents.add(
             PrefComponent(
                 includeDefaultDisplayInTopologyPreference(),
@@ -143,12 +161,16 @@ open class SelectedDisplayPreferenceFragment(
         prefComponents.add(
             PrefComponent(builtinDisplayDensityPreference(), PrefInfo.BUILTIN_DISPLAY_DENSITY)
         )
+
         // External display preferences
         prefComponents.add(
             PrefComponent(externalDisplayDensityPreference(), PrefInfo.EXTERNAL_DISPLAY_DENSITY)
         )
         prefComponents.add(PrefComponent(resolutionPreference(), PrefInfo.DISPLAY_RESOLUTION))
         prefComponents.add(PrefComponent(rotationPreference(), PrefInfo.DISPLAY_ROTATION))
+        if (ConnectedDisplayInjector.isUserPreferredHdrModeEnabled()) {
+            prefComponents.add(PrefComponent(hdrPreference(), PrefInfo.DISPLAY_HDR_PREFERENCE))
+        }
         if (shouldShowDisplayConnectionPref) {
             // Since `shouldShowDisplayConnectionPref` is static until reboot, instead of updating
             // visibility like the other preferences, just skip setting up connection pref
@@ -213,6 +235,11 @@ open class SelectedDisplayPreferenceFragment(
             selectedDisplayPreference
                 .findPreference<ListPreference>(PrefInfo.DISPLAY_ROTATION.key)
                 ?.let { updateRotationPreference(it, display) }
+            if (com.android.window.flags.Flags.enableUserPreferredHdrMode()) {
+                selectedDisplayPreference
+                    .findPreference<SwitchPreferenceCompat>(PrefInfo.DISPLAY_HDR_PREFERENCE.key)
+                    ?.let { updateHdrPreference(it, display) }
+            }
             if (shouldShowDisplayConnectionPref) {
                 selectedDisplayPreference
                     .findPreference<RestrictedListPreference>(
@@ -344,14 +371,43 @@ open class SelectedDisplayPreferenceFragment(
         display: DisplayDeviceAdditionalInfo,
     ) {
         val displayMode = display.mode ?: return
-        val width = displayMode.getPhysicalWidth()
-        val height = displayMode.getPhysicalHeight()
-        preference.setSummary(
-            createAccessibleSequence(
-                "$width x $height",
-                getResources().getString(R.string.screen_resolution_delimiter_a11y, width, height),
+        val width = displayMode.physicalWidth
+        val height = displayMode.physicalHeight
+        val formattedWidth = numberFormatter.format(width)
+        val formattedHeight = numberFormatter.format(height)
+        ExternalDisplaySettingsLoggerStore.getLogger(display.id).updateResolution(width, height)
+
+        if (ConnectedDisplayInjector.isRefreshRateFlagsEnabled()) {
+            val formattedRefreshRate = refreshRateFormatter.format(displayMode.refreshRate)
+            val displayText =
+                resources.getString(
+                    R.string.screen_resolution_refresh_rate_combined_displayed_text,
+                    formattedWidth,
+                    formattedHeight,
+                    formattedRefreshRate,
+                )
+            val a11yText =
+                resources.getString(
+                    R.string.screen_resolution_refresh_rate_combined_a11y,
+                    formattedWidth,
+                    formattedHeight,
+                    formattedRefreshRate,
+                )
+
+            preference.setSummary(createAccessibleSequence(displayText, a11yText))
+        } else {
+            val resolutionDisplayText =
+                resources.getString(
+                    R.string.screen_resolution_displayed_text,
+                    formattedWidth,
+                    formattedHeight,
+                )
+            val resolutionA11yText =
+                resources.getString(R.string.screen_resolution_delimiter_a11y, width, height)
+            preference.setSummary(
+                createAccessibleSequence(resolutionDisplayText, resolutionA11yText)
             )
-        )
+        }
     }
 
     private fun rotationPreference(): ListPreference {
@@ -382,6 +438,11 @@ open class SelectedDisplayPreferenceFragment(
                             return false
                         }
                         setValueIndex(rotation)
+                        val logger = ExternalDisplaySettingsLoggerStore.getLogger(displayId)
+                        logger.updateRotation(rotation * 90)
+                        logger.log(
+                            SettingsStatsLog.EXTERNAL_DISPLAY_SETTINGS_CHANGED__SETTING__ROTATION
+                        )
                         return true
                     }
                 }
@@ -393,10 +454,40 @@ open class SelectedDisplayPreferenceFragment(
         display: DisplayDeviceAdditionalInfo,
     ) {
         val rotation = display.rotation
+        ExternalDisplaySettingsLoggerStore.getLogger(display.id).updateRotation(rotation * 90)
         preference.apply {
             setValueIndex(rotation)
             setSummary(rotationEntries[rotation])
         }
+    }
+
+    private fun hdrPreference(): SwitchPreferenceCompat {
+        return SwitchPreferenceCompat(requireContext()).apply {
+            setTitle(PrefInfo.DISPLAY_HDR_PREFERENCE.titleResource)
+            setSummary(R.string.hdr_preference_summary)
+            key = PrefInfo.DISPLAY_HDR_PREFERENCE.key
+            onPreferenceClickListener =
+                Preference.OnPreferenceClickListener { preference ->
+                    writePreferenceClickMetric(preference)
+
+                    val displayId =
+                        viewModel.uiState.value?.selectedDisplayId
+                            ?: return@OnPreferenceClickListener false
+                    viewModel.updateUserHdrPreference(
+                        displayId,
+                        (preference as SwitchPreferenceCompat).isChecked(),
+                    )
+                    true
+                }
+        }
+    }
+
+    private fun updateHdrPreference(
+        preference: SwitchPreferenceCompat,
+        display: DisplayDeviceAdditionalInfo,
+    ) {
+        preference.isVisible = display.isHdrSupported
+        preference.isChecked = display.hdrPreference == DisplayManager.HDR_PREFERENCE_HDR_ALLOWED
     }
 
     private fun connectionPreference(): RestrictedListPreference {
@@ -516,7 +607,11 @@ open class SelectedDisplayPreferenceFragment(
             ParentPrefCategory.ROOT,
         ),
         DISPLAY_RESOLUTION(
-            R.string.external_display_resolution_settings_title,
+            if (ConnectedDisplayInjector.isRefreshRateFlagsEnabled()) {
+                R.string.external_display_resolution_refresh_rate_settings_title
+            } else {
+                R.string.external_display_resolution_settings_title
+            },
             "pref_key_external_display_resolution",
             DisplayType.EXTERNAL_DISPLAY,
             ParentPrefCategory.ROOT,
@@ -524,6 +619,12 @@ open class SelectedDisplayPreferenceFragment(
         DISPLAY_ROTATION(
             R.string.external_display_rotation,
             "pref_key_external_display_rotation",
+            DisplayType.EXTERNAL_DISPLAY,
+            ParentPrefCategory.ROOT,
+        ),
+        DISPLAY_HDR_PREFERENCE(
+            R.string.hdr_preference_title,
+            "pref_key_external_display_hdr_preference",
             DisplayType.EXTERNAL_DISPLAY,
             ParentPrefCategory.ROOT,
         ),

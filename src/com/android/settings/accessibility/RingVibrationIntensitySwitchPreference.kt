@@ -19,23 +19,39 @@ import android.content.Context
 import android.os.VibrationAttributes
 import android.provider.Settings.System.RING_VIBRATION_INTENSITY
 import com.android.settings.R
+import com.android.settingslib.metadata.ReadWritePermit
+import com.android.settingslib.metadata.SensitivityLevel
 
 /** Accessibility settings for ring vibration, using a switch toggle. */
 // LINT.IfChange
 class RingVibrationIntensitySwitchPreference(
     context: Context,
     key: String,
+    purpose: Int,
     mainSwitchPreferenceKey: String,
 ) :
     VibrationIntensitySwitchPreference(
         context = context,
         key = key,
+        purpose = purpose,
         settingsProviderKey = RING_VIBRATION_INTENSITY,
         mainSwitchPreferenceKey = mainSwitchPreferenceKey,
         vibrationUsage = VibrationAttributes.USAGE_RINGTONE,
         title = R.string.accessibility_ring_vibration_title,
         hasRingerModeDependency = true,
     ) {
+    override val sensitivityLevel: Int
+        get() = SensitivityLevel.NO_SENSITIVITY
+
+    override fun getWritePermit(
+        context: Context,
+        value: Boolean?,
+        callingPid: Int,
+        callingUid: Int,
+    ) = ReadWritePermit.ALLOW
+
+    override val supportsWrite = true
+
     override val keywords: Int
         get() = R.string.keywords_ring_vibration
 }

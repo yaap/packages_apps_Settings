@@ -370,6 +370,11 @@ public class BatteryInfo {
                 currentTimeMs);
     }
 
+    /** Whether it is wireless charging or not. */
+    public boolean isWirelessCharging() {
+        return pluggedStatus == BatteryManager.BATTERY_PLUGGED_WIRELESS;
+    }
+
     private static void updateBatteryInfoCharging(
             Context context,
             Intent batteryBroadcast,
@@ -384,6 +389,9 @@ public class BatteryInfo {
                     context.getContentResolver(),
                     com.android.settingslib.fuelgauge.BatteryUtils.GLOBAL_TIME_TO_FULL_MILLIS,
                     chargeTimeMs);
+        }
+        if (chargeTimeMs > 0) {
+            info.remainingTimeUs = PowerUtil.convertMsToUs(chargeTimeMs);
         }
 
         final int status =
@@ -432,7 +440,6 @@ public class BatteryInfo {
                         && dockDefenderMode == BatteryUtils.DockDefenderMode.DISABLED)
                 || dockDefenderMode == BatteryUtils.DockDefenderMode.TEMPORARILY_BYPASSED) {
             // Battery is charging to full
-            info.remainingTimeUs = PowerUtil.convertMsToUs(chargeTimeMs);
             int resId = getChargingDurationResId(info.isFastCharging);
             info.remainingLabel =
                     chargeTimeMs <= 0

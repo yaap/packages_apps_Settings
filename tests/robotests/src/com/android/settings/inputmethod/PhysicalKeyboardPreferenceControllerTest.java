@@ -30,6 +30,7 @@ import android.view.InputDevice;
 
 import androidx.preference.Preference;
 
+import com.android.settings.R;
 import com.android.settings.inputmethod.PhysicalKeyboardFragment.HardKeyboardDeviceInfo;
 import com.android.settings.testutils.shadow.ShadowInputDevice;
 
@@ -116,13 +117,15 @@ public class PhysicalKeyboardPreferenceControllerTest {
     @Config(shadows = ShadowInputDevice.class)
     public void updateState_hasKeyboard_setSummaryToKeyboardName() {
         final InputDevice device = mock(InputDevice.class);
-        when(device.isVirtual()).thenReturn(false);
+        when(device.isPhysicalDevice()).thenReturn(true);
         when(device.isFullKeyboard()).thenReturn(true);
         when(device.getName()).thenReturn("test_keyboard");
         ShadowInputDevice.addDevice(0, device);
 
         mController.updateState(mPreference);
 
-        verify(mPreference).setSummary(device.getName());
+        verify(mPreference)
+                .setSummary(
+                        mContext.getString(R.string.physical_keyboard_summary, device.getName()));
     }
 }

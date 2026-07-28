@@ -27,6 +27,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.Mockito.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.reset;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -42,6 +43,7 @@ import android.net.wifi.WifiEnterpriseConfig.Eap;
 import android.net.wifi.WifiEnterpriseConfig.Phase2;
 import android.net.wifi.WifiManager;
 import android.os.Looper;
+import android.os.Process;
 import android.os.UserManager;
 import android.platform.test.annotations.EnableFlags;
 import android.platform.test.flag.junit.SetFlagsRule;
@@ -50,15 +52,17 @@ import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
+
 import com.android.settings.R;
-import com.android.settings.connectivity.Flags;
+import com.android.settings.flags.Flags;
 import com.android.settings.network.SubscriptionUtil;
 import com.android.settings.utils.AndroidKeystoreAliasLoader;
 import com.android.settings.widget.EnhancedSettingsSpinnerAdapter;
@@ -66,8 +70,11 @@ import com.android.settings.wifi.details2.WifiPrivacyPreferenceController;
 import com.android.settings.wifi.details2.WifiPrivacyPreferenceController2;
 import com.android.wifitrackerlib.WifiEntry;
 
+import com.google.android.material.materialswitch.MaterialSwitch;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.common.collect.ImmutableList;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
@@ -79,6 +86,10 @@ import org.mockito.junit.MockitoRule;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.RuntimeEnvironment;
 import org.robolectric.Shadows;
+import org.robolectric.annotation.Config;
+import org.robolectric.annotation.Implementation;
+import org.robolectric.annotation.Implements;
+import org.robolectric.annotation.Resetter;
 import org.robolectric.shadows.ShadowInputMethodManager;
 import org.robolectric.shadows.ShadowSubscriptionManager;
 
@@ -88,8 +99,11 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @RunWith(RobolectricTestRunner.class)
+@Config(shadows = {WifiConfigController2Test.ShadowWifiUtils.class})
 public class WifiConfigController2Test {
 
+    static final int USER_ID_CURRENT = Process.myUserHandle().getIdentifier();
+    static final int USER_ID_OTHER = USER_ID_CURRENT + 1;
     static final String WIFI_EAP_TLS_V1_3 = "TLS v1.3";
 
     @Rule
@@ -171,10 +185,16 @@ public class WifiConfigController2Test {
         when(mEapMethodSimSpinner.getSelectedItemPosition()).thenReturn(WIFI_EAP_METHOD_SIM);
     }
 
+    @After
+    public void tearDown() {
+        ShadowWifiUtils.reset();
+    }
+
     private void createController(
             WifiEntry mWifiEntry, int modeConnect, boolean hideMeteredAndPrivacy) {
         mController = new WifiConfigController2(mConfigUiBase, mView, mWifiEntry,
-                modeConnect, hideMeteredAndPrivacy, mWifiManager, mAndroidKeystoreAliasLoader);
+                modeConnect, hideMeteredAndPrivacy, /*showFocusRingIndicator=*/false,
+                mWifiManager, mAndroidKeystoreAliasLoader);
     }
 
     @Test
@@ -234,36 +254,42 @@ public class WifiConfigController2Test {
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_WIFI_MULTIUSER)
+    @EnableFlags(Flags.FLAG_ENABLE_WIFI_MULTIUSER)
     public void saveSharedField() {
+        when(mUserManager.getUserCount()).thenReturn(2);
         createController(null, WifiConfigUiBase2.MODE_CONNECT, false);
-        final Switch sharedSwitch = mView.findViewById(R.id.share_wifi_network);
+        final MaterialSwitch sharedSwitch = mView.findViewById(R.id.share_wifi_network);
+
         assertThat(sharedSwitch).isNotNull();
         assertThat(sharedSwitch.getVisibility()).isEqualTo(View.VISIBLE);
 
-        WifiConfiguration config = mController.getConfig();
+        sharedSwitch.setChecked(true);
 
+        WifiConfiguration config = mController.getConfig();
         assertThat(config.shared).isTrue();
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_WIFI_MULTIUSER)
+    @EnableFlags(Flags.FLAG_ENABLE_WIFI_MULTIUSER)
     public void editConfigurationFieldState() {
+        when(mUserManager.getUserCount()).thenReturn(2);
         createController(null, WifiConfigUiBase2.MODE_CONNECT, false);
-        final Switch editConfigurationSwitch =
+        final MaterialSwitch editConfigurationSwitch =
                 mView.findViewById(R.id.edit_wifi_network_configuration);
-        final Switch sharedSwitch = mView.findViewById(R.id.share_wifi_network);
+        final MaterialSwitch sharedSwitch = mView.findViewById(R.id.share_wifi_network);
 
         assertThat(editConfigurationSwitch).isNotNull();
+        assertThat(editConfigurationSwitch.getVisibility()).isEqualTo(View.VISIBLE);
 
         sharedSwitch.setChecked(true);
-        shadowOf(Looper.getMainLooper()).idle();
+        editConfigurationSwitch.setChecked(false);
 
-        assertThat(editConfigurationSwitch.isEnabled()).isTrue();
+        WifiConfiguration config = mController.getConfig();
+        assertThat(config.isAllowedToUpdateByOtherUsers()).isFalse();
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_WIFI_MULTIUSER)
+    @EnableFlags(Flags.FLAG_ENABLE_WIFI_MULTIUSER)
     public void checkSharingFieldsVisibility() {
         when(mUserManager.getUserCount()).thenReturn(1);
         createController(null, WifiConfigUiBase2.MODE_CONNECT, false);
@@ -278,14 +304,33 @@ public class WifiConfigController2Test {
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_WIFI_MULTIUSER)
+    @EnableFlags(Flags.FLAG_ENABLE_WIFI_MULTIUSER)
+    public void checkSharingFieldsVisibility_modifyNetwork() {
+        when(mUserManager.getUserCount()).thenReturn(2);
+        when(mWifiEntry.isSaved()).thenReturn(true);
+        final WifiConfiguration mockWifiConfig = spy(new WifiConfiguration());
+        when(mockWifiConfig.getIpConfiguration()).thenReturn(mock(IpConfiguration.class));
+        when(mWifiEntry.getWifiConfiguration()).thenReturn(mockWifiConfig);
+        createController(mWifiEntry, WifiConfigUiBase2.MODE_MODIFY, false);
+        shadowOf(Looper.getMainLooper()).idle();
+
+        final View sharingFields = mView.findViewById(R.id.sharing_toggle_fields);
+        final View editConfigFields =
+                mView.findViewById(R.id.edit_wifi_network_configuration_fields);
+
+        assertThat(sharingFields.getVisibility()).isEqualTo(View.GONE);
+        assertThat(editConfigFields.getVisibility()).isEqualTo(View.GONE);
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_ENABLE_WIFI_MULTIUSER)
     public void checkIpSpinnerState_networkNotOwned_multipleUsers() {
         when(mUserManager.getUserCount()).thenReturn(2);
         when(mWifiEntry.isSaved()).thenReturn(true);
         final WifiConfiguration mockWifiConfig = spy(new WifiConfiguration());
         when(mockWifiConfig.getIpConfiguration()).thenReturn(mock(IpConfiguration.class));
         when(mWifiEntry.getWifiConfiguration()).thenReturn(mockWifiConfig);
-        mockWifiConfig.creatorUid = Integer.MAX_VALUE;
+        when(mockWifiConfig.getCreatorUserId()).thenReturn(USER_ID_OTHER);
         createController(mWifiEntry, WifiConfigUiBase2.MODE_CONNECT, false);
 
         final View ipSettingsSpinner = mView.findViewById(R.id.ip_settings);
@@ -293,14 +338,14 @@ public class WifiConfigController2Test {
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_WIFI_MULTIUSER)
+    @EnableFlags(Flags.FLAG_ENABLE_WIFI_MULTIUSER)
     public void checkIpSpinnerState_networkNotOwned_singleUser() {
         when(mUserManager.getUserCount()).thenReturn(1);
         when(mWifiEntry.isSaved()).thenReturn(true);
         final WifiConfiguration mockWifiConfig = spy(new WifiConfiguration());
         when(mockWifiConfig.getIpConfiguration()).thenReturn(mock(IpConfiguration.class));
         when(mWifiEntry.getWifiConfiguration()).thenReturn(mockWifiConfig);
-        mockWifiConfig.creatorUid = Integer.MAX_VALUE;
+        when(mockWifiConfig.getCreatorUserId()).thenReturn(USER_ID_OTHER);
         createController(mWifiEntry, WifiConfigUiBase2.MODE_CONNECT, false);
 
         final View ipSettingsSpinner = mView.findViewById(R.id.ip_settings);
@@ -308,14 +353,14 @@ public class WifiConfigController2Test {
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_WIFI_MULTIUSER)
+    @EnableFlags(Flags.FLAG_ENABLE_WIFI_MULTIUSER)
     public void checkIpSpinnerState_networkOwned_multipleUsers() {
         when(mUserManager.getUserCount()).thenReturn(2);
         when(mWifiEntry.isSaved()).thenReturn(true);
         final WifiConfiguration mockWifiConfig = spy(new WifiConfiguration());
         when(mockWifiConfig.getIpConfiguration()).thenReturn(mock(IpConfiguration.class));
         when(mWifiEntry.getWifiConfiguration()).thenReturn(mockWifiConfig);
-        mockWifiConfig.creatorUid = 1;
+        when(mockWifiConfig.getCreatorUserId()).thenReturn(USER_ID_CURRENT);
         createController(mWifiEntry, WifiConfigUiBase2.MODE_CONNECT, false);
 
         final View ipSettingsSpinner = mView.findViewById(R.id.ip_settings);
@@ -323,14 +368,14 @@ public class WifiConfigController2Test {
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_WIFI_MULTIUSER)
+    @EnableFlags(Flags.FLAG_ENABLE_WIFI_MULTIUSER)
     public void checkProxySpinnerState_networkNotOwned_multipleUsers() {
         when(mUserManager.getUserCount()).thenReturn(2);
         when(mWifiEntry.isSaved()).thenReturn(true);
         final WifiConfiguration mockWifiConfig = spy(new WifiConfiguration());
         when(mockWifiConfig.getIpConfiguration()).thenReturn(mock(IpConfiguration.class));
         when(mWifiEntry.getWifiConfiguration()).thenReturn(mockWifiConfig);
-        mockWifiConfig.creatorUid = Integer.MAX_VALUE;
+        when(mockWifiConfig.getCreatorUserId()).thenReturn(USER_ID_OTHER);
         createController(mWifiEntry, WifiConfigUiBase2.MODE_CONNECT, false);
 
         final View proxySettingsSpinner = mView.findViewById(R.id.proxy_settings);
@@ -338,14 +383,14 @@ public class WifiConfigController2Test {
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_WIFI_MULTIUSER)
+    @EnableFlags(Flags.FLAG_ENABLE_WIFI_MULTIUSER)
     public void checkProxySpinnerState_networkNotOwned_singleUser() {
         when(mUserManager.getUserCount()).thenReturn(1);
         when(mWifiEntry.isSaved()).thenReturn(true);
         final WifiConfiguration mockWifiConfig = spy(new WifiConfiguration());
         when(mockWifiConfig.getIpConfiguration()).thenReturn(mock(IpConfiguration.class));
         when(mWifiEntry.getWifiConfiguration()).thenReturn(mockWifiConfig);
-        mockWifiConfig.creatorUid = Integer.MAX_VALUE;
+        when(mockWifiConfig.getCreatorUserId()).thenReturn(USER_ID_OTHER);
         createController(mWifiEntry, WifiConfigUiBase2.MODE_CONNECT, false);
 
         final View proxySettingsSpinner = mView.findViewById(R.id.proxy_settings);
@@ -353,18 +398,123 @@ public class WifiConfigController2Test {
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_WIFI_MULTIUSER)
+    @EnableFlags(Flags.FLAG_ENABLE_WIFI_MULTIUSER)
     public void checkProxySpinnerState_networkOwned_multipleUsers() {
         when(mUserManager.getUserCount()).thenReturn(2);
         when(mWifiEntry.isSaved()).thenReturn(true);
         final WifiConfiguration mockWifiConfig = spy(new WifiConfiguration());
         when(mockWifiConfig.getIpConfiguration()).thenReturn(mock(IpConfiguration.class));
         when(mWifiEntry.getWifiConfiguration()).thenReturn(mockWifiConfig);
-        mockWifiConfig.creatorUid = 1;
+        when(mockWifiConfig.getCreatorUserId()).thenReturn(USER_ID_CURRENT);
         createController(mWifiEntry, WifiConfigUiBase2.MODE_CONNECT, false);
 
         final View proxySettingsSpinner = mView.findViewById(R.id.proxy_settings);
         assertThat(proxySettingsSpinner.isEnabled()).isEqualTo(true);
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_ENABLE_WIFI_MULTIUSER)
+    public void checkFieldsState_networkNotEditable_allFieldsDisabled() {
+        when(mUserManager.getUserCount()).thenReturn(2);
+        when(mWifiEntry.isSaved()).thenReturn(true);
+        final WifiConfiguration mockWifiConfig = spy(new WifiConfiguration());
+        when(mockWifiConfig.getIpConfiguration()).thenReturn(mock(IpConfiguration.class));
+        when(mWifiEntry.getWifiConfiguration()).thenReturn(mockWifiConfig);
+        when(mockWifiConfig.getCreatorUserId()).thenReturn(USER_ID_OTHER);
+        createController(mWifiEntry, WifiConfigUiBase2.MODE_CONNECT, false);
+
+        // Check sharing switches
+        final MaterialSwitch sharedSwitch = mView.findViewById(R.id.share_wifi_network);
+        final MaterialSwitch editConfigSwitch =
+                mView.findViewById(R.id.edit_wifi_network_configuration);
+        assertThat(sharedSwitch.isEnabled()).isFalse();
+        assertThat(editConfigSwitch.isEnabled()).isFalse();
+
+        // Check static IP fields
+        final Spinner ipSettingsSpinner = mView.findViewById(R.id.ip_settings);
+        ipSettingsSpinner.setSelection(STATIC_IP);
+        mController.onItemSelected(ipSettingsSpinner, null, STATIC_IP, 0);
+        assertThat(mView.findViewById(R.id.ipaddress).isEnabled()).isFalse();
+        assertThat(mView.findViewById(R.id.gateway).isEnabled()).isFalse();
+        assertThat(mView.findViewById(R.id.network_prefix_length).isEnabled()).isFalse();
+        assertThat(mView.findViewById(R.id.dns1).isEnabled()).isFalse();
+        assertThat(mView.findViewById(R.id.dns2).isEnabled()).isFalse();
+
+        // Check static proxy fields
+        final Spinner proxySettingsSpinner = mView.findViewById(R.id.proxy_settings);
+        proxySettingsSpinner.setSelection(WifiConfigController2.PROXY_STATIC);
+        mController.onItemSelected(proxySettingsSpinner, null, WifiConfigController2.PROXY_STATIC,
+                0);
+        assertThat(mView.findViewById(R.id.proxy_hostname).isEnabled()).isFalse();
+        assertThat(mView.findViewById(R.id.proxy_port).isEnabled()).isFalse();
+        assertThat(mView.findViewById(R.id.proxy_exclusionlist).isEnabled()).isFalse();
+
+        // Check PAC proxy field
+        proxySettingsSpinner.setSelection(WifiConfigController2.PROXY_PAC);
+        mController.onItemSelected(proxySettingsSpinner, null, WifiConfigController2.PROXY_PAC, 0);
+        assertThat(mView.findViewById(R.id.proxy_pac).isEnabled()).isFalse();
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_ENABLE_WIFI_MULTIUSER)
+    public void checkSharingSwitchDisablement_guestUser() {
+        ShadowWifiUtils.setIsGuestUser(true);
+        when(mUserManager.getUserCount()).thenReturn(2);
+        createController(null, WifiConfigUiBase2.MODE_CONNECT, false);
+        shadowOf(Looper.getMainLooper()).idle();
+
+        final MaterialSwitch sharedSwitch = mView.findViewById(R.id.share_wifi_network);
+        final MaterialSwitch editConfigSwitch =
+                mView.findViewById(R.id.edit_wifi_network_configuration);
+
+        assertThat(sharedSwitch.isEnabled()).isFalse();
+        assertThat(editConfigSwitch.isEnabled()).isFalse();
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_ENABLE_WIFI_MULTIUSER)
+    public void checkFieldsState_networkEditable_allFieldsEnabled() {
+        ShadowWifiUtils.setIsGuestUser(false);
+        when(mUserManager.getUserCount()).thenReturn(2);
+        when(mWifiEntry.isSaved()).thenReturn(true);
+        final WifiConfiguration mockWifiConfig = spy(new WifiConfiguration());
+        when(mockWifiConfig.getIpConfiguration()).thenReturn(mock(IpConfiguration.class));
+        when(mWifiEntry.getWifiConfiguration()).thenReturn(mockWifiConfig);
+        when(mockWifiConfig.getCreatorUserId()).thenReturn(USER_ID_CURRENT);
+        createController(mWifiEntry, WifiConfigUiBase2.MODE_CONNECT, false);
+        shadowOf(Looper.getMainLooper()).idle();
+
+        // Check sharing switches
+        final MaterialSwitch sharedSwitch = mView.findViewById(R.id.share_wifi_network);
+        final MaterialSwitch editConfigSwitch =
+                mView.findViewById(R.id.edit_wifi_network_configuration);
+        assertThat(sharedSwitch.isEnabled()).isTrue();
+        // Default state of shared switch is true, so edit switch should be enabled.
+        assertThat(editConfigSwitch.isEnabled()).isTrue();
+
+        // Check static IP fields
+        final Spinner ipSettingsSpinner = mView.findViewById(R.id.ip_settings);
+        ipSettingsSpinner.setSelection(STATIC_IP);
+        mController.onItemSelected(ipSettingsSpinner, null, STATIC_IP, 0);
+        assertThat(mView.findViewById(R.id.ipaddress).isEnabled()).isTrue();
+        assertThat(mView.findViewById(R.id.gateway).isEnabled()).isTrue();
+        assertThat(mView.findViewById(R.id.network_prefix_length).isEnabled()).isTrue();
+        assertThat(mView.findViewById(R.id.dns1).isEnabled()).isTrue();
+        assertThat(mView.findViewById(R.id.dns2).isEnabled()).isTrue();
+
+        // Check static proxy fields
+        final Spinner proxySettingsSpinner = mView.findViewById(R.id.proxy_settings);
+        proxySettingsSpinner.setSelection(WifiConfigController2.PROXY_STATIC);
+        mController.onItemSelected(proxySettingsSpinner, null, WifiConfigController2.PROXY_STATIC,
+                0);
+        assertThat(mView.findViewById(R.id.proxy_hostname).isEnabled()).isTrue();
+        assertThat(mView.findViewById(R.id.proxy_port).isEnabled()).isTrue();
+        assertThat(mView.findViewById(R.id.proxy_exclusionlist).isEnabled()).isTrue();
+
+        // Check PAC proxy field
+        proxySettingsSpinner.setSelection(WifiConfigController2.PROXY_PAC);
+        mController.onItemSelected(proxySettingsSpinner, null, WifiConfigController2.PROXY_PAC, 0);
+        assertThat(mView.findViewById(R.id.proxy_pac).isEnabled()).isTrue();
     }
 
     @Test
@@ -609,6 +759,60 @@ public class WifiConfigController2Test {
     }
 
     @Test
+    @EnableFlags(Flags.FLAG_ENABLE_WIFI_MULTIUSER)
+    public void loadSavedShared_shouldCorrectSharedValue() {
+        checkSavedSharedValue(true);
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_ENABLE_WIFI_MULTIUSER)
+    public void loadSavedPrivate_shouldCorrectSharedValue() {
+        checkSavedSharedValue(false);
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_ENABLE_WIFI_MULTIUSER)
+    public void loadSavedEditable_shouldCorrectEditConfigValue() {
+        checkSavedEditConfigValue(true);
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_ENABLE_WIFI_MULTIUSER)
+    public void loadSavedNotEditable_shouldCorrectEditConfigValue() {
+        checkSavedEditConfigValue(false);
+    }
+
+    private void checkSavedSharedValue(boolean shared) {
+        when(mUserManager.getUserCount()).thenReturn(2);
+        when(mWifiEntry.isSaved()).thenReturn(true);
+        final WifiConfiguration mockWifiConfig = spy(new WifiConfiguration());
+        when(mockWifiConfig.getIpConfiguration()).thenReturn(mock(IpConfiguration.class));
+        when(mWifiEntry.getWifiConfiguration()).thenReturn(mockWifiConfig);
+        mockWifiConfig.shared = shared;
+        createController(mWifiEntry, WifiConfigUiBase2.MODE_CONNECT, false);
+
+        final MaterialSwitch sharedSwitch = mView.findViewById(R.id.share_wifi_network);
+
+        assertThat(sharedSwitch.isChecked()).isEqualTo(shared);
+    }
+
+    private void checkSavedEditConfigValue(boolean allowEditsByOtherUsers) {
+        when(mUserManager.getUserCount()).thenReturn(2);
+        when(mWifiEntry.isSaved()).thenReturn(true);
+        final WifiConfiguration mockWifiConfig = spy(new WifiConfiguration());
+        when(mockWifiConfig.getIpConfiguration()).thenReturn(mock(IpConfiguration.class));
+        when(mWifiEntry.getWifiConfiguration()).thenReturn(mockWifiConfig);
+        mockWifiConfig.shared = true;
+        when(mockWifiConfig.isAllowedToUpdateByOtherUsers()).thenReturn(allowEditsByOtherUsers);
+        createController(mWifiEntry, WifiConfigUiBase2.MODE_CONNECT, false);
+
+        final MaterialSwitch editConfigSwitch =
+                mView.findViewById(R.id.edit_wifi_network_configuration);
+
+        assertThat(editConfigSwitch.isChecked()).isEqualTo(allowEditsByOtherUsers);
+    }
+
+    @Test
     public void loadSavedDhcpValue_true() {
         checkSavedDhcpValue(true);
     }
@@ -749,17 +953,14 @@ public class WifiConfigController2Test {
     }
 
     @Test
-    public void loginScreenMode() {
-        createController(mWifiEntry, WifiConfigUiBase2.MODE_LOGIN_SCREEN, false);
-        assertThat(mView.findViewById(R.id.shared_network_login_screen_warning).getVisibility())
-                .isEqualTo(View.VISIBLE);
-        assertThat(mView.findViewById(R.id.sharing_toggle_fields).getVisibility())
-                .isEqualTo(View.GONE);
-        assertThat(mView.findViewById(R.id.edit_wifi_network_configuration_fields).getVisibility())
-                .isEqualTo(View.GONE);
+    public void checkDefaultPrivate_guestMode() {
+        ShadowWifiUtils.setIsGuestUser(true);
+        createController(mWifiEntry, WifiConfigUiBase2.MODE_CONNECT, false);
+        shadowOf(Looper.getMainLooper()).idle();
 
         WifiConfiguration wifiConfiguration = mController.getConfig();
-        assertThat(wifiConfiguration.shared).isTrue();
+        assertThat(wifiConfiguration.shared).isFalse();
+        assertThat(wifiConfiguration.isAllowedToUpdateByOtherUsers()).isFalse();
     }
 
     @Test
@@ -1147,6 +1348,142 @@ public class WifiConfigController2Test {
         verify(mController.mEapAnonymousView, never()).setText(any(String.class));
     }
 
+    @Test
+    public void verifyPasswordAccessibilityDelegate_removesPasswordPrefix() {
+        Context themeContext = new android.view.ContextThemeWrapper(mContext,
+                androidx.appcompat.R.style.Theme_AppCompat);
+        TextInputLayout realLayout = new TextInputLayout(themeContext);
+        View mockHost = mock(View.class);
+        Context mockContext = mock(Context.class);
+        AccessibilityNodeInfoCompat mockInfo = mock(AccessibilityNodeInfoCompat.class);
+
+        when(mockHost.getContext()).thenReturn(mockContext);
+        when(mockContext.getString(R.string.wifi_password)).thenReturn("Password");
+
+        WifiConfigController2.PasswordTextInputLayoutAccessibilityDelegate delegate =
+                new WifiConfigController2.PasswordTextInputLayoutAccessibilityDelegate(realLayout);
+
+        when(mockInfo.getText()).thenReturn("Password1234");
+        delegate.onInitializeAccessibilityNodeInfo(mockHost, mockInfo);
+        verify(mockInfo).setText("1234");
+
+        reset(mockInfo);
+        when(mockInfo.getText()).thenReturn("password");
+        delegate.onInitializeAccessibilityNodeInfo(mockHost, mockInfo);
+        verify(mockInfo).setText(null);
+
+        reset(mockInfo);
+        when(mockInfo.getText()).thenReturn("MyNetwork");
+        delegate.onInitializeAccessibilityNodeInfo(mockHost, mockInfo);
+        verify(mockInfo, never()).setText(any());
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_ENABLE_WIFI_MULTIUSER)
+    public void updateEditConfigurationFieldState_disabled_staysFocusable() {
+        createController(null, WifiConfigUiBase2.MODE_CONNECT, false);
+        MaterialSwitch switchView = mView.findViewById(R.id.edit_wifi_network_configuration);
+
+        mController.updateNetworkFieldState(R.id.edit_wifi_network_configuration_fields, switchView,
+                false);
+
+        View container = mView.findViewById(R.id.edit_wifi_network_configuration_fields);
+
+
+        assertThat(switchView.isEnabled()).isFalse();
+        assertThat(container.isEnabled()).isFalse();
+        assertThat(container.getImportantForAccessibility())
+                .isEqualTo(View.IMPORTANT_FOR_ACCESSIBILITY_AUTO);
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_ENABLE_WIFI_MULTIUSER)
+    public void updateEditConfigurationFieldState_enabled_showsForAccessibility() {
+        createController(null, WifiConfigUiBase2.MODE_CONNECT, false);
+        MaterialSwitch switchView = mView.findViewById(R.id.edit_wifi_network_configuration);
+
+        mController.updateNetworkFieldState(R.id.edit_wifi_network_configuration_fields, switchView,
+                true);
+
+        View container = mView.findViewById(R.id.edit_wifi_network_configuration_fields);
+
+        assertThat(switchView.isEnabled()).isTrue();
+        assertThat(container.isEnabled()).isTrue();
+        assertThat(container.getImportantForAccessibility())
+                .isEqualTo(View.IMPORTANT_FOR_ACCESSIBILITY_AUTO);
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_ENABLE_WIFI_MULTIUSER)
+    public void setAccessibilityDelegate_initializesNodeInfoCorrectly() {
+        createController(null, WifiConfigUiBase2.MODE_CONNECT, false);
+
+        mController.setAccessibilityDelegateForNetworkFields();
+
+        // Verify delegate is attached.
+        View container = mView.findViewById(R.id.sharing_toggle_fields);
+        View.AccessibilityDelegate delegate = container.getAccessibilityDelegate();
+        assertThat(delegate).isNotNull();
+
+        AccessibilityNodeInfo info = new AccessibilityNodeInfo();
+        MaterialSwitch switchView = mView.findViewById(R.id.share_wifi_network);
+        switchView.setChecked(true);
+
+        delegate.onInitializeAccessibilityNodeInfo(container, info);
+
+        assertThat(info.getClassName().toString()).isEqualTo("android.widget.Switch");
+        assertThat(info.getContentDescription().toString()).isEqualTo(
+                mContext.getString(R.string.wifi_share_preference_title) + ". "
+                        + mContext.getString(R.string.wifi_share_preference_summary));
+        assertThat(info.getStateDescription().toString())
+                .isEqualTo(mContext.getString(R.string.switch_on_text));
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_ENABLE_WIFI_MULTIUSER)
+    public void setAccessibilityDelegate_clickListener_togglesSwitchAndUpdatesState() {
+        createController(null, WifiConfigUiBase2.MODE_CONNECT, false);
+
+        mController.setAccessibilityDelegateForNetworkFields();
+
+        View container = mView.findViewById(R.id.sharing_toggle_fields);
+        MaterialSwitch switchView = mView.findViewById(R.id.share_wifi_network);
+
+        // Ensure initial state is Off.
+        switchView.setChecked(false);
+
+        // Click the container
+        container.performClick();
+
+        // Verify the toggle changed and the accessibility state description reflects the new state.
+        assertThat(switchView.isChecked()).isTrue();
+        assertThat(container.getStateDescription().toString())
+                .isEqualTo(mContext.getString(R.string.switch_on_text));
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_ENABLE_WIFI_MULTIUSER)
+    public void shouldShowFocusRingsInSuw_showFocusRing() {
+        mController = new WifiConfigController2(mConfigUiBase, mView, null,
+                WifiConfigUiBase2.MODE_CONNECT, false, /*showFocusRingIndicator=*/true,
+                mWifiManager, mAndroidKeystoreAliasLoader);
+
+        assertThat(mView.findViewById(R.id.sharing_toggle_fields).getForeground()).isNotNull();
+        assertThat(mView.findViewById(R.id.edit_wifi_network_configuration_fields).getForeground())
+                .isNotNull();
+        assertThat(mView.findViewById(R.id.password_input_layout)
+                .findViewById(com.google.android.material.R.id.text_input_end_icon)
+                .getForeground()).isNotNull();
+        assertThat(mView.findViewById(R.id.ssid_scanner_button).getForeground()).isNotNull();
+        assertThat(mView.findViewById(R.id.ip_settings).getForeground()).isNotNull();
+        assertThat(mView.findViewById(R.id.proxy_settings).getForeground()).isNotNull();
+        assertThat(mView.findViewById(R.id.metered_settings).getForeground()).isNotNull();
+        assertThat(mView.findViewById(R.id.security).getForeground()).isNotNull();
+        assertThat(mView.findViewById(R.id.advanced_options_layout).getForeground()).isNotNull();
+        assertThat(mView.findViewById(R.id.privacy_settings).getForeground()).isNotNull();
+        assertThat(mHiddenSettingsSpinner.getForeground()).isNotNull();
+    }
+
     private void setUpModifyingSavedCertificateConfigController(String savedCaCertificate,
             String savedUserCertificate) {
         final WifiConfiguration mockWifiConfig = spy(new WifiConfiguration());
@@ -1196,5 +1533,29 @@ public class WifiConfigController2Test {
         when(sub.getDisplayName()).thenReturn(displayName);
         when(sub.getCarrierId()).thenReturn(carrierId);
         return sub;
+    }
+
+    /*
+     * Shadow Class to enable access to static methods in WifiUtils
+     */
+    @Implements(com.android.settings.wifi.WifiUtils.class)
+    public static class ShadowWifiUtils {
+        private static boolean sIsGuestUser = false;
+
+         /** Shadow implementation of isGuestUser */
+        @Implementation
+        public static boolean isGuestUser(Context context) {
+            return sIsGuestUser;
+        }
+
+        public static void setIsGuestUser(boolean isGuestUser) {
+            sIsGuestUser = isGuestUser;
+        }
+
+        /** Resetter method to reset values between tests */
+        @Resetter
+        public static void reset() {
+            sIsGuestUser = false;
+        }
     }
 }

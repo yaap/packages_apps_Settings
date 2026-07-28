@@ -17,6 +17,7 @@
 package com.android.settings.wifi.calling;
 
 import static com.android.settings.SettingsActivity.EXTRA_SHOW_FRAGMENT;
+import static com.android.settings.wifi.calling.WifiCallingSettingsForSub.FRAGMENT_BUNDLE_SUBID;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -42,10 +43,9 @@ import android.os.Bundle;
 import android.os.PersistableBundle;
 import android.platform.test.flag.junit.SetFlagsRule;
 import android.telephony.CarrierConfigManager;
-import android.telephony.NetworkRegistrationInfo;
-import android.telephony.ServiceState;
 import android.telephony.TelephonyManager;
 import android.telephony.ims.ImsMmTelManager;
+import android.telephony.satellite.SatelliteManager;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -60,6 +60,7 @@ import com.android.settings.network.ims.MockWifiCallingQueryImsState;
 import com.android.settings.network.ims.WifiCallingQueryImsState;
 import com.android.settings.network.telephony.wificalling.IWifiCallingRepository;
 import com.android.settings.testutils.shadow.ShadowFragment;
+import com.android.settings.testutils.shadow.ShadowTelecomDependencies;
 import com.android.settings.widget.SettingsMainSwitchBar;
 import com.android.settings.widget.SettingsMainSwitchPreference;
 import com.android.settingslib.widget.TopIntroPreference;
@@ -79,7 +80,7 @@ import org.robolectric.RuntimeEnvironment;
 import org.robolectric.annotation.Config;
 import org.robolectric.util.ReflectionHelpers;
 
-@Config(shadows = ShadowFragment.class)
+@Config(shadows = {ShadowFragment.class, ShadowTelecomDependencies.class})
 @RunWith(RobolectricTestRunner.class)
 public class WifiCallingSettingsForSubTest {
     @Rule public final SetFlagsRule mSetFlagsRule = new SetFlagsRule();
@@ -109,6 +110,8 @@ public class WifiCallingSettingsForSubTest {
     @Mock
     private TelephonyManager mTelephonyManager;
     @Mock
+    private SatelliteManager mSatelliteManager;
+    @Mock
     private PreferenceScreen mPreferenceScreen;
     @Mock
     private SettingsActivity mActivity;
@@ -128,6 +131,7 @@ public class WifiCallingSettingsForSubTest {
     @Before
     public void setUp() throws Exception {
         MockitoAnnotations.initMocks(this);
+        mSetFlagsRule.enableFlags(android.telecom.flags.Flags.FLAG_TELECOM_MAINLINE_API);
 
         mContext = RuntimeEnvironment.application;
         doReturn(mContext.getTheme()).when(mActivity).getTheme();
@@ -142,6 +146,7 @@ public class WifiCallingSettingsForSubTest {
         doReturn(mTelephonyManager).when(mTelephonyManager).createForSubscriptionId(anyInt());
         doReturn(mock(LifecycleOwner.class)).when(mFragment).getViewLifecycleOwner();
         final Bundle bundle = new Bundle();
+        bundle.putInt(FRAGMENT_BUNDLE_SUBID, SUB_ID);
         when(mFragment.getArguments()).thenReturn(bundle);
         doNothing().when(mFragment).addPreferencesFromResource(anyInt());
         doNothing().when(mFragment).finish();
@@ -251,14 +256,8 @@ public class WifiCallingSettingsForSubTest {
         mBundle.putBoolean(CarrierConfigManager.KEY_EDITABLE_WFC_ROAMING_MODE_BOOL, true);
         mBundle.putBoolean(
                 CarrierConfigManager.KEY_OVERRIDE_WFC_ROAMING_MODE_WHILE_USING_NTN_BOOL, true);
-
         // Phone connected to non-terrestrial network
-        NetworkRegistrationInfo nri = new NetworkRegistrationInfo.Builder()
-                .setIsNonTerrestrialNetwork(true)
-                .build();
-        ServiceState ss = new ServiceState();
-        ss.addNetworkRegistrationInfo(nri);
-        doReturn(ss).when(mTelephonyManager).getServiceState();
+        doReturn(true).when(mSatelliteManager).isInCarrierRoamingNtnMode(anyInt());
 
         // Call onResume to update the WFC roaming preference.
         mFragment.onResume();
@@ -419,6 +418,11 @@ public class WifiCallingSettingsForSubTest {
         @Override
         TelephonyManager getTelephonyManagerForSub(int subId) {
             return mTelephonyManager;
+        }
+
+        @Override
+        SatelliteManager getSatelliteManager() {
+            return mSatelliteManager;
         }
 
         @Override

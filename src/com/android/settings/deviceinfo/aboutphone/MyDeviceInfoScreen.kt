@@ -25,7 +25,6 @@ import androidx.fragment.app.Fragment
 import com.android.settings.R
 import com.android.settings.Settings.MyDeviceInfoActivity
 import com.android.settings.core.PreferenceScreenMixin
-import com.android.settings.deviceinfo.DeviceNamePreference
 import com.android.settings.deviceinfo.hardwareinfo.HardwareInfoScreen
 import com.android.settings.deviceinfo.imei.ImeiPreference
 import com.android.settings.deviceinfo.simstatus.SimEidPreference
@@ -37,16 +36,24 @@ import com.android.settingslib.metadata.PreferenceIconProvider
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
 import com.android.settingslib.metadata.ProvidePreferenceScreen
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.metadata.preferenceHierarchy
 import com.android.settingslib.widget.SettingsThemeHelper.isExpressiveTheme
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 
+// LINT.IfChange
 @ProvidePreferenceScreen(MyDeviceInfoScreen.KEY)
 open class MyDeviceInfoScreen :
     PreferenceScreenMixin, PreferenceSummaryProvider, PreferenceIconProvider {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED)
+
     override val key: String
         get() = KEY
+
+    override val purpose: Int
+        get() = R.string.my_device_info_pref_screen_purpose
 
     override val title: Int
         get() = R.string.about_settings
@@ -76,21 +83,13 @@ open class MyDeviceInfoScreen :
 
     override fun getPreferenceHierarchy(context: Context, coroutineScope: CoroutineScope) =
         preferenceHierarchy(context) {
-            if (Flags.catalystAboutPhoneDeviceName()) {
-                +PreferenceCategory(
-                    BASIC_INFO_CATEGORY,
-                    R.string.my_device_info_basic_info_category_title,
-                ) +=
-                    {
-                        +DeviceNamePreference(context) order 1
-                    }
-            }
             +PreferenceCategory(
-                DEVICE_DETAIL_CATEGORY,
-                R.string.my_device_info_device_details_category_title,
+                key = DEVICE_DETAIL_CATEGORY,
+                purpose = R.string.device_detail_category_purpose,
+                title = R.string.my_device_info_device_details_category_title,
             ) +=
                 {
-                    if (Flags.catalystDeviceModel()) +HardwareInfoScreen.KEY order 30
+                    +HardwareInfoScreen.KEY order 30
                     addAsync(coroutineScope, Dispatchers.Default) {
                         +SimEidPreference(context) order 31
                     }
@@ -105,7 +104,7 @@ open class MyDeviceInfoScreen :
 
     companion object {
         const val KEY = "my_device_info_pref_screen"
-        internal const val BASIC_INFO_CATEGORY = "basic_info_category"
         internal const val DEVICE_DETAIL_CATEGORY = "device_detail_category"
     }
 }
+// LINT.ThenChange(MyDeviceInfoFragment.java, MyDeviceInfoApiFirstScreen.kt)

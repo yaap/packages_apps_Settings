@@ -33,6 +33,9 @@ import android.bluetooth.BluetoothLeBroadcastReceiveState;
 import android.content.Context;
 import android.os.SystemProperties;
 
+import androidx.preference.Preference;
+import androidx.preference.PreferenceGroup;
+
 import com.android.internal.logging.nano.MetricsProto.MetricsEvent;
 import com.android.settings.testutils.FakeFeatureFactory;
 import com.android.settingslib.bluetooth.A2dpProfile;
@@ -199,7 +202,12 @@ public class UtilsTest {
         when(cachedDevice2.getGroupId()).thenReturn(1);
         when(cachedDevice3.getGroupId()).thenReturn(2);
         when(cachedDevice1.getProfiles())
-                .thenReturn(ImmutableList.of(mA2dpProfile, mHeadsetProfile, mLeAudioProfile));
+                .thenReturn(
+                        ImmutableList.of(
+                                mA2dpProfile,
+                                mHeadsetProfile,
+                                mHearingAidProfile,
+                                mLeAudioProfile));
         when(cachedDevice2.getProfiles()).thenReturn(ImmutableList.of(mLeAudioProfile));
         when(cachedDevice3.getProfiles())
                 .thenReturn(ImmutableList.of(mA2dpProfile, mHeadsetProfile, mLeAudioProfile));
@@ -254,6 +262,45 @@ public class UtilsTest {
     }
 
     @Test
+    public void enableLeAudioProfile_hasHearingAidProfile_disableHearingAidProfile() {
+        CachedBluetoothDevice cachedDevice1 = mock(CachedBluetoothDevice.class);
+        BluetoothDevice device1 = mock(BluetoothDevice.class);
+        when(cachedDevice1.getDevice()).thenReturn(device1);
+        when(cachedDevice1.getGroupId()).thenReturn(BluetoothCsipSetCoordinator.GROUP_ID_INVALID);
+        when(cachedDevice1.getProfiles())
+                .thenReturn(
+                        ImmutableList.of(
+                                mA2dpProfile,
+                                mHeadsetProfile,
+                                mHearingAidProfile,
+                                mLeAudioProfile));
+
+        Utils.setLeAudioEnabled(mLocalBtManager, cachedDevice1, true);
+
+        verify(mLeAudioProfile).setEnabled(device1, true);
+        verify(mHearingAidProfile).setEnabled(device1, false);
+    }
+
+    @Test
+    public void enableLeAudioProfile_noHearingAidProfile_notDisableHearingAidProfile() {
+        CachedBluetoothDevice cachedDevice1 = mock(CachedBluetoothDevice.class);
+        BluetoothDevice device1 = mock(BluetoothDevice.class);
+        when(cachedDevice1.getDevice()).thenReturn(device1);
+        when(cachedDevice1.getGroupId()).thenReturn(BluetoothCsipSetCoordinator.GROUP_ID_INVALID);
+        when(cachedDevice1.getProfiles())
+                .thenReturn(
+                        ImmutableList.of(
+                                mA2dpProfile,
+                                mHeadsetProfile,
+                                mLeAudioProfile));
+
+        Utils.setLeAudioEnabled(mLocalBtManager, cachedDevice1, true);
+
+        verify(mLeAudioProfile).setEnabled(device1, true);
+        verify(mHearingAidProfile, never()).setEnabled(device1, false);
+    }
+
+    @Test
     public void disableLeAudioProfile_multipleDeviceInGroup() {
         CachedBluetoothDevice cachedDevice1 = mock(CachedBluetoothDevice.class);
         CachedBluetoothDevice cachedDevice2 = mock(CachedBluetoothDevice.class);
@@ -271,7 +318,12 @@ public class UtilsTest {
         when(cachedDevice2.getGroupId()).thenReturn(1);
         when(cachedDevice3.getGroupId()).thenReturn(2);
         when(cachedDevice1.getProfiles())
-                .thenReturn(ImmutableList.of(mA2dpProfile, mHeadsetProfile, mLeAudioProfile));
+                .thenReturn(
+                        ImmutableList.of(
+                                mA2dpProfile,
+                                mHeadsetProfile,
+                                mHearingAidProfile,
+                                mLeAudioProfile));
         when(cachedDevice2.getProfiles()).thenReturn(ImmutableList.of(mLeAudioProfile));
         when(cachedDevice3.getProfiles())
                 .thenReturn(ImmutableList.of(mA2dpProfile, mHeadsetProfile, mLeAudioProfile));
@@ -323,5 +375,125 @@ public class UtilsTest {
         verify(mLeAudioProfile).setEnabled(device1, false);
         verify(mA2dpProfile).setEnabled(device1, true);
         verify(mHeadsetProfile).setEnabled(device1, true);
+    }
+
+    @Test
+    public void disableLeAudioProfile_hasHearingAidProfile_enableHearingAidProfile() {
+        CachedBluetoothDevice cachedDevice1 = mock(CachedBluetoothDevice.class);
+        BluetoothDevice device1 = mock(BluetoothDevice.class);
+        when(cachedDevice1.getDevice()).thenReturn(device1);
+        when(cachedDevice1.getGroupId()).thenReturn(BluetoothCsipSetCoordinator.GROUP_ID_INVALID);
+        when(cachedDevice1.getProfiles())
+                .thenReturn(
+                        ImmutableList.of(
+                                mA2dpProfile,
+                                mHeadsetProfile,
+                                mHearingAidProfile,
+                                mLeAudioProfile));
+
+        Utils.setLeAudioEnabled(mLocalBtManager, cachedDevice1, false);
+
+        verify(mLeAudioProfile).setEnabled(device1, false);
+        verify(mHearingAidProfile).setEnabled(device1, true);
+    }
+
+    @Test
+    public void disableLeAudioProfile_noHearingAidProfile_notEnableHearingAidProfile() {
+        CachedBluetoothDevice cachedDevice1 = mock(CachedBluetoothDevice.class);
+        BluetoothDevice device1 = mock(BluetoothDevice.class);
+        when(cachedDevice1.getDevice()).thenReturn(device1);
+        when(cachedDevice1.getGroupId()).thenReturn(BluetoothCsipSetCoordinator.GROUP_ID_INVALID);
+        when(cachedDevice1.getProfiles())
+                .thenReturn(
+                        ImmutableList.of(
+                                mA2dpProfile,
+                                mHeadsetProfile,
+                                mLeAudioProfile));
+
+        Utils.setLeAudioEnabled(mLocalBtManager, cachedDevice1, false);
+
+        verify(mLeAudioProfile).setEnabled(device1, false);
+        verify(mHearingAidProfile, never()).setEnabled(device1, true);
+    }
+
+    @Test
+    public void updateVisibilityAccordingToChildren_oneVisibleChild_groupIsVisible() {
+        // Setup: Create a preference group with one visible child preference.
+        PreferenceGroup group = mock(PreferenceGroup.class);
+        Preference visiblePreference = mock(Preference.class);
+        when(group.getPreferenceCount()).thenReturn(1);
+        when(group.getPreference(0)).thenReturn(visiblePreference);
+        when(visiblePreference.isVisible()).thenReturn(true);
+
+        // Call the method under test.
+        Utils.updateVisibilityAccordingToChildren(group);
+
+        // Verify: The group's visibility is set to true.
+        verify(group).setVisible(true);
+    }
+
+    @Test
+    public void updateVisibilityAccordingToChildren_allChildrenInvisible_groupIsInvisible() {
+        // Setup: Create a preference group with two invisible child preferences.
+        PreferenceGroup group = mock(PreferenceGroup.class);
+        Preference invisiblePreference1 = mock(Preference.class);
+        Preference invisiblePreference2 = mock(Preference.class);
+        when(group.getPreferenceCount()).thenReturn(2);
+        when(group.getPreference(0)).thenReturn(invisiblePreference1);
+        when(group.getPreference(1)).thenReturn(invisiblePreference2);
+        when(invisiblePreference1.isVisible()).thenReturn(false);
+        when(invisiblePreference2.isVisible()).thenReturn(false);
+
+        // Call the method under test.
+        Utils.updateVisibilityAccordingToChildren(group);
+
+        // Verify: The group's visibility is set to false.
+        verify(group).setVisible(false);
+    }
+
+    @Test
+    public void updateVisibilityAccordingToChildren_noChildren_groupIsInvisible() {
+        // Setup: Create a preference group with no children.
+        PreferenceGroup group = mock(PreferenceGroup.class);
+        when(group.getPreferenceCount()).thenReturn(0);
+
+        // Call the method under test.
+        Utils.updateVisibilityAccordingToChildren(group);
+
+        // Verify: The group's visibility is set to false.
+        verify(group).setVisible(false);
+    }
+
+    @Test
+    public void updateVisibilityAccordingToChildren_mixedVisibilityChildren_groupIsVisible() {
+        // Setup: Create a preference group with one visible and one invisible child.
+        PreferenceGroup group = mock(PreferenceGroup.class);
+        Preference invisiblePreference = mock(Preference.class);
+        Preference visiblePreference = mock(Preference.class);
+        when(group.getPreferenceCount()).thenReturn(2);
+        when(group.getPreference(0)).thenReturn(invisiblePreference);
+        when(group.getPreference(1)).thenReturn(visiblePreference);
+        when(invisiblePreference.isVisible()).thenReturn(false);
+        when(visiblePreference.isVisible()).thenReturn(true);
+
+        // Call the method under test.
+        Utils.updateVisibilityAccordingToChildren(group);
+
+        // Verify: The group's visibility is set to true because at least one child is visible.
+        verify(group).setVisible(true);
+    }
+
+    @Test
+    public void updateVisibilityAccordingToChildren_invisibleCategoryKey_doesNothing() {
+        // Setup: Create a preference group with the special INVISIBLE_CATEGORY key.
+        PreferenceGroup group = mock(PreferenceGroup.class);
+        when(group.getKey()).thenReturn(Utils.INVISIBLE_CATEGORY);
+
+        // Call the method under test.
+        Utils.updateVisibilityAccordingToChildren(group);
+
+        // Verify: The method returns early and does not change the group's visibility.
+        verify(group, never()).setVisible(anyBoolean());
+        verify(group, never()).getPreferenceCount();
     }
 }

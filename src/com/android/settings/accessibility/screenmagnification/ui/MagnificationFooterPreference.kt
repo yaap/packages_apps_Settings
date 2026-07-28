@@ -22,7 +22,6 @@ import android.icu.text.MessageFormat
 import android.text.Html
 import com.android.server.accessibility.Flags
 import com.android.settings.R
-import com.android.settings.accessibility.screenmagnification.OneFingerPanningPreferenceController
 import com.android.settings.accessibility.shared.ui.AccessibilityFooterPreferenceBinding
 import com.android.settings.accessibility.shared.ui.AccessibilityFooterPreferenceMetadata
 import com.android.settings.inputmethod.InputPeripheralsSettingsUtils
@@ -32,9 +31,9 @@ import com.android.settingslib.datastore.SettingsSecureStore
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceTitleProvider
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 
-// LINT.IfChange
-class MagnificationFooterPreference :
+class MagnificationFooterPreference(override val helpResource: Int) :
     AccessibilityFooterPreferenceMetadata,
     AccessibilityFooterPreferenceBinding,
     PreferenceTitleProvider,
@@ -44,14 +43,14 @@ class MagnificationFooterPreference :
     override val key: String
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.magnification_preference_screen_html_description_purpose
+
     override val indexable
         get() = false
 
     override val introductionTitle: Int
         get() = R.string.accessibility_screen_magnification_about_title
-
-    override val helpResource: Int
-        get() = R.string.help_url_magnification
 
     override val learnMoreText: Int
         get() = R.string.accessibility_screen_magnification_footer_learn_more_content_description
@@ -70,6 +69,8 @@ class MagnificationFooterPreference :
             mSettingsKeyedObserver = null
         }
     }
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
 
     override fun getTitle(context: Context): CharSequence? {
         val hasTouch =
@@ -100,7 +101,7 @@ class MagnificationFooterPreference :
     private fun getTouchOnlySummary(context: Context): String {
         if (Flags.enableMagnificationOneFingerPanningGesture()) {
             val isOneFingerPanningOn =
-                OneFingerPanningPreferenceController.isOneFingerPanningEnabled(context)
+                OneFingerPanningSwitchPreference.isOneFingerPanningEnabled(context)
             return MessageFormat.format(
                 context.getString(
                     if (isOneFingerPanningOn)
@@ -128,74 +129,37 @@ class MagnificationFooterPreference :
     private fun getKeyboardOnlySummary(context: Context): String {
         val meta: String? = context.getString(R.string.modifier_keys_meta)
         val alt: String? = context.getString(R.string.modifier_keys_alt)
-        if (com.android.hardware.input.Flags.enableTalkbackAndMagnifierKeyGestures()) {
-            return MessageFormat.format(
-                context.getString(
-                    R.string.accessibility_screen_magnification_keyboard_summary,
-                    meta,
-                    alt,
-                ),
-                1,
-                2,
-                3,
-                4,
-            )
-        } else {
-            return MessageFormat.format(
-                context.getString(
-                    R.string.accessibility_screen_magnification_keyboard_shortcuts_flag_off_summary,
-                    meta,
-                    alt,
-                ),
-                1,
-                2,
-                3,
-                4,
-            )
-        }
+        return MessageFormat.format(
+            context.getString(
+                R.string.accessibility_screen_magnification_keyboard_summary,
+                meta,
+                alt,
+            ),
+            1,
+            2,
+            3,
+            4,
+        )
     }
 
     private fun getKeyboardTouchSummary(context: Context): String {
         val meta: String? = context.getString(R.string.modifier_keys_meta)
         val alt: String? = context.getString(R.string.modifier_keys_alt)
-        if (com.android.hardware.input.Flags.enableTalkbackAndMagnifierKeyGestures()) {
-            return MessageFormat.format(
-                context.getString(
-                    R.string.accessibility_screen_magnification_keyboard_touch_summary,
-                    meta,
-                    alt,
-                ),
-                1,
-                2,
-                3,
-                4,
-                5,
-            )
-        } else {
-            val stringBuilder = StringBuilder()
-            stringBuilder.append(
-                MessageFormat.format(
-                    context.getString(
-                        R.string
-                            .accessibility_screen_magnification_keyboard_shortcuts_flag_off_summary,
-                        meta,
-                        alt,
-                    ),
-                    1,
-                    2,
-                    3,
-                    4,
-                )
-            )
-
-            stringBuilder.append("<br/><br/>")
-            stringBuilder.append(getTouchOnlySummary(context))
-            return stringBuilder.toString()
-        }
+        return MessageFormat.format(
+            context.getString(
+                R.string.accessibility_screen_magnification_keyboard_touch_summary,
+                meta,
+                alt,
+            ),
+            1,
+            2,
+            3,
+            4,
+            5,
+        )
     }
 
     companion object {
         const val KEY = "html_description"
     }
 }
-// LINT.ThenChange(/src/com/android/settings/accessibility/screenmagnification/FooterPreferenceController.java)

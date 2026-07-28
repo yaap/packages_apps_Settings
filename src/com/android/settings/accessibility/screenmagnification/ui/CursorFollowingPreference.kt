@@ -20,15 +20,17 @@ import android.content.Context
 import android.provider.Settings
 import androidx.preference.Preference
 import com.android.settings.R
-import com.android.settings.accessibility.Flags
 import com.android.settings.accessibility.MagnificationCapabilities
 import com.android.settings.accessibility.MagnificationCapabilities.MagnificationMode.ALL
 import com.android.settings.accessibility.MagnificationCapabilities.MagnificationMode.FULLSCREEN
 import com.android.settings.accessibility.extensions.isInSetupWizard
 import com.android.settings.accessibility.screenmagnification.dialogs.CursorFollowingModeChooser
 import com.android.settings.inputmethod.InputPeripheralsSettingsUtils
+import com.android.settingslib.datastore.HandlerExecutor
 import com.android.settingslib.datastore.KeyValueStore
+import com.android.settingslib.datastore.KeyedObserver
 import com.android.settingslib.datastore.SettingsSecureStore
+import com.android.settingslib.metadata.DiscreteIntValue
 import com.android.settingslib.metadata.PersistentPreference
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
 import com.android.settingslib.metadata.PreferenceLifecycleContext
@@ -36,16 +38,19 @@ import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
 import com.android.settingslib.metadata.ReadWritePermit
+import com.android.settingslib.metadata.SensitivityLevel
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.preference.PreferenceBinding
 
-// LINT.IfChange
 class CursorFollowingPreference :
     PreferenceBinding,
+    DiscreteIntValue,
     PersistentPreference<Int>,
     PreferenceSummaryProvider,
     PreferenceLifecycleProvider,
     PreferenceAvailabilityProvider,
-    Preference.OnPreferenceClickListener {
+    Preference.OnPreferenceClickListener,
+    KeyedObserver<String?> {
 
     private lateinit var lifecycleContext: PreferenceLifecycleContext
 
@@ -55,8 +60,17 @@ class CursorFollowingPreference :
     override val key: String
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.accessibility_magnification_cursor_following_mode_purpose
+
     override val title: Int
         get() = R.string.accessibility_magnification_cursor_following_title
+
+    override val values: Int
+        get() = R.array.magnification_cursor_following_mode_values
+
+    override val valuesDescription: Int
+        get() = R.array.magnification_cursor_following_mode_summaries
 
     override fun getSummary(context: Context): CharSequence? {
         if (isEnabled(context)) {
@@ -98,6 +112,8 @@ class CursorFollowingPreference :
         callingUid: Int,
     ): @ReadWritePermit Int? = ReadWritePermit.ALLOW
 
+    override val supportsWrite = true
+
     override fun bind(preference: Preference, metadata: PreferenceMetadata) {
         super.bind(preference, metadata)
         preference.onPreferenceClickListener = this
@@ -108,9 +124,33 @@ class CursorFollowingPreference :
         lifecycleContext = context
     }
 
+    override fun onStart(context: PreferenceLifecycleContext) {
+        super.onStart(context)
+        storage(context)
+            .addObserver(MagnificationCapabilities.KEY_CAPABILITY, this, HandlerExecutor.main)
+    }
+
+    override fun onStop(context: PreferenceLifecycleContext) {
+        super.onStop(context)
+        storage(context).removeObserver(MagnificationCapabilities.KEY_CAPABILITY, this)
+    }
+
+    override fun onKeyChanged(key: String?, reason: Int) {
+        lifecycleContext.notifyPreferenceChange(KEY)
+    }
+
+    override val availabilityDescription =
+        "The device must not be during setup and must have a mouse connected."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
+
     override fun isAvailable(context: Context): Boolean {
         return !context.isInSetupWizard() && isMagnificationCursorFollowingModeDialogSupported()
     }
+
+    override fun getEnabledDescription(): String = "Screen magnification must be set to 'full screen' or 'switch between full and partial screen'"
+
+    override fun getEnabledStability() = PreconditionStability.UNSTABLE
 
     override fun isEnabled(context: Context): Boolean {
         @MagnificationCapabilities.MagnificationMode
@@ -126,9 +166,11 @@ class CursorFollowingPreference :
         return true
     }
 
+    override val sensitivityLevel: Int
+        get() = SensitivityLevel.NO_SENSITIVITY
+
     private fun isMagnificationCursorFollowingModeDialogSupported(): Boolean {
-        return Flags.enableMagnificationCursorFollowingDialog() &&
-            InputPeripheralsSettingsUtils.isMouse()
+        return InputPeripheralsSettingsUtils.isMouse() || InputPeripheralsSettingsUtils.isTouchpad()
     }
 
     companion object {
@@ -144,4 +186,3 @@ class CursorFollowingPreference :
                 }
     }
 }
-// LINT.ThenChange(/src/com/android/settings/accessibility/screenmagnification/CursorFollowingModePreferenceController.java)

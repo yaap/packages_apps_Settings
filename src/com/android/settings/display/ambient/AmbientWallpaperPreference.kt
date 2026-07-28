@@ -22,18 +22,25 @@ import com.android.settings.R
 import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.SettingsSecureStore
 import com.android.settingslib.metadata.SwitchPreference
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
+
 
 class AmbientWallpaperPreference(context: Context) :
     SwitchPreference(
-        KEY,
-        R.string.doze_always_on_wallpaper_title,
-        R.string.doze_always_on_wallpaper_description,
+        key = KEY,
+        purpose = R.string.doze_always_on_wallpaper_enabled_purpose,
+        title = R.string.doze_always_on_wallpaper_title,
+        summary = R.string.doze_always_on_wallpaper_description,
     ) {
 
     private val dataStore = context.dataStore
     private val dozeAlwaysOnDataStore = AmbientDisplayStorage(context)
 
     override fun dependencies(context: Context) = arrayOf(AmbientDisplayMainSwitchPreference.KEY)
+
+    override fun getEnabledDescription(): String = "Always-on display must be enabled."
+
+    override fun getEnabledStability() = PreconditionStability.UNSTABLE
 
     override fun isEnabled(context: Context) = dozeAlwaysOnDataStore.getBoolean(DOZE_ALWAYS_ON)!!
 

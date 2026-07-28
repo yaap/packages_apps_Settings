@@ -27,13 +27,18 @@ import com.android.settingslib.datastore.SettingsSecureStore
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.ReadWritePermit
+import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.metadata.SwitchPreference
 
 class PersistentAfterRestartsPreference(
     context: Context,
     private val extraDimStorage: ExtraDimDataStore = ExtraDimDataStore(context),
 ) :
-    SwitchPreference(key = KEY, title = R.string.reduce_bright_colors_persist_preference_title),
+    SwitchPreference(
+        key = KEY,
+        purpose = R.string.reduce_bright_colors_persist_across_reboots_purpose,
+        title = R.string.reduce_bright_colors_persist_preference_title
+    ),
     PreferenceLifecycleProvider {
 
     private var settingsKeyedObserver: KeyedObserver<String?>? = null
@@ -44,9 +49,11 @@ class PersistentAfterRestartsPreference(
     override val indexable
         get() = false
 
+    override fun getEnabledDescription() = "The 'Extra dim' setting must be enabled"
+
     override fun isEnabled(context: Context): Boolean = extraDimStorage.getBoolean(KEY) == true
 
-    override fun storage(context: Context): KeyValueStore = SettingsSecureStore.get(context)
+    override fun storage(context: Context): KeyValueStore = SettingsSecureStore.get(context).apply { setDefaultValue(KEY, false) }
 
     override fun getReadPermissions(context: Context) = SettingsSecureStore.getReadPermissions()
 
@@ -79,6 +86,9 @@ class PersistentAfterRestartsPreference(
         settingsKeyedObserver?.let { observer -> extraDimStorage.removeObserver(observer) }
         settingsKeyedObserver = null
     }
+
+    override val sensitivityLevel: Int
+        get() = SensitivityLevel.NO_SENSITIVITY
 
     companion object {
         private const val KEY = Settings.Secure.REDUCE_BRIGHT_COLORS_PERSIST_ACROSS_REBOOTS

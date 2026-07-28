@@ -18,12 +18,10 @@ package com.android.settings.accessibility.screenmagnification.ui
 
 import android.app.settings.SettingsEnums
 import android.content.ComponentName
-import android.platform.test.annotations.EnableFlags
-import android.platform.test.annotations.RequiresFlagsDisabled
-import android.platform.test.flag.junit.CheckFlagsRule
-import android.platform.test.flag.junit.DeviceFlagsValueProvider
-import android.platform.test.flag.junit.SetFlagsRule
+import android.content.Intent
+import android.provider.Settings
 import android.view.InputDevice
+import android.view.View
 import androidx.fragment.app.FragmentFactory
 import androidx.fragment.app.testing.FragmentScenario
 import androidx.fragment.app.testing.FragmentScenario.FragmentAction
@@ -32,30 +30,29 @@ import androidx.preference.Preference
 import com.android.internal.accessibility.AccessibilityShortcutController
 import com.android.settings.R
 import com.android.settings.accessibility.BaseShortcutInteractionsTestCases
-import com.android.settings.accessibility.Flags
 import com.android.settings.accessibility.MagnificationCapabilities
 import com.android.settings.accessibility.MagnificationCapabilities.MagnificationMode
 import com.android.settings.accessibility.ShortcutPreference
 import com.android.settings.accessibility.screenmagnification.dialogs.CursorFollowingModeChooser
 import com.android.settings.accessibility.screenmagnification.dialogs.MagnificationModeChooser
 import com.android.settings.testutils.AccessibilityTestUtils.assertDialogShown
+import com.android.settings.testutils.AccessibilityTestUtils.launchFragmentInSetupWizardFlow
 import com.android.settings.testutils.inflateViewHolder
+import com.android.settings.testutils.shadow.SettingsShadowResources
 import com.android.settings.testutils.shadow.ShadowInputDevice
+import com.android.settingslib.widget.preference.footer.R as FooterPrefR
 import com.google.common.truth.Truth.assertThat
 import org.junit.After
-import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.robolectric.RobolectricTestRunner
 import org.robolectric.annotation.Config
 import org.robolectric.shadows.ShadowLooper
 
-@Config(shadows = [ShadowInputDevice::class])
+@Config(shadows = [ShadowInputDevice::class, SettingsShadowResources::class])
 @RunWith(RobolectricTestRunner::class)
 class MagnificationPreferenceFragmentTest :
     BaseShortcutInteractionsTestCases<MagnificationPreferenceFragment>() {
-    @get:Rule val checkFlagsRule: CheckFlagsRule = DeviceFlagsValueProvider.createCheckFlagsRule()
-    @get:Rule val setFlagsRule = SetFlagsRule()
     private var fragScenario: FragmentScenario<MagnificationPreferenceFragment>? = null
     private var fragment: MagnificationPreferenceFragment? = null
 
@@ -77,7 +74,6 @@ class MagnificationPreferenceFragmentTest :
         assertDialogShown(fragment, MagnificationModeChooser::class.java)
     }
 
-    @EnableFlags(Flags.FLAG_ENABLE_MAGNIFICATION_CURSOR_FOLLOWING_DIALOG)
     @Test
     fun clickCursorFollowingModePreference_showDedicatedDialog() {
         // Setup cursor following mode enabled
@@ -111,16 +107,37 @@ class MagnificationPreferenceFragmentTest :
         assertThat(fragment.helpResource).isEqualTo(R.string.help_url_magnification)
     }
 
-    @RequiresFlagsDisabled(Flags.FLAG_CATALYST_MAGNIFICATION)
     @Test
-    fun getSearchIndexDataProvider_verifyXmlResourcesToIndex() {
-        val searchIndexableResource =
-            MagnificationPreferenceFragment.SEARCH_INDEX_DATA_PROVIDER.getXmlResourcesToIndex(
-                context,
-                /* enabled= */ true,
-            )
-        assertThat(searchIndexableResource.first().xmlResId)
-            .isEqualTo(R.xml.accessibility_magnification_screen)
+    fun launchFragment_helpUrlResolvable_learnMoreTextIsVisible() {
+        setupHelpUri(isResolvable = true)
+
+        val fragment = launchFragment()
+
+        assertThat(isLearnMoreTextVisible(fragment)).isTrue()
+    }
+
+    @Test
+    fun launchFragment_helpUrlNotResolvable_learnMoreTextIsNotVisible() {
+        setupHelpUri(isResolvable = false)
+
+        val fragment = launchFragment()
+
+        assertThat(isLearnMoreTextVisible(fragment)).isFalse()
+    }
+
+    @Test
+    fun launchFragmentInSetupWizard_helpUrlResolvable_learnMoreTextIsNotVisible() {
+        setupHelpUri(isResolvable = true)
+
+        launchFragmentInSetupWizardFlow(MagnificationPreferenceFragment::class.java, null).use {
+            it.moveToState(Lifecycle.State.RESUMED).onFragment {
+                frag: MagnificationPreferenceFragment? ->
+                fragment = frag
+            }
+            assertThat(fragment).isNotNull()
+
+            assertThat(isLearnMoreTextVisible(fragment!!)).isFalse()
+        }
     }
 
     override fun getShortcutToggle(): ShortcutPreference? {
@@ -148,6 +165,31 @@ class MagnificationPreferenceFragmentTest :
 
     override fun getFeatureComponentString(): String {
         return AccessibilityShortcutController.MAGNIFICATION_CONTROLLER_NAME
+    }
+
+    private fun isLearnMoreTextVisible(fragment: MagnificationPreferenceFragment): Boolean {
+        val footerPreference =
+            fragment.findPreference<Preference>(MagnificationFooterPreference.KEY)
+        val view =
+            footerPreference
+                ?.inflateViewHolder()
+                ?.findViewById(FooterPrefR.id.settingslib_learn_more)
+
+        return view?.visibility == View.VISIBLE
+    }
+
+    private fun setupHelpUri(isResolvable: Boolean) {
+        // If the device is not provisioned, the HelperUtils#getHelpIntent would return null
+        Settings.Global.putInt(context.contentResolver, Settings.Global.DEVICE_PROVISIONED, 1)
+        if (isResolvable) {
+            // Use the Uri that is resolvable by the Settings app to reduce extra test setup
+            SettingsShadowResources.overrideResource(
+                R.string.help_url_magnification,
+                Intent(Settings.ACTION_ACCESSIBILITY_SETTINGS).toUri(Intent.URI_INTENT_SCHEME),
+            )
+        } else {
+            SettingsShadowResources.overrideResource(R.string.help_url_magnification, "")
+        }
     }
 
     companion object {

@@ -23,12 +23,14 @@ import androidx.fragment.app.Fragment
 import com.android.settings.R
 import com.android.settings.Settings.ConfigureWifiSettingsActivity
 import com.android.settings.core.PreferenceScreenMixin
-import com.android.settings.flags.Flags
 import com.android.settings.network.AirplaneModePreference
 import com.android.settings.utils.makeLaunchIntent
 import com.android.settings.wifi.utils.wifiManager
 import com.android.settingslib.datastore.HandlerExecutor
+import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.KeyedObserver
+import com.android.settingslib.metadata.METADATA_IN_UI
+import com.android.settingslib.metadata.PersistentPreference
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceMetadata
@@ -36,17 +38,23 @@ import com.android.settingslib.metadata.PreferenceSummaryProvider
 import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.preferenceHierarchy
 import kotlinx.coroutines.CoroutineScope
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_MOBILE_DATA
 
 // LINT.IfChange
 @ProvidePreferenceScreen(ConfigureWifiScreen.KEY)
 open class ConfigureWifiScreen(context: Context) :
     PreferenceScreenMixin, PreferenceSummaryProvider, PreferenceLifecycleProvider {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_MOBILE_DATA)
+
 
     private val airplaneModeDataStore = AirplaneModePreference.createDataStore(context)
     private lateinit var keyedObserver: KeyedObserver<String>
 
     override val key: String
         get() = KEY
+
+    override val purpose: Int
+        get() = R.string.configure_network_settings_purpose
 
     override val title: Int
         get() = R.string.network_and_internet_preferences_title
@@ -57,8 +65,7 @@ open class ConfigureWifiScreen(context: Context) :
     override fun getMetricsCategory() = SettingsEnums.CONFIGURE_WIFI
 
     override fun isFlagEnabled(context: Context) =
-        Flags.catalystConfigureNetworkSettings() &&
-            !ConfigureWifiSettings.isGuestUser(context) &&
+        !ConfigureWifiSettings.isGuestUser(context) &&
             context.resources.getBoolean(R.bool.config_show_wifi_settings)
 
     override fun hasCompleteHierarchy() = false
@@ -94,7 +101,10 @@ open class ConfigureWifiScreen(context: Context) :
     override fun fragmentClass(): Class<out Fragment>? = ConfigureWifiSettings::class.java
 
     override fun getPreferenceHierarchy(context: Context, coroutineScope: CoroutineScope) =
-        preferenceHierarchy(context) { +WifiWakeupSwitchPreference() }
+        preferenceHierarchy(context) {
+            +ConfigureWifiScreenPreference(this@ConfigureWifiScreen)
+            +WifiWakeupSwitchPreference()
+        }
 
     private fun Context.isWifiWakeupEnabled(): Boolean {
         val wifiManager = this.wifiManager ?: return false
@@ -105,8 +115,33 @@ open class ConfigureWifiScreen(context: Context) :
             !powerManager.isPowerSaveMode
     }
 
+    class ConfigureWifiScreenPreference(
+        private val screenMetadata : ConfigureWifiScreen
+    ) : PreferenceMetadata, PreferenceSummaryProvider, PersistentPreference<String> {
+        override val key : String
+            get() = "configure_network_settings_preference"
+
+        override val purpose : Int
+            get() = screenMetadata.purpose
+
+        override fun tags(context: Context) = arrayOf(METADATA_IN_UI)
+
+        override val indexable = false
+
+        override fun isEnabled(context: Context) : Boolean = screenMetadata.isEnabled(context)
+
+        override fun getSummary(context: Context) : CharSequence? = screenMetadata.getSummary(context)
+
+        override val supportsWrite: Boolean
+            get() = false
+
+        override val valueType = String::class.javaObjectType
+
+        override fun storage(context: Context): KeyValueStore = createSummaryStorage(context, key)
+    }
+
     companion object {
         const val KEY = "configure_network_settings"
     }
 }
-// LINT.ThenChange(ConfigureWifiSettings.java)
+// LINT.ThenChange(ConfigureWifiSettings.java, ConfigureWifiApiScreen.kt)

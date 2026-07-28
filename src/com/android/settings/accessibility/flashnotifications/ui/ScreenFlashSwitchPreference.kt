@@ -38,7 +38,12 @@ import com.android.settingslib.metadata.ReadWritePermit
 import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.metadata.SwitchPreference
 
-class ScreenFlashSwitchPreference : SwitchPreference(KEY, R.string.screen_flash_notification_title),
+class ScreenFlashSwitchPreference :
+    SwitchPreference(
+        KEY,
+        R.string.screen_flash_notification_purpose,
+        R.string.screen_flash_notification_title,
+    ),
     PreferenceSummaryProvider, PrimarySwitchPreferenceBinding, PreferenceLifecycleProvider,
     OnPreferenceClickListener, KeyedObserver<String?> {
 
@@ -61,7 +66,8 @@ class ScreenFlashSwitchPreference : SwitchPreference(KEY, R.string.screen_flash_
         storage(context).removeObserver(this)
     }
 
-    override fun storage(context: Context): KeyValueStore = SettingsSystemStore.get(context)
+    override fun storage(context: Context): KeyValueStore =
+        SettingsSystemStore.get(context).apply { setDefaultValue(KEY, false) }
 
     override fun getReadPermissions(context: Context) = SettingsSystemStore.getReadPermissions()
 

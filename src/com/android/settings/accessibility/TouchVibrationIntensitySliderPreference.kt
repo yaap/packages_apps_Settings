@@ -19,6 +19,7 @@ import android.content.Context
 import android.os.VibrationAttributes
 import android.provider.Settings
 import com.android.settings.R
+import com.android.settingslib.metadata.SensitivityLevel
 
 /** Accessibility settings for touch haptic feedback, as a slider. */
 // LINT.IfChange
@@ -26,11 +27,15 @@ class TouchVibrationIntensitySliderPreference(context: Context) :
     VibrationIntensitySliderPreference(
         context = context,
         key = KEY,
+        purpose = R.string.haptic_feedback_intensity_purpose,
         vibrationUsage = VibrationAttributes.USAGE_TOUCH,
         title = R.string.accessibility_touch_vibration_title,
     ) {
     override val keywords: Int
         get() = R.string.keywords_touch_vibration
+
+    override val sensitivityLevel: Int
+        get() = SensitivityLevel.NO_SENSITIVITY
 
     companion object {
         const val KEY = Settings.System.HAPTIC_FEEDBACK_INTENSITY

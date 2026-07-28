@@ -35,7 +35,10 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import android.app.KeyguardManager;
+import android.app.admin.DevicePolicyIdentifiers;
 import android.app.admin.DevicePolicyManager;
+import android.app.admin.EnforcingAdmin;
+import android.app.admin.PolicyEnforcementInfo;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.Intent;
@@ -43,8 +46,10 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.content.pm.ServiceInfo;
 import android.content.res.Resources;
-import android.platform.test.flag.junit.CheckFlagsRule;
-import android.platform.test.flag.junit.DeviceFlagsValueProvider;
+import android.os.UserHandle;
+import android.platform.test.annotations.DisableFlags;
+import android.platform.test.annotations.EnableFlags;
+import android.platform.test.flag.junit.SetFlagsRule;
 import android.provider.SearchIndexableResource;
 import android.provider.Settings;
 
@@ -52,6 +57,7 @@ import androidx.preference.PreferenceScreen;
 
 import com.android.settings.R;
 import com.android.settings.testutils.FakeFeatureFactory;
+import com.android.settings.testutils.shadow.ShadowDevicePolicyManager;
 import com.android.settingslib.RestrictedLockUtils;
 import com.android.settingslib.widget.CandidateInfo;
 import com.android.settingslib.widget.FooterPreference;
@@ -67,17 +73,19 @@ import org.robolectric.Shadows;
 import org.robolectric.annotation.Config;
 import org.robolectric.shadows.ShadowKeyguardManager;
 
+import java.util.Collections;
 import java.util.List;
 
 @RunWith(RobolectricTestRunner.class)
 @Config(shadows = {
         com.android.settings.testutils.shadow.ShadowFragment.class,
-        ShadowKeyguardManager.class
+        ShadowKeyguardManager.class,
+        ShadowDevicePolicyManager.class
 })
 public class ScreenTimeoutSettingsTest {
 
     @Rule
-    public final CheckFlagsRule mCheckFlagsRule = DeviceFlagsValueProvider.createCheckFlagsRule();
+    public final SetFlagsRule mSetFlagsRule = new SetFlagsRule();
 
     private static final String[] TIMEOUT_ENTRIES =
             new String[]{"15 secs", "30 secs", "1 min", "2 min", "5 min"};
@@ -111,10 +119,13 @@ public class ScreenTimeoutSettingsTest {
     FooterPreference mPowerConsumptionPreference;
 
     @Mock
-    DevicePolicyManager mDevicePolicyManager;
+    private PackageManager mPackageManager;
 
     @Mock
-    private PackageManager mPackageManager;
+    private PolicyEnforcementInfo mPolicyEnforcementInfo;
+
+    @Mock
+    private EnforcingAdmin mEnforcingAdmin;
 
     @Before
     public void setup() {
@@ -140,7 +151,6 @@ public class ScreenTimeoutSettingsTest {
         doReturn(true).when(mResources).getBoolean(
                 com.android.internal.R.bool.config_adaptive_sleep_available);
 
-        doReturn(null).when(mContext).getSystemService(DevicePolicyManager.class);
         doReturn(mResources).when(mContext).getResources();
 
         doReturn(mResources).when(mSettings).getResources();
@@ -199,6 +209,7 @@ public class ScreenTimeoutSettingsTest {
         verify(mSettings.mAdaptiveSleepController, never()).addToScreen(mPreferenceScreen);
     }
 
+    @DisableFlags(android.app.admin.flags.Flags.FLAG_POLICY_TRANSPARENCY_REFACTOR_ENABLED)
     @Test
     public void updateCandidates_enforcedAdmin_showDisabledByAdminPreference() {
         mSettings.mAdmin = new RestrictedLockUtils.EnforcedAdmin();
@@ -213,6 +224,24 @@ public class ScreenTimeoutSettingsTest {
         verify(mPreferenceScreen, never()).addPreference(mPowerConsumptionPreference);
     }
 
+    @EnableFlags(android.app.admin.flags.Flags.FLAG_POLICY_TRANSPARENCY_REFACTOR_ENABLED)
+    @Test
+    public void updateCandidates_enforcedAdmin_showDisabledByAdminPreference_withEnforcingAdmin() {
+        mSettings.mEnforcingAdmin = mEnforcingAdmin;
+        mSettings.mDisableOptionsPreference = mDisableOptionsPreference;
+        mSettings.mPowerConsumptionPreference = mPowerConsumptionPreference;
+        doNothing().when(mSettings).setupDisabledFooterPreference();
+        doNothing().when(mSettings).setupPowerConsumptionFooterPreference();
+        ShadowDevicePolicyManager.getShadow().setPolicyEnforcementInfoForPolicy(
+                DevicePolicyIdentifiers.MAX_TIME_TO_LOCK_POLICY,
+                new PolicyEnforcementInfo(List.of(mEnforcingAdmin)));
+
+        mSettings.updateCandidates();
+
+        verify(mPreferenceScreen, atLeast(1)).addPreference(mDisableOptionsPreference);
+        verify(mPreferenceScreen, never()).addPreference(mPowerConsumptionPreference);
+    }
+
     @Test
     public void updateCandidates_withoutAdmin_showPowerConsumptionPreference() {
         mSettings.mAdmin = null;
@@ -220,6 +249,9 @@ public class ScreenTimeoutSettingsTest {
         mSettings.mPowerConsumptionPreference = mPowerConsumptionPreference;
         doNothing().when(mSettings).setupDisabledFooterPreference();
         doNothing().when(mSettings).setupPowerConsumptionFooterPreference();
+        ShadowDevicePolicyManager.getShadow().setPolicyEnforcementInfoForPolicy(
+                DevicePolicyIdentifiers.MAX_TIME_TO_LOCK_POLICY,
+                new PolicyEnforcementInfo(Collections.emptyList()));
 
         mSettings.updateCandidates();
 
@@ -227,14 +259,34 @@ public class ScreenTimeoutSettingsTest {
         verify(mPreferenceScreen, atLeast(1)).addPreference(mPowerConsumptionPreference);
     }
 
+    @DisableFlags(android.app.admin.flags.Flags.FLAG_POLICY_TRANSPARENCY_REFACTOR_ENABLED)
     @Test
     public void getCandidates_enforcedAdmin_timeoutIsLimited() {
         mSettings.mAdmin = new RestrictedLockUtils.EnforcedAdmin();
         mSettings.mDisableOptionsPreference = mDisableOptionsPreference;
         doNothing().when(mSettings).setupDisabledFooterPreference();
-        doReturn(mDevicePolicyManager).when(mContext).getSystemService(DevicePolicyManager.class);
+        ShadowDevicePolicyManager.getShadow().setMaximumTimeToLock(UserHandle.myUserId(), 30000L);
+        // No configured max timeout
+        doThrow(new Resources.NotFoundException("Invalid resource")).when(mResources)
+                .getInteger(R.integer.config_max_screen_timeout);
+
+        List<? extends CandidateInfo> candidates = mSettings.getCandidates();
+
+        // Assert that candidates are truncated at the admin-controlled timeout
+        assertThat(candidates.size()).isEqualTo(2);
+        assertThat(candidates.get(candidates.size() - 1).getKey()).isEqualTo(TIMEOUT_VALUES[1]);
+    }
+
+    @EnableFlags(android.app.admin.flags.Flags.FLAG_POLICY_TRANSPARENCY_REFACTOR_ENABLED)
+    @Test
+    public void getCandidates_enforcedAdmin_timeoutIsLimited_withEnforcingAdmin() {
+        mSettings.mDisableOptionsPreference = mDisableOptionsPreference;
+        doNothing().when(mSettings).setupDisabledFooterPreference();
+        ShadowDevicePolicyManager.getShadow().setPolicyEnforcementInfoForPolicy(
+                DevicePolicyIdentifiers.MAX_TIME_TO_LOCK_POLICY,
+                new PolicyEnforcementInfo(List.of(mEnforcingAdmin)));
         // Admin-enforced max timeout of 30000
-        when(mDevicePolicyManager.getMaximumTimeToLock(any(), anyInt())).thenReturn(30000L);
+        ShadowDevicePolicyManager.getShadow().setMaximumTimeToLock(UserHandle.myUserId(), 30000L);
         // No configured max timeout
         doThrow(new Resources.NotFoundException("Invalid resource")).when(mResources)
                 .getInteger(R.integer.config_max_screen_timeout);
@@ -258,14 +310,37 @@ public class ScreenTimeoutSettingsTest {
         assertThat(candidates.get(candidates.size() - 1).getKey()).isEqualTo(TIMEOUT_VALUES[2]);
     }
 
+    @DisableFlags(android.app.admin.flags.Flags.FLAG_POLICY_TRANSPARENCY_REFACTOR_ENABLED)
     @Test
     public void getCandidates_configuredAndAdminEnforcedMaxTimeout_lowestTimeoutIsApplied() {
         mSettings.mAdmin = new RestrictedLockUtils.EnforcedAdmin();
         mSettings.mDisableOptionsPreference = mDisableOptionsPreference;
         doNothing().when(mSettings).setupDisabledFooterPreference();
-        doReturn(mDevicePolicyManager).when(mContext).getSystemService(DevicePolicyManager.class);
+        ShadowDevicePolicyManager.getShadow().setPolicyEnforcementInfoForPolicy(
+                DevicePolicyIdentifiers.MAX_TIME_TO_LOCK_POLICY,
+                new PolicyEnforcementInfo(List.of(mEnforcingAdmin)));
         // Admin-enforced max timeout of 30000
-        when(mDevicePolicyManager.getMaximumTimeToLock(any(), anyInt())).thenReturn(30000L);
+        ShadowDevicePolicyManager.getShadow().setMaximumTimeToLock(UserHandle.myUserId(), 30000L);
+        // Configured max timeout of 120000
+        doReturn(120000).when(mResources).getInteger(R.integer.config_max_screen_timeout);
+
+        List<? extends CandidateInfo> candidates = mSettings.getCandidates();
+
+        // Assert that candidates are truncated at the lowest of the two timeouts
+        assertThat(candidates.size()).isEqualTo(2);
+        assertThat(candidates.get(candidates.size() - 1).getKey()).isEqualTo(TIMEOUT_VALUES[1]);
+    }
+
+    @EnableFlags(android.app.admin.flags.Flags.FLAG_POLICY_TRANSPARENCY_REFACTOR_ENABLED)
+    @Test
+    public void getCandidates_configuredAndAdminEnforcedMaxTimeout_lowestTimeoutIsApplied_withEnforcingAdmin() {
+        mSettings.mDisableOptionsPreference = mDisableOptionsPreference;
+        doNothing().when(mSettings).setupDisabledFooterPreference();
+        ShadowDevicePolicyManager.getShadow().setPolicyEnforcementInfoForPolicy(
+                DevicePolicyIdentifiers.MAX_TIME_TO_LOCK_POLICY,
+                new PolicyEnforcementInfo(List.of(mEnforcingAdmin)));
+        // Admin-enforced max timeout of 30000
+        ShadowDevicePolicyManager.getShadow().setMaximumTimeToLock(UserHandle.myUserId(), 30000L);
         // Configured max timeout of 120000
         doReturn(120000).when(mResources).getInteger(R.integer.config_max_screen_timeout);
 

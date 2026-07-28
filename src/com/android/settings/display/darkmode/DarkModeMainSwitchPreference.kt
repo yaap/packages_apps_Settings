@@ -18,25 +18,50 @@ package com.android.settings.display.darkmode
 
 import android.content.Context
 import com.android.settings.R
+import com.android.settings.accessibility.Flags
+import com.android.settings.accessibility.extensions.isPowerSaveMode
 import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.metadata.BooleanValuePreference
+import com.android.settingslib.metadata.MUSTPASS_SET
+import com.android.settingslib.metadata.MUSTPASS_SET
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ReadWritePermit
 import com.android.settingslib.metadata.SensitivityLevel
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.widget.MainSwitchPreferenceBinding
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
+
 
 // LINT.IfChange
-class DarkModeMainSwitchPreference(private val dataStore: DarkModeStorage) :
+class DarkModeMainSwitchPreference(private val dataStore: DarkModeStorage, val isUiOnly: Boolean) :
     PreferenceMetadata, MainSwitchPreferenceBinding, BooleanValuePreference {
 
     override val key: String
         get() = KEY
+
+    override val purpose: Int
+        get() = R.string.dark_ui_activated_purpose
 
     override val title: Int
         get() = R.string.dark_theme_main_switch_title
 
     override val indexable
         get() = false
+
+    override fun tags(context: Context): Array<String> {
+        if (isUiOnly) {
+            return arrayOf(UI_ONLY_PREFERENCE)
+        }
+        return arrayOf(MUSTPASS_SET)
+    }
+
+    override fun getEnabledDescription(): String = if (!Flags.allowToEnterDarkThemeSettingsWhenBatterySaver()) "Battery saver must be turned off." else "Always enabled."
+
+    override fun getEnabledStability() = PreconditionStability.UNSTABLE
+
+    override fun isEnabled(context: Context): Boolean =
+        if (!Flags.allowToEnterDarkThemeSettingsWhenBatterySaver()) !context.isPowerSaveMode()
+        else true
 
     override fun storage(context: Context): KeyValueStore = dataStore
 
@@ -50,6 +75,7 @@ class DarkModeMainSwitchPreference(private val dataStore: DarkModeStorage) :
     override fun getWritePermit(context: Context, callingPid: Int, callingUid: Int) =
         ReadWritePermit.ALLOW
 
+    override val supportsWrite = true
     override val sensitivityLevel
         get() = SensitivityLevel.NO_SENSITIVITY
 

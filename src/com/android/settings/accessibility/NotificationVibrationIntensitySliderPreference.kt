@@ -19,6 +19,7 @@ import android.content.Context
 import android.os.VibrationAttributes
 import android.provider.Settings
 import com.android.settings.R
+import com.android.settingslib.metadata.SensitivityLevel
 
 /** Accessibility settings for notification vibration, using an intensity slider. */
 // LINT.IfChange
@@ -26,11 +27,15 @@ class NotificationVibrationIntensitySliderPreference(context: Context) :
     VibrationIntensitySliderPreference(
         context = context,
         key = KEY,
+        purpose = R.string.notification_vibration_intensity_purpose,
         vibrationUsage = VibrationAttributes.USAGE_NOTIFICATION,
         title = R.string.accessibility_notification_vibration_title,
     ) {
     override val keywords: Int
         get() = R.string.keywords_notification_vibration
+
+    override val sensitivityLevel: Int
+        get() = SensitivityLevel.NO_SENSITIVITY
 
     companion object {
         const val KEY = Settings.System.NOTIFICATION_VIBRATION_INTENSITY

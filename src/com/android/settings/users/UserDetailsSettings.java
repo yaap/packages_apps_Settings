@@ -37,6 +37,7 @@ import android.os.Trace;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultLauncher;
@@ -67,6 +68,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Arguments to this fragment must include the userId of the user (in EXTRA_USER_ID) for whom
  * to display controls.
  */
+// LINT.IfChange
 public class UserDetailsSettings extends SettingsPreferenceFragment
         implements Preference.OnPreferenceClickListener, Preference.OnPreferenceChangeListener {
 
@@ -89,6 +91,8 @@ public class UserDetailsSettings extends SettingsPreferenceFragment
     private static final int DIALOG_CONFIRM_RESET_GUEST_AND_SWITCH_USER = 5;
     private static final int DIALOG_CONFIRM_REVOKE_ADMIN = 6;
     private static final int DIALOG_CONFIRM_GRANT_ADMIN = 7;
+    private static final int DIALOG_DELETE_LAST_ADMIN = 8;
+    private static final int DIALOG_REVOKE_LAST_ADMIN = 9;
 
     /** Whether to enable the app_copying fragment. */
     private static final boolean SHOW_APP_COPYING_PREF = false;
@@ -162,6 +166,8 @@ public class UserDetailsSettings extends SettingsPreferenceFragment
             if (canDeleteUser()) {
                 if (mUserInfo.isGuest()) {
                     showDialog(DIALOG_CONFIRM_RESET_GUEST);
+                } else if (isLastAdminUser()) {
+                    showDialog(DIALOG_DELETE_LAST_ADMIN);
                 } else {
                     showDialog(DIALOG_CONFIRM_REMOVE);
                 }
@@ -209,7 +215,11 @@ public class UserDetailsSettings extends SettingsPreferenceFragment
             if (Boolean.FALSE.equals(newValue)) {
                 mMetricsFeatureProvider.action(getActivity(),
                         SettingsEnums.ACTION_REVOKE_ADMIN_FROM_SETTINGS);
-                showDialog(DIALOG_CONFIRM_REVOKE_ADMIN);
+                if (isLastAdminUser()) {
+                    showDialog(DIALOG_REVOKE_LAST_ADMIN);
+                } else {
+                    showDialog(DIALOG_CONFIRM_REVOKE_ADMIN);
+                }
             } else {
                 mMetricsFeatureProvider.action(getActivity(),
                         SettingsEnums.ACTION_GRANT_ADMIN_FROM_SETTINGS);
@@ -235,6 +245,9 @@ public class UserDetailsSettings extends SettingsPreferenceFragment
                 return SettingsEnums.DIALOG_GRANT_USER_ADMIN;
             case DIALOG_SETUP_USER:
                 return SettingsEnums.DIALOG_USER_SETUP;
+            case DIALOG_DELETE_LAST_ADMIN:
+            case DIALOG_REVOKE_LAST_ADMIN:
+                return SettingsEnums.DIALOG_CANNOT_REMOVE_LAST_ADMIN_USER;
             default:
                 return 0;
         }
@@ -280,6 +293,10 @@ public class UserDetailsSettings extends SettingsPreferenceFragment
                 return createRevokeAdminDialog(getContext());
             case DIALOG_CONFIRM_GRANT_ADMIN:
                 return createGrantAdminDialog(getContext());
+            case DIALOG_DELETE_LAST_ADMIN:
+                return createDeleteLastAdminDialog(getContext());
+            case DIALOG_REVOKE_LAST_ADMIN:
+                return createRevokeLastAdminDialog(getContext());
         }
         throw new IllegalArgumentException("Unsupported dialogId " + dialogId);
     }
@@ -330,6 +347,32 @@ public class UserDetailsSettings extends SettingsPreferenceFragment
         dialogHelper.setBackButton(R.string.cancel, view -> {
             dialogHelper.getDialog().dismiss();
         });
+        return dialogHelper.getDialog();
+    }
+
+    private Dialog createDeleteLastAdminDialog(Context context) {
+        CustomDialogHelper dialogHelper = new CustomDialogHelper(context);
+        dialogHelper.setIcon(context.getDrawable(R.drawable.ic_person_remove));
+        dialogHelper.setTitle(R.string.user_remove_last_admin_title);
+        dialogHelper.setMessage(R.string.user_remove_last_admin_message);
+        dialogHelper.setMessagePadding(MESSAGE_PADDING);
+        dialogHelper.setPositiveButton(R.string.okay,
+                view -> {
+                    dialogHelper.getDialog().dismiss();
+                });
+        return dialogHelper.getDialog();
+    }
+
+    private Dialog createRevokeLastAdminDialog(Context context) {
+        CustomDialogHelper dialogHelper = new CustomDialogHelper(context);
+        dialogHelper.setIcon(context.getDrawable(R.drawable.ic_remove_moderator));
+        dialogHelper.setTitle(R.string.user_revoke_last_admin_title);
+        dialogHelper.setMessage(R.string.user_revoke_last_admin_message);
+        dialogHelper.setMessagePadding(MESSAGE_PADDING);
+        dialogHelper.setPositiveButton(R.string.okay,
+                view -> {
+                    dialogHelper.getDialog().dismiss();
+                });
         return dialogHelper.getDialog();
     }
 
@@ -434,7 +477,7 @@ public class UserDetailsSettings extends SettingsPreferenceFragment
             if (!Utils.isVoiceCapable(context)) { // no telephony
                 removePreference(KEY_ENABLE_TELEPHONY_CALLING);
             }
-            if (mUserInfo.isMain() || UserManager.isHeadlessSystemUserMode()) {
+            if (mUserInfo.isMain()) {
                 removePreference(KEY_ENABLE_TELEPHONY_CALLING);
             }
             if (mUserInfo.isRestricted()) {
@@ -578,6 +621,8 @@ public class UserDetailsSettings extends SettingsPreferenceFragment
     }
 
     private void removeUser() {
+        Toast.makeText(getPrefContext(), R.string.user_deleted_confirmation_toast,
+                Toast.LENGTH_LONG).show();
         if (mUserInfo.id == UserHandle.myUserId()) {
             removeThisUser();
         } else {
@@ -727,4 +772,10 @@ public class UserDetailsSettings extends SettingsPreferenceFragment
                 DevicePolicyIdentifiers.getIdentifierForUserRestriction(
                         userRestriction), UserHandle.myUserId());
     }
+
+    private boolean isLastAdminUser() {
+        return mUserManager.getUserRemovability(mUserInfo.id)
+                == UserManager.REMOVE_RESULT_ERROR_LAST_ADMIN_USER;
+    }
 }
+// LINT.ThenChange(UserDetailsSettingsScreenApi.kt)

@@ -19,6 +19,12 @@ package com.android.settings.network;
 import static android.net.wifi.WifiConfiguration.NetworkSelectionStatus.NETWORK_SELECTION_ENABLED;
 import static android.os.UserManager.DISALLOW_CONFIG_WIFI;
 
+import static com.android.settingslib.interfaces.troubleshooting.ITroubleshootingInfoProviderService.ISSUE_SUBJECT_IS_CELLULAR;
+import static com.android.settingslib.interfaces.troubleshooting.ITroubleshootingInfoProviderService.ISSUE_SUBJECT_IS_WIFI;
+import static com.android.settingslib.interfaces.troubleshooting.ITroubleshootingInfoProviderService.KEY_ACTION_OF_PREFERENCE_UI_FOOTER;
+import static com.android.settingslib.interfaces.troubleshooting.ITroubleshootingInfoProviderService.KEY_CLASS_NAME;
+import static com.android.settingslib.interfaces.troubleshooting.ITroubleshootingInfoProviderService.KEY_NAME_OF_PREFERENCE_UI_FOOTER;
+import static com.android.settingslib.interfaces.troubleshooting.ITroubleshootingInfoProviderService.KEY_PACKAGE_NAME;
 import static com.android.wifitrackerlib.WifiEntry.CONNECTED_STATE_CONNECTED;
 
 import android.app.Activity;
@@ -35,7 +41,10 @@ import android.net.NetworkTemplate;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.os.PowerManager;
+import android.os.ResultReceiver;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
@@ -60,6 +69,8 @@ import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.MenuProvider;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.MutableLiveData;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.PreferenceScreen;
@@ -80,6 +91,8 @@ import com.android.settings.network.ethernet.EthernetSwitchPreferenceController;
 import com.android.settings.network.ethernet.EthernetTracker;
 import com.android.settings.network.ethernet.EthernetTrackerImpl;
 import com.android.settings.search.BaseSearchIndexProvider;
+import com.android.settings.troubleshooting.TroubleshootingServiceConnection;
+import com.android.settings.troubleshooting.TroubleshootingUtils;
 import com.android.settings.widget.GearPreference;
 import com.android.settings.wifi.AddNetworkFragment;
 import com.android.settings.wifi.AddWifiNetworkPreference;
@@ -97,6 +110,7 @@ import com.android.settingslib.HelpUtils;
 import com.android.settingslib.RestrictedLockUtils;
 import com.android.settingslib.RestrictedLockUtilsInternal;
 import com.android.settingslib.RestrictedSwitchPreference;
+import com.android.settingslib.interfaces.troubleshooting.ITroubleshootingInfoProviderService;
 import com.android.settingslib.search.Indexable;
 import com.android.settingslib.search.SearchIndexable;
 import com.android.settingslib.utils.StringUtil;
@@ -115,7 +129,9 @@ import com.google.android.setupcompat.util.WizardManagerHelper;
 import com.google.android.setupdesign.GlifPreferenceLayout;
 
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 /**
@@ -196,6 +212,103 @@ public class NetworkProviderSettings extends RestrictedDashboardFragment
     // things.
     private static final String EXTRA_START_CONNECT_SSID = "wifi_start_connect_ssid";
     private String mOpenSsid;
+
+    private TroubleshootingServiceConnection mTroubleshootingServiceConnection;
+
+    private final ResultReceiver mWifiTroubleshootingReceiver =
+            new ResultReceiver(new Handler(Looper.getMainLooper())) {
+                @Override
+                protected void onReceiveResult(int resultCode, @Nullable Bundle resultData) {
+                    super.onReceiveResult(resultCode, resultData);
+                    final WifiEntry connectedEntry = mWifiPickerTracker.getConnectedWifiEntry();
+                    PreferenceCategory connectedWifiPreferenceCategory =
+                            mWifiCategory.getPreferenceCategory();
+                    if (connectedEntry != null && connectedWifiPreferenceCategory != null) {
+                        final LongPressWifiEntryPreference connectedPref =
+                                connectedWifiPreferenceCategory.findPreference(
+                                        connectedEntry.getKey());
+                        if (connectedPref == null) {
+                            return;
+                        }
+                        if (resultCode == ITroubleshootingInfoProviderService.RESULT_SUCCESS) {
+                            attachFooter(connectedEntry.getKey(), "", null);
+                            return;
+                        }
+                        Map<String, Bundle> uiInfos =
+                                mTroubleshootingServiceConnection.getDiagnosticUiInfos();
+                        if (!uiInfos.containsKey(ISSUE_SUBJECT_IS_WIFI)) {
+                            Log.i(TAG, "No wifi troubleshooting UI info");
+                            return;
+                        }
+                        Bundle bundle = uiInfos.get(ISSUE_SUBJECT_IS_WIFI);
+                        if (bundle == null || bundle.isEmpty()) {
+                            Log.i(TAG, "No wifi troubleshooting UI info due to no bundle data");
+                            return;
+                        }
+                        if (!bundle.containsKey(KEY_ACTION_OF_PREFERENCE_UI_FOOTER)) {
+                            Log.i(TAG, "No footer action of Wifi info");
+                            return;
+                        }
+                        String title = bundle.getString(KEY_NAME_OF_PREFERENCE_UI_FOOTER, "");
+                        String packageName = bundle.getString(KEY_PACKAGE_NAME, "");
+                        String className = bundle.getString(KEY_CLASS_NAME, "");
+                        String action = bundle.getString(KEY_ACTION_OF_PREFERENCE_UI_FOOTER, "");
+                        attachFooter(connectedEntry.getKey(), title, (v) -> {
+                            TroubleshootingUtils.startWifiTroubleShootingActivity(
+                                    getActivity(),
+                                    packageName,
+                                    className,
+                                    action,
+                                    connectedEntry.getSsid());
+                        });
+                    }
+                }
+            };
+
+    private final ResultReceiver mMobileTroubleshootingReceiver =
+            new ResultReceiver(new Handler(Looper.getMainLooper())) {
+                @Override
+                protected void onReceiveResult(int resultCode, @Nullable Bundle resultData) {
+                    super.onReceiveResult(resultCode, resultData);
+                    if (resultCode == ITroubleshootingInfoProviderService.RESULT_SUCCESS) {
+                        attachFooter(
+                                SubscriptionsPreferenceController.PREF_KEY_ACTIVE_MOBILE_CONNECTION,
+                                "",
+                                null);
+                        return;
+                    }
+                    Map<String, Bundle> uiInfos =
+                            mTroubleshootingServiceConnection.getDiagnosticUiInfos();
+                    if (!uiInfos.containsKey(ISSUE_SUBJECT_IS_CELLULAR)) {
+                        Log.i(TAG, "No cellular troubleshooting UI info");
+                        return;
+                    }
+                    Bundle bundle = uiInfos.get(ISSUE_SUBJECT_IS_CELLULAR);
+                    if (bundle == null || bundle.isEmpty()) {
+                        Log.i(TAG, "No cellular troubleshooting UI info due to no bundle data");
+                        return;
+                    }
+                    if (!bundle.containsKey(KEY_ACTION_OF_PREFERENCE_UI_FOOTER)) {
+                        Log.i(TAG, "No footer action of Cellular info");
+                        return;
+                    }
+                    String title = bundle.getString(KEY_NAME_OF_PREFERENCE_UI_FOOTER, "");
+                    String packageName = bundle.getString(KEY_PACKAGE_NAME, "");
+                    String className = bundle.getString(KEY_CLASS_NAME, "");
+                    String action = bundle.getString(KEY_ACTION_OF_PREFERENCE_UI_FOOTER, "");
+                    attachFooter(
+                            SubscriptionsPreferenceController.PREF_KEY_ACTIVE_MOBILE_CONNECTION,
+                            title,
+                            (v) -> {
+                                TroubleshootingUtils.startMobileTroubleshootingActivity(
+                                        getActivity(),
+                                        packageName,
+                                        className,
+                                        action,
+                                        SubscriptionManager.getDefaultDataSubscriptionId());
+                            });
+                }
+            };
 
     private boolean mIsViewLoading;
     @VisibleForTesting
@@ -347,8 +460,7 @@ public class NetworkProviderSettings extends RestrictedDashboardFragment
         mAirplaneModeEnabler = new AirplaneModeEnabler(getContext(), this);
         mDataStateListener = new MobileDataEnabledListener(getContext(), this);
 
-        // TODO(b/37429702): Add animations and preference comparator back after initial screen is
-        // loaded (ODR).
+        // Animations and preference comparator are disabled. See b/37429702 for context.
         setAnimationAllowed(false);
 
         addPreferences();
@@ -393,6 +505,14 @@ public class NetworkProviderSettings extends RestrictedDashboardFragment
                 fixConnectivityItem.setVisible(!mIsGuest && (!isAirplaneModeOn || isWifiEnabled));
             }
         };
+
+        HashMap<String, ResultReceiver> resultReceivers = new HashMap<>();
+        resultReceivers.put(ISSUE_SUBJECT_IS_WIFI,
+                mWifiTroubleshootingReceiver);
+        resultReceivers.put(ITroubleshootingInfoProviderService.ISSUE_SUBJECT_IS_CELLULAR,
+                mMobileTroubleshootingReceiver);
+        mTroubleshootingServiceConnection = new TroubleshootingServiceConnection(resultReceivers);
+
         final Intent intent = this.getIntent();
         mIsInSetupWizard = WizardManagerHelper.isAnySetupWizard(intent);
     }
@@ -577,6 +697,10 @@ public class NetworkProviderSettings extends RestrictedDashboardFragment
             mOpenSsid = intent.getStringExtra(EXTRA_START_CONNECT_SSID);
         }
 
+        if (mNetworkMobileProviderController != null) {
+            mNetworkMobileProviderController.setWifiPickerTrackerHelper(mWifiPickerTrackerHelper);
+        }
+
         requireActivity().addMenuProvider(mMenuProvider);
     }
 
@@ -632,6 +756,19 @@ public class NetworkProviderSettings extends RestrictedDashboardFragment
         changeNextButtonState(mWifiPickerTracker != null
                 && mWifiPickerTracker.getConnectedWifiEntry() != null
                 || getDataEnabled());
+
+        if (com.android.settings.flags.Flags.receiveTroubleshootingMessage()
+                && mTroubleshootingServiceConnection.isTroubleshootingServiceExists(getContext())) {
+            mTroubleshootingServiceConnection.bindService(getContext());
+        }
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        if (com.android.settings.flags.Flags.receiveTroubleshootingMessage()) {
+            mTroubleshootingServiceConnection.unbindService(getContext());
+        }
     }
 
     @Override
@@ -739,56 +876,58 @@ public class NetworkProviderSettings extends RestrictedDashboardFragment
         }
 
         if (mSelectedWifiEntry.canDisconnect()) {
-            if (mSelectedWifiEntry.canShare()) {
-                addShareMenuIfSuitable(menu);
-            }
+            addShareMenuIfSuitable(menu);
             menu.add(Menu.NONE, MENU_ID_DISCONNECT, 1 /* order */,
                     R.string.wifi_disconnect_button_text);
         }
 
         // "forget" for normal saved network. And "disconnect" for ephemeral network because it
         // could only be disconnected and be put in blocklists so it won't be used again.
-        if (canForgetNetwork()) {
-            addForgetMenuIfSuitable(menu);
-        }
-
-        WifiConfiguration config = mSelectedWifiEntry.getWifiConfiguration();
-        // Some configs are ineditable
-        if (WifiUtils.isNetworkLockedDown(getActivity(), config)) {
-            return;
-        }
-
-        addModifyMenuIfSuitable(menu, mSelectedWifiEntry);
+        addForgetMenuIfSuitable(menu);
+        addModifyMenuIfSuitable(menu);
     }
 
-    @VisibleForTesting
     void addShareMenuIfSuitable(ContextMenu menu) {
-        if (mIsAdmin) {
-            menu.add(Menu.NONE, MENU_ID_SHARE, 0 /* order */, R.string.share);
+        if (!WifiUtils.isNetworkShareable(mSelectedWifiEntry, getActivity())) {
             return;
         }
-        Log.w(TAG, "Don't add the Wi-Fi share menu because the user is not an admin.");
-        EventLog.writeEvent(0x534e4554, "206986392", -1 /* UID */, "User is not an admin");
+        if (!WifiUtils.isWifiMultiuserEnabled() && !mIsAdmin) {
+            Log.w(TAG, "Don't add the Wi-Fi share menu because the user is not an admin.");
+            EventLog.writeEvent(0x534e4554, "206986392", UserHandle.myUserId(),
+                    "User is not an admin");
+            return;
+        }
+        menu.add(Menu.NONE, MENU_ID_SHARE, 0 /* order */, R.string.share);
     }
 
-    @VisibleForTesting
     void addForgetMenuIfSuitable(ContextMenu menu) {
-        if (mIsAdmin) {
-            menu.add(Menu.NONE, MENU_ID_FORGET, 0 /* order */, R.string.forget);
+        if (!WifiUtils.isNetworkForgettable(mSelectedWifiEntry, getActivity())) {
+            return;
         }
+        if (!WifiUtils.isWifiMultiuserEnabled() && !mIsAdmin) {
+            Log.w(TAG, "Don't add the Wi-Fi forget menu because the user is not an admin.");
+            EventLog.writeEvent(0x534e4554, "206986392", UserHandle.myUserId(),
+                    "User is not an admin");
+            return;
+        }
+        menu.add(Menu.NONE, MENU_ID_FORGET, 0 /* order */, R.string.forget);
     }
 
-    @VisibleForTesting
-    void addModifyMenuIfSuitable(ContextMenu menu, WifiEntry wifiEntry) {
-        if (mIsAdmin && wifiEntry.isSaved()
-                && wifiEntry.getConnectedState() != CONNECTED_STATE_CONNECTED) {
-            menu.add(Menu.NONE, MENU_ID_MODIFY, 0 /* order */, R.string.wifi_modify);
+    void addModifyMenuIfSuitable(ContextMenu menu) {
+        WifiConfiguration config = mSelectedWifiEntry.getWifiConfiguration();
+        if (WifiUtils.isNetworkLockedDown(getActivity(), config)
+                || !WifiUtils.isNetworkEditable(mSelectedWifiEntry, getActivity())
+                || !mSelectedWifiEntry.isSaved()
+                || mSelectedWifiEntry.getConnectedState() == CONNECTED_STATE_CONNECTED) {
+            return;
         }
-    }
-
-    private boolean canForgetNetwork() {
-        return mSelectedWifiEntry.canForget() && !WifiUtils.isNetworkLockedDown(getActivity(),
-                mSelectedWifiEntry.getWifiConfiguration());
+        if (!WifiUtils.isWifiMultiuserEnabled() && !mIsAdmin) {
+            Log.w(TAG, "Don't add the Wi-Fi modify menu because the user is not an admin.");
+            EventLog.writeEvent(0x534e4554, "237672190", UserHandle.myUserId(),
+                    "User isn't admin");
+            return;
+        }
+        menu.add(Menu.NONE, MENU_ID_MODIFY, 0 /* order */, R.string.wifi_modify);
     }
 
     @Override
@@ -808,12 +947,6 @@ public class NetworkProviderSettings extends RestrictedDashboardFragment
                         () -> launchWifiDppConfiguratorActivity(mSelectedWifiEntry));
                 return true;
             case MENU_ID_MODIFY:
-                if (!mIsAdmin) {
-                    Log.e(TAG, "Can't modify Wi-Fi because the user isn't admin.");
-                    EventLog.writeEvent(0x534e4554, "237672190", UserHandle.myUserId(),
-                            "User isn't admin");
-                    return true;
-                }
                 showDialog(mSelectedWifiEntry, WifiConfigUiBase2.MODE_MODIFY);
                 return true;
             default:
@@ -958,6 +1091,9 @@ public class NetworkProviderSettings extends RestrictedDashboardFragment
             requireActivity().invalidateMenu();
         }
 
+        if (mWifiPickerTrackerHelper != null) {
+            mWifiPickerTrackerHelper.mWifiState.postValue(wifiState);
+        }
         switch (wifiState) {
             case WifiManager.WIFI_STATE_ENABLED:
                 setWifiScanMessage(/* isWifiEnabled */ true);
@@ -1024,6 +1160,9 @@ public class NetworkProviderSettings extends RestrictedDashboardFragment
     public void onWifiEntriesChanged(@WifiPickerTracker.WifiEntriesChangedReason int reason) {
         if (isFinishingOrDestroyed()) {
             return;
+        }
+        if (mWifiPickerTrackerHelper != null) {
+            mWifiPickerTrackerHelper.mWifiEntriesChangedReason.postValue(reason);
         }
         updateWifiEntryPreferences();
         if (reason == WifiPickerTracker.WIFI_ENTRIES_CHANGED_REASON_SCAN_RESULTS) {
@@ -1099,6 +1238,7 @@ public class NetworkProviderSettings extends RestrictedDashboardFragment
                     }
                     return true;
                 });
+
                 pref.setOnGearClickListener(preference -> {
                     launchNetworkDetailsFragment(pref);
                 });
@@ -1262,8 +1402,7 @@ public class NetworkProviderSettings extends RestrictedDashboardFragment
                             : R.string.wifi_configure_settings_preference_summary_wakeup_off));
         }
 
-        if (!(isCatalystEnabled()
-                && com.android.settings.flags.Flags.deeplinkNetworkAndInternet25q4())) {
+        if (!isCatalystEnabled()) {
             final int numSavedNetworks = mWifiPickerTracker == null ? 0 :
                     mWifiPickerTracker.getNumSavedNetworks();
             final int numSavedSubscriptions = mWifiPickerTracker == null ? 0 :
@@ -1409,7 +1548,7 @@ public class NetworkProviderSettings extends RestrictedDashboardFragment
         // If it's an unsaved secure WifiEntry, it will callback
         // ConnectCallback#onConnectResult with ConnectCallback#CONNECT_STATUS_FAILURE_NO_CONFIG
         WifiEntryConnectCallback callback =
-                new WifiEntryConnectCallback(wifiEntry, editIfNoConfig, fullScreenEdit);
+                new WifiEntryConnectCallback(wifiEntry, editIfNoConfig, fullScreenEdit, this);
 
         if (Flags.androidVWifiApi() && wifiEntry.getSecurityTypes()
                 .contains(WifiEntry.SECURITY_WEP)) {
@@ -1423,6 +1562,7 @@ public class NetworkProviderSettings extends RestrictedDashboardFragment
 
         wifiEntry.connect(callback);
     }
+
 
     private class WifiConnectActionListener implements WifiManager.ActionListener {
         @Override
@@ -1496,23 +1636,27 @@ public class NetworkProviderSettings extends RestrictedDashboardFragment
         final WifiEntry mConnectWifiEntry;
         final boolean mEditIfNoConfig;
         final boolean mFullScreenEdit;
+        final MutableLiveData<Integer> mConnectStatus = new MutableLiveData<>();
 
         WifiEntryConnectCallback(WifiEntry connectWifiEntry, boolean editIfNoConfig,
-                boolean fullScreenEdit) {
+                boolean fullScreenEdit, LifecycleOwner lifecycleOwner) {
             mConnectWifiEntry = connectWifiEntry;
             mEditIfNoConfig = editIfNoConfig;
             mFullScreenEdit = fullScreenEdit;
+            mConnectStatus.observe(lifecycleOwner, this::handleConnectResult);
         }
 
         @Override
         public void onConnectResult(@ConnectStatus int status) {
-            if (isFinishingOrDestroyed()) {
-                return;
-            }
+            Log.i(TAG, "onConnectResult(), ConnectStatus:" + status);
+            mConnectStatus.postValue(status);
+        }
 
+        private void handleConnectResult(@ConnectStatus int status) {
             if (status == ConnectCallback.CONNECT_STATUS_SUCCESS) {
                 mClickedConnect = true;
             } else if (status == ConnectCallback.CONNECT_STATUS_FAILURE_NO_CONFIG) {
+                Log.w(TAG, "No config for Wi-Fi connect!");
                 if (mEditIfNoConfig) {
                     // Edit an unsaved secure Wi-Fi network.
                     if (mFullScreenEdit) {

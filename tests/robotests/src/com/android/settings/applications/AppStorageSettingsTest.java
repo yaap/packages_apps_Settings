@@ -19,6 +19,7 @@ package com.android.settings.applications;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.mock;
@@ -87,7 +88,7 @@ public class AppStorageSettingsTest {
     @Test
     public void updateUiWithSize_noAppStats_shouldDisableClearButtons()
             throws PackageManager.NameNotFoundException {
-        mockMainlineModule(mSettings.mPackageName, false /* isMainlineModule */);
+        mockModulePackage(mSettings.mPackageName, false /* isApex */);
         mSettings.updateUiWithSize(null);
 
         verify(mSizesController).updateUi(nullable(Context.class));
@@ -103,7 +104,7 @@ public class AppStorageSettingsTest {
         when(stats.getDataBytes()).thenReturn(10000L);
         doNothing().when(mSettings).handleClearCacheClick();
         doNothing().when(mSettings).handleClearDataClick();
-        mockMainlineModule(mSettings.mPackageName, false /* isMainlineModule */);
+        mockModulePackage(mSettings.mPackageName, false /* isApex */);
 
 
         mSettings.updateUiWithSize(stats);
@@ -119,14 +120,14 @@ public class AppStorageSettingsTest {
     }
 
     @Test
-    public void updateUiWithSize_mainlineModule_shouldDisableClearButtons()
+    public void updateUiWithSize_apexPackage_shouldDisableClearButtons()
             throws PackageManager.NameNotFoundException {
         final AppStorageStats stats = mock(AppStorageStats.class);
         when(stats.getCacheBytes()).thenReturn(5000L);
         when(stats.getDataBytes()).thenReturn(10000L);
         doNothing().when(mSettings).handleClearCacheClick();
         doNothing().when(mSettings).handleClearDataClick();
-        mockMainlineModule(mSettings.mPackageName, true /* isMainlineModule */);
+        mockModulePackage(mSettings.mPackageName, true /* isApex */);
 
 
         mSettings.updateUiWithSize(stats);
@@ -151,19 +152,20 @@ public class AppStorageSettingsTest {
         return pref;
     }
 
-    private void mockMainlineModule(String packageName, boolean isMainlineModule)
+    private void mockModulePackage(String packageName, boolean isApex)
             throws PackageManager.NameNotFoundException {
         final PackageInfo packageInfo = new PackageInfo();
         final ApplicationInfo applicationInfo = new ApplicationInfo();
         applicationInfo.sourceDir = "apex";
         packageInfo.applicationInfo = applicationInfo;
+        packageInfo.isApex = isApex;
 
-        if (isMainlineModule) {
+        when(mPackageManager.getPackageInfo(eq(packageName), anyInt() /* flags */)).thenReturn(
+                packageInfo);
+        if (isApex) {
             when(mPackageManager.getModuleInfo(packageName, 0 /* flags */)).thenReturn(
                     new ModuleInfo());
         } else {
-            when(mPackageManager.getPackageInfo(packageName, 0 /* flags */)).thenReturn(
-                    packageInfo);
             when(mPackageManager.getModuleInfo(packageName, 0 /* flags */)).thenThrow(
                     new PackageManager.NameNotFoundException());
         }

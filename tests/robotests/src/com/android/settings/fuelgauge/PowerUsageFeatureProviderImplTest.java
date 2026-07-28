@@ -26,6 +26,8 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.os.Process;
 
+import com.android.settings.fuelgauge.batteryusage.BatteryAdvanceInfoController;
+import com.android.settings.fuelgauge.batteryusage.BatteryAdvanceInfoDialog;
 import com.android.settings.fuelgauge.batteryusage.DataProcessor;
 
 import org.junit.Before;
@@ -99,6 +101,25 @@ public class PowerUsageFeatureProviderImplTest {
         assertThat(mPowerFeatureProvider.getBatteryUsageListConsumePowerThreshold()).isEqualTo(0.0);
     }
 
+
+    @Test
+    public void getBatteryUsageResetErrorTimeThresholdMs_returnExpectedResult() {
+        assertThat(mPowerFeatureProvider.getBatteryUsageResetErrorTimeThresholdMs())
+                .isEqualTo(Long.MAX_VALUE);
+    }
+
+    @Test
+    public void getBatteryUsageResetErrorPowerThreshold_returnExpectedResult() {
+        assertThat(mPowerFeatureProvider.getBatteryUsageResetErrorPowerThreshold())
+                .isEqualTo(Double.MAX_VALUE);
+    }
+
+    @Test
+    public void getBatteryUsageOverCalcPowerDrainThreshold_returnExpectedResult() {
+        assertThat(mPowerFeatureProvider.getBatteryUsageOverCalcPowerDrainThreshold())
+                .isEqualTo(Double.MAX_VALUE);
+    }
+
     @Test
     public void getBatteryUsageStatsMaxAgeMs_returnUnsetValue() {
         assertThat(mPowerFeatureProvider.getBatteryUsageStatsMaxAgeMs(/* isFromPeriodJob= */true))
@@ -143,6 +164,22 @@ public class PowerUsageFeatureProviderImplTest {
     @Test
     public void isTypeSystem_uidOther_returnFalse() {
         assertThat(mPowerFeatureProvider.isTypeSystem(UID_OTHER, null)).isFalse();
+    }
+
+    @Test
+    public void getBatteryAdvanceInfoDialog_returnNull() {
+        BatteryAdvanceInfoDialog dialog = mPowerFeatureProvider.getBatteryAdvanceInfoDialog();
+
+        assertThat(dialog).isNull();
+    }
+
+    @Test
+    public void getBatteryAdvanceInfoController_returnNull() {
+        BatteryAdvanceInfoController controller =
+                mPowerFeatureProvider.getBatteryAdvanceInfoController(
+                        mContext, /* lifecycle= */ null, /* fragment= */ null);
+
+        assertThat(controller).isNull();
     }
 
     @Test
@@ -208,5 +245,10 @@ public class PowerUsageFeatureProviderImplTest {
         doReturn(false).when(mPowerFeatureProvider).isExtraDefend();
 
         assertThat(mPowerFeatureProvider.isBatteryDefend(mBatteryInfo)).isTrue();
+    }
+
+    @Test
+    public void isBatteryAdvanceInfoEnabled_returnFalse() {
+        assertThat(mPowerFeatureProvider.isBatteryAdvanceInfoEnabled()).isFalse();
     }
 }

@@ -27,6 +27,7 @@ import androidx.fragment.app.testing.EmptyFragmentActivity
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceScreen
+import androidx.recyclerview.widget.RecyclerView
 import androidx.test.annotation.UiThreadTest
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -142,6 +143,9 @@ class ResolutionPreferenceFragmentTest : ExternalDisplayTestBase() {
         (topPref.getPreference(1) as SelectorWithWidgetPreference).onClick()
         shadowOf(Looper.getMainLooper()).idle()
 
+        mListener.update(display.id)
+        mHandler.flush()
+
         verify(mMockedInjector)
             .setUserPreferredDisplayMode(
                 display.id,
@@ -164,7 +168,10 @@ class ResolutionPreferenceFragmentTest : ExternalDisplayTestBase() {
         val newMode = display.supportedModes[1]
 
         val bundle = Bundle()
-        bundle.putBoolean(ResolutionChangeDialogFragment.KEY_CONFIRMED, true)
+        bundle.putParcelable(
+            ResolutionChangeDialogFragment.KEY_CONFIRMED,
+            ResolutionChangeConfirmationState.ACCEPT,
+        )
         bundle.putParcelable(ResolutionChangeDialogFragment.KEY_NEW_MODE, newMode)
         fragment.setFragmentResult(ResolutionChangeDialogFragment.KEY_RESULT, bundle)
         shadowOf(Looper.getMainLooper()).idle()
@@ -187,7 +194,10 @@ class ResolutionPreferenceFragmentTest : ExternalDisplayTestBase() {
         shadowOf(Looper.getMainLooper()).idle()
 
         val bundle = Bundle()
-        bundle.putBoolean(ResolutionChangeDialogFragment.KEY_CONFIRMED, false)
+        bundle.putParcelable(
+            ResolutionChangeDialogFragment.KEY_CONFIRMED,
+            ResolutionChangeConfirmationState.REVERT,
+        )
         bundle.putParcelable(ResolutionChangeDialogFragment.KEY_EXISTING_MODE, existingMode)
         fragment.setFragmentResult(ResolutionChangeDialogFragment.KEY_RESULT, bundle)
         shadowOf(Looper.getMainLooper()).idle()
@@ -210,6 +220,19 @@ class ResolutionPreferenceFragmentTest : ExternalDisplayTestBase() {
         activityScenario.scenario.onActivity { activity: EmptyFragmentActivity ->
             assertThat(activity.isFinishing).isTrue()
         }
+    }
+
+    @Test
+    @UiThreadTest
+    fun onStart_setsRecyclerViewNotImportantForAccessibility() {
+        initFragment(mDisplays[0].id)
+        // onStartCallback() is called within initFragment()
+        mHandler.flush()
+
+        // Verify that the RecyclerView is marked as not important for accessibility
+        // to prevent "X of Y" announcements for each resolution option.
+        assertThat(fragment.listView.importantForAccessibility)
+            .isEqualTo(View.IMPORTANT_FOR_ACCESSIBILITY_NO)
     }
 
     @Test

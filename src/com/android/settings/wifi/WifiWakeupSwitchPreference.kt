@@ -46,7 +46,7 @@ import com.android.settingslib.preference.SwitchPreferenceBinding
 
 @Suppress("DEPRECATION")
 class WifiWakeupSwitchPreference :
-    SwitchPreference(KEY, R.string.wifi_wakeup),
+    SwitchPreference(KEY, R.string.enable_wifi_wakeup_purpose, R.string.wifi_wakeup),
     SwitchPreferenceBinding,
     PreferenceSummaryProvider,
     PreferenceLifecycleProvider {
@@ -109,7 +109,7 @@ class WifiWakeupSwitchPreference :
         }
 
     override val sensitivityLevel
-        get() = SensitivityLevel.LOW_SENSITIVITY
+        get() = SensitivityLevel.NO_SENSITIVITY
 
     override fun storage(context: Context): KeyValueStore = Storage(context)
 
@@ -188,6 +188,8 @@ class WifiWakeupSwitchPreference :
         }
         return true
     }
+
+    override fun getEnabledDescription(): String = "Requires Location to be enabled. Requires Wi-Fi scanning to be always available."
 
     companion object {
         const val TAG = "WifiWakeupSwitchPreference"

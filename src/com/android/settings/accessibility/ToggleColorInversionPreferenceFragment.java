@@ -16,10 +16,7 @@
 
 package com.android.settings.accessibility;
 
-import static com.android.internal.accessibility.AccessibilityShortcutController.COLOR_INVERSION_COMPONENT_NAME;
-
 import android.app.settings.SettingsEnums;
-import android.content.ComponentName;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.View;
@@ -29,34 +26,13 @@ import androidx.annotation.Nullable;
 
 import com.android.settings.R;
 import com.android.settings.accessibility.colorinversion.ui.ColorInversionScreen;
-import com.android.settings.search.BaseSearchIndexProvider;
-import com.android.settingslib.search.SearchIndexable;
+import com.android.settings.dashboard.DashboardFragment;
 
 /**
  * Settings page for color inversion.
  */
-@SearchIndexable(forTarget = SearchIndexable.ALL & ~SearchIndexable.ARC)
-public class ToggleColorInversionPreferenceFragment extends BaseSupportFragment {
+public class ToggleColorInversionPreferenceFragment extends DashboardFragment {
     private static final String TAG = "ToggleColorInversionPreferenceFragment";
-
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (!Flags.catalystColorInversion()) {
-            ToggleShortcutPreferenceController shortcutPreferenceController = use(
-                    ToggleShortcutPreferenceController.class);
-            if (shortcutPreferenceController != null) {
-                shortcutPreferenceController.initialize(
-                        getFeatureComponentName(),
-                        getChildFragmentManager(),
-                        getFeatureName(),
-                        getMetricsCategory()
-                );
-            }
-            use(FeedbackButtonPreferenceController.class).initialize(
-                    new FeedbackManager(context, getMetricsCategory()));
-        }
-    }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -75,7 +51,7 @@ public class ToggleColorInversionPreferenceFragment extends BaseSupportFragment 
 
     @Override
     protected int getPreferenceScreenResId() {
-        return R.xml.accessibility_color_inversion_settings;
+        return 0;
     }
 
     @Override
@@ -86,23 +62,6 @@ public class ToggleColorInversionPreferenceFragment extends BaseSupportFragment 
     @Override
     public int getHelpResource() {
         return R.string.help_url_color_inversion;
-    }
-
-    public static final BaseSearchIndexProvider SEARCH_INDEX_DATA_PROVIDER =
-            new BaseSearchIndexProvider(
-                    Flags.catalystColorInversion()
-                            && com.android.settings.flags.Flags.catalystSettingsSearch() ? 0 :
-                            R.xml.accessibility_color_inversion_settings);
-
-    @NonNull
-    private CharSequence getFeatureName() {
-        return getString(
-                R.string.accessibility_display_inversion_preference_title);
-    }
-
-    @NonNull
-    private ComponentName getFeatureComponentName() {
-        return COLOR_INVERSION_COMPONENT_NAME;
     }
 
     @Override

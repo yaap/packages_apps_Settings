@@ -16,6 +16,10 @@
 
 package com.android.settings.security;
 
+import static android.app.admin.DevicePolicyManager.PASSWORD_QUALITY_MANAGED;
+import static android.app.admin.DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED;
+import static android.app.admin.DpcAuthority.DPC_AUTHORITY;
+
 import static com.google.common.truth.Truth.assertThat;
 
 import static org.junit.Assert.assertNull;
@@ -26,16 +30,17 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import android.app.admin.DevicePolicyIdentifiers;
 import android.app.admin.DevicePolicyManager;
+import android.app.admin.EnforcingAdmin;
+import android.app.admin.PolicyEnforcementInfo;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.os.UserHandle;
 import android.os.UserManager;
 import android.os.storage.StorageManager;
-import android.platform.test.annotations.DisableFlags;
-import android.platform.test.annotations.EnableFlags;
-import android.platform.test.annotations.RequiresFlagsDisabled;
-import android.platform.test.annotations.RequiresFlagsEnabled;
 import android.platform.test.flag.junit.CheckFlagsRule;
 import android.platform.test.flag.junit.DeviceFlagsValueProvider;
 import android.platform.test.flag.junit.SetFlagsRule;
@@ -45,9 +50,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 
 import com.android.internal.widget.LockPatternUtils;
 import com.android.settings.SettingsActivity;
-import com.android.settings.flags.Flags;
 import com.android.settings.password.ChooseLockGeneric;
-import com.android.settings.security.screenlock.ScreenLockSettings;
 import com.android.settings.testutils.FakeFeatureFactory;
 import com.android.settings.testutils.ResourcesUtils;
 import com.android.settingslib.RestrictedLockUtils;
@@ -60,6 +63,8 @@ import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.List;
 
 @RunWith(AndroidJUnit4.class)
 public class ScreenLockPreferenceDetailsUtilsTest {
@@ -97,6 +102,7 @@ public class ScreenLockPreferenceDetailsUtilsTest {
         when(mContext.getSystemService(StorageManager.class)).thenReturn(mStorageManager);
         when(mContext.getSystemService(Context.DEVICE_POLICY_SERVICE))
                 .thenReturn(mDevicePolicyManager);
+        when(mContext.getSystemService(DevicePolicyManager.class)).thenReturn(mDevicePolicyManager);
         when(mContext.getSystemService(Context.USER_SERVICE)).thenReturn(mUserManager);
         doNothing().when(mContext).startActivity(any());
         when(mUserManager.getProfileIdsWithDisabled(anyInt())).thenReturn(new int[]{});
@@ -123,9 +129,9 @@ public class ScreenLockPreferenceDetailsUtilsTest {
     }
 
     @Test
-    @DisableFlags(com.android.settings.flags.Flags.FLAG_BIOMETRICS_ONBOARDING_EDUCATION)
-    public void getSummary_unsecureAndDisabledPattern_flagOff_shouldReturnUnlockModeOff() {
-        final String summary = prepareString("unlock_set_unlock_mode_off", "unlockModeOff");
+    public void getSummary_unsecureAndDisabledPattern_flagOn_shouldReturnUnlockModeOff() {
+        final String summary = prepareString("unlock_set_unlock_mode_off_new", "unlockModeOff");
+        whenConfigHidePatternSecurityOptionIsEnabled(false);
 
         when(mLockPatternUtils.isSecure(USER_ID)).thenReturn(false);
         when(mLockPatternUtils.isLockScreenDisabled(anyInt())).thenReturn(true);
@@ -134,9 +140,10 @@ public class ScreenLockPreferenceDetailsUtilsTest {
     }
 
     @Test
-    @EnableFlags(com.android.settings.flags.Flags.FLAG_BIOMETRICS_ONBOARDING_EDUCATION)
-    public void getSummary_unsecureAndDisabledPattern_flagOn_shouldReturnUnlockModeOff() {
-        final String summary = prepareString("unlock_set_unlock_mode_off_new", "unlockModeOff");
+    public void getSummary_unsecureAndDisabledPattern_patternUnsupported_hasCorrectSummary() {
+        final String summary = prepareString("unlock_set_unlock_mode_off_new_without_pattern",
+                "unlockModeOffWithoutPattern");
+        whenConfigHidePatternSecurityOptionIsEnabled(true);
 
         when(mLockPatternUtils.isSecure(USER_ID)).thenReturn(false);
         when(mLockPatternUtils.isLockScreenDisabled(anyInt())).thenReturn(true);
@@ -243,7 +250,7 @@ public class ScreenLockPreferenceDetailsUtilsTest {
     public void getSummary_unsupportedPasswordQuality_shouldReturnNull() {
         when(mLockPatternUtils.isSecure(USER_ID)).thenReturn(true);
         when(mLockPatternUtils.getKeyguardStoredPasswordQuality(USER_ID))
-                .thenReturn(DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED);
+                .thenReturn(PASSWORD_QUALITY_UNSPECIFIED);
 
         assertNull(mScreenLockPreferenceDetailsUtils.getSummary(USER_ID));
     }
@@ -281,10 +288,33 @@ public class ScreenLockPreferenceDetailsUtilsTest {
         final RestrictedLockUtils.EnforcedAdmin admin = new RestrictedLockUtils.EnforcedAdmin();
 
         when(mDevicePolicyManager.getPasswordQuality(admin.component, USER_ID))
-                .thenReturn(DevicePolicyManager.PASSWORD_QUALITY_UNSPECIFIED);
+                .thenReturn(PASSWORD_QUALITY_UNSPECIFIED);
 
         assertThat(mScreenLockPreferenceDetailsUtils.isPasswordQualityManaged(USER_ID, admin))
                 .isFalse();
+    }
+
+    @Test
+    public void getPasswordQualityManagedEnforcingAdmin_passwordQualityUnset_shouldReturnNull() {
+        when(mDevicePolicyManager.getPasswordQuality(/* component= */ null, USER_ID)).thenReturn(
+                PASSWORD_QUALITY_UNSPECIFIED);
+
+        assertThat(mScreenLockPreferenceDetailsUtils.getPasswordQualityManagedEnforcingAdmin(
+                USER_ID)).isNull();
+    }
+
+    @Test
+    public void getPasswordQualityManagedEnforcingAdmin_passwordQualityManaged_shouldReturnAdmin() {
+        when(mDevicePolicyManager.getPasswordQuality(/* component= */ null, USER_ID)).thenReturn(
+                PASSWORD_QUALITY_MANAGED);
+        final EnforcingAdmin expectedAdmin = new EnforcingAdmin("package", DPC_AUTHORITY,
+                UserHandle.of(USER_ID), new ComponentName("package", "component"));
+        when(mDevicePolicyManager.getEnforcingAdminsForPolicy(
+                DevicePolicyIdentifiers.PASSWORD_QUALITY_POLICY, USER_ID)).thenReturn(
+                    new PolicyEnforcementInfo(List.of(expectedAdmin)));
+
+        assertThat(mScreenLockPreferenceDetailsUtils.getPasswordQualityManagedEnforcingAdmin(
+                USER_ID)).isEqualTo(expectedAdmin);
     }
 
     @Test
@@ -308,53 +338,6 @@ public class ScreenLockPreferenceDetailsUtilsTest {
         mScreenLockPreferenceDetailsUtils = new ScreenLockPreferenceDetailsUtils(mContext);
 
         assertThat(mScreenLockPreferenceDetailsUtils.isLockPatternSecure()).isFalse();
-    }
-
-    @Test
-    @RequiresFlagsEnabled(Flags.FLAG_BIOMETRIC_ONBOARDING_EDUCATION)
-    public void shouldShowGearMenu_patternIsSecure_flagOn_shouldReturnFalse() {
-        when(mLockPatternUtils.isSecure(anyInt())).thenReturn(true);
-
-        assertThat(mScreenLockPreferenceDetailsUtils.shouldShowGearMenu()).isFalse();
-    }
-
-    @Test
-    @RequiresFlagsDisabled(Flags.FLAG_BIOMETRIC_ONBOARDING_EDUCATION)
-    public void shouldShowGearMenu_patternIsNotSecure_flagOff_shouldReturnFalse() {
-        when(mLockPatternUtils.isSecure(anyInt())).thenReturn(false);
-
-        assertThat(mScreenLockPreferenceDetailsUtils.shouldShowGearMenu()).isFalse();
-    }
-
-    @Test
-    @RequiresFlagsDisabled(Flags.FLAG_BIOMETRIC_ONBOARDING_EDUCATION)
-    public void shouldShowGearMenu_patternIsSecure_flagOff_shouldReturnTrue() {
-        when(mLockPatternUtils.isSecure(anyInt())).thenReturn(true);
-
-        assertThat(mScreenLockPreferenceDetailsUtils.shouldShowGearMenu()).isTrue();
-    }
-
-    @Test
-    @RequiresFlagsEnabled(Flags.FLAG_BIOMETRIC_ONBOARDING_EDUCATION)
-    public void shouldShowGearMenu_patternIsNotSecure_flagOn_shouldReturnFalse() {
-        when(mLockPatternUtils.isSecure(anyInt())).thenReturn(false);
-
-        assertThat(mScreenLockPreferenceDetailsUtils.shouldShowGearMenu()).isFalse();
-    }
-
-    @Test
-    public void openScreenLockSettings_shouldSendIntent() {
-        mScreenLockPreferenceDetailsUtils.openScreenLockSettings(SOURCE_METRICS_CATEGORY);
-
-        assertFragmentLaunchRequested(ScreenLockSettings.class.getName());
-    }
-
-    @Test
-    public void getLaunchScreenLockSettingsIntent_returnsIntent() {
-        final Intent intent = mScreenLockPreferenceDetailsUtils.getLaunchScreenLockSettingsIntent(
-                SOURCE_METRICS_CATEGORY);
-
-        assertFragmentLaunchIntent(intent, ScreenLockSettings.class.getName());
     }
 
     @Test
@@ -395,6 +378,13 @@ public class ScreenLockPreferenceDetailsUtilsTest {
         final int resId = ResourcesUtils.getResourcesId(
                 ApplicationProvider.getApplicationContext(), "bool",
                 "config_show_unlock_set_or_change");
+        when(mResources.getBoolean(resId)).thenReturn(enabled);
+    }
+
+    private void whenConfigHidePatternSecurityOptionIsEnabled(boolean enabled) {
+        final int resId = ResourcesUtils.getResourcesId(
+                ApplicationProvider.getApplicationContext(), "bool",
+                "config_hide_pattern_security_option");
         when(mResources.getBoolean(resId)).thenReturn(enabled);
     }
 

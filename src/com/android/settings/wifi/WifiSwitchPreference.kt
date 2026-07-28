@@ -25,8 +25,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.net.wifi.WifiManager
+import android.os.Looper
 import android.os.UserManager
 import android.provider.Settings
+import android.util.Log
 import android.widget.Toast
 import androidx.preference.Preference
 import androidx.preference.Preference.OnPreferenceChangeListener
@@ -45,6 +47,7 @@ import com.android.settingslib.WirelessUtils
 import com.android.settingslib.datastore.AbstractKeyedDataObservable
 import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.Permissions
+import com.android.settingslib.metadata.MUSTPASS_SET
 import com.android.settingslib.metadata.PreferenceChangeReason
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceMetadata
@@ -52,10 +55,22 @@ import com.android.settingslib.metadata.ReadWritePermit
 import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.metadata.SwitchPreference
 import com.android.settingslib.preference.SwitchPreferenceBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.NonCancellable
+import kotlinx.coroutines.SupervisorJob
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
+
 
 // LINT.IfChange
-class WifiSwitchPreference :
-    SwitchPreference(KEY, R.string.wifi_settings_primary_switch_title),
+class WifiSwitchPreference(private val scope: CoroutineScope) :
+    SwitchPreference(
+        KEY,
+        purpose = R.string.main_toggle_wifi_purpose,
+        R.string.wifi_settings_primary_switch_title,
+    ),
     SwitchPreferenceBinding,
     PreferenceActionMetricsProvider,
     OnPreferenceChangeListener,
@@ -68,7 +83,11 @@ class WifiSwitchPreference :
     override val preferenceActionMetrics: Int
         get() = ACTION_WIFI
 
-    override fun tags(context: Context) = arrayOf(KEY_WIFI)
+    override fun tags(context: Context) = arrayOf(KEY_WIFI, MUSTPASS_SET)
+
+    override fun getEnabledDescription(): String = "This setting must not be restricted by a device administrator. Preference cannot be changed while satellite messaging is active. Preference cannot be turned on while in airplane mode."
+
+    override fun getEnabledStability() = PreconditionStability.UNSTABLE
 
     override fun isEnabled(context: Context) = super<PreferenceRestrictionMixin>.isEnabled(context)
 
@@ -130,16 +149,17 @@ class WifiSwitchPreference :
         when {
             (value == true && !context.isRadioAllowed()) || isSatelliteOn(context) ->
                 ReadWritePermit.DISALLOW
+
             else -> ReadWritePermit.ALLOW
         }
 
     override val sensitivityLevel
-        get() = SensitivityLevel.LOW_SENSITIVITY
+        get() = SensitivityLevel.MUST_PROVIDE_UNDO
 
-    override fun storage(context: Context): KeyValueStore = WifiSwitchStore(context)
+    override fun storage(context: Context): KeyValueStore = WifiSwitchStore(context, scope)
 
     @Suppress("UNCHECKED_CAST")
-    private class WifiSwitchStore(private val context: Context) :
+    private class WifiSwitchStore(private val context: Context, private val scope: CoroutineScope) :
         AbstractKeyedDataObservable<String>(), KeyValueStore {
 
         private var broadcastReceiver: BroadcastReceiver? = null
@@ -152,7 +172,21 @@ class WifiSwitchPreference :
         override fun <T : Any> setValue(key: String, valueType: Class<T>, value: T?) {
             if (value !is Boolean) return
 
-            context.isWifiEnabled = value
+            if (Looper.myLooper() == Looper.getMainLooper()) {
+                // Log warning for main thread calls to alert developers/AI callers
+                Log.w(TAG, "[${context.packageName}]: Async call to setWifiEnabled: $value")
+
+                writeScope.launch {
+                    // NonCancellable protects the IPC call even if the initiating process/UI closes
+                    withContext(Dispatchers.IO + NonCancellable) {
+                        performWifiToggle(context, value)
+                    }
+                }
+            } else {
+                // Background or Binder threads (e.g., AI via ContentProvider) execute synchronously
+                Log.d(TAG, "[${context.packageName}]: Sync call to setWifiEnabled: $value")
+                performWifiToggle(context, value)
+            }
 
             val metricsFeature = featureFactory.metricsFeatureProvider
             if (value) {
@@ -185,9 +219,22 @@ class WifiSwitchPreference :
         override fun onLastObserverRemoved() {
             broadcastReceiver?.let { context.unregisterReceiver(it) }
         }
+
+        companion object {
+            private val writeScope = CoroutineScope(SupervisorJob() + Dispatchers.Main.immediate)
+
+            private fun performWifiToggle(context: Context, enabled: Boolean) {
+                try {
+                    context.isWifiEnabled = enabled
+                } catch (e: Exception) {
+                    Log.e(TAG, "Wi-Fi Toggle failed", e)
+                }
+            }
+        }
     }
 
     companion object {
+        private const val TAG = "WifiSwitchPreference"
         const val KEY = "main_toggle_wifi"
 
         private fun Context.isRadioAllowed() =

@@ -16,7 +16,7 @@
 
 package com.android.settings.dream;
 
-import static android.service.dreams.Flags.allowDreamWhenPostured;
+
 import static android.service.dreams.Flags.dreamsV2;
 
 import android.app.settings.SettingsEnums;
@@ -67,7 +67,8 @@ public class WhenToDreamPicker extends RadioButtonPickerFragment {
         mDreamsSupportedOnBattery = getResources().getBoolean(
                 com.android.internal.R.bool.config_dreamsEnabledOnBattery);
         mShowRestrictToWirelessCharging =
-                getResources().getBoolean(R.bool.config_show_restrict_to_wireless_charging);
+                getResources().getBoolean(
+                        com.android.internal.R.bool.config_supportDreamWirelessChargingRestriction);
     }
 
     @Override
@@ -91,8 +92,8 @@ public class WhenToDreamPicker extends RadioButtonPickerFragment {
             throw new IllegalArgumentException("Entries and values must be of the same length.");
         }
 
-        final boolean supportDreamWhilePostured = allowDreamWhenPostured()
-                && getResources().getBoolean(R.bool.config_posturing_supported);
+        final boolean supportDreamWhilePostured =
+                getResources().getBoolean(R.bool.config_posturing_supported);
         for (int i = 0; i < entries.length; i++) {
             final String key = values[i];
             if (DreamSettings.WHILE_POSTURED_ONLY.equals(key) && !supportDreamWhilePostured) {

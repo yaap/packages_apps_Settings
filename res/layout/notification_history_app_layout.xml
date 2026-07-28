@@ -58,7 +58,7 @@
             android:layout_alignParentEnd="true">
 
             <include
-                layout="@*android:layout/notification_expand_button"
+                layout="@*android:layout/notification_2025_expand_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -69,7 +69,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/notification_list_wrapper"
         android:layout_width="match_parent"
-        android:background="@androidprv:color/materialColorSurfaceContainer"
+        android:background="@color/materialColorSurfaceContainer"
         android:layout_height="wrap_content">
 
         <com.android.settings.notification.history.NotificationHistoryRecyclerView

@@ -40,10 +40,10 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
 
-import com.android.server.accessibility.Flags;
 import com.android.settings.R;
 import com.android.settings.core.TogglePreferenceController;
 
+// LINT.IfChange
 /** The controller to handle main switch to turn on or turn off accessibility autoclick. */
 public class ToggleAutoclickMainSwitchPreferenceController
         extends TogglePreferenceController implements DefaultLifecycleObserver {
@@ -78,7 +78,7 @@ public class ToggleAutoclickMainSwitchPreferenceController
 
     @Override
     public int getAvailabilityStatus() {
-        return Flags.enableAutoclickIndicator() ? AVAILABLE : CONDITIONALLY_UNAVAILABLE;
+        return AVAILABLE;
     }
 
     @Override
@@ -159,3 +159,4 @@ public class ToggleAutoclickMainSwitchPreferenceController
         return mContext.getPackageManager().hasSystemFeature(PackageManager.FEATURE_PC);
     }
 }
+// LINT.ThenChange(autoclick/ui/AutoclickMainSwitchPreference.kt)

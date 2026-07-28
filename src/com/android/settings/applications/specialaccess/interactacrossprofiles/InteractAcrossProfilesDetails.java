@@ -25,6 +25,7 @@ import static android.app.admin.DevicePolicyResources.Strings.Settings.HOW_TO_DI
 import static android.app.admin.DevicePolicyResources.Strings.Settings.INSTALL_IN_PERSONAL_PROFILE_TO_CONNECT_PROMPT;
 import static android.app.admin.DevicePolicyResources.Strings.Settings.INSTALL_IN_WORK_PROFILE_TO_CONNECT_PROMPT;
 import static android.app.admin.DevicePolicyResources.Strings.Settings.ONLY_CONNECT_TRUSTED_APPS;
+import static android.app.admin.DpcAuthority.DPC_AUTHORITY;
 import static android.content.pm.PackageManager.MATCH_DIRECT_BOOT_AWARE;
 import static android.content.pm.PackageManager.MATCH_DIRECT_BOOT_UNAWARE;
 import static android.provider.Settings.ACTION_MANAGE_CROSS_PROFILE_ACCESS;
@@ -38,8 +39,10 @@ import android.app.ActionBar;
 import android.app.AppOpsManager;
 import android.app.admin.DevicePolicyEventLogger;
 import android.app.admin.DevicePolicyManager;
+import android.app.admin.EnforcingAdmin;
 import android.app.admin.flags.Flags;
 import android.app.settings.SettingsEnums;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -56,7 +59,6 @@ import android.os.UserManager;
 import android.provider.Settings;
 import android.stats.devicepolicy.DevicePolicyEnums;
 import android.util.IconDrawableFactory;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -64,6 +66,7 @@ import android.widget.ImageView;
 import android.widget.Space;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.preference.Preference;
 
@@ -130,13 +133,23 @@ public class InteractAcrossProfilesDetails extends AppInfoBase
         if (SettingsThemeHelper.isExpressiveTheme(mContext)) {
             addPreferencesFromResource(
                     R.xml.interact_across_profiles_permissions_details_expressive);
-            hideFooterPreferenceIcon("interact_across_profiles_summary_2");
-            hideFooterPreferenceIcon("interact_across_profiles_extra_summary");
+            FooterPreference footerPref1 = findPreference("interact_across_profiles_summary_1");
+            FooterPreference footerPref2 = findPreference("interact_across_profiles_summary_2");
+            FooterPreference footerPref3 = findPreference(
+                    INTERACT_ACROSS_PROFILE_EXTRA_SUMMARY_KEY);
+            // Prevent PreferenceScreen sorting preferences alphabetically
+            footerPref1.setOrder(10);
+            footerPref2.setOrder(20);
+            footerPref3.setOrder(30);
+            // Only show icon for the 1st preference
+            footerPref2.setIconVisibility(View.GONE);
+            footerPref3.setIconVisibility(View.GONE);
         } else {
             addPreferencesFromResource(R.xml.interact_across_profiles_permissions_details);
         }
     }
 
+    @NonNull
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
@@ -319,8 +332,9 @@ public class InteractAcrossProfilesDetails extends AppInfoBase
         final TextView dialogTitle = dialogView.findViewById(
                 R.id.interact_across_profiles_consent_dialog_title);
         dialogTitle.setText(mDpm.getResources().getString(CONNECT_APPS_DIALOG_TITLE, () ->
-                getString(R.string.interact_across_profiles_consent_dialog_title, mAppLabel),
-                    mAppLabel));
+                        getString(R.string.interact_across_profiles_consent_dialog_title,
+                                mAppLabel),
+                mAppLabel));
 
         final TextView appDataSummary = dialogView.findViewById(R.id.app_data_summary);
         appDataSummary.setText(
@@ -466,8 +480,16 @@ public class InteractAcrossProfilesDetails extends AppInfoBase
         mSwitchPref.setTitle(R.string.interact_across_profiles_switch_disabled);
         if (!isCrossProfilePackageAllowlisted(mPackageName)) {
             mInstallBanner.setVisible(false);
-            mSwitchPref.setDisabledByAdmin(RestrictedLockUtils.getProfileOrDeviceOwner(
-                    mContext, mWorkProfile));
+            // Cross profile package can only be set with profile owner permission.
+            if (android.app.admin.flags.Flags.policyTransparencyRefactorEnabled()) {
+                ComponentName profileOwnerComponent = mDpm.getProfileOwnerAsUser(mWorkProfile);
+                EnforcingAdmin admin = new EnforcingAdmin(profileOwnerComponent.getPackageName(),
+                        DPC_AUTHORITY, mWorkProfile, profileOwnerComponent);
+                mSwitchPref.setDisabledByAdmin(admin);
+            } else {
+                mSwitchPref.setDisabledByAdmin(RestrictedLockUtils.getProfileOrDeviceOwner(
+                        mContext, mWorkProfile));
+            }
             return true;
         }
         mSwitchPref.setEnabled(false);
@@ -598,9 +620,6 @@ public class InteractAcrossProfilesDetails extends AppInfoBase
     }
 
     private void setUserPreferenceForPackage(boolean enabled, String crossProfilePackage) {
-        if (!Flags.backupConnectedAppsSettings()) {
-            return;
-        }
         String allowedPackagesString = Settings.Global.getString(getContentResolver(),
                 CONNECTED_APPS_ALLOWED_PACKAGES);
         String disallowedPackagesString = Settings.Global.getString(getContentResolver(),
@@ -632,14 +651,4 @@ public class InteractAcrossProfilesDetails extends AppInfoBase
                 .map(pkg -> new HashSet<>(Arrays.asList(pkg.split(","))))
                 .orElseGet(HashSet::new);
     }
-
-    private void hideFooterPreferenceIcon(String preferenceKey) {
-        Preference preference = findPreference(preferenceKey);
-        if (preference instanceof FooterPreference) {
-            ((FooterPreference) preference).setIconVisibility(View.GONE);
-        } else {
-            Log.d(TAG, "Could not find preference " + preferenceKey);
-        }
-    }
-
 }

@@ -16,6 +16,8 @@
 
 package com.android.settings;
 
+import static android.telephony.TelephonyManager.SIM_PIN_ENROLLMENT_STATUS_PLATFORM_MANAGED;
+
 import android.app.settings.SettingsEnums;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -73,6 +75,7 @@ import java.util.List;
  * these operations.
  *
  */
+// LINT.IfChange
 public class IccLockSettings extends SettingsPreferenceFragment
         implements EditPinPreference.OnPinEnteredListener {
     private static final String TAG = "IccLockSettings";
@@ -335,6 +338,18 @@ public class IccLockSettings extends SettingsPreferenceFragment
         updatePreferences();
     }
 
+    private boolean isAutoPinManagementFeatureEnabledForSubscription() {
+        if (!android.security.Flags.autoSimPinManagement()) {
+            return false;
+        }
+
+        int enrollmentStatus = mTelephonyManager.createForSubscriptionId(
+                mSubId).getSimAutoPinManagementEnrollmentStatus();
+        Log.d(TAG, "Enrollment status: " + enrollmentStatus);
+
+        return enrollmentStatus == SIM_PIN_ENROLLMENT_STATUS_PLATFORM_MANAGED;
+    }
+
     private void updatePreferences() {
 
         final SubscriptionInfo sir = getVisibleSubscriptionInfoForSimSlotIndex(mSlotId);
@@ -353,10 +368,12 @@ public class IccLockSettings extends SettingsPreferenceFragment
             mPinDialog.setEnabled(sir != null);
         }
         if (mPinToggle != null) {
-            mPinToggle.setEnabled(sir != null);
+            mPinToggle.setEnabled(
+                    sir != null && !isAutoPinManagementFeatureEnabledForSubscription());
 
             if (sir != null) {
-                mPinToggle.setChecked(isIccLockEnabled());
+                mPinToggle.setChecked(
+                        isIccLockEnabled() || isAutoPinManagementFeatureEnabledForSubscription());
             }
         }
     }
@@ -772,3 +789,4 @@ public class IccLockSettings extends SettingsPreferenceFragment
                 mEmptyTabContent);
     }
 }
+// LINT.ThenChange(IccLockApiScreen.kt)

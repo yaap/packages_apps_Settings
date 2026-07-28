@@ -18,6 +18,8 @@ package com.android.settings.homepage;
 
 import static android.view.WindowManager.LayoutParams.SYSTEM_FLAG_HIDE_NON_SYSTEM_OVERLAY_WINDOWS;
 
+import static com.android.settings.SettingsActivity.EXTRA_IS_DEEPLINK_HOME_STARTED_FROM_SEARCH;
+
 import static com.google.common.truth.Truth.assertThat;
 
 import static org.junit.Assert.assertEquals;
@@ -215,7 +217,7 @@ public class SettingsHomepageActivityTest {
     }
 
     @Test
-    public void onCreate_TaskRoot_shouldNotFinish() {
+    public void onCreate_taskRoot_shouldNotFinish() {
         SettingsHomepageActivity activity =
                 spy(Robolectric.buildActivity(SettingsHomepageActivity.class).get());
         doReturn(true).when(activity).isTaskRoot();
@@ -226,10 +228,24 @@ public class SettingsHomepageActivityTest {
     }
 
     @Test
-    public void onCreate_notTaskRoot_shouldRestartActivity() {
+    public void onCreate_deepLinkFromSearch_shouldNotFinish() {
+        SettingsHomepageActivity activity =
+                spy(Robolectric.buildActivity(SettingsHomepageActivity.class,
+                        new Intent().putExtra(EXTRA_IS_DEEPLINK_HOME_STARTED_FROM_SEARCH, true))
+                        .get());
+        doReturn(false).when(activity).isTaskRoot();
+
+        activity.onCreate(/* savedInstanceState= */ null);
+
+        verify(activity, never()).finish();
+    }
+
+    @Test
+    public void onCreate_notTaskRoot_embeddedDeepLink_shouldRestartActivity() {
         SettingsHomepageActivity activity =
                 spy(Robolectric.buildActivity(SettingsHomepageActivity.class).get());
         doReturn(false).when(activity).isTaskRoot();
+        doReturn(true).when(activity).shouldLaunchDeepLinkIntentToRight();
 
         activity.onCreate(/* savedInstanceState= */ null);
 
@@ -238,11 +254,12 @@ public class SettingsHomepageActivityTest {
     }
 
     @Test
-    public void onCreate_notTaskRoot_flagNewTask_shouldOnlyFinish() {
+    public void onCreate_notTaskRoot_flagNewTaskAndNotEmbeddedDeepLink_shouldFinish() {
         SettingsHomepageActivity activity =
                 spy(Robolectric.buildActivity(SettingsHomepageActivity.class,
                         new Intent().addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)).get());
         doReturn(false).when(activity).isTaskRoot();
+        doReturn(false).when(activity).shouldLaunchDeepLinkIntentToRight();
 
         activity.onCreate(/* savedInstanceState= */ null);
 
@@ -311,6 +328,19 @@ public class SettingsHomepageActivityTest {
         activity.onCreate(/* savedInstanceState= */ null);
 
         verify(activity).initSplitPairRules();
+    }
+
+    @Test
+    public void onCreate_homepageContainerIsNotFocusable() {
+        final SettingsHomepageActivity activity = Robolectric.buildActivity(
+                SettingsHomepageActivity.class).create().get();
+        final View homepageContainer = activity.findViewById(R.id.settings_homepage_container);
+
+        // Verify that the homepage container is not focusable in touch mode.
+        // This ensures that the container itself doesn't get selected, allowing
+        // child views like the RecyclerView to handle focus and scrolling correctly.
+        assertThat(homepageContainer.isFocusableInTouchMode()).isFalse();
+        assertThat(homepageContainer.hasFocus()).isFalse();
     }
 
     @Test

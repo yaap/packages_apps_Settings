@@ -25,10 +25,16 @@ import com.android.settings.contract.TAG_DEVICE_STATE_PREFERENCE
 import com.android.settings.contract.TAG_DEVICE_STATE_SCREEN
 import com.android.settings.core.PreferenceScreenMixin
 import com.android.settings.core.SubSettingLauncher
+import com.android.settingslib.metadata.CatalystFlagProviderFactory
+import com.android.settingslib.metadata.KeyParametersSchema
+import com.android.settingslib.metadata.ParameterizedPreferenceScreenArgumentsFactory
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceTitleProvider
 import com.android.settingslib.metadata.ProvidePreferenceScreen
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
+import com.android.settingslib.metadata.ValidatedKeyParameters
 import com.android.settingslib.metadata.preferenceHierarchy
+import com.android.settingslib.metadata.preferencesapi.types.AnyString
 import com.android.settingslib.preference.PreferenceFragment
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.Flow
@@ -36,14 +42,37 @@ import kotlinx.coroutines.flow.flow
 
 // TODO(b/418768192): add a lint check to update WifiNetworkDetailsFragment.java when this file is
 // changed and vice versa.
+/** This screen was migrated to the API-first approach in [WifiDetailsScreenApi]. */
 @ProvidePreferenceScreen(WifiNetworkDetailsScreen.KEY, parameterized = true)
-open class WifiNetworkDetailsScreen(context: Context, override val arguments: Bundle) :
-    PreferenceScreenMixin, PreferenceTitleProvider {
+open class WifiNetworkDetailsScreen
+private constructor(
+    @Deprecated(
+        "This property will be removed once the catalyst framework stops passing the arguments as a bundle. Use the keyParameters instead."
+    )
+    final override val arguments: Bundle?,
+    final override val keyParameters: ValidatedKeyParameters?,
+) : PreferenceScreenMixin, PreferenceTitleProvider {
 
-    private val wifiEntryKey = arguments.getString(KEY_ARGUMENT_WIFI_ENTRY_KEY)!!
+    private val wifiEntryKey: String? =
+        if (CatalystFlagProviderFactory.catalystUseKeyParameters()) {
+            keyParameters!!.get(KEY_ARGUMENT_WIFI_ENTRY_KEY)
+        } else {
+            arguments!!.getString(KEY_ARGUMENT_WIFI_ENTRY_KEY)!!
+        }
+
+    @Deprecated(
+        "This constructor will be removed once the catalyst framework stops passing the arguments as a bundle. Use the other constructor instead."
+    )
+    constructor(args: Bundle) : this(args, null)
+
+    constructor(keyParameters: ValidatedKeyParameters) : this(null, keyParameters)
 
     override val key: String
         get() = KEY
+
+    //TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.wifi_network_details_purpose
 
     override val screenTitle: Int
         get() = R.string.pref_title_network_details
@@ -57,7 +86,7 @@ open class WifiNetworkDetailsScreen(context: Context, override val arguments: Bu
     override fun getMetricsCategory() = SettingsEnums.WIFI_NETWORK_DETAILS
 
     override fun tags(context: Context) =
-        arrayOf(TAG_DEVICE_STATE_SCREEN, TAG_DEVICE_STATE_PREFERENCE)
+        arrayOf(TAG_DEVICE_STATE_SCREEN, TAG_DEVICE_STATE_PREFERENCE, UI_ONLY_PREFERENCE)
 
     override fun getTitle(context: Context): CharSequence = ""
 
@@ -67,7 +96,14 @@ open class WifiNetworkDetailsScreen(context: Context, override val arguments: Bu
         return SubSettingLauncher(context)
             .setTitleRes(R.string.pref_title_network_details)
             .setDestination(WifiNetworkDetailsFragment::class.java.getName())
-            .setArguments(Bundle().apply { putString(KEY_ARGUMENT_WIFI_ENTRY_KEY, wifiEntryKey) })
+            .setArguments(
+                if (CatalystFlagProviderFactory.catalystUseKeyParameters()) {
+                    Bundle().apply { putString(KEY_ARGUMENT_WIFI_ENTRY_KEY, wifiEntryKey ?: "") }
+                } else {
+                    val w = wifiEntryKey ?: ""
+                    parametersSchema.prepare(KEY_ARGUMENT_WIFI_ENTRY_KEY to w).toBundle()
+                }
+            )
             .setSourceMetricsCategory(getMetricsCategory())
             .toIntent()
     }
@@ -79,13 +115,26 @@ open class WifiNetworkDetailsScreen(context: Context, override val arguments: Bu
     override fun getPreferenceHierarchy(context: Context, coroutineScope: CoroutineScope) =
         preferenceHierarchy(context) {}
 
-    companion object {
+    companion object : ParameterizedPreferenceScreenArgumentsFactory {
         const val KEY = "wifi_network_details"
 
         const val KEY_EXTRA_WIFI_ENTRY_KEY = "wifi_entry_key"
         const val KEY_ARGUMENT_WIFI_ENTRY_KEY = "key_chosen_wifientry_key"
 
         @JvmStatic
+        override val parametersSchema = KeyParametersSchema {
+            parameter(KEY_ARGUMENT_WIFI_ENTRY_KEY, "The chosen WiFi entry key", required = false, type = AnyString) // TODO(scottjonathan): What is a wifi entry key?
+        }
+
+        @JvmStatic
+        override fun keyParameters(context: Context): Flow<ValidatedKeyParameters> = flow {
+            // TODO(b/418767976): generate all possible WiFi network entries.
+        }
+
+        @JvmStatic
+        @Deprecated(
+            "This method will be removed once the catalyst framework stops passing the arguments as a bundle. Use keyParameters instead."
+        )
         fun parameters(context: Context): Flow<Bundle> = flow {
             // TODO(b/418767976): generate all possible WiFi network entries.
         }

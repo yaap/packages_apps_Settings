@@ -4,41 +4,41 @@ container: "system_ext"
 # NOTE: Keep alphabetized to help limit merge conflicts from multiple simultaneous editors.
 
 flag {
-  name: "add_brightness_settings_in_suw"
+  name: "allow_to_enter_dark_theme_settings_when_battery_saver"
   namespace: "accessibility"
-  description: "Whether to add brightness preference in SUW Vision Settings"
-  bug: "332974327"
-}
-
-flag {
-  name: "audio_balance_state_description"
-  namespace: "accessibility"
-  description: "Provides a more valuable state description to the audio balance slider."
-  bug: "319575109"
+  description: "Allow users to enter the dark theme settings page to change the option config during battery saver mode."
+  bug: "467786619"
   metadata {
     purpose: PURPOSE_BUGFIX
   }
 }
 
 flag {
-  name: "catalyst_a11y_activity_detail"
+  name: "catalyst_a11y_button_shortcut_setting"
   namespace: "accessibility"
-  description: "Migrate accessibility activity screen to the Catalyst infrastructure"
-  bug: "337243383"
+  description: "Migrate a11y button shortcut setting screen to the Catalyst infrastructure"
+  bug: "440381191"
 }
 
 flag {
-  name: "catalyst_a11y_service_detail"
+  name: "catalyst_a11y_shortcuts_settings"
   namespace: "accessibility"
-  description: "Migrate accessibility service screen to the Catalyst infrastructure"
-  bug: "337243808"
+  description: "Migrate a11y shortcuts settings screen to the Catalyst infrastructure"
+  bug: "440380982"
 }
 
 flag {
-  name: "catalyst_color_inversion"
+  name: "catalyst_audio_adjustment_screen"
   namespace: "accessibility"
-  description: "Migrate color inversion screen to the Catalyst infrastructure"
-  bug: "413452734"
+  description: "Migrate audio adjustment screen to the Catalyst infrastructure"
+  bug: "421227414"
+}
+
+flag {
+  name: "catalyst_autoclick_screen"
+  namespace: "accessibility"
+  description: "Migrate autoclick screen to the Catalyst infrastructure"
+  bug: "440382182"
 }
 
 flag {
@@ -49,17 +49,10 @@ flag {
 }
 
 flag {
-  name: "catalyst_daltonizer"
+  name: "catalyst_edit_shortcuts"
   namespace: "accessibility"
-  description: "Migrate daltonizer screen to the Catalyst infrastructure"
-  bug: "413453264"
-}
-
-flag {
-  name: "catalyst_extra_dim"
-  namespace: "accessibility"
-  description: "Migrate extra dim screen to the Catalyst infrastructure"
-  bug: "413454003"
+  description: "Migrate edit shortcuts screen to the Catalyst infrastructure"
+  bug: "440383851"
 }
 
 flag {
@@ -77,10 +70,24 @@ flag {
 }
 
 flag {
-  name: "catalyst_magnification"
+  name: "catalyst_caption_preferences_screen"
   namespace: "accessibility"
-  description: "Migrate magnification screen to the Catalyst infrastructure"
-  bug: "413453974"
+  description: "Migrate caption preferences screen to Catalyst infrastructure"
+  bug: "440381963"
+}
+
+flag {
+  name: "catalyst_time_to_take_action_screen"
+  namespace: "accessibility"
+  description: "Migrate time to take action screen to Catalyst infrastructure"
+  bug: "440382902"
+}
+
+flag {
+  name: "catalyst_timing_controls_screen"
+  namespace: "accessibility"
+  description: "Migrate timing controls screen to Catalyst infrastructure"
+  bug: "440381971"
 }
 
 flag {
@@ -94,6 +101,16 @@ flag {
 }
 
 flag {
+  name: "desktop_magnification_settings_polish"
+  namespace: "accessibility"
+  description: "Enables polish of magnification settings related to input form factors (touch and keyboard)."
+  bug: "422204290"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
   name: "enable_color_contrast_control"
   namespace: "accessibility"
   description: "Allows users to control color contrast in the Accessibility settings page."
@@ -101,17 +118,21 @@ flag {
 }
 
 flag {
-    name: "enable_disability_support"
+    name: "enable_edt_app_exceptions"
     namespace: "accessibility"
-    description: "Use disability support for accessibility"
-    bug: "419387108"
+    description: "Allow users to opt-out selected apps from Expanded Dark Theme."
+    bug: "448469020"
 }
 
 flag {
-  name: "enable_magnification_cursor_following_dialog"
-  namespace: "accessibility"
-  description: "Decides whether to show the magnification cursor following dialog in Settings app."
-  bug: "388335935"
+    name: "enable_inset_focus_rings_in_suw_read_only"
+    namespace: "accessibility"
+    description: "Decides whether to enable inset focus rings in Accessibility surfaces during the SuW."
+    bug: "484084632"
+    is_fixed_read_only: true
+    metadata {
+      purpose: PURPOSE_BUGFIX
+    }
 }
 
 flag {
@@ -122,10 +143,57 @@ flag {
 }
 
 flag {
+  name: "enable_magnification_mode_chooser_fragment"
+  namespace: "accessibility"
+  description: "Enables the magnification mode chooser fragment instead of the legacy dialog UI."
+  bug: "456047460"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+    name: "enable_setuplib_in_a11y_setup_page"
+    namespace: "accessibility"
+    description: "Decides whether to use new accessibility setup page uses the SetupLib implementation."
+    bug: "407080818"
+}
+
+flag {
+    name: "floating_menu_transparency_slider_announces_disabled"
+    namespace: "accessibility"
+    description: "updates state description so slider handle reads 'disabled' when the setting is disabled."
+    bug: "456649436"
+    metadata {
+      purpose: PURPOSE_BUGFIX
+    }
+}
+
+flag {
   name: "never_restrict_accessibility_activity"
   namespace: "accessibility"
   description: "Stops possibly restricting AccessibilityActivityPreferences"
   bug: "331990900"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "preferred_shortcut_filters_navigation_mode"
+  namespace: "accessibility"
+  description: "Retrieving a user's preferred shortcuts filters out types that aren't available in the current navigation mode."
+  bug: "488115037"
+  metadata {
+    purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "text_cursor_blinking_user_setting"
+  namespace: "accessibility"
+  description: "Moves the text cursor blinking setting to the Color and Motion settings page."
+  bug: "405251212"
   metadata {
     purpose: PURPOSE_BUGFIX
   }

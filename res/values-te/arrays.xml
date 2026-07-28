@@ -58,7 +58,7 @@
     <item msgid="286164147080824297">"డిస్‌కనెక్ట్ చేస్తోంది..."</item>
     <item msgid="1628460745311787730">"డిస్‌కనెక్ట్ చేయబడింది"</item>
     <item msgid="4013828218541488949">"విఫలమైంది"</item>
-    <item msgid="5473541238056528086">"బ్లాక్ చేయబడింది"</item>
+    <item msgid="5473541238056528086">"బ్లాక్ అయింది"</item>
     <item msgid="1114588261171522603">"బలహీన కనెక్షన్‌ను తాత్కాలికంగా నివారిస్తోంది"</item>
   </string-array>
     <!-- no translation found for wifi_tether_security:0 (6312112980634811065) -->
@@ -305,16 +305,6 @@
     <item msgid="3756073389408535680">"బ్యాక్‌గ్రౌండ్‌లో అమలు చేయడం"</item>
     <item msgid="2114661179947426734">"యాక్సెస్ సామర్థ్య వాల్యూమ్"</item>
   </string-array>
-  <string-array name="long_press_timeout_selector_titles">
-    <item msgid="6926391290986427331">"తక్కువ సేపు"</item>
-    <item msgid="5118829513010894576">"మధ్యస్థం"</item>
-    <item msgid="6740026006576843477">"ఎక్కువ సేపు"</item>
-  </string-array>
-  <string-array name="long_press_timeout_selector_list_titles">
-    <item msgid="8908021508913038488">"తక్కువ సేపు"</item>
-    <item msgid="7397961711906421599">"ఓ మోస్తరు సమయం వరకు"</item>
-    <item msgid="4079132024502041928">"ఎక్కువ సేపు"</item>
-  </string-array>
   <string-array name="ethernet_ip_settings">
     <item msgid="7618681915649929019">"DHCP"</item>
     <item msgid="4425163520864432692">"స్టాటిక్"</item>
@@ -358,14 +348,6 @@
     <item msgid="1119043472912497241">"నలుపు బ్యాక్‌గ్రౌండ్‌లో పసుపు రంగు"</item>
     <item msgid="2836895041823327816">"నీలి బ్యాక్‌గ్రౌండ్‌లో పసుపు రంగు"</item>
     <item msgid="747238414788976867">"అనుకూలం"</item>
-  </string-array>
-  <string-array name="accessibility_button_location_selector_titles">
-    <item msgid="6485511780196327736">"ఇతర యాప్‌ల మీద తేలియాడుతోంది"</item>
-    <item msgid="3605616699204153590">"నావిగేషన్ బార్"</item>
-  </string-array>
-  <string-array name="accessibility_button_size_selector_titles">
-    <item msgid="7482952318152486459">"చిన్నది"</item>
-    <item msgid="1666628329913333563">"పెద్దది"</item>
   </string-array>
   <string-array name="vpn_proxy_settings">
     <item msgid="7165538292837266997">"ఏదీ వద్దు"</item>

@@ -17,12 +17,14 @@
 package com.android.settings.network.telephony
 
 import android.content.Context
-import android.platform.test.annotations.EnableFlags
 import androidx.test.core.app.ApplicationProvider
-import com.android.settings.flags.Flags
+import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.google.common.truth.Truth.assertThat
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.test.TestScope
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import org.junit.Before
 import org.junit.Test
 import org.mockito.Mockito.spy
@@ -38,6 +40,11 @@ class MobileNetworkMainSwitchPreferenceTest {
     private val mockSubscriptionRepository = mock<SubscriptionRepository>()
 
     private lateinit var preference: MobileNetworkMainSwitchPreference
+    private val testDispatcher = UnconfinedTestDispatcher()
+    private val testScope = TestScope(testDispatcher)
+    private val preferenceLifecycleContext: PreferenceLifecycleContext = mock {
+        on { lifecycleScope }.thenReturn(testScope)
+    }
 
     @Before
     fun setUp() {
@@ -46,6 +53,7 @@ class MobileNetworkMainSwitchPreferenceTest {
                 MobileNetworkMainSwitchPreference(
                     context,
                     TEST_SUB_ID,
+                    testScope,
                     mockSubscriptionActivationRepository,
                     mockSubscriptionRepository,
                 )
@@ -53,31 +61,36 @@ class MobileNetworkMainSwitchPreferenceTest {
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_DEEPLINK_NETWORK_AND_INTERNET_25Q4)
-    fun isEnabled_subIsActive_returnTrue() {
+    fun isEnabled_subIsActive_returnTrue() = runBlocking {
         mockSubscriptionActivationRepository.stub {
             on { isActivationChangeableFlow() }.thenReturn(flowOf(true))
         }
 
-        val result = preference.isEnabled(context)
+        preference.onStart(preferenceLifecycleContext)
+        preferenceLifecycleContext.notifyPreferenceChange(preference.key)
 
+        delay(100)
+
+        val result = preference.isEnabled(context)
         assertThat(result).isTrue()
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_DEEPLINK_NETWORK_AND_INTERNET_25Q4)
-    fun isEnabled_subIsNotActive_returnFalse() {
+    fun isEnabled_subIsNotActive_returnFalse() = runBlocking {
         mockSubscriptionActivationRepository.stub {
             on { isActivationChangeableFlow() }.thenReturn(flowOf(false))
         }
 
-        val result = preference.isEnabled(context)
+        preference.onStart(preferenceLifecycleContext)
+        preferenceLifecycleContext.notifyPreferenceChange(preference.key)
 
+        delay(100)
+
+        val result = preference.isEnabled(context)
         assertThat(result).isFalse()
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_DEEPLINK_NETWORK_AND_INTERNET_25Q4)
     fun setValue_setActive() = runBlocking {
         preference.storage(context).setBoolean(preference.key, true)
 
@@ -85,7 +98,6 @@ class MobileNetworkMainSwitchPreferenceTest {
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_DEEPLINK_NETWORK_AND_INTERNET_25Q4)
     fun setValue_setInActive() = runBlocking {
         preference.storage(context).setBoolean(preference.key, false)
 
@@ -93,7 +105,6 @@ class MobileNetworkMainSwitchPreferenceTest {
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_DEEPLINK_NETWORK_AND_INTERNET_25Q4)
     fun getValue_subActive_returnTrue() {
         mockSubscriptionRepository.stub {
             on { isSubscriptionEnabledFlow(TEST_SUB_ID) }.thenReturn(flowOf(true))
@@ -105,7 +116,6 @@ class MobileNetworkMainSwitchPreferenceTest {
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_DEEPLINK_NETWORK_AND_INTERNET_25Q4)
     fun getValue_subInactive_returnFalse() {
         mockSubscriptionRepository.stub {
             on { isSubscriptionEnabledFlow(TEST_SUB_ID) }.thenReturn(flowOf(false))

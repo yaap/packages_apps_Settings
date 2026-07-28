@@ -27,28 +27,32 @@
     <string name="bluetooth_footer_mac_message" product="desktop" msgid="8944917742814573320">"Enhetens Bluetooth-adress: <xliff:g id="BLUETOOTH_MAC_ADDRESS">%1$s</xliff:g>"</string>
     <string name="bluetooth_ask_discovery" product="tablet" msgid="7430581669309228387">"<xliff:g id="APP_NAME">%1$s</xliff:g> vill göra din surfplatta synlig för andra Bluetooth-enheter i <xliff:g id="TIMEOUT">%2$d</xliff:g> sekunder."</string>
     <string name="bluetooth_ask_discovery" product="default" msgid="3947027393224406367">"<xliff:g id="APP_NAME">%1$s</xliff:g> vill göra din mobil synlig för andra Bluetooth-enheter i <xliff:g id="TIMEOUT">%2$d</xliff:g> sekunder."</string>
-    <string name="bluetooth_ask_discovery" product="desktop" msgid="5960803243956876943">"<xliff:g id="APP_NAME">%1$s</xliff:g> vill göra dina enheter synliga för andra Bluetooth-enheter i <xliff:g id="TIMEOUT">%2$d</xliff:g> sekunder."</string>
+    <string name="bluetooth_ask_discovery" product="desktop" msgid="3067808499809072108">"<xliff:g id="APP_NAME">%1$s</xliff:g> vill göra den här enheten synlig för andra Bluetooth-enheter i <xliff:g id="TIMEOUT">%2$d</xliff:g> sekunder."</string>
     <string name="bluetooth_ask_discovery_no_name" product="tablet" msgid="440976482246291783">"En app vill göra din surfplatta synlig för andra Bluetooth-enheter i <xliff:g id="TIMEOUT">%1$d</xliff:g> sekunder."</string>
     <string name="bluetooth_ask_discovery_no_name" product="default" msgid="5164413774312648842">"En app vill göra din mobil synlig för andra Bluetooth-enheter i <xliff:g id="TIMEOUT">%1$d</xliff:g> sekunder."</string>
-    <string name="bluetooth_ask_discovery_no_name" product="desktop" msgid="3353426051482286017">"En app vill göra din enhet synlig för andra Bluetooth-enheter i <xliff:g id="TIMEOUT">%1$d</xliff:g> sekunder."</string>
+    <string name="bluetooth_ask_discovery_no_name" product="desktop" msgid="1777937067593913629">"En app vill göra den här enheten synlig för andra Bluetooth-enheter i <xliff:g id="TIMEOUT">%1$d</xliff:g> sekunder."</string>
     <string name="bluetooth_ask_lasting_discovery" product="tablet" msgid="750347558570909906">"<xliff:g id="APP_NAME">%1$s</xliff:g> vill göra din surfplatta synlig för andra Bluetooth-enheter. Du kan ändra detta senare i inställningarna för Bluetooth."</string>
     <string name="bluetooth_ask_lasting_discovery" product="default" msgid="5844129004156080891">"<xliff:g id="APP_NAME">%1$s</xliff:g> vill göra din mobil synlig för andra Bluetooth-enheter. Du kan ändra detta senare i inställningarna för Bluetooth."</string>
-    <string name="bluetooth_ask_lasting_discovery" product="desktop" msgid="3887794644497572519">"<xliff:g id="APP_NAME">%1$s</xliff:g> vill göra din enhet synlig för andra Bluetooth-enheter. Du kan ändra detta senare i inställningarna för Bluetooth."</string>
+    <string name="bluetooth_ask_lasting_discovery" product="desktop" msgid="3640979928435371509">"<xliff:g id="APP_NAME">%1$s</xliff:g> vill aktivera Bluetooth och göra den här enheten synlig för andra Bluetooth-enheter. Du kan ändra detta senare i Bluetooth-inställningarna."</string>
     <string name="bluetooth_ask_lasting_discovery_no_name" product="tablet" msgid="1062185767225450964">"En app vill göra din surfplatta synlig för andra Bluetooth-enheter. Du kan ändra detta senare i inställningarna för Bluetooth."</string>
     <string name="bluetooth_ask_lasting_discovery_no_name" product="default" msgid="7909547303183236140">"En app vill göra din mobil synlig för andra Bluetooth-enheter. Du kan ändra detta senare i inställningarna för Bluetooth."</string>
     <string name="bluetooth_ask_lasting_discovery_no_name" product="desktop" msgid="6517618973665289643">"En app vill göra din enhet synlig för andra Bluetooth-enheter. Du kan ändra detta senare i inställningarna för Bluetooth."</string>
     <string name="bluetooth_ask_enablement_and_discovery" product="tablet" msgid="6187874232925632790">"<xliff:g id="APP_NAME">%1$s</xliff:g> vill aktivera Bluetooth och göra din surfplatta synlig för andra enheter i <xliff:g id="TIMEOUT">%2$d</xliff:g> sekunder."</string>
     <string name="bluetooth_ask_enablement_and_discovery" product="default" msgid="1018495685727482700">"<xliff:g id="APP_NAME">%1$s</xliff:g> vill aktivera Bluetooth och göra din mobil synlig för andra enheter i <xliff:g id="TIMEOUT">%2$d</xliff:g> sekunder."</string>
-    <string name="bluetooth_ask_enablement_and_discovery" product="desktop" msgid="4841837610815256531">"<xliff:g id="APP_NAME">%1$s</xliff:g> vill aktivera Bluetooth och göra din enhet synlig för andra enheter i <xliff:g id="TIMEOUT">%2$d</xliff:g> sekunder."</string>
+    <string name="bluetooth_ask_enablement_and_discovery" product="desktop" msgid="3963663600685390857">"<xliff:g id="APP_NAME">%1$s</xliff:g> vill aktivera Bluetooth och göra den här enheten synlig för andra enheter i <xliff:g id="TIMEOUT">%2$d</xliff:g> sekunder."</string>
     <string name="bluetooth_ask_enablement_and_discovery_no_name" product="tablet" msgid="3469927640700478737">"En app vill aktivera Bluetooth och göra din surfplatta synlig för andra enheter i <xliff:g id="TIMEOUT">%1$d</xliff:g> sekunder."</string>
     <string name="bluetooth_ask_enablement_and_discovery_no_name" product="default" msgid="4847493437698663706">"En app vill aktivera Bluetooth och göra din mobil synlig för andra enheter i <xliff:g id="TIMEOUT">%1$d</xliff:g> sekunder."</string>
-    <string name="bluetooth_ask_enablement_and_discovery_no_name" product="desktop" msgid="2660699995682598369">"En app vill aktivera Bluetooth och göra din enhet synlig för andra enheter i <xliff:g id="TIMEOUT">%1$d</xliff:g> sekunder."</string>
+    <string name="bluetooth_ask_enablement_and_discovery_no_name" product="desktop" msgid="4200605722063705557">"En app vill aktivera Bluetooth och göra den här enheten synlig för andra enheter i <xliff:g id="TIMEOUT">%1$d</xliff:g> sekunder."</string>
     <string name="bluetooth_ask_enablement_and_lasting_discovery" product="tablet" msgid="487436507630570730">"<xliff:g id="APP_NAME">%1$s</xliff:g> vill aktivera Bluetooth och göra din surfplatta synlig för andra enheter. Du kan ändra detta senare i inställningarna för Bluetooth."</string>
     <string name="bluetooth_ask_enablement_and_lasting_discovery" product="default" msgid="5169934906530139494">"<xliff:g id="APP_NAME">%1$s</xliff:g> vill aktivera Bluetooth och göra din mobil synlig för andra enheter. Du kan ändra detta senare i inställningarna för Bluetooth."</string>
-    <string name="bluetooth_ask_enablement_and_lasting_discovery" product="desktop" msgid="2790161567276762264">"<xliff:g id="APP_NAME">%1$s</xliff:g> vill aktivera Bluetooth och göra din enhet synlig för andra enheter. Du kan ändra detta senare i inställningarna för Bluetooth."</string>
+    <string name="bluetooth_ask_enablement_and_lasting_discovery" product="desktop" msgid="6083859715114907587">"<xliff:g id="APP_NAME">%1$s</xliff:g> vill aktivera Bluetooth och göra den här enheten synlig för andra enheter. Du kan ändra detta senare i Bluetooth-inställningarna."</string>
     <string name="bluetooth_ask_enablement_and_lasting_discovery_no_name" product="tablet" msgid="505214056751470551">"En app vill aktivera Bluetooth och göra din surfplatta synlig för andra enheter. Du kan ändra detta senare i inställningarna för Bluetooth."</string>
     <string name="bluetooth_ask_enablement_and_lasting_discovery_no_name" product="default" msgid="6187216564831513193">"En app vill aktivera Bluetooth och göra din mobil synlig för andra enheter. Du kan ändra detta senare i inställningarna för Bluetooth."</string>
-    <string name="bluetooth_ask_enablement_and_lasting_discovery_no_name" product="desktop" msgid="5587751002247136990">"En app vill aktivera Bluetooth och göra din enhet synlig för andra enheter. Du kan ändra detta senare i inställningarna för Bluetooth."</string>
+    <string name="bluetooth_ask_enablement_and_lasting_discovery_no_name" product="desktop" msgid="1296067140931944135">"En app vill aktivera Bluetooth och göra den här enheten synlig för andra enheter. Du kan ändra detta senare i Bluetooth-inställningarna."</string>
+    <string name="bluetooth_hearing_device_input_routing_builtin_option" product="default" msgid="604940407490893699">"Telefonens mikrofon"</string>
+    <string name="bluetooth_hearing_device_input_routing_builtin_option" product="desktop" msgid="899174913125357494">"Enhetens mikrofon"</string>
+    <string name="bluetooth_audio_routing_summary" product="default" msgid="7087659154407454242">"Dirigera ljud till hörapparaten eller telefonens högtalare"</string>
+    <string name="bluetooth_audio_routing_summary" product="desktop" msgid="4537882886747949240">"Dirigera ljud till hörapparaten eller enhetens högtalare"</string>
     <string name="encryption_and_credential_settings_summary" product="default" msgid="3741475436042800617">"Mobilen är krypterad"</string>
     <string name="encryption_and_credential_settings_summary" product="tablet" msgid="2220021007677215054">"Enheten har krypterats"</string>
     <string name="encryption_and_credential_settings_summary" product="desktop" msgid="2220021007677215054">"Enheten har krypterats"</string>
@@ -123,6 +127,26 @@
     <string name="security_settings_face_enroll_introduction_control_consent_message" product="tablet" msgid="6983939010814873996"></string>
     <string name="security_settings_face_enroll_introduction_control_consent_message" product="device" msgid="6983939010814873996"></string>
     <string name="security_settings_face_enroll_introduction_control_consent_message" product="desktop" msgid="6983939010814873996"></string>
+    <string name="security_settings_face_enroll_introduction_message_unlock_disabled" product="default" msgid="8906620058505772369">"Lås upp telefonen eller godkänn köp med hjälp av ansiktet.\n\nObs! Du kan inte låsa upp den här enheten med hjälp av ansiktet. Kontakta organisationens administratör om du vill veta mer."</string>
+    <string name="security_settings_face_enroll_introduction_message_unlock_disabled" product="desktop" msgid="8527453843561896568">"Lås upp enheten eller godkänn köp med hjälp av ansiktet.\n\nObs! Du kan inte låsa upp den här enheten med hjälp av ansiktet. Kontakta organisationens administratör om du vill veta mer."</string>
+    <string name="security_settings_face_enroll_introduction_message_setup" product="default" msgid="5667326364825190475">"Lås upp telefonen, godkänn köp eller logga in i appar med ditt ansikte"</string>
+    <string name="security_settings_face_enroll_introduction_message_setup" product="desktop" msgid="8153291564425666563">"Lås upp enheten, godkänn köp eller logga in i appar med ditt ansikte"</string>
+    <string name="security_settings_face_enroll_improve_face_alert_body" product="default" msgid="827881183869443564">"Radera din nuvarande ansiktsmodell och konfigurera om ansiktslåset.\n\nAnsiktsmodellen raderas permanent på ett säkert sätt.\n\nEfter borttagningen behöver du pinkod, lösenord eller mönster för att låsa upp telefonen och för autentisering i appar."</string>
+    <string name="security_settings_face_enroll_improve_face_alert_body" product="desktop" msgid="3033159905539587695">"Radera din nuvarande ansiktsmodell och ställ in upplåsning med ansiktet igen.\n\nAnsiktsmodellen raderas permanent på ett säkert sätt.\n\nEfter borttagningen behöver du pinkod, lösenord eller mönster för att låsa upp enheten och för autentisering i appar."</string>
+    <string name="security_settings_face_enroll_improve_face_alert_body_fingerprint" product="default" msgid="657898108282284896">"Radera din nuvarande ansiktsmodell och konfigurera om ansiktslåset.\n\nAnsiktsmodellen raderas permanent på ett säkert sätt.\n\nEfter borttagningen behöver du fingeravtryck, pinkod, lösenord eller mönster för att låsa upp telefonen och för autentisering i appar."</string>
+    <string name="security_settings_face_enroll_improve_face_alert_body_fingerprint" product="desktop" msgid="4773722047433370821">"Radera din nuvarande ansiktsmodell och ställ in upplåsning med ansiktet igen.\n\nAnsiktsmodellen raderas permanent på ett säkert sätt.\n\nEfter borttagningen behöver du fingeravtryck, pinkod, lösenord eller mönster för att låsa upp enheten och för autentisering i appar."</string>
+    <string name="security_settings_face_settings_require_attention_details" product="default" msgid="9055569538299306139">"Du måste ha ögonen öppna för att låsa upp telefonen"</string>
+    <string name="security_settings_face_settings_require_attention_details" product="desktop" msgid="6708465338217767003">"Du måste ha ögonen öppna för att låsa upp enheten"</string>
+    <string name="security_settings_face_settings_remove_dialog_details" product="default" msgid="631912351020557148">"Ansiktsmodellen raderas permanent på ett säkert sätt.\n\nEfter borttagningen behöver du pinkod, lösenord eller mönster för att låsa upp telefonen och för autentisering i appar."</string>
+    <string name="security_settings_face_settings_remove_dialog_details" product="desktop" msgid="6371830907687898599">"Ansiktsmodellen raderas permanent på ett säkert sätt.\n\nEfter borttagningen behöver du pinkod, lösenord eller mönster för att låsa upp enheten eller för autentisering i appar."</string>
+    <string name="security_settings_face_settings_remove_dialog_details_convenience" product="default" msgid="4067458308624865583">"Ansiktsmodellen raderas permanent på ett säkert sätt.\n\nEfter raderingen behöver du pinkod, lösenord eller mönster för att låsa upp telefonen."</string>
+    <string name="security_settings_face_settings_remove_dialog_details_convenience" product="desktop" msgid="8773532142993444478">"Ansiktsmodellen raderas permanent på ett säkert sätt.\n\nEfter borttagningen behöver du pinkod, lösenord eller mönster för att låsa upp enheten."</string>
+    <string name="security_settings_face_remove_dialog_details_fingerprint" product="default" msgid="3697170798827306695">"Ansiktsmodellen raderas permanent på ett säkert sätt.\n\nEfter borttagningen behöver du fingeravtryck, pinkod, lösenord eller mönster för att låsa upp telefonen eller för autentisering i appar."</string>
+    <string name="security_settings_face_remove_dialog_details_fingerprint" product="desktop" msgid="540277269419613514">"Ansiktsmodellen raderas permanent på ett säkert sätt.\n\nEfter borttagningen behöver du fingeravtryck, pinkod, lösenord eller mönster för att låsa upp enheten eller för autentisering i appar."</string>
+    <string name="security_settings_face_remove_dialog_details_fingerprint_conv" product="default" msgid="7229672458856399521">"Ansiktsmodellen raderas permanent på ett säkert sätt.\n\nEfter borttagningen behöver du fingeravtryck, pinkod, lösenord eller mönster för att låsa upp telefonen."</string>
+    <string name="security_settings_face_remove_dialog_details_fingerprint_conv" product="desktop" msgid="2106529501669220799">"Ansiktsmodellen raderas permanent på ett säkert sätt.\n\nEfter borttagningen behöver du fingeravtryck, pinkod, lösenord eller mönster för att låsa upp enheten."</string>
+    <string name="security_settings_face_settings_context_subtitle" product="default" msgid="1322898999413079369">"Lås upp telefonen med ansiktslås"</string>
+    <string name="security_settings_face_settings_context_subtitle" product="desktop" msgid="2969929877374962497">"Lås upp enheten med ansiktet"</string>
     <string name="security_settings_face_settings_footer" product="default" msgid="3036403896485044957">"Använd ansiktet för att låsa upp telefonen och för autentisering i appar, t.ex. när du loggar in i appar eller godkänner köp.\n\nTänk på detta:\nBara ett ansikte i taget kan vara konfigurerat. Radera det nuvarande ansiktet innan du lägger till ett nytt.\n\nOm du tittar på telefonen kan du oavsiktligt låsa upp den.\n\nAndra kan låsa upp din telefon om de håller upp den mot ditt ansikte.\n\nTelefonen kanske kan låsas upp av någon som är mycket lik dig, till exempel ett syskon."</string>
     <string name="security_settings_face_settings_footer" product="tablet" msgid="3467711032275909082">"Använd ansiktet för att låsa upp surfplattan och för autentisering i appar, t.ex. när du loggar in i appar eller godkänner köp.\n\nTänk på detta:\nBara ett ansikte i taget kan vara konfigurerat. Radera det nuvarande ansiktet innan du lägger till ett nytt.\n\nOm du tittar på surfplattan kan du oavsiktligt låsa upp den.\n\nAndra kan låsa upp din surfplatta om de håller upp den mot ditt ansikte.\n\nSurfplattan kanske kan låsas upp av någon som är mycket lik dig, till exempel ett syskon."</string>
     <string name="security_settings_face_settings_footer" product="device" msgid="6237815625247917310">"Använd ansiktet för att låsa upp enheten och för autentisering i appar, t.ex. när du loggar in i appar eller godkänner köp.\n\nTänk på detta:\nBara ett ansikte i taget kan vara konfigurerat. Radera det nuvarande ansiktet innan du lägger till ett nytt.\n\nOm du tittar på enheten kan du oavsiktligt låsa upp den.\n\nAndra kan låsa upp din enhet om de håller upp den mot ditt ansikte.\n\nEnheten kanske kan låsas upp av någon som är mycket lik dig, till exempel ett syskon."</string>
@@ -139,6 +163,7 @@
     <string name="security_settings_face_settings_footer_class3_attention_not_supported" product="tablet" msgid="6790505667764631343">"Lås upp surfplattan eller verifiera din identitet med ditt ansikte, till exempel när du loggar in i appar eller godkänner ett köp.\n\nTänk på detta:\nBara ett ansikte i taget kan vara konfigurerat. Radera det nuvarande ansiktet innan du lägger till ett nytt.\n\nOm du tittar på surfplattan kan du oavsiktligt låsa upp den.\n\nAndra kan låsa upp surfplattan om de håller upp den mot ditt ansikte, även om du inte har ögonen öppna.\n\nSurfplattan kanske kan låsas upp av någon som är mycket lik dig, till exempel ett syskon."</string>
     <string name="security_settings_face_settings_footer_class3_attention_not_supported" product="device" msgid="7858917821957779752">"Lås upp enheten eller verifiera din identitet med ditt ansikte, till exempel när du loggar in i appar eller godkänner ett köp.\n\nTänk på detta:\nBara ett ansikte i taget kan vara konfigurerat. Radera det nuvarande ansiktet innan du lägger till ett nytt.\n\nOm du tittar på enheten kan du oavsiktligt låsa upp den.\n\nAndra kan låsa upp enheten om de håller upp den mot ditt ansikte, även om du inte har ögonen öppna.\n\nEnheten kanske kan låsas upp av någon som är mycket lik dig, till exempel ett syskon."</string>
     <string name="security_settings_face_settings_footer_class3_attention_not_supported" product="desktop" msgid="7858917821957779752">"Lås upp enheten eller verifiera din identitet med ditt ansikte, till exempel när du loggar in i appar eller godkänner ett köp.\n\nTänk på detta:\nBara ett ansikte i taget kan vara konfigurerat. Radera det nuvarande ansiktet innan du lägger till ett nytt.\n\nOm du tittar på enheten kan du oavsiktligt låsa upp den.\n\nAndra kan låsa upp enheten om de håller upp den mot ditt ansikte, även om du inte har ögonen öppna.\n\nEnheten kanske kan låsas upp av någon som är mycket lik dig, till exempel ett syskon."</string>
+    <string name="security_settings_face_footer_description_class3" product="default" msgid="3460502249540215759"></string>
     <string name="security_settings_fingerprint_enroll_introduction_v3_message" msgid="2145273491174234191">"Lås upp din <xliff:g id="DEVICENAME">%s</xliff:g> eller verifiera din identitet med ditt fingeravtryck, till exempel när du loggar in i appar eller godkänner ett köp"</string>
     <string name="security_settings_fingerprint_enroll_introduction_consent_message" product="default" msgid="5101253231118659496">"Tillåt att ditt barn använder sitt fingeravtryck för att låsa upp telefonen och verifiera sin identitet. Detta sker när barnet loggar in i appar, godkänner ett köp med mera."</string>
     <string name="security_settings_fingerprint_enroll_introduction_consent_message" product="tablet" msgid="3063978167545799342">"Tillåt att ditt barn använder sitt fingeravtryck för att låsa upp surfplattan och verifiera sin identitet. Detta sker när barnet loggar in i appar, godkänner ett köp med mera."</string>
@@ -176,10 +201,96 @@
     <string name="security_settings_fingerprint_v2_home_screen_text" product="device" msgid="7398339851724524558">"Lås upp enheten eller verifiera din identitet med ditt fingeravtryck, till exempel när du loggar in i appar"</string>
     <string name="security_settings_fingerprint_v2_home_screen_text" product="default" msgid="5376408603508393038">"Lås upp telefonen eller verifiera din identitet med ditt fingeravtryck, till exempel när du loggar in i appar"</string>
     <string name="security_settings_fingerprint_v2_home_screen_text" product="desktop" msgid="7398339851724524558">"Lås upp enheten eller verifiera din identitet med ditt fingeravtryck, till exempel när du loggar in i appar"</string>
+    <string name="security_settings_fingerprint_enroll_introduction_message_unlock_disabled" product="default" msgid="8536395298073746085">"Använd fingeravtrycket för att låsa upp telefonen och godkänna köp.\n\nObs! Du kan inte använda fingeravtrycket för att låsa upp den här enheten. Kontakta organisationens administratör om du vill veta mer."</string>
+    <string name="security_settings_fingerprint_enroll_introduction_message_unlock_disabled" product="desktop" msgid="1449873608291132102">"Använd fingeravtrycket för att låsa upp enheten och godkänna köp.\n\nObs! Du kan inte använda fingeravtrycket för att låsa upp den här enheten. Kontakta organisationens administratör om du vill veta mer."</string>
+    <string name="security_settings_remoteauth_enroll_introduction_message" product="default" msgid="548895260855476885">"Med upplåsning med klockan kan du smidigt låsa upp telefonen, till exempel när dina fingrar är fuktiga eller ditt ansikte inte känns igen.\n\nDu kan låsa upp den här telefonen med klockan så här:"</string>
+    <string name="security_settings_remoteauth_enroll_introduction_message" product="desktop" msgid="6975912914017982596">"Med upplåsning med klockan kan du smidigt låsa upp enheten, till exempel när dina fingrar är fuktiga eller ditt ansikte inte känns igen.\n\nDu kan låsa upp den här enheten med klockan så här:"</string>
+    <string name="security_settings_remoteauth_enroll_introduction_info_lock_open" product="default" msgid="5036235531555790028">"Klockan måste vara upplåst, på handleden och i närheten av telefonen. Du behöver inte låsa upp klockan igen när den är på handleden."</string>
+    <string name="security_settings_remoteauth_enroll_introduction_info_lock_open" product="desktop" msgid="4379534816294081846">"Klockan måste vara upplåst, på handleden och i närheten av enheten. Du behöver inte låsa upp klockan igen när den är på handleden."</string>
+    <string name="security_settings_remoteauth_enroll_introduction_info_notifications" product="default" msgid="8236871030056883849">"När den här telefonen låses upp får du en avisering på klockan. Om den låstes upp oavsiktligt kan du trycka på aviseringen och låsa telefonen igen."</string>
+    <string name="security_settings_remoteauth_enroll_introduction_info_notifications" product="desktop" msgid="1186235463250896267">"När den här enheten låses upp får du en avisering på klockan. Om den låstes upp oavsiktligt kan du trycka på aviseringen och låsa enheten igen."</string>
+    <string name="security_settings_remoteauth_enroll_finish_description" product="default" msgid="553477510982159386">"Nu kan du låsa upp den här telefonen med klockan när du sveper uppåt på låsskärmen eller trycker på en avisering"</string>
+    <string name="security_settings_remoteauth_enroll_finish_description" product="desktop" msgid="7745250450395684994">"Nu kan du låsa upp den här enheten med klockan när du sveper uppåt på låsskärmen eller trycker på en avisering"</string>
+    <string name="security_settings_remoteauth_settings_description" product="default" msgid="507676718189793752">"Du kan låsa upp den här telefonen med klockan när du sveper uppåt på låsskärmen eller trycker på en avisering"</string>
+    <string name="security_settings_remoteauth_settings_description" product="desktop" msgid="4266751960630500666">"Du kan låsa upp den här enheten med klockan när du sveper uppåt på låsskärmen eller trycker på en avisering"</string>
+    <string name="security_settings_remoteauth_settings_info_footer" product="default" msgid="7176165099467997157">"Du kan bara använda upplåsning med klockan om klockan är upplåst, sitter på handleden, i närheten av telefonen och ansluten till den. Om anslutningen avbryts behöver du låsa upp telefonen innan du kan använda upplåsning med klockan\n\nTänk på följande:\nDu kan bara ha en klocka åt gången inställd på telefonen. Om du vill lägga till en annan klocka måste du först ta bort den befintliga."</string>
+    <string name="security_settings_remoteauth_settings_info_footer" product="desktop" msgid="4888346924492807836">"Du kan bara använda upplåsning med klockan om klockan är upplåst, sitter på handleden, i närheten av enheten och ansluten till den. Om anslutningen avbryts behöver du låsa upp enheten innan du kan använda upplåsning med klockan\n\nTänk på följande:\nDu kan bara ha en klocka åt gången inställd på enheten. Om du vill lägga till en annan klocka måste du först ta bort den befintliga."</string>
     <string name="biometric_settings_hand_back_to_guardian" product="tablet" msgid="9034560319613439593">"Ge tillbaka surfplattan till din förälder"</string>
     <string name="biometric_settings_hand_back_to_guardian" product="device" msgid="2149647165743006307">"Ge tillbaka telefonen till din förälder"</string>
     <string name="biometric_settings_hand_back_to_guardian" product="default" msgid="2060265104488529949">"Ge tillbaka telefonen till din förälder"</string>
     <string name="biometric_settings_hand_back_to_guardian" product="desktop" msgid="2149647165743006307">"Ge tillbaka telefonen till din förälder"</string>
+    <string name="biometric_settings_intro_with_activeunlock" product="default" msgid="8858463763101227881">"Om du konfigurerar ansiktslås och fingeravtryckslås frågar telefonen om fingeravtryck när du använder munskydd eller om det är mörkt.\n\nMed upplåsning med klockan kan du smidigt låsa upp telefonen, till exempel när dina fingrar är fuktiga eller ditt ansikte inte känns igen."</string>
+    <string name="biometric_settings_intro_with_activeunlock" product="desktop" msgid="8647938561672414067">"Om du ställer in upplåsning med ansiktet och fingeravtryckslås frågar enheten om fingeravtryck när du använder munskydd eller om det är mörkt.\n\nMed upplåsning med klockan kan du smidigt låsa upp enheten, till exempel när dina fingrar är fuktiga eller ansiktet inte känns igen."</string>
+    <string name="biometric_settings_intro_with_fingerprint" product="default" msgid="7057949977059277103">"Med upplåsning med klockan kan du smidigt låsa upp telefonen, till exempel när ditt fingeravtryck inte känns igen."</string>
+    <string name="biometric_settings_intro_with_fingerprint" product="desktop" msgid="3405074735777726953">"Med upplåsning med klockan kan du smidigt låsa upp enheten, till exempel när ditt fingeravtryck inte känns igen."</string>
+    <string name="biometric_settings_intro_with_face" product="default" msgid="2726655588847229283">"Med upplåsning med klockan kan du smidigt låsa upp telefonen, till exempel när ditt ansikte inte känns igen."</string>
+    <string name="biometric_settings_intro_with_face" product="desktop" msgid="1265319569297304712">"Med upplåsning med klockan kan du smidigt låsa upp enheten, till exempel när ditt ansikte inte känns igen."</string>
+    <string name="biometric_settings_intro" product="default" msgid="1110080686857635531">"Om du konfigurerar ansiktslås och fingeravtryckslås frågar telefonen om fingeravtryck när du använder munskydd eller om det är mörkt"</string>
+    <string name="biometric_settings_intro" product="desktop" msgid="5958563780867026412">"Om du ställer in upplåsning med ansiktet och fingeravtryckslås frågar enheten om fingeravtryck när du använder munskydd eller om det är mörkt"</string>
+    <string name="biometric_settings_use_biometric_unlock_phone" product="default" msgid="3409316849691305012">"Låsa upp telefonen"</string>
+    <string name="biometric_settings_use_biometric_unlock_phone" product="desktop" msgid="6393832544950099600">"Lås upp enheten"</string>
+    <string name="setup_fingerprint_enroll_enrolling_skip_message" product="default" msgid="4979485905634049022">"Du har valt att låsa upp telefonen med ditt fingeravtryck. Om du hoppar över konfigureringen nu måste du slutföra den senare. Konfigureringen tar bara ett par minuter."</string>
+    <string name="setup_fingerprint_enroll_enrolling_skip_message" product="desktop" msgid="2601670958752026992">"Du har valt att låsa upp enheten med ditt fingeravtryck. Om du hoppar över konfigureringen nu måste du slutföra den senare. Konfigureringen tar bara ett par minuter."</string>
+    <string name="unlock_disable_frp_warning_content_pattern" product="default" msgid="5070116742207378028">"Ett mönster skyddar telefonen om den kommer bort eller blir stulen"</string>
+    <string name="unlock_disable_frp_warning_content_pattern" product="desktop" msgid="3828076488822985960">"Ett mönster skyddar enheten om den kommer bort eller blir stulen"</string>
+    <string name="unlock_disable_frp_warning_content_pattern_fingerprint" product="default" msgid="7919767908076245408">"Ett mönster skyddar telefonen om den kommer bort eller blir stulen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Fingeravtrycksmodellen som sparats på enheten raderas också. Du kan inte längre använda fingeravtrycket för autentisering i appar."</string>
+    <string name="unlock_disable_frp_warning_content_pattern_fingerprint" product="desktop" msgid="9116397340044675886">"Ett mönster skyddar enheten om den kommer bort eller blir stulen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Fingeravtrycksmodellen som sparats på enheten raderas också. Du kan inte längre använda fingeravtrycket för autentisering i appar."</string>
+    <string name="unlock_disable_frp_warning_content_pattern_face" product="default" msgid="37951657146319620">"Ett mönster skyddar telefonen om den kommer bort eller blir stulen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Ansiktsmodellen raderas också permanent på ett säkert sätt. Du kan inte längre använda ansiktet för autentisering i appar."</string>
+    <string name="unlock_disable_frp_warning_content_pattern_face" product="desktop" msgid="5949258661260705528">"Ett mönster skyddar enheten om den kommer bort eller blir stulen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Ansiktsmodellen raderas också permanent på ett säkert sätt. Du kan inte längre använda ansiktet för autentisering i appar."</string>
+    <string name="unlock_disable_frp_warning_content_pattern_face_fingerprint" product="default" msgid="2099587344025095004">"Ett mönster skyddar telefonen om den kommer bort eller blir stulen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Fingeravtrycksmodellen som sparats på enheten raderas. Ansiktsmodellen raderas också permanent på ett säkert sätt. Du kan inte längre använda ansiktet eller fingeravtrycket för autentisering i appar."</string>
+    <string name="unlock_disable_frp_warning_content_pattern_face_fingerprint" product="desktop" msgid="1894841959198314076">"Ett mönster skyddar enheten om den kommer bort eller blir stulen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Fingeravtrycksmodellen som sparats på enheten raderas. Ansiktsmodellen raderas också permanent på ett säkert sätt. Du kan inte längre använda ansiktet eller fingeravtrycket för autentisering i appar."</string>
+    <string name="unlock_disable_frp_warning_content_pin" product="default" msgid="4884453290870316484">"En pinkod skyddar telefonen om den kommer bort eller blir stulen"</string>
+    <string name="unlock_disable_frp_warning_content_pin" product="desktop" msgid="2069572855122085869">"En pinkod skyddar enheten om den kommer bort eller blir stulen"</string>
+    <string name="unlock_disable_frp_warning_content_pin_fingerprint" product="default" msgid="2874913409506418991">"En pinkod skyddar telefonen om den kommer bort eller blir stulen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Fingeravtrycksmodellen som sparats på enheten raderas också. Du kan inte längre använda fingeravtrycket för autentisering i appar."</string>
+    <string name="unlock_disable_frp_warning_content_pin_fingerprint" product="desktop" msgid="6361691886708081331">"En pinkod skyddar enheten om den kommer bort eller blir stulen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Fingeravtrycksmodellen som sparats på enheten raderas också. Du kan inte längre använda fingeravtrycket för autentisering i appar."</string>
+    <string name="unlock_disable_frp_warning_content_pin_face" product="default" msgid="263465132877970450">"En pinkod skyddar telefonen om den kommer bort eller blir stulen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Ansiktsmodellen raderas också permanent på ett säkert sätt. Du kan inte längre använda ansiktet för autentisering i appar."</string>
+    <string name="unlock_disable_frp_warning_content_pin_face" product="desktop" msgid="1495988088469298632">"En pinkod skyddar enheten om den kommer bort eller blir stulen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Ansiktsmodellen raderas också permanent på ett säkert sätt. Du kan inte längre använda ansiktet för autentisering i appar."</string>
+    <string name="unlock_disable_frp_warning_content_pin_face_fingerprint" product="default" msgid="476636556062520667">"En pinkod skyddar telefonen om den kommer bort eller blir stulen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Fingeravtrycksmodellen som sparats på enheten raderas. Ansiktsmodellen raderas också permanent på ett säkert sätt. Du kan inte längre använda ansiktet eller fingeravtrycket för autentisering i appar."</string>
+    <string name="unlock_disable_frp_warning_content_pin_face_fingerprint" product="desktop" msgid="6813575631983953707">"En pinkod skyddar enheten om den kommer bort eller blir stulen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Fingeravtrycksmodellen som sparats på enheten raderas. Ansiktsmodellen raderas också permanent på ett säkert sätt. Du kan inte längre använda ansiktet eller fingeravtrycket för autentisering i appar."</string>
+    <string name="unlock_disable_frp_warning_content_password" product="default" msgid="1127164258200398958">"Ett lösenord skyddar telefonen om den kommer bort eller blir stulen"</string>
+    <string name="unlock_disable_frp_warning_content_password" product="desktop" msgid="8367036366524786060">"Ett lösenord skyddar enheten om den kommer bort eller blir stulen"</string>
+    <string name="unlock_disable_frp_warning_content_password_fingerprint" product="default" msgid="4593407083619543775">"Ett lösenord skyddar telefonen om den kommer bort eller blir stulen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Fingeravtrycksmodellen som sparats på enheten raderas också. Du kan inte längre använda fingeravtrycket för autentisering i appar."</string>
+    <string name="unlock_disable_frp_warning_content_password_fingerprint" product="desktop" msgid="1659299201470069003">"Ett lösenord skyddar enheten om den kommer bort eller blir stulen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Fingeravtrycksmodellen som sparats på enheten raderas också. Du kan inte längre använda fingeravtrycket för autentisering i appar."</string>
+    <string name="unlock_disable_frp_warning_content_password_face" product="default" msgid="2765003117110694527">"Ett lösenord skyddar telefonen om den kommer bort eller blir stulen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Ansiktsmodellen raderas också permanent på ett säkert sätt. Du kan inte längre använda ansiktet för autentisering i appar."</string>
+    <string name="unlock_disable_frp_warning_content_password_face" product="desktop" msgid="912428236263888131">"Ett lösenord skyddar enheten om den kommer bort eller blir stulen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Ansiktsmodellen raderas också permanent på ett säkert sätt. Du kan inte längre använda ansiktet för autentisering i appar."</string>
+    <string name="unlock_disable_frp_warning_content_password_face_fingerprint" product="default" msgid="5660327560346083891">"Ett lösenord skyddar telefonen om den kommer bort eller blir stulen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Fingeravtrycksmodellen som sparats på enheten raderas. Ansiktsmodellen raderas också permanent på ett säkert sätt. Du kan inte längre använda ansiktet eller fingeravtrycket för autentisering i appar."</string>
+    <string name="unlock_disable_frp_warning_content_password_face_fingerprint" product="desktop" msgid="5615430301170627057">"Ett lösenord skyddar enheten om den kommer bort eller blir stulen.<xliff:g id="EMPTY_LINE">
+
+</xliff:g>Fingeravtrycksmodellen som sparats på enheten raderas. Ansiktsmodellen raderas också permanent på ett säkert sätt. Du kan inte längre använda ansiktet eller fingeravtrycket för autentisering i appar."</string>
     <string name="lock_screen_intro_skip_dialog_text_frp" product="tablet" msgid="7526137517192538870">"Enhetens skyddsfunktioner aktiveras inte. Du kan inte hindra andra från att använda surfplattan om den blir stulen, tappas bort eller återställs."</string>
     <string name="lock_screen_intro_skip_dialog_text_frp" product="device" msgid="1350434793163709209">"Enhetens skyddsfunktioner aktiveras inte. Du kan inte hindra andra från att använda enheten om den blir stulen, tappas bort eller återställs."</string>
     <string name="lock_screen_intro_skip_dialog_text_frp" product="default" msgid="8367731653387033354">"Enhetens skyddsfunktioner aktiveras inte. Du kan inte hindra andra från att använda mobilen om den blir stulen, tappas bort eller återställs."</string>
@@ -233,9 +344,9 @@
     <string name="lock_screen_pin_skip_face_message" product="default" msgid="358903382559327157">"Det krävs en pinkod för att konfigurera ansiktslås.\n\nEn pinkod skyddar telefonen om den kommer bort eller blir stulen."</string>
     <string name="lock_screen_pattern_skip_face_message" product="default" msgid="6400426500859622964">"Det krävs ett mönster för att konfigurera ansiktslås.\n\nEtt mönster skyddar telefonen om den kommer bort eller blir stulen."</string>
     <string name="lock_screen_password_skip_face_message" product="default" msgid="1555954661782997039">"Det krävs ett lösenord för att konfigurera ansiktslås.\n\nEtt lösenord skyddar telefonen om den kommer bort eller blir stulen."</string>
-    <string name="lock_screen_pin_skip_face_message" product="desktop" msgid="1932467886606343431">"Det krävs en pinkod för att konfigurera ansiktslås.\n\nEn pinkod skyddar enheten om den kommer bort eller blir stulen."</string>
-    <string name="lock_screen_pattern_skip_face_message" product="desktop" msgid="3670112640345602511">"Det krävs ett mönster för att konfigurera ansiktslås.\n\nEtt mönster skyddar enheten om den kommer bort eller blir stulen."</string>
-    <string name="lock_screen_password_skip_face_message" product="desktop" msgid="256847653854178247">"Det krävs ett lösenord för att konfigurera ansiktslås.\n\nEtt lösenord skyddar enheten om den kommer bort eller blir stulen."</string>
+    <string name="lock_screen_pin_skip_face_message" product="desktop" msgid="6077624122176446307">"Det krävs en pinkod för att ställa in upplåsning med ansiktet.\n\nEn pinkod skyddar enheten om den kommer bort eller blir stulen."</string>
+    <string name="lock_screen_pattern_skip_face_message" product="desktop" msgid="7817325312874210218">"Det krävs ett mönster för att ställa in upplåsning med ansiktet.\n\nEtt mönster skyddar enheten om den kommer bort eller blir stulen."</string>
+    <string name="lock_screen_password_skip_face_message" product="desktop" msgid="865444733831491817">"Det krävs ett lösenord för att ställa in upplåsning med ansiktet.\n\nEtt lösenord skyddar enheten om den kommer bort eller blir stulen."</string>
     <string name="lock_screen_pin_skip_biometrics_message" product="tablet" msgid="6016574209955764097">"Det krävs en pinkod för att ställa in fingeravtryckslås och ansiktslås.\n\nEn pinkod skyddar surfplattan om den kommer bort eller blir stulen."</string>
     <string name="lock_screen_pattern_skip_biometrics_message" product="tablet" msgid="5193008948766756870">"Det krävs ett mönster för att ställa in fingeravtryckslås och ansiktslås.\n\nEtt mönster skyddar surfplattan om den kommer bort eller blir stulen."</string>
     <string name="lock_screen_password_skip_biometrics_message" product="tablet" msgid="2157871617774498976">"Det krävs ett lösenord för att ställa in fingeravtryckslås och ansiktslås.\n\nEtt lösenord skyddar surfplattan om den kommer bort eller blir stulen."</string>
@@ -245,9 +356,9 @@
     <string name="lock_screen_pin_skip_biometrics_message" product="default" msgid="6614355211073480369">"Det krävs en pinkod för att ställa in fingeravtryckslås och ansiktslås.\n\nEn pinkod skyddar telefonen om den kommer bort eller blir stulen."</string>
     <string name="lock_screen_pattern_skip_biometrics_message" product="default" msgid="969489650005656159">"Det krävs ett mönster för att ställa in fingeravtryckslås och ansiktslås.\n\nEtt mönster skyddar telefonen om den kommer bort eller blir stulen."</string>
     <string name="lock_screen_password_skip_biometrics_message" product="default" msgid="2934343185175325368">"Det krävs ett lösenord för att ställa in fingeravtryckslås och ansiktslås.\n\nEtt lösenord skyddar telefonen om den kommer bort eller blir stulen."</string>
-    <string name="lock_screen_pin_skip_biometrics_message" product="desktop" msgid="3023595865822720071">"Det krävs en pinkod för att ställa in fingeravtryckslås och ansiktslås.\n\nEn pinkod skyddar enheten om den kommer bort eller blir stulen."</string>
-    <string name="lock_screen_pattern_skip_biometrics_message" product="desktop" msgid="3039110875534893916">"Det krävs ett mönster för att ställa in fingeravtryckslås och ansiktslås.\n\nEtt mönster skyddar enheten om den kommer bort eller blir stulen."</string>
-    <string name="lock_screen_password_skip_biometrics_message" product="desktop" msgid="6506194961404887073">"Det krävs ett lösenord för att ställa in fingeravtryckslås och ansiktslås.\n\nEtt lösenord skyddar enheten om den kommer bort eller blir stulen."</string>
+    <string name="lock_screen_pin_skip_biometrics_message" product="desktop" msgid="589104020540379702">"Det krävs en pinkod för att ställa in upplåsning med ansiktet och fingeravtryckslås.\n\nEn pinkod skyddar enheten om den kommer bort eller blir stulen."</string>
+    <string name="lock_screen_pattern_skip_biometrics_message" product="desktop" msgid="753887465655237435">"Det krävs ett mönster för att ställa in upplåsning med ansiktet och fingeravtryckslås.\n\nEtt mönster skyddar enheten om den kommer bort eller blir stulen."</string>
+    <string name="lock_screen_password_skip_biometrics_message" product="desktop" msgid="5347114264507215823">"Det krävs ett lösenord för att ställa in upplåsning med ansiktet och fingeravtryckslås.\n\nEtt lösenord skyddar enheten om den kommer bort eller blir stulen."</string>
     <string name="fingerprint_v2_delete_message" product="default" msgid="8723083814238510088">"Om du gör detta raderas fingeravtrycksbilderna och fingeravtrycksmodellen som har kopplats till <xliff:g id="FINGERPRINT_ID">%1$s</xliff:g> och lagras på telefonen"</string>
     <string name="fingerprint_v2_delete_message" product="tablet" msgid="527375244730792698">"Om du gör detta raderas fingeravtrycksbilderna och fingeravtrycksmodellen som har kopplats till <xliff:g id="FINGERPRINT_ID">%1$s</xliff:g> och lagras på surfplattan"</string>
     <string name="fingerprint_v2_delete_message" product="device" msgid="4549780655045100171">"Om du gör detta raderas fingeravtrycksbilderna och fingeravtrycksmodellen som har kopplats till <xliff:g id="FINGERPRINT_ID">%1$s</xliff:g> och lagras på enheten"</string>
@@ -271,6 +382,8 @@
     <string name="encrypt_title" product="tablet" msgid="8915795247786124547">"Kryptera surfplattan"</string>
     <string name="encrypt_title" product="default" msgid="511146128799853404">"Kryptera telefonen"</string>
     <string name="encrypt_title" product="desktop" msgid="7536236095337188236">"Kryptera enheten"</string>
+    <string name="suggested_lock_settings_title" product="default" msgid="2717909185701554381">"Skydda telefonen"</string>
+    <string name="suggested_lock_settings_title" product="desktop" msgid="2170600598362998798">"Skydda enheten"</string>
     <string name="suggested_lock_settings_summary" product="tablet" msgid="8821254377043173267">"Skydda surfplattan genom att ställa in skärmlås"</string>
     <string name="suggested_lock_settings_summary" product="device" msgid="4863929838844014122">"Skydda enheten genom att ställa in skärmlås"</string>
     <string name="suggested_lock_settings_summary" product="default" msgid="8050809409337082738">"Skydda mobilen genom att ställa in skärmlås"</string>
@@ -294,7 +407,7 @@
     <string name="bluetooth_unpair_dialog_with_associations_body" product="default" msgid="5994849277385675452">"Telefonen kopplas bort från <xliff:g id="DEVICE_NAME">%1$s</xliff:g>. <xliff:g id="APP_NAME">%2$s</xliff:g> hanterar inte längre enheten"</string>
     <string name="bluetooth_unpair_dialog_with_associations_body" product="tablet" msgid="1783141603173138886">"Surfplattan kopplas bort från <xliff:g id="DEVICE_NAME">%1$s</xliff:g>. <xliff:g id="APP_NAME">%2$s</xliff:g> hanterar inte längre enheten"</string>
     <string name="bluetooth_unpair_dialog_with_associations_body" product="device" msgid="4096203730149218837">"Enheten kopplas bort från <xliff:g id="DEVICE_NAME">%1$s</xliff:g>. <xliff:g id="APP_NAME">%2$s</xliff:g> hanterar inte längre enheten"</string>
-    <string name="bluetooth_unpair_dialog_with_associations_body" product="desktop" msgid="4096203730149218837">"Enheten kopplas bort från <xliff:g id="DEVICE_NAME">%1$s</xliff:g>. <xliff:g id="APP_NAME">%2$s</xliff:g> hanterar inte längre enheten"</string>
+    <string name="bluetooth_unpair_dialog_with_associations_body" product="desktop" msgid="6878153881802282771">"Enheten kopplas bort från <xliff:g id="DEVICE_NAME_0">%1$s</xliff:g>. <xliff:g id="APP_NAME">%2$s</xliff:g> hanterar inte längre <xliff:g id="DEVICE_NAME_1">%1$s</xliff:g>"</string>
     <string name="virtual_device_forget_dialog_body" product="default" msgid="2373694955133298944">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g> kopplas inte längre till den här telefonen. Om du fortsätter kan vissa appar samt appstreaming sluta fungera."</string>
     <string name="virtual_device_forget_dialog_body" product="tablet" msgid="6223163028932322388">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g> kopplas inte längre till den här surfplattan. Om du fortsätter kan vissa appar samt appstreaming sluta fungera."</string>
     <string name="virtual_device_forget_dialog_body" product="device" msgid="1888180822338607328">"<xliff:g id="DEVICE_NAME">%1$s</xliff:g> kopplas inte längre till den här enheten. Om du fortsätter kan vissa appar samt appstreaming sluta fungera."</string>
@@ -303,13 +416,15 @@
     <string name="virtual_device_details_footer_title" product="tablet" msgid="1049988675804747535">"Om du glömmer <xliff:g id="DEVICE_NAME">%1$s</xliff:g> kopplas den inte längre till den här surfplattan. Vissa behörigheter tas bort och vissa appar samt appstreaming kan sluta fungera."</string>
     <string name="virtual_device_details_footer_title" product="device" msgid="7548402204973923744">"Om du glömmer <xliff:g id="DEVICE_NAME">%1$s</xliff:g> kopplas den inte längre till den här enheten. Vissa behörigheter tas bort och vissa appar samt appstreaming kan sluta fungera."</string>
     <string name="virtual_device_details_footer_title" product="desktop" msgid="7548402204973923744">"Om du glömmer <xliff:g id="DEVICE_NAME">%1$s</xliff:g> kopplas den inte längre till den här enheten. Vissa behörigheter tas bort och vissa appar samt appstreaming kan sluta fungera."</string>
-    <string name="nfc_secure_toggle_summary" product="default" msgid="3515508978581011683">"Tillåt endast NFC när skärmen är upplåst"</string>
+    <string name="nfc_secure_toggle_summary" product="default" msgid="3074277711174185931">"Tillåt kontaktlösa betalningar endast när skärmen är upplåst"</string>
     <string name="wifi_add_app_single_network_summary" product="default" msgid="7742934005022827107">"<xliff:g id="APPNAME">%1$s</xliff:g> vill spara ett nätverk på telefonen"</string>
     <string name="wifi_add_app_single_network_summary" product="tablet" msgid="93466057231937113">"<xliff:g id="APPNAME">%1$s</xliff:g> vill spara ett nätverk på surfplattan"</string>
     <string name="wifi_add_app_single_network_summary" product="desktop" msgid="2116663141004049983">"<xliff:g id="APPNAME">%1$s</xliff:g> vill spara ett nätverk på enheten"</string>
     <string name="wifi_add_app_networks_summary" product="default" msgid="7014504084783236696">"<xliff:g id="APPNAME">%1$s</xliff:g> vill spara dessa nätverk på telefonen"</string>
     <string name="wifi_add_app_networks_summary" product="tablet" msgid="6433255556506891439">"<xliff:g id="APPNAME">%1$s</xliff:g> vill spara dessa nätverk på surfplattan"</string>
     <string name="wifi_add_app_networks_summary" product="desktop" msgid="4238956725252527159">"<xliff:g id="APPNAME">%1$s</xliff:g> vill spara dessa nätverk på enheten"</string>
+    <string name="wifi_hidden_network_warning" product="default" msgid="5069866459200615493">"Om routern inte sänder ut ett nätverks-id men du vill ansluta till nätverket i framtiden kan du ange att nätverket ska vara dolt.\n\nDetta kan innebära en säkerhetsrisk eftersom telefonen regelbundet kommer att sända ut en signal för att hitta nätverket.\n\nRouterinställningarna ändras inte om du anger att nätverket ska vara dolt."</string>
+    <string name="wifi_hidden_network_warning" product="desktop" msgid="1145969827779463554">"Om routern inte sänder ut ett nätverks-id men du vill ansluta till nätverket i framtiden kan du ange att nätverket ska vara dolt.\n\nDetta kan innebära en säkerhetsrisk eftersom enheten regelbundet kommer att sända ut en signal för att hitta nätverket.\n\nRouterinställningarna ändras inte om du anger att nätverket ska vara dolt."</string>
     <string name="auto_rotate_screen_summary" product="default" msgid="5562937346878935483">"Justera skärmriktningen automatiskt när du vänder telefonen mellan stående och liggande läge"</string>
     <string name="auto_rotate_screen_summary" product="tablet" msgid="3163709742477804994">"Justera skärmriktningen automatiskt när du vänder surfplattan mellan stående och liggande läge"</string>
     <string name="auto_rotate_screen_summary" product="desktop" msgid="3805199344834364732">"Justera skärmriktningen automatiskt när du vänder enheten mellan stående och liggande läge"</string>
@@ -319,12 +434,15 @@
     <string name="sim_lock_off" product="tablet" msgid="4619320846576958981">"PIN-kod krävs för att använda surfplattan"</string>
     <string name="sim_lock_off" product="default" msgid="2064502270875375541">"Pinkod krävs för att använda telefonen"</string>
     <string name="sim_lock_off" product="desktop" msgid="903164661366964150">"Kräv pinkod för att använda enheten"</string>
-    <string name="status_number" product="tablet" msgid="6746773328312218158">"Mobilnummer (MDN)"</string>
     <string name="status_number" product="default" msgid="2333455505912871374">"Telefonnummer"</string>
-    <string name="status_number_sim_slot" product="tablet" msgid="2595836594107617972">"MDN (SIM-kortsplats %1$d)"</string>
-    <string name="status_number_sim_slot" product="default" msgid="7154930998382872847">"Telefonnummer (SIM-kortsplats %1$d)"</string>
-    <string name="status_number_sim_status" product="tablet" msgid="9003886361856568694">"MDN på SIM-kortet"</string>
+    <string name="status_number" product="tablet" msgid="2610169120378692971">"MSISDN"</string>
+    <string name="status_number" product="desktop" msgid="2610169120378692971">"MSISDN"</string>
+    <string name="status_number_sim_slot" product="default" msgid="8033783200178721660">"Telefonnummer %1$d"</string>
+    <string name="status_number_sim_slot" product="tablet" msgid="105938472243665656">"MSISDN %1$d"</string>
+    <string name="status_number_sim_slot" product="desktop" msgid="105938472243665656">"MSISDN %1$d"</string>
     <string name="status_number_sim_status" product="default" msgid="7536755538266735352">"Telefonnummer på SIM-kortet"</string>
+    <string name="status_number_sim_status" product="tablet" msgid="3380909445549639752">"MSISDN på SIM-kortet"</string>
+    <string name="status_number_sim_status" product="desktop" msgid="3380909445549639752">"MSISDN på SIM-kortet"</string>
     <string name="storage_wizard_init_v2_internal_title" product="tablet" msgid="2049551739429034707">"Formatera SD-kortet för internt lagringsutrymme"</string>
     <string name="storage_wizard_init_v2_internal_summary" product="tablet" msgid="6130017080675241337">"Lagra appar och media för att endast använda på den här surfplattan. &lt;a href=https://support.google.com/android/answer/12153449&gt;Läs mer om att konfigurera ett SD-kort&lt;/a&gt;."</string>
     <string name="storage_wizard_init_v2_internal_action" product="tablet" msgid="560506072518373839">"Formatera"</string>
@@ -344,6 +462,7 @@
     <string name="main_clear_desc" product="default" msgid="1888412491866186706">"Detta raderar all data från enhetens "<b>"interna lagringsutrymme"</b>", bland annat följande:\n\n"<li>"ditt Google-konto"</li>\n<li>"system- och appdata och inställningar"</li>\n<li>"nedladdade appar"</li></string>
     <string name="main_clear_desc" product="desktop" msgid="405802272460355609">"Detta raderar all data från enhetens "<b>"interna lagringsutrymme"</b>", bland annat:\n\n"<li>"Ditt Google-konto"</li>\n<li>"System- och appdata och inställningar"</li>\n<li>"Nedladdade appar"</li></string>
     <string name="main_clear_accounts" product="default" msgid="3604029744509330786">\n\n"Du är inloggad på följande konton:\n"</string>
+    <string name="main_clear_accounts_count" product="default" msgid="8431492930725475832">"{count,plural, =1{\n\nDu är inloggad på följande konto:\n}other{\n\nDu är inloggad på följande konton:\n}}"</string>
     <string name="main_clear_other_users_present" product="default" msgid="7750368595882863399">\n\n"Det finns andra användare på enheten.\n"</string>
     <string name="main_clear_desc_erase_external_storage" product="nosdcard" msgid="5834269984459195918">\n\n"Om du vill ta bort musik, bilder och annan användardata måste du rensa "<b>"USB-lagringsenheten"</b>"."</string>
     <string name="main_clear_desc_erase_external_storage" product="default" msgid="2891180770413959600">\n\n"Om du vill ta bort musik, bilder och annan användardata måste du rensa "<b>"SD-kortet"</b>"."</string>
@@ -386,6 +505,8 @@
     <string name="accessibility_daltonizer_about_intro_text" product="default" msgid="5234458848997942613">"Ändra hur färger visas på telefonen"</string>
     <string name="accessibility_daltonizer_about_intro_text" product="tablet" msgid="5300401841391736534">"Ändra hur färger visas på surfplattan"</string>
     <string name="accessibility_daltonizer_about_intro_text" product="desktop" msgid="8908526728447739478">"Ändra hur färger visas på enheten"</string>
+    <string name="accessibility_hearing_device_ringtone_alarm_routing_title" product="default" msgid="6245455325032243921">"Ringsignaler och alarm"</string>
+    <string name="accessibility_hearing_device_ringtone_alarm_routing_title" product="desktop" msgid="1096901437012239116">"Alarm"</string>
     <string name="reduce_bright_colors_preference_subtitle" product="default" msgid="9162440023310121356">"Extradimmat kan vara användbart när &lt;ol&gt; &lt;li&gt;&amp;nbsp;telefonens lägsta ljusstyrka fortfarande är för ljus&lt;/li&gt; &lt;li&gt;&amp;nbsp;du använder telefonen i mörker, t.ex. på natten eller i ett mörkt rum innan du ska sova.&lt;/li&gt; &lt;/ol&gt;"</string>
     <string name="reduce_bright_colors_preference_subtitle" product="tablet" msgid="5747242697890472822">"Extradimmat kan vara användbart när &lt;ol&gt; &lt;li&gt; surfplattans lägsta ljusstyrka fortfarande är för ljus&lt;/li&gt; &lt;li&gt; du använder surfplattan i mörker, t.ex. på natten eller i ett mörkt rum innan du ska sova.&lt;/li&gt; &lt;/ol&gt;"</string>
     <string name="reduce_bright_colors_preference_subtitle" product="desktop" msgid="3114657547062643684">"Extradimmat kan vara användbart när &lt;ol&gt; &lt;li&gt; enhetens lägsta ljusstyrka fortfarande är för ljus&lt;/li&gt; &lt;li&gt; du använder enheten i mörker, t.ex. på natten eller i ett mörkt rum innan du ska sova.&lt;/li&gt; &lt;/ol&gt;"</string>
@@ -481,9 +602,12 @@
     <string name="lockscreen_trivial_controls_summary" product="default" msgid="42562533085885152">"Utan att låsa upp telefonen"</string>
     <string name="lockscreen_trivial_controls_summary" product="tablet" msgid="9052068482124729345">"Utan att låsa upp surfplattan"</string>
     <string name="lockscreen_trivial_controls_summary" product="desktop" msgid="8183513643394359332">"Utan att låsa upp enheten"</string>
-    <string name="device_supervision_switch_title" product="default" msgid="5711051584668311080">"Inställningar för telefonen"</string>
-    <string name="device_supervision_switch_title" product="tablet" msgid="5400384750840247844">"Inställningar för surfplattan"</string>
-    <string name="device_supervision_switch_title" product="desktop" msgid="2140192989162020111">"Inställningar för enheten"</string>
+    <string name="device_supervision_features_title" product="default" msgid="8612616791672564436">"Kontroller för telefonen"</string>
+    <string name="device_supervision_features_title" product="tablet" msgid="8301949957844501200">"Inställningar för surfplattan"</string>
+    <string name="device_supervision_features_title" product="desktop" msgid="5041758196166273467">"Kontroller för enheten"</string>
+    <string name="supervision_apps_managing_this_device_title" product="default" msgid="8369485156586947413">"Hantera den här telefonen"</string>
+    <string name="supervision_apps_managing_this_device_title" product="tablet" msgid="1795086998459265754">"Hantera den här surfplattan"</string>
+    <string name="supervision_apps_managing_this_device_title" product="desktop" msgid="3365839381660880395">"Hantera den här enheten"</string>
     <string name="supervision_pin_length_message" product="default" msgid="7142997986515800901">"{count,plural, =1{Ange en pinkod med minst # siffra. Du hanterar inställningar på den här telefonen med den.}other{Ange en pinkod med minst # siffror. Du hanterar inställningar på den här telefonen med den.}}"</string>
     <string name="supervision_pin_length_message" product="tablet" msgid="1772471880165492225">"{count,plural, =1{Ange en pinkod med minst # siffra. Du hanterar inställningar på den här surfplattan med den.}other{Ange en pinkod med minst # siffror. Du hanterar inställningar på den här surfplattan med den.}}"</string>
     <string name="supervision_pin_length_message" product="desktop" msgid="7689193597679628648">"{count,plural, =1{Ange en pinkod med minst # siffra. Du hanterar inställningar på den här enheten med den.}other{Ange en pinkod med minst # siffror. Du hanterar inställningar på den här enheten med den.}}"</string>
@@ -493,12 +617,18 @@
     <string name="supervision_delete_pin_confirm_message" product="default" msgid="4142432379507014709">"Pinkoden för föräldrakontroller raderas permanent. Alla kontroller som du har ställt in för användare på den här telefonen med den här pinkoden inaktiveras."</string>
     <string name="supervision_delete_pin_confirm_message" product="tablet" msgid="3676061526109959657">"Pinkoden för föräldrakontroller raderas permanent. Alla kontroller som du har ställt in för användare på den här surfplattan med den här pinkoden inaktiveras."</string>
     <string name="supervision_delete_pin_confirm_message" product="desktop" msgid="9122403113168273844">"Pinkoden för föräldrakontroller raderas permanent. Alla kontroller som du har ställt in för användare på den här enheten med den här pinkoden inaktiveras."</string>
+    <string name="supervision_multiple_providers_delete_pin_confirm_message" product="default" msgid="7121239686502410611">"Pinkoden för föräldrakontroller raderas. Du kan fortfarande hantera föräldrakontroller från apparna och tjänsterna som hanterar den här telefonen."</string>
+    <string name="supervision_multiple_providers_delete_pin_confirm_message" product="tablet" msgid="1918406961760478041">"Pinkoden för föräldrakontroller raderas. Du kan fortfarande hantera föräldrakontroller från apparna och tjänsterna som hanterar den här surfplattan."</string>
+    <string name="supervision_multiple_providers_delete_pin_confirm_message" product="desktop" msgid="5187413417226276855">"Pinkoden för föräldrakontroller raderas. Du kan fortfarande hantera föräldrakontroller från apparna och tjänsterna som hanterar den här enheten."</string>
     <string name="device_supervision_pin_management_footer" product="default" msgid="6890338658180593450">"Pinkoden för föräldrakontroller är densamma för alla användare på den här telefonen"</string>
     <string name="device_supervision_pin_management_footer" product="tablet" msgid="4013172842200145374">"Pinkoden för föräldrakontroller är densamma för alla användare på den här surfplattan"</string>
     <string name="device_supervision_pin_management_footer" product="desktop" msgid="6539340160423866980">"Pinkoden för föräldrakontroller är densamma för alla användare på den här enheten"</string>
     <string name="supervision_multi_profile_error_message" product="default" msgid="4185376425933293903">"Eftersom det finns flera profiler på den här telefonen går det inte att aktivera föräldrakontroller."</string>
     <string name="supervision_multi_profile_error_message" product="tablet" msgid="5021937906206996760">"Eftersom det finns flera profiler på den här surfplattan går det inte att aktivera föräldrakontroller."</string>
     <string name="supervision_multi_profile_error_message" product="desktop" msgid="7222938263475617299">"Eftersom det finns flera profiler på den här enheten går det inte att aktivera föräldrakontroller."</string>
+    <string name="supervision_setup_multi_profile_error_message" product="default" msgid="7949405920898610718">"Det finns flera profiler på den här telefonen"</string>
+    <string name="supervision_setup_multi_profile_error_message" product="tablet" msgid="6028864049946511965">"Det finns flera profiler på den här surfplattan"</string>
+    <string name="supervision_setup_multi_profile_error_message" product="desktop" msgid="3447724427845313093">"Det finns flera profiler på den här enheten"</string>
     <string name="auto_rotate_summary_a11y" product="default" msgid="2813368383309985185">"När du vänder telefonen mellan stående och liggande läge"</string>
     <string name="auto_rotate_summary_a11y" product="tablet" msgid="4708833814245913981">"När du vänder surfplattan mellan stående och liggande läge"</string>
     <string name="auto_rotate_summary_a11y" product="desktop" msgid="1342493478927297535">"När du vänder enheten mellan stående och liggande läge"</string>
@@ -535,4 +665,150 @@
     <string name="audio_sharing_confirm_dialog_content_with_link" product="desktop" msgid="668964968208427465">"Om du vill dela ljud ansluter du först LE Audio-hörlurar till din enhet. "<annotation id="link">"Läs mer om kompatibla enheter"</annotation></string>
     <string name="network_dashboard_summary_mobile" product="default" msgid="1856501121269595911">"Mobil, wifi och surfzon"</string>
     <string name="network_dashboard_summary_mobile" product="desktop" msgid="8770767156162473221">"Wifi, mobil, surfzon"</string>
+    <string name="top_intro_region_title" product="default" msgid="915184646302419632">"Regionen du väljer påverkar hur telefonen visar tid, datum, temperatur med mera"</string>
+    <string name="top_intro_region_title" product="desktop" msgid="4176286015398594299">"Regionen du väljer påverkar hur enheten visar tid, datum, temperatur med mera"</string>
+    <string name="private_space_fingerprint_enroll_introduction_footer_message" product="default" msgid="5424764618312876122">"Ditt privata utrymme kan låsas upp oavsiktligt, till exempel om någon håller telefonen mot ditt finger."</string>
+    <string name="private_space_fingerprint_enroll_introduction_footer_message" product="desktop" msgid="1777628194784795967">"Ditt privata utrymme kan låsas upp oavsiktligt, till exempel om någon håller enheten mot ditt finger."</string>
+    <string name="private_space_face_enroll_introduction_info_looking" product="default" msgid="305936839337361784">"Om du tittar på telefonen kan du oavsiktligt låsa upp det privata utrymmet. Ditt privata utrymme kan också låsas upp av någon som är lik dig, som ett syskon, eller någon som håller enheten mot ditt ansikte."</string>
+    <string name="private_space_face_enroll_introduction_info_looking" product="desktop" msgid="7384750093083248112">"Om du tittar på enheten kan du oavsiktligt låsa upp det privata utrymmet. Ditt privata utrymme kan också låsas upp av någon som är lik dig, som ett syskon, eller någon som håller enheten mot ditt ansikte."</string>
+    <string name="private_space_face_settings_footer" product="default" msgid="212607111539219116">"Lås upp det privata utrymmet med ditt ansikte.\n\nTänk på detta:\nBara ett ansikte kan vara inställt i taget. För att lägga till ett nytt ansikte måste du ta bort det nuvarande.\n\nOm du tittar på telefonen kan du råka låsa upp den.\n\nDitt privata utrymme kan låsas upp av någon annan om din enhet hålls mot ditt ansikte.\n\nDitt privata utrymme kan låsas upp av någon som är lik dig, till exempel ett syskon."</string>
+    <string name="private_space_face_settings_footer" product="desktop" msgid="5379113827824389147">"Lås upp det privata utrymmet med ditt ansikte.\n\nTänk på detta:\nBara ett ansikte kan vara inställt i taget. För att lägga till ett nytt ansikte måste du ta bort det nuvarande.\n\nOm du tittar på enheten kan du råka låsa upp den.\n\nDitt privata utrymme kan låsas upp av någon annan om din enhet hålls mot ditt ansikte.\n\nDitt privata utrymme kan låsas upp av någon som är lik dig, till exempel ett syskon."</string>
+    <string name="private_space_delete_summary" product="default" msgid="6731333342020734606">"Ditt privata utrymme tas bort permanent från din enhet. \n\nAlla appar i ditt utrymme och tillhörande data tas bort från telefonens "<b>"interna lagringsutrymme"</b>"."</string>
+    <string name="private_space_delete_summary" product="desktop" msgid="2654261524341800235">"Ditt privata utrymme tas bort permanent från din enhet. \n\nAlla appar i ditt utrymme och tillhörande data tas bort från enhetens "<b>"interna lagringsutrymme"</b>"."</string>
+    <string name="reset_private_space_delete_dialog" product="default" msgid="8929854517683078216">"Om du har ett privat utrymme på din enhet tas det bort permanent och Google-kontot som lagts till för ditt utrymme tas bort. \n\nAlla appar i ditt utrymme och tillhörande data tas även bort från telefonens "<b>"interna lagringsutrymme"</b>"."</string>
+    <string name="reset_private_space_delete_dialog" product="desktop" msgid="212701183647817405">"Om du har ett privat utrymme på din enhet tas det bort permanent och Google-kontot som lagts till för ditt utrymme tas bort. \n\nAlla appar i ditt utrymme och tillhörande data tas bort från enhetens "<b>"interna lagringsutrymme"</b>"."</string>
+    <string name="style_suggestion_title" product="default" msgid="5542169058581069091">"Anpassa telefonen"</string>
+    <string name="style_suggestion_title" product="desktop" msgid="6633259602241390541">"Anpassa enheten"</string>
+    <string name="storage_os_detail_dialog_system" product="default" msgid="900519793933569665">"Detta omfattar operativsystemet och de filer som behövs för att telefonen ska fungera smidigt. Av säkerhetsskäl går det inte att komma åt de här filerna."</string>
+    <string name="storage_os_detail_dialog_system" product="desktop" msgid="6775876458851128896">"Detta omfattar operativsystemet och de filer som behövs för att enheten ska fungera smidigt. Av säkerhetsskäl går det inte att komma åt de här filerna."</string>
+    <string name="activity_not_found" product="default" msgid="6925342827420626978">"Appen är inte installerad på telefonen."</string>
+    <string name="activity_not_found" product="desktop" msgid="2440711947892938614">"Appen är inte installerad på enheten."</string>
+    <string name="notification_listener_security_warning_summary" product="default" msgid="6430760593378501603">"<xliff:g id="NOTIFICATION_LISTENER_NAME">%1$s</xliff:g>-appen kan läsa alla aviseringar, inklusive personliga uppgifter som namn på kontaktpersoner, foton och texten i mottagna meddelanden. Appen kan även skjuta upp och stänga aviseringar eller använda åtgärdsknappar i aviseringar för att t.ex. svara på telefonsamtal. \n\nAppen kan också aktivera eller inaktivera Stör ej och ändra relaterade inställningar."</string>
+    <string name="notification_listener_security_warning_summary" product="desktop" msgid="4220921495800674165">"<xliff:g id="NOTIFICATION_LISTENER_NAME">%1$s</xliff:g>-appen kan läsa alla aviseringar, inklusive personliga uppgifter som namn på kontaktpersoner, foton och texten i mottagna meddelanden. Appen kan även skjuta upp och stänga aviseringar eller använda åtgärdsknappar i aviseringar. \n\nAppen kan också aktivera eller inaktivera Stör ej och ändra relaterade inställningar."</string>
+    <string name="notif_type_ongoing_summary" product="default" msgid="4609736750050399900">"Kontinuerlig kommunikation från appar som används, navigering, telefonsamtal med mera"</string>
+    <string name="notif_type_ongoing_summary" product="desktop" msgid="2095885335561216334">"Kontinuerlig kommunikation från appar som används, navigering med mera"</string>
+    <string name="usb_default_info" product="default" msgid="3102841746337088387">"När en annan enhet ansluts och den här telefonen låses upp används de här inställningarna. Anslut bara till betrodda enheter."</string>
+    <string name="usb_default_info" product="desktop" msgid="4425262755067415698">"När en annan enhet ansluts och den här enheten låses upp används de här inställningarna. Anslut bara till betrodda enheter."</string>
+    <string name="disabled_by_policy_content_biometric_parental_consent" product="default" msgid="1632474961586870159">"Ge telefonen till en förälder som kan börja konfigurera detta"</string>
+    <string name="disabled_by_policy_content_biometric_parental_consent" product="desktop" msgid="7693039404410022862">"Ge enheten till en förälder som kan börja konfigurera detta"</string>
+    <string name="disabled_by_policy_parental_consent" product="default" msgid="3228137840263314415">"Ge telefonen till en förälder för att få tillåtelse att ändra inställningen."</string>
+    <string name="disabled_by_policy_parental_consent" product="desktop" msgid="1779899136601893549">"Ge enheten till en förälder för att få tillåtelse att ändra inställningen."</string>
+    <string name="condition_zen_summary_phone_muted" product="default" msgid="1107174080067940534">"Ljudet är av på telefonen"</string>
+    <string name="condition_zen_summary_phone_muted" product="desktop" msgid="3749597102905584774">"Ljudet är av på enheten"</string>
+    <string name="disabled_feature_reason_slow_down_phone" product="default" msgid="8659735491296581891">"Funktionen har inaktiverats eftersom den gör telefonen långsammare"</string>
+    <string name="disabled_feature_reason_slow_down_phone" product="desktop" msgid="7800573784344580283">"Funktionen har inaktiverats eftersom den gör enheten långsammare"</string>
+    <string name="mobile_data_settings_summary_auto_switch" product="default" msgid="3598846878817104930">"Enheten byter automatiskt till den här operatören när den är inom räckvidd"</string>
+    <string name="mobile_data_settings_summary_auto_switch" product="desktop" msgid="524891657197879512">"Enheten byter automatiskt till den här operatören när den är inom räckvidd"</string>
+    <string name="thread_network_settings_footer_title" product="default" msgid="1317201778097436182">"Med Thread kan du ansluta dina smarta hemenheter och få förbättrad effektivitet och prestanda.\n\nNär funktionen har aktiverats kan den här enheten läggas till i ett Thread-nätverk så att enheter som stöds av Matter kan styras med telefonen."</string>
+    <string name="thread_network_settings_footer_title" product="desktop" msgid="2799861559795140920">"Med Thread kan du ansluta dina smarta hemenheter och få förbättrad effektivitet och prestanda.\n\nNär funktionen har aktiverats kan den här enheten läggas till i ett Thread-nätverk så att enheter som stöds av Matter kan styras med enheten."</string>
+    <string name="bluetooth_connect_access_dialog_content" product="default" msgid="4057807008863531756">"<xliff:g id="DEVICE_NAME_0">%1$s</xliff:g> vill ansluta till den här telefonen.\n\nDu har inte anslutit till <xliff:g id="DEVICE_NAME_1">%2$s</xliff:g> tidigare."</string>
+    <string name="bluetooth_connect_access_dialog_content" product="desktop" msgid="6980101860822297332">"<xliff:g id="DEVICE_NAME_0">%1$s</xliff:g> vill ansluta till den här enheten.\n\nDu har inte anslutit till <xliff:g id="DEVICE_NAME_1">%2$s</xliff:g> tidigare."</string>
+    <string name="bluetooth_details_permissions_sync_title" product="default" msgid="8409065081160402814">"Synkronisera behörigheter från telefonen"</string>
+    <string name="bluetooth_details_permissions_sync_title" product="desktop" msgid="2734017312695525620">"Synkronisera behörigheter från enheten"</string>
+    <string name="bluetooth_details_permissions_sync_summary" product="default" msgid="8315177725634711706">"Ge klockan samma appbehörigheter som du har gett den här telefonen"</string>
+    <string name="bluetooth_details_permissions_sync_summary" product="desktop" msgid="6376301353616747859">"Ge klockan samma appbehörigheter som du har gett den här enheten"</string>
+    <string name="audio_sharing_comfirm_dialog_content" product="default" msgid="5014698176442588172">"Om du vill dela ljud ska du börja med att ansluta LE Audio-hörlurarna till din telefon"</string>
+    <string name="audio_sharing_comfirm_dialog_content" product="desktop" msgid="162861653770613243">"Om du vill dela ljud ska du börja med att ansluta LE Audio-hörlurarna till din enhet"</string>
+    <string name="supervision_web_content_filters_top_intro" product="default" msgid="4953123663358923689">"Hjälper till att filtrera bort explicit innehåll i vissa appar och webbläsare på den här telefonen. Explicit innehåll kan fortfarande visas i andra appar, enheter eller webbläsare."</string>
+    <string name="supervision_web_content_filters_top_intro" product="desktop" msgid="9032662719049305184">"Hjälper till att filtrera bort explicit innehåll i vissa appar och webbläsare på den här enheten. Explicit innehåll kan fortfarande visas i andra appar, enheter eller webbläsare."</string>
+    <string name="dream_setup_description" product="default" msgid="8438386366154615008">"Välj vad som ska visas på skärmen när surfplattan är dockad. Energiförbrukningen kan öka när en skärmsläckare används."</string>
+    <string name="dream_setup_description" product="desktop" msgid="5397812906934631491">"Välj vad som ska visas på skärmen när enheten är dockad. Energiförbrukningen kan öka när en skärmsläckare används."</string>
+    <string name="display_settings" product="default" msgid="3387606354749476666">"Skärm"</string>
+    <string name="sound_settings" product="default" msgid="1962377912191328861">"Ljud och vibration"</string>
+    <string name="sound_settings" product="desktop" msgid="9077346630096747379">"Ljud"</string>
+    <string name="security_settings_face_enroll_consent_introduction_title" product="default" msgid="4756935885820420260">"Tillåt ansiktslås"</string>
+    <string name="security_settings_face_enroll_consent_introduction_title" product="desktop" msgid="7194334858085778245">"Tillåt upplåsning med ansiktet"</string>
+    <string name="security_settings_face_enroll_introduction_title" product="default" msgid="193847167859538900">"Lås upp med ansiktet"</string>
+    <string name="security_settings_face_enroll_introduction_title" product="desktop" msgid="193847167859538900">"Lås upp med ansiktet"</string>
+    <string name="security_settings_face_footer_learn_more_description" product="default" msgid="2747425608262449212"></string>
+    <string name="security_settings_face_footer_learn_more_description" product="desktop" msgid="2747425608262449212"></string>
+    <string name="security_settings_fingerprint_description" product="default" msgid="1962781280961450006"></string>
+    <string name="security_settings_fingerprint_description" product="desktop" msgid="1962781280961450006"></string>
+    <string name="security_settings_face_preference_title" product="default" msgid="1088234386271687481">"Ansiktslås"</string>
+    <string name="security_settings_face_preference_title" product="desktop" msgid="120316049914434185">"Lås upp med ansiktet"</string>
+    <string name="security_settings_face_profile_preference_title" product="default" msgid="1915373190432876537">"Ansiktslås för jobbprofilen"</string>
+    <string name="security_settings_face_profile_preference_title" product="desktop" msgid="4371857798884456701">"Lås upp med ansiktet för jobbet"</string>
+    <string name="security_settings_face_enroll_education_title" product="default" msgid="8682081307863421676">"Så här ställer du in ansiktslås"</string>
+    <string name="security_settings_face_enroll_education_title" product="desktop" msgid="8858193013681141921">"Så här ställer du in upplåsning med ansiktet"</string>
+    <string name="security_settings_face_enroll_education_title_accessibility" product="default" msgid="3901871844780048667">"Ställa in ansiktslås"</string>
+    <string name="security_settings_face_enroll_education_title_accessibility" product="desktop" msgid="5399523062928830699">"Ställa in upplåsning med ansiktet"</string>
+    <string name="security_settings_face_enroll_education_accessibility_dialog_message" product="default" msgid="2707415907634952273">"Om ansiktslås för tillgänglighet har inaktiverats fungerar inte vissa konfigureringssteg korrekt med TalkBack."</string>
+    <string name="security_settings_face_enroll_education_accessibility_dialog_message" product="desktop" msgid="2684063732021756512">"Om upplåsning för tillgänglighet har inaktiverats fungerar inte vissa konfigureringssteg korrekt med TalkBack."</string>
+    <string name="security_settings_face_enroll_intro_timeout_dialog_title" product="default" msgid="5745003455521734580">"Det går inte att ställa ansiktslås"</string>
+    <string name="security_settings_face_enroll_intro_timeout_dialog_title" product="desktop" msgid="3376165761884832052">"Det går inte att ställa in upplåsning med ansiktet"</string>
+    <string name="security_settings_face_enroll_should_re_enroll_title" product="default" msgid="608503397130033829">"Förbättra prestandan för ansiktslåset"</string>
+    <string name="security_settings_face_enroll_should_re_enroll_title" product="desktop" msgid="6884989592846418817">"Förbättra prestandan för upplåsning med ansiktet"</string>
+    <string name="security_settings_face_enroll_should_re_enroll_subtitle" product="default" msgid="4780958925117205199">"Ställ in ansiktslås igen"</string>
+    <string name="security_settings_face_enroll_should_re_enroll_subtitle" product="desktop" msgid="8465796920263573315">"Ställ in upplåsning med ansiktet igen"</string>
+    <string name="security_settings_face_enroll_must_re_enroll_title" product="default" msgid="6236623084036789183">"Ställ in ansiktslås igen"</string>
+    <string name="security_settings_face_enroll_must_re_enroll_title" product="desktop" msgid="698089042328381491">"Ställ in upplåsning med ansiktet igen"</string>
+    <string name="security_settings_face_enroll_improve_face_alert_title" product="default" msgid="7920547352014027595">"Ställ in ansiktslås"</string>
+    <string name="security_settings_face_enroll_improve_face_alert_title" product="desktop" msgid="194826533308033819">"Ställ in upplåsning med ansiktet"</string>
+    <string name="security_settings_face_settings_use_face_category" product="default" msgid="6762864609006881666">"Använd ansiktslås för"</string>
+    <string name="security_settings_face_settings_use_face_category" product="desktop" msgid="8697471702832224831">"Använd upplåsning med ansiktet för"</string>
+    <string name="security_settings_face_settings_preferences_category" product="default" msgid="1702437691901552436">"När du använder ansiktslås"</string>
+    <string name="security_settings_face_settings_preferences_category" product="desktop" msgid="8363429360453118065">"När du använder upplåsning med ansiktet"</string>
+    <string name="security_settings_face_settings_require_confirmation_details" product="default" msgid="8094562591947583249">"Ansiktslås i appar måste alltid bekräftas"</string>
+    <string name="security_settings_face_settings_require_confirmation_details" product="desktop" msgid="3454469557534188210">"Upplåsning med ansiktet i appar måste alltid bekräftas"</string>
+    <string name="security_settings_face_settings_enroll" product="default" msgid="478045480258037112">"Ställa in ansiktslås"</string>
+    <string name="security_settings_face_settings_enroll" product="desktop" msgid="1975696698406819144">"Ställa in upplåsning med ansiktet"</string>
+    <string name="security_settings_activeunlock_require_face_fingerprint_setup_title" product="default" msgid="3091207415358585820">"Ställ först in ansikts- eller fingeravtryckslås"</string>
+    <string name="security_settings_activeunlock_require_face_fingerprint_setup_title" product="desktop" msgid="3568327776503208253">"Ställ in upplåsning med ansiktet eller fingeravtryckslås"</string>
+    <string name="security_settings_activeunlock_require_face_setup_title" product="default" msgid="5451139327828979605">"Ställ först in ansiktslås"</string>
+    <string name="security_settings_activeunlock_require_face_setup_title" product="desktop" msgid="491404270155205470">"Ställ först in upplåsning med ansiktet"</string>
+    <string name="security_settings_biometric_preference_title" product="default" msgid="301824710578384746">"Ansikts- och fingeravtryckslås"</string>
+    <string name="security_settings_biometric_preference_title" product="desktop" msgid="1931938360990718210">"Lås upp med ansikts- och fingeravtryckslås"</string>
+    <string name="security_settings_work_biometric_preference_title" product="default" msgid="5408195383591972572">"Ansikts- och fingeravtryckslås för jobbprofilen"</string>
+    <string name="security_settings_work_biometric_preference_title" product="desktop" msgid="3219742888338830428">"Lås upp med ansikts- och fingeravtryckslås för jobbprofilen"</string>
+    <string name="biometric_settings_add_face_in_split_mode_title" product="default" msgid="3738938046173770733">"Det går inte att ställa in ansiktslås"</string>
+    <string name="biometric_settings_add_face_in_split_mode_title" product="desktop" msgid="4418550129265286960">"Det går inte att ställa in upplåsning med ansiktet"</string>
+    <string name="biometric_settings_add_face_in_split_mode_message" product="default" msgid="6022144462744038426">"Stäng delad skärm för att ställa in ansiktslås"</string>
+    <string name="biometric_settings_add_face_in_split_mode_message" product="desktop" msgid="3957054157286969169">"Stäng delad skärm för att ställa in upplåsning med ansiktet"</string>
+    <string name="private_space_biometric_title" product="default" msgid="6023715691209902125">"Ansikts- och fingeravtryckslås"</string>
+    <string name="private_space_biometric_title" product="desktop" msgid="7653829341622235589">"Lås upp med ansikts- och fingeravtryckslås"</string>
+    <string name="private_space_biometric_unlock_title" product="default" msgid="4621918727209012807">"Ansikts- och fingeravtryckslås för privat utrymme"</string>
+    <string name="private_space_biometric_unlock_title" product="desktop" msgid="8876292883349974060">"Lås upp privat utrymme med ansikts- och fingeravtryckslås"</string>
+    <string name="private_space_face_title" product="default" msgid="6298308773515063762">"Ansiktslås"</string>
+    <string name="private_space_face_title" product="desktop" msgid="5330390437157810466">"Lås upp med ansiktet"</string>
+    <string name="private_space_face_unlock_title" product="default" msgid="6728077494636366004">"Ansiktslås för privat utrymme"</string>
+    <string name="private_space_face_unlock_title" product="desktop" msgid="5927793887938524983">"Låser upp privat utrymme med ansiktet"</string>
+    <string name="private_space_face_enroll_introduction_title" product="default" msgid="2639038889945177295">"Ställ in ansiktslås för privat utrymme"</string>
+    <string name="private_space_face_enroll_introduction_title" product="desktop" msgid="2178134262452414008">"Ställ in upplåsning med ansiktet för privat utrymme"</string>
+    <string name="private_space_face_settings_require_confirmation_details" product="default" msgid="53946777371581345">"Ansiktslås måste alltid bekräftas"</string>
+    <string name="private_space_face_settings_require_confirmation_details" product="desktop" msgid="8714390228758015030">"Bekräfta alltid vid upplåsning med ansiktet"</string>
+    <string name="face_unlock_skip_face" product="default" msgid="4637244610483409257">"Fortsätt utan ansiktslås"</string>
+    <string name="face_unlock_skip_face" product="desktop" msgid="7830641351453909812">"Fortsätt utan att låsa upp med ansiktet"</string>
+    <string name="unlock_disable_frp_warning_content_face_authbound_keys" product="default" msgid="6653509931873771815">"Ditt skärmlås och ansiktslås tas bort.<xliff:g id="EMPTY_LINE_0">
+
+</xliff:g>Kontaktlös betalning blir inte tillgänglig.<xliff:g id="EMPTY_LINE_1">
+
+</xliff:g>Plånboks- och betalningsappar samt andra appar som kräver autentisering kanske inte fungerar som avsett."</string>
+    <string name="unlock_disable_frp_warning_content_face_authbound_keys" product="desktop" msgid="6850817681051261780">"Ditt skärmlås och upplåsning med ansiktet tas bort.<xliff:g id="EMPTY_LINE_0">
+
+</xliff:g>Kontaktlös betalning blir inte tillgänglig.<xliff:g id="EMPTY_LINE_1">
+
+</xliff:g>Plånboks- och betalningsappar samt andra appar som kräver autentisering kanske inte fungerar som avsett."</string>
+    <string name="unlock_disable_frp_warning_content_face_fingerprint_authbound_keys" product="default" msgid="2154403457672365886">"Ditt skärmlås, ansiktslås och fingeravtryckslås tas bort.<xliff:g id="EMPTY_LINE_0">
+
+</xliff:g>Kontaktlös betalning blir inte tillgänglig.<xliff:g id="EMPTY_LINE_1">
+
+</xliff:g>Plånboks- och betalningsappar samt andra appar som kräver autentisering kanske inte fungerar som avsett."</string>
+    <string name="unlock_disable_frp_warning_content_face_fingerprint_authbound_keys" product="desktop" msgid="6493782879075394085">"Ditt skärmlås, upplåsning med ansiktet och fingeravtryckslås tas bort.<xliff:g id="EMPTY_LINE_0">
+
+</xliff:g>Kontaktlös betalning blir inte tillgänglig.<xliff:g id="EMPTY_LINE_1">
+
+</xliff:g>Plånboks- och betalningsappar samt andra appar som kräver autentisering kanske inte fungerar som avsett."</string>
+    <string name="lockpassword_choose_your_password_header_for_face" product="default" msgid="6148777249889558666">"Ange lösenord för ansiktslås"</string>
+    <string name="lockpassword_choose_your_password_header_for_face" product="desktop" msgid="3207282447348772055">"Ange lösenord för upplåsning med ansikte"</string>
+    <string name="lockpassword_choose_your_pattern_header_for_face" product="default" msgid="2879540885525976497">"Ange mönster för ansiktslås"</string>
+    <string name="lockpassword_choose_your_pattern_header_for_face" product="desktop" msgid="7936694877510431166">"Ange mönster för upplåsning med ansiktet"</string>
+    <string name="lockpassword_choose_your_pin_header_for_face" product="default" msgid="901192866812262140">"Ange pinkod för ansiktslås"</string>
+    <string name="lockpassword_choose_your_pin_header_for_face" product="desktop" msgid="2581974088529231135">"Ange pinkod för upplåsning med ansiktet"</string>
+    <string name="identity_check_issue_card_summary" product="default" msgid="4376934098421152876">"Identitetskoll förhindrar oönskad åtkomst till dina appar. Nu tillgängligt med alla appar som använder fingeravtryckslås eller ansiktslås."</string>
+    <string name="identity_check_issue_card_summary" product="desktop" msgid="5618480959570778444">"Identitetskoll förhindrar oönskad åtkomst till dina appar. Nu tillgängligt med alla appar som använder upplåsning med ansiktet och fingeravtryckslås."</string>
+    <string name="identity_check_promo_card_summary" product="default" msgid="7603823818908679600">"Uppdateringar:\n"<ul><li>"Identitetskoll ger ytterligare skydd för alla appar som använder fingeravtryckslås eller ansiktslås."</li>\n<li>"Med tiden kan fler sätt att verifiera din identitet och skydda appar på enheten läggas till i identitetskollen. "<a href="https://support.google.com/android?p=identity_check">"Läs mer om när och var du är skyddad."</a></li></ul></string>
+    <string name="identity_check_promo_card_summary" product="desktop" msgid="1541590147680628039">"Uppdateringar:\n"<ul><li>"Identitetskoll ger ytterligare skydd för alla appar som använder upplåsning med ansiktet eller fingeravtryckslås."</li>\n<li>"Med tiden kan fler sätt att verifiera din identitet och skydda appar på enheten läggas till i identitetskollen. "<a href="https://support.google.com/android?p=identity_check">"Läs mer om när och var du är skyddad."</a></li></ul></string>
+    <string name="identity_check_notification_summary" product="default" msgid="2031507461011469851">"Identitetskoll förhindrar oönskad åtkomst till dina appar. Nu tillgängligt med alla appar som använder fingeravtryckslås eller ansiktslås."</string>
+    <string name="identity_check_notification_summary" product="desktop" msgid="3273054322161095419">"Identitetskoll förhindrar oönskad åtkomst till dina appar. Nu tillgängligt med alla appar som använder upplåsning med ansiktet och fingeravtryckslås."</string>
+    <string name="usb_use_file_transfers" product="desktop" msgid="237241307335820660">"Filöverföring"</string>
 </resources>

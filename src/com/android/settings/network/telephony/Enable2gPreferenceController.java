@@ -15,9 +15,14 @@
  */
 package com.android.settings.network.telephony;
 
+import android.app.NotificationManager;
 import android.app.settings.SettingsEnums;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.os.UserManager;
+import android.telephony.CarrierConfigManager;
 import android.telephony.RadioAccessFamily;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
@@ -26,14 +31,19 @@ import android.text.TextUtils;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 import androidx.lifecycle.DefaultLifecycleObserver;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
 
+import com.android.internal.annotations.VisibleForTesting;
+import com.android.internal.telephony.RILConstants;
+import com.android.internal.telephony.flags.Flags;
 import com.android.settings.R;
 import com.android.settings.network.AllowedNetworkTypesListener;
 import com.android.settings.network.SubscriptionUtil;
+import com.android.settings.network.telephony.networkchange.NetworkProtectionDialogFragment;
 import com.android.settings.overlay.FeatureFactory;
 import com.android.settingslib.RestrictedSwitchPreference;
 import com.android.settingslib.core.instrumentation.MetricsFeatureProvider;
@@ -58,6 +68,7 @@ public class Enable2gPreferenceController extends TelephonyTogglePreferenceContr
         implements DefaultLifecycleObserver {
 
     private static final String LOG_TAG = "Enable2gPreferenceController";
+    public static final String REQUEST_KEY = "request_key";
     private static final long BITMASK_2G = TelephonyManager.NETWORK_TYPE_BITMASK_GSM
             | TelephonyManager.NETWORK_TYPE_BITMASK_GPRS
             | TelephonyManager.NETWORK_TYPE_BITMASK_EDGE
@@ -72,6 +83,7 @@ public class Enable2gPreferenceController extends TelephonyTogglePreferenceContr
     // This value will be set to true when used with the new Mobile Network Security page
     private boolean mShowSummaryAsSimName;
     private AllowedNetworkTypesListener mAllowedNetworkTypesListener;
+    private Fragment mFragment;
 
     /**
      * Class constructor of "Enable 2G" toggle.
@@ -92,8 +104,9 @@ public class Enable2gPreferenceController extends TelephonyTogglePreferenceContr
      * @param subId is the subscription id
      * @return this instance after initialization
      */
-    public @NonNull Enable2gPreferenceController init(int subId) {
+    public @NonNull Enable2gPreferenceController init(@NonNull Fragment host, int subId) {
         mSubId = subId;
+        mFragment = host;
         mTelephonyManager = mContext.getSystemService(TelephonyManager.class)
                 .createForSubscriptionId(mSubId);
         if (mAllowedNetworkTypesListener == null) {
@@ -111,13 +124,15 @@ public class Enable2gPreferenceController extends TelephonyTogglePreferenceContr
     /**
      * Initialization based on a given subscription id and preference summary.
      *
+     * @param host is the current Fragment object
      * @param subId is the subscription id
      * @param showSummaryAsSimName to show summary as a sim name
      * @return this instance after initialization
      */
-    public @NonNull Enable2gPreferenceController init(int subId, boolean showSummaryAsSimName) {
+    public @NonNull Enable2gPreferenceController init(@NonNull Fragment host, int subId,
+                                                      boolean showSummaryAsSimName) {
         mShowSummaryAsSimName = showSummaryAsSimName;
-        return init(subId);
+        return init(host, subId);
     }
 
     @Override
@@ -141,6 +156,21 @@ public class Enable2gPreferenceController extends TelephonyTogglePreferenceContr
         mRestrictedPreference.useAdminDisabledSummary(true);
         mRestrictedPreference.getRestrictedPreferenceHelper()
                 .setUserRestriction(UserManager.DISALLOW_CELLULAR_2G);
+        if (isCarrierDisabled2gNetwork()) {
+            mRestrictedPreference.setOnPreferenceClickListener(
+                    new Preference.OnPreferenceClickListener() {
+                        @Override
+                        public boolean onPreferenceClick(Preference preference) {
+                            if (!mRestrictedPreference.isChecked()) {
+                                showNetworkProtectionDialog(
+                                        R.string.network_protection_2g_off_alert_dialog_title,
+                                        R.string.network_protection_2g_off_alert_dialog_desc,
+                                        R.string.network_protection_2g_alert_dialog_turn_off_btn);
+                            }
+                            return false;
+                        }
+                    });
+        }
     }
 
     @Override
@@ -166,6 +196,11 @@ public class Enable2gPreferenceController extends TelephonyTogglePreferenceContr
         if (!mShowSummaryAsSimName) {
             preference.setSummary(mContext.getString(R.string.enable_2g_summary));
         }
+
+        if (isCarrierDisabled2gNetwork()) {
+            mFragment.getParentFragmentManager().setFragmentResultListener(REQUEST_KEY, mFragment,
+                    (requestKey, result) -> onDialogResult(result));
+        }
     }
 
     private String getSimCardName() {
@@ -182,14 +217,17 @@ public class Enable2gPreferenceController extends TelephonyTogglePreferenceContr
      * Get the {@link com.android.settings.core.BasePreferenceController.AvailabilityStatus} for
      * this preference given a {@code subId}.
      * <p>
-     * A return value of {@link #AVAILABLE} denotes that the 2g status can be updated for this
+     * A return value of {@link #AVAILABLE} denotes that the 2G status can be updated for this
      * particular subscription.
-     * We return {@link #AVAILABLE} if the following conditions are met and {@link
-     * #CONDITIONALLY_UNAVAILABLE} otherwise.
+     *
+     * Otherwise,
      * <ul>
-     *     <li>The subscription is usable {@link SubscriptionManager#isUsableSubscriptionId}</li>
-     *     <li>The device supports
-     *     <a href="https://cs.android.com/android/platform/superproject/+/master:hardware/interfaces/radio/1.6/IRadio.hal">Radio HAL version 1.6 or greater</a> </li>
+     *     <li>{@link CONDITIONALLY_UNAVAILABLE} is returned if the subscription is invalid
+     *     ({@link SubscriptionManager#isUsableSubscriptionId}).</li>
+     *     <li>{@link UNSUPPORTED_ON_DEVICE} is returned if the modem doesn't support 2G network
+     *     mode or the HAL doesn't support
+     *     <a href="https://cs.android.com/android/platform/superproject/+/master:hardware/interfaces/radio/1.6/IRadio.hal">Radio HAL version 1.6</a>
+     *      or greater.</li>
      * </ul>
      */
     @Override
@@ -198,11 +236,19 @@ public class Enable2gPreferenceController extends TelephonyTogglePreferenceContr
             Log.w(LOG_TAG, "getAvailabilityStatus: Telephony manager not yet initialized");
             return CONDITIONALLY_UNAVAILABLE;
         }
-        boolean visible =
-                SubscriptionManager.isUsableSubscriptionId(subId)
-                        && mTelephonyManager.isRadioInterfaceCapabilitySupported(
-                        mTelephonyManager.CAPABILITY_USES_ALLOWED_NETWORK_TYPES_BITMASK);
-        return visible ? AVAILABLE : CONDITIONALLY_UNAVAILABLE;
+        if ((mTelephonyManager.getSupportedRadioAccessFamily() & BITMASK_2G) == 0) {
+            Log.w(LOG_TAG, "getAvailabilityStatus: 2G unsupported");
+            return UNSUPPORTED_ON_DEVICE;
+        }
+        if (!mTelephonyManager.isRadioInterfaceCapabilitySupported(
+                    mTelephonyManager.CAPABILITY_USES_ALLOWED_NETWORK_TYPES_BITMASK)) {
+            Log.w(LOG_TAG, "getAvailabilityStatus: allowed network types bitmask unsupported");
+            return UNSUPPORTED_ON_DEVICE;
+        }
+        if (!SubscriptionManager.isUsableSubscriptionId(subId)) {
+            return CONDITIONALLY_UNAVAILABLE;
+        }
+        return AVAILABLE;
     }
 
     /**
@@ -222,12 +268,25 @@ public class Enable2gPreferenceController extends TelephonyTogglePreferenceContr
             return true;
         }
 
+        if (!SubscriptionManager.isUsableSubscriptionId(mSubId)) {
+            return false;
+        }
+
         if (mTelephonyManager == null) {
             Log.w(LOG_TAG, "isChecked: Telephony manager not yet initialized");
             return false;
         }
         long currentlyAllowedNetworkTypes = mTelephonyManager.getAllowedNetworkTypesForReason(
                 mTelephonyManager.ALLOWED_NETWORK_TYPES_REASON_ENABLE_2G);
+
+        // Check for corrupted network types and fix if necessary
+        if (currentlyAllowedNetworkTypes == 0) {
+            long defaultNetworkTypes = RadioAccessFamily.getRafFromNetworkType(
+                    RILConstants.PREFERRED_NETWORK_MODE);
+            mTelephonyManager.setAllowedNetworkTypesForReason(
+                    mTelephonyManager.ALLOWED_NETWORK_TYPES_REASON_ENABLE_2G, defaultNetworkTypes);
+            currentlyAllowedNetworkTypes = defaultNetworkTypes;
+        }
         return (currentlyAllowedNetworkTypes & BITMASK_2G) == 0;
     }
 
@@ -244,6 +303,13 @@ public class Enable2gPreferenceController extends TelephonyTogglePreferenceContr
      */
     @Override
     public boolean setChecked(boolean isChecked) {
+        if (!isChecked && isCarrierDisabled2gNetwork()) {
+            return true;
+        }
+        return setAllowedNetworkTypes(isChecked);
+    }
+
+    private boolean setAllowedNetworkTypes(boolean isChecked) {
         if (isDisabledByAdmin()) {
             return false;
         }
@@ -288,5 +354,45 @@ public class Enable2gPreferenceController extends TelephonyTogglePreferenceContr
                         TelephonyManager.ALLOWED_NETWORK_TYPES_REASON_USER));
         Log.i(LOG_TAG, "PreferredNetworkMode: " + networkMode);
         return TelephonyManager.NETWORK_MODE_GSM_ONLY == networkMode;
+    }
+
+    private boolean isCarrierDisabled2gNetwork() {
+        if (!Flags.keyCarrier2gToggle()) {
+            return false;
+        }
+        final CarrierConfigManager carrierConfigManager =
+                mContext.getSystemService(CarrierConfigManager.class);
+
+        final PersistableBundle bundle = carrierConfigManager.getConfigForSubId(mSubId);
+        if (bundle == null) {
+            return false;
+        }
+        return bundle.getBoolean(
+                CarrierConfigManager.KEY_CARRIER_DEFAULT_2G_PROTECTION_ENABLED_BOOL);
+    }
+
+
+    private void showNetworkProtectionDialog(int titleResId, int descResId,
+                                             int positiveBtntxtResId) {
+        NetworkProtectionDialogFragment.show(mFragment, mContext.getString(titleResId),
+                mContext.getString(descResId), mContext.getString(positiveBtntxtResId));
+    }
+
+    @VisibleForTesting
+    protected void onDialogResult(@NonNull Bundle result) {
+        if (result.getInt(REQUEST_KEY) == DialogInterface.BUTTON_POSITIVE) {
+            if (mRestrictedPreference.isChecked()) {
+                mRestrictedPreference.setChecked(false);
+            }
+            setAllowedNetworkTypes(false);
+            NotificationManager notificationManager = mContext.getSystemService(
+                    NotificationManager.class);
+            notificationManager.cancel(
+                    NetworkChangeNotification.NETWORK_PROTECTION_2G_NOTIFICATION_ID + mSubId);
+        } else {
+            if (!mRestrictedPreference.isChecked()) {
+                mRestrictedPreference.setChecked(true);
+            }
+        }
     }
 }

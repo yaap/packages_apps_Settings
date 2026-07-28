@@ -30,21 +30,29 @@ import android.service.notification.NotificationListenerService
 import android.util.Log
 import com.android.settings.R
 import com.android.settings.Settings.NotificationAccessSettingsActivity
+import com.android.settings.applications.specialaccess.notificationaccess.AppInfoNotificationAccessScreen.Companion.KEY_SERVICE
 import com.android.settings.contract.TAG_DEVICE_STATE_SCREEN
 import com.android.settings.core.PreferenceScreenMixin
 import com.android.settings.flags.Flags
 import com.android.settings.utils.makeLaunchIntent
+import com.android.settingslib.metadata.CatalystFlagProviderFactory
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.preferenceHierarchy
 import kotlinx.coroutines.CoroutineScope
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_NOTIFICATIONS
 
 /** "Apps" -> "Special app access" -> "Notification read, reply & control" */
 @ProvidePreferenceScreen(AppsNotificationAccessScreen.KEY)
 open class AppsNotificationAccessScreen : PreferenceScreenMixin {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_NOTIFICATIONS, TAG_DEVICE_STATE_SCREEN)
 
     override val key: String
         get() = KEY
+
+    //TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.notification_access_purpose
 
     override val title: Int
         get() = R.string.manage_notification_access_title
@@ -54,7 +62,6 @@ open class AppsNotificationAccessScreen : PreferenceScreenMixin {
 
     override fun getMetricsCategory() = SettingsEnums.NOTIFICATION_ACCESS
 
-    override fun tags(context: Context) = arrayOf(TAG_DEVICE_STATE_SCREEN)
 
     override fun isFlagEnabled(context: Context) = Flags.catalystAppList()
 
@@ -67,12 +74,20 @@ open class AppsNotificationAccessScreen : PreferenceScreenMixin {
         preferenceHierarchy(context) {
             val services = loadNotificationListenerServices(context)
             for (service in services) {
-                val arguments =
-                    Bundle(1).apply {
-                        putString("app", service.packageName)
-                        putString("serviceName", service.name)
-                    }
-                +(AppInfoNotificationAccessScreen.KEY args arguments)
+                if (CatalystFlagProviderFactory.catalystUseKeyParameters()) {
+                    val parameters =
+                        AppInfoNotificationAccessScreen.parametersSchema.prepare(
+                            KEY_SERVICE to service.packageName + "/" + service.name
+                        )
+                    +(AppInfoNotificationAccessScreen.KEY withParameters parameters)
+                } else {
+                    val arguments =
+                        Bundle(1).apply {
+                            putString("app", service.packageName)
+                            putString("serviceName", service.name)
+                        }
+                    +(AppInfoNotificationAccessScreen.KEY args arguments)
+                }
             }
         }
 

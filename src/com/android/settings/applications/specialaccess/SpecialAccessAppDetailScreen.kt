@@ -29,6 +29,8 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceScreen
 import com.android.settings.R
 import com.android.settings.applications.AppInfoHeaderPreference
+import com.android.settings.applications.CatalystAppListFragment.Companion.DEFAULT_SHOW_SYSTEM
+import com.android.settings.applications.InstalledPackageName
 import com.android.settings.applications.PackageInfoProvider
 import com.android.settings.applications.applicationInfoComparator
 import com.android.settings.applications.appops.AppOpsModeDataStore
@@ -44,13 +46,22 @@ import com.android.settings.widget.FooterPreferenceMetadata
 import com.android.settingslib.datastore.HandlerExecutor
 import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.KeyedObserver
+import com.android.settingslib.metadata.CatalystFlagProviderFactory
+import com.android.settingslib.metadata.KEY_PACKAGE_NAME
+import com.android.settingslib.metadata.KeyParametersSchema
+import com.android.settingslib.metadata.ParameterizedPreferenceScreenArgumentsFactory
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
 import com.android.settingslib.metadata.PreferenceTitleProvider
+import com.android.settingslib.metadata.SensitivityLevel
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
+import com.android.settingslib.metadata.ValidatedKeyParameters
+import com.android.settingslib.metadata.packageName
 import com.android.settingslib.metadata.preferenceHierarchy
+import com.android.settingslib.metadata.preferencesapi.types.CustomEnum
 import com.android.settingslib.preference.PreferenceBinding
 import com.android.settingslib.spaprivileged.model.app.AppListRepositoryImpl
 import com.android.settingslib.utils.applications.PackageObservable
@@ -58,10 +69,19 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 
 /** Abstract screen to display app details for special access. */
-abstract class SpecialAccessAppDetailScreen(context: Context, override val arguments: Bundle) :
+abstract class SpecialAccessAppDetailScreen
+private constructor(
+    val context: Context,
+    @Deprecated(
+        "This property will be removed once the catalyst framework stops passing the arguments as a bundle. Use the keyParameters instead."
+    )
+    final override val arguments: Bundle?,
+    final override val keyParameters: ValidatedKeyParameters?,
+) :
     PreferenceScreenMixin,
     PreferenceBinding,
     PreferenceAvailabilityProvider,
@@ -83,6 +103,16 @@ abstract class SpecialAccessAppDetailScreen(context: Context, override val argum
             setModeByUid,
         )
 
+    @Deprecated(
+        "This constructor will be removed once the catalyst framework stops passing the arguments as a bundle. Use the other constructor instead."
+    )
+    constructor(context: Context, args: Bundle) : this(context, args, null)
+
+    constructor(
+        context: Context,
+        keyParameters: ValidatedKeyParameters,
+    ) : this(context, null, keyParameters)
+
     /** App ops to control. */
     abstract val op: Int
 
@@ -102,9 +132,15 @@ abstract class SpecialAccessAppDetailScreen(context: Context, override val argum
         get() = null
 
     override val packageName
-        get() = arguments.packageName
+        by lazy {
+            if (CatalystFlagProviderFactory.catalystUseKeyParameters()) {
+                keyParameters!!.packageName ?: "null"
+            } else {
+                arguments!!.packageName
+            }
+        }
 
-    override var packageInfo: PackageInfo? = context.getPackageInfo(packageName)
+    override var packageInfo: PackageInfo? = if(packageName != "null") context.getPackageInfo(packageName) else null
 
     override val highlightMenuKey
         get() = R.string.menu_key_apps
@@ -116,7 +152,7 @@ abstract class SpecialAccessAppDetailScreen(context: Context, override val argum
         enabled || enabledSetting == PackageManager.COMPONENT_ENABLED_STATE_DISABLED_USER
 
     override fun getTitle(context: Context) =
-        if (isFromAppInfo(arguments)) {
+        if (isFromAppInfo()) {
             context.getString(screenTitle)
         } else {
             packageInfo?.applicationInfo?.loadLabel(context.packageManager)
@@ -135,7 +171,7 @@ abstract class SpecialAccessAppDetailScreen(context: Context, override val argum
         val appInfo = packageInfo?.applicationInfo
         if (preference !is PreferenceScreen) {
             preference.icon =
-                if (appInfo != null && !isFromAppInfo(arguments)) {
+                if (appInfo != null && !isFromAppInfo()) {
                     IconDrawableFactory.newInstance(preference.context).getBadgedIcon(appInfo)
                 } else {
                     null
@@ -173,7 +209,12 @@ abstract class SpecialAccessAppDetailScreen(context: Context, override val argum
         preferenceHierarchy(context) {
             val packageInfoProvider = this@SpecialAccessAppDetailScreen
             +AppInfoHeaderPreference(packageInfoProvider)
-            +SpecialAccessSwitchPreference(switchPreferenceTitle, dataStore, packageInfoProvider)
+            +SpecialAccessSwitchPreference(
+                switchPreferenceTitle,
+                dataStore,
+                packageInfoProvider,
+                key,
+            )
             +FooterPreference(footerPreferenceTitle)
         }
 
@@ -198,12 +239,51 @@ abstract class SpecialAccessAppDetailScreen(context: Context, override val argum
     /** Returns the action metrics when the access is changed. */
     open fun getAccessChangeActionMetrics(allowed: Boolean): Int = 0
 
-    companion object {
+    companion object : ParameterizedPreferenceScreenArgumentsFactory {
+        const val KEY_INTENT_SOURCE = "source"
+
+        @JvmStatic
+        override val parametersSchema = KeyParametersSchema {
+            parameter(KEY_PACKAGE_NAME,  "The package name of the app", required = false, type = InstalledPackageName)
+        }
+
+        /**
+         * Returns the parameters for the special access app detail parameterized screen with the
+         * default show system value and no custom filter.
+         */
+        @JvmStatic
+        override fun keyParameters(context: Context) =
+            parameters(context, DEFAULT_SHOW_SYSTEM, { _, _ -> true }).map { bundle ->
+                parametersSchema.prepare(bundle)
+            }
+
         /**
          * Returns the parameters for the special access app detail parameterized screen.
          *
          * The [filter] MUST be as quick as possible, otherwise the app list UI will flicker.
          */
+        fun keyParameters(
+            context: Context,
+            showSystemApp: Boolean,
+            customFilter: (Context, ApplicationInfo?) -> Boolean,
+        ): Flow<ValidatedKeyParameters> {
+            // TODO (b/457649430): when the catalyst framework stops passing the arguments as a
+            // bundle: replace the parameters(context) call to the actual implementation,
+            // or make this function the primary implementation and the legacy parameters() should
+            // call this one.
+            return parameters(context, showSystemApp, customFilter).map { bundle ->
+                parametersSchema.prepare(bundle)
+            }
+        }
+
+        /**
+         * Returns the parameters for the special access app detail parameterized screen.
+         *
+         * The [filter] MUST be as quick as possible, otherwise the app list UI will flicker.
+         */
+        @Deprecated(
+            "This method will be removed once the catalyst framework stops passing the arguments as a bundle. Use keyParameters instead."
+        )
         fun parameters(
             context: Context,
             showSystemApp: Boolean,
@@ -240,7 +320,15 @@ abstract class SpecialAccessAppDetailScreen(context: Context, override val argum
      *
      * If it's from the AppInfo page, we will remove the icon and also update the entry title.
      */
-    private fun isFromAppInfo(arguments: Bundle): Boolean = arguments.source == AppInfoScreen.SOURCE
+    private fun isFromAppInfo(): Boolean =
+        if (CatalystFlagProviderFactory.catalystUseKeyParameters()) {
+            // Since we removed this from the parameterSchema it will always
+            // return false, but screens never launch this via the api anyway.
+            //keyParameters!![KEY_INTENT_SOURCE] == AppInfoScreen.SOURCE
+            false
+        } else {
+            arguments!!.source == AppInfoScreen.SOURCE
+        }
 }
 
 private class FooterPreference(override val title: Int) :
@@ -248,4 +336,11 @@ private class FooterPreference(override val title: Int) :
 
     override val key: String
         get() = "footer"
+
+    override val purpose: Int
+        get() = R.string.footer_purpose
+
+    override val sensitivityLevel = SensitivityLevel.DO_NOT_EXPOSE
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
 }

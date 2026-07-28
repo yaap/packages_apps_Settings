@@ -20,7 +20,6 @@ import android.app.Activity
 import android.app.settings.SettingsEnums.ACTION_AIRPLANE_TOGGLE
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.os.UserHandle
 import android.os.UserManager
 import android.provider.Settings
@@ -34,20 +33,27 @@ import com.android.settings.contract.KEY_AIRPLANE_MODE
 import com.android.settings.metrics.PreferenceActionMetricsProvider
 import com.android.settings.network.SatelliteRepository.Companion.isSatelliteOn
 import com.android.settings.restriction.PreferenceRestrictionMixin
-import com.android.settingslib.RestrictedSwitchPreference
 import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.KeyValueStoreDelegate
 import com.android.settingslib.datastore.SettingsGlobalStore
+import com.android.settingslib.metadata.HERO_SET
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.ReadWritePermit
 import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.metadata.SwitchPreference
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
+import com.android.settingslib.widget.MainSwitchPreferenceBinding
 
 // LINT.IfChange
-class AirplaneModePreference :
-    SwitchPreference(KEY, R.string.airplane_mode),
+open class AirplaneModePreference :
+    SwitchPreference(
+        KEY,
+        R.string.airplane_mode_settings_airplane_mode_on_purpose,
+        R.string.airplane_mode,
+    ),
     PreferenceActionMetricsProvider,
     PreferenceAvailabilityProvider,
     PreferenceLifecycleProvider,
@@ -56,11 +62,17 @@ class AirplaneModePreference :
     override val icon: Int
         @DrawableRes get() = R.drawable.ic_airplanemode_active
 
-    override fun tags(context: Context) = arrayOf(KEY_AIRPLANE_MODE)
+    override fun tags(context: Context) = arrayOf(KEY_AIRPLANE_MODE, HERO_SET)
 
-    override fun isAvailable(context: Context) =
-        (context.resources.getBoolean(R.bool.config_show_toggle_airplane) &&
-            !context.packageManager.hasSystemFeature(PackageManager.FEATURE_LEANBACK))
+    override val availabilityDescription = "The device must support configuring airplane mode."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
+
+    override fun isAvailable(context: Context) = context.isAirplaneModeEligible()
+
+    override fun getEnabledDescription(): String = "This setting must not be restricted by a device administrator. Airplane mode cannot be changed during an emergency call. Airplane mode cannot be changed while satellite messaging is active."
+
+    override fun getEnabledStability() = PreconditionStability.UNSTABLE
 
     override fun isEnabled(context: Context) = super<PreferenceRestrictionMixin>.isEnabled(context)
 
@@ -81,7 +93,7 @@ class AirplaneModePreference :
         }
 
     override val sensitivityLevel
-        get() = SensitivityLevel.HIGH_SENSITIVITY
+        get() = SensitivityLevel.MUST_PROVIDE_UNDO
 
     override val preferenceActionMetrics: Int
         get() = ACTION_AIRPLANE_TOGGLE
@@ -89,7 +101,7 @@ class AirplaneModePreference :
     override fun storage(context: Context) = createDataStore(context)
 
     override fun onCreate(context: PreferenceLifecycleContext) {
-        context.requirePreference<RestrictedSwitchPreference>(KEY).onPreferenceChangeListener =
+        context.requirePreference<Preference>(key).onPreferenceChangeListener =
             Preference.OnPreferenceChangeListener { _: Preference, _: Any ->
                 if (isInEcmMode(context)) {
                     showEcmDialog(context)
@@ -154,8 +166,13 @@ class AirplaneModePreference :
             override val keyValueStoreDelegate
                 get() = settingsStore
 
+            override fun contains(key: String): Boolean = settingsStore.contains(KEY)
+
+            override fun <T : Any> getValue(key: String, valueType: Class<T>) =
+                settingsStore.getValue(KEY, valueType)
+
             override fun <T : Any> setValue(key: String, valueType: Class<T>, value: T?) {
-                settingsStore.setValue(key, valueType, value)
+                settingsStore.setValue(KEY, valueType, value)
 
                 val intent = Intent(Intent.ACTION_AIRPLANE_MODE_CHANGED)
                 intent.putExtra("state", getBoolean(KEY)!!)
@@ -164,4 +181,34 @@ class AirplaneModePreference :
         }
     }
 }
+
 // LINT.ThenChange(AirplaneModePreferenceController.java)
+
+/** Preference for the Airplane Mode toggle in the Network & Internet screen. */
+class AirplaneModeTogglePreference : AirplaneModePreference() {
+
+    override val availabilityDescription = "The device must support configuring airplane mode and must not have a paired watch."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
+
+    override fun isAvailable(context: Context) =
+        context.isAirplaneModeEligible() && !context.hasPairedWatchForAirplaneModeSync()
+}
+
+/** Preference for the Airplane Mode toggle in the Airplane Mode Settings screen. */
+class AirplaneModeDetailsPreference : AirplaneModePreference(), MainSwitchPreferenceBinding {
+
+    override val availabilityDescription = "The device must support configuring airplane mode and must not have a paired watch."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
+
+    override fun isAvailable(context: Context) =
+        context.isAirplaneModeEligible() && context.hasPairedWatchForAirplaneModeSync()
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
+
+    // Since the AirplaneModeSettingsScreen is indexed and already points to this main switch, we
+    // don't want this to also be indexed causing 2 results for Settings search.
+    override val indexable: Boolean
+        get() = false
+}

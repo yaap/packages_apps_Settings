@@ -127,9 +127,9 @@ public class GuestTelephonyPreferenceControllerTest {
         mUserManager.setIsAdminUser(true);
         mUserManager.setUserSwitcherEnabled(true);
         mUserManager.setSupportsMultipleUsers(true);
-        mUserManager.setUserTypeEnabled(UserManager.USER_TYPE_FULL_RESTRICTED, true);
-        mUserManager.setUserTypeEnabled(UserManager.USER_TYPE_FULL_SYSTEM, true);
-        mUserManager.setUserTypeEnabled(UserManager.USER_TYPE_FULL_GUEST, true);
+        mUserManager.setUserTypeSupported(UserManager.USER_TYPE_FULL_RESTRICTED, true);
+        mUserManager.setUserTypeSupported(UserManager.USER_TYPE_FULL_SYSTEM, true);
+        mUserManager.setUserTypeSupported(UserManager.USER_TYPE_FULL_GUEST, true);
 
         final GuestTelephonyPreferenceController controller =
                 new GuestTelephonyPreferenceController(mContext, "fake_key");
@@ -150,7 +150,6 @@ public class GuestTelephonyPreferenceControllerTest {
         controller.setChecked(true);
 
         assertThat(mUserManager.hasGuestUserRestriction("no_outgoing_calls", false)).isTrue();
-        assertThat(mUserManager.hasGuestUserRestriction("no_sms", true)).isTrue();
     }
 
     @Test
@@ -163,7 +162,6 @@ public class GuestTelephonyPreferenceControllerTest {
         controller.setChecked(false);
 
         assertThat(mUserManager.hasGuestUserRestriction("no_outgoing_calls", true)).isTrue();
-        assertThat(mUserManager.hasGuestUserRestriction("no_sms", true)).isTrue();
     }
 
     @Test
@@ -175,9 +173,9 @@ public class GuestTelephonyPreferenceControllerTest {
         mUserManager.setIsAdminUser(true);
         mUserManager.setUserSwitcherEnabled(true);
         mUserManager.setSupportsMultipleUsers(true);
-        mUserManager.setUserTypeEnabled(UserManager.USER_TYPE_FULL_RESTRICTED, true);
-        mUserManager.setUserTypeEnabled(UserManager.USER_TYPE_FULL_SYSTEM, true);
-        mUserManager.setUserTypeEnabled(UserManager.USER_TYPE_FULL_GUEST, true);
+        mUserManager.setUserTypeSupported(UserManager.USER_TYPE_FULL_RESTRICTED, true);
+        mUserManager.setUserTypeSupported(UserManager.USER_TYPE_FULL_SYSTEM, true);
+        mUserManager.setUserTypeSupported(UserManager.USER_TYPE_FULL_GUEST, true);
         mDpm.setPolicyEnforcementInfoForUserRestriction(DISALLOW_REMOVE_USER,
                 new PolicyEnforcementInfo(List.of(DPC_ADMIN)));
 
@@ -200,9 +198,9 @@ public class GuestTelephonyPreferenceControllerTest {
         mUserManager.setIsAdminUser(true);
         mUserManager.setUserSwitcherEnabled(true);
         mUserManager.setSupportsMultipleUsers(true);
-        mUserManager.setUserTypeEnabled(UserManager.USER_TYPE_FULL_RESTRICTED, true);
-        mUserManager.setUserTypeEnabled(UserManager.USER_TYPE_FULL_SYSTEM, true);
-        mUserManager.setUserTypeEnabled(UserManager.USER_TYPE_FULL_GUEST, true);
+        mUserManager.setUserTypeSupported(UserManager.USER_TYPE_FULL_RESTRICTED, true);
+        mUserManager.setUserTypeSupported(UserManager.USER_TYPE_FULL_SYSTEM, true);
+        mUserManager.setUserTypeSupported(UserManager.USER_TYPE_FULL_GUEST, true);
         mDpm.setPolicyEnforcementInfoForUserRestriction(DISALLOW_REMOVE_USER,
                 new PolicyEnforcementInfo(Collections.EMPTY_LIST));
         mDpm.setPolicyEnforcementInfoForUserRestriction(DISALLOW_ADD_USER,

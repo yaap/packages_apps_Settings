@@ -229,7 +229,7 @@ public class CreateShortcutPreferenceControllerTest {
         when(mContext.getResources()).thenReturn(mResources);
         when(mResources.getBoolean(R.bool.config_show_sim_info)).thenReturn(true);
         when(mContext.getSystemService(UserManager.class)).thenReturn(mUserManager);
-        when(mUserManager.isGuestUser()).thenReturn(false);
+        when(mUserManager.isAdminUser()).thenReturn(true);
         when(mUserManager.hasUserRestriction(
                 UserManager.DISALLOW_CONFIG_MOBILE_NETWORKS)).thenReturn(false);
 
@@ -241,7 +241,7 @@ public class CreateShortcutPreferenceControllerTest {
         when(mContext.getResources()).thenReturn(mResources);
         when(mResources.getBoolean(R.bool.config_show_sim_info)).thenReturn(false);
         when(mContext.getSystemService(UserManager.class)).thenReturn(mUserManager);
-        when(mUserManager.isGuestUser()).thenReturn(false);
+        when(mUserManager.isAdminUser()).thenReturn(true);
         when(mUserManager.hasUserRestriction(
                 UserManager.DISALLOW_CONFIG_MOBILE_NETWORKS)).thenReturn(false);
 
@@ -249,11 +249,11 @@ public class CreateShortcutPreferenceControllerTest {
     }
 
     @Test
-    public void canShowDataUsage_isGuestUser_returnFalse() {
+    public void canShowDataUsage_isNotAdminUser_returnFalse() {
         when(mContext.getResources()).thenReturn(mResources);
         when(mResources.getBoolean(R.bool.config_show_sim_info)).thenReturn(true);
         when(mContext.getSystemService(UserManager.class)).thenReturn(mUserManager);
-        when(mUserManager.isGuestUser()).thenReturn(true);
+        when(mUserManager.isAdminUser()).thenReturn(false);
         when(mUserManager.hasUserRestriction(
                 UserManager.DISALLOW_CONFIG_MOBILE_NETWORKS)).thenReturn(false);
 
@@ -265,11 +265,33 @@ public class CreateShortcutPreferenceControllerTest {
         when(mContext.getResources()).thenReturn(mResources);
         when(mResources.getBoolean(R.bool.config_show_sim_info)).thenReturn(true);
         when(mContext.getSystemService(UserManager.class)).thenReturn(mUserManager);
-        when(mUserManager.isGuestUser()).thenReturn(false);
+        when(mUserManager.isAdminUser()).thenReturn(true);
         when(mUserManager.hasUserRestriction(
                 UserManager.DISALLOW_CONFIG_MOBILE_NETWORKS)).thenReturn(true);
 
         assertThat(mController.canShowDataUsage()).isFalse();
+    }
+
+    @Test
+    public void canShowNightDisplay_available_returnTrue() {
+        when(mContext.getResources()).thenReturn(mResources);
+        when(mResources.getBoolean(
+                com.android.internal.R.bool.config_nightDisplayAvailable)).thenReturn(true);
+        when(mResources.getBoolean(
+                com.android.internal.R.bool.config_cv_available)).thenReturn(false);
+
+        assertThat(mController.canShowNightDisplay()).isTrue();
+    }
+
+    @Test
+    public void canShowNightDisplay_unavailable_returnFalse() {
+        when(mContext.getResources()).thenReturn(mResources);
+        when(mResources.getBoolean(
+                com.android.internal.R.bool.config_nightDisplayAvailable)).thenReturn(true);
+        when(mResources.getBoolean(
+                com.android.internal.R.bool.config_cv_available)).thenReturn(true);
+
+        assertThat(mController.canShowNightDisplay()).isFalse();
     }
 
     private void setupActivityInfo(String name) {

@@ -21,6 +21,7 @@ import static android.telephony.UiccSlotInfo.CARD_STATE_INFO_PRESENT;
 import static com.google.common.truth.Truth.assertThat;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
@@ -28,6 +29,7 @@ import static org.mockito.Mockito.when;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.telephony.SubscriptionInfo;
 import android.telephony.SubscriptionManager;
 import android.telephony.TelephonyManager;
@@ -42,6 +44,7 @@ import androidx.test.ext.junit.runners.AndroidJUnit4;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
@@ -667,6 +670,25 @@ public class UiccSlotUtilTest {
         verify(latch).countDown();
     }
 
+    @Test
+    public void simCardStateChangeReceiver_registerOn_registersWithReceiverExported() {
+        CountDownLatch latch = new CountDownLatch(1);
+        UiccSlotUtil.SimCardStateChangeReceiver receiver =
+                new UiccSlotUtil.SimCardStateChangeReceiver(latch);
+
+        receiver.registerOn(mContext);
+
+        ArgumentCaptor<IntentFilter> filterCaptor = ArgumentCaptor.forClass(IntentFilter.class);
+        verify(mContext).registerReceiver(
+                eq(receiver),
+                filterCaptor.capture(),
+                eq(Context.RECEIVER_EXPORTED));
+        // Verify: The intent filter contains the correct action
+        assertThat(filterCaptor.getValue().hasAction(
+                        TelephonyManager.ACTION_SIM_CARD_STATE_CHANGED))
+                .isTrue();
+    }
+
     private void compareTwoUiccSlotMappings(Collection<UiccSlotMapping> testUiccSlotMappings,
             Collection<UiccSlotMapping> verifyUiccSlotMappings) {
         assertThat(testUiccSlotMappings.size()).isEqualTo(verifyUiccSlotMappings.size());
@@ -690,13 +712,35 @@ public class UiccSlotUtilTest {
 
     private SubscriptionInfo createSubscriptionInfo(int subId, int logicalSlotIndex, int portIndex,
             boolean isEmbedded, int cardId) {
-        return new SubscriptionInfo(
-                subId, "",
-                logicalSlotIndex, "", "", 0, 0, "", 0, null, "", "", "",
-                isEmbedded /* isEmbedded */,
-                null, "",
-                cardId,
-                false, null, false, 0, 0, 0, null, null, true, portIndex);
+        return new SubscriptionInfo.Builder()
+                .setId(subId)
+                .setIccId("")
+                .setSimSlotIndex(logicalSlotIndex)
+                .setDisplayName("")
+                .setCarrierName("")
+                .setDisplayNameSource(0)
+                .setIconTint(0)
+                .setNumber("")
+                .setDataRoaming(0)
+                .setIcon(null)
+                .setMcc("")
+                .setMnc("")
+                .setCountryIso("")
+                .setEmbedded(isEmbedded)
+                .setNativeAccessRules(null)
+                .setCardString("")
+                .setCardId(cardId)
+                .setOpportunistic(false)
+                .setGroupUuid(null)
+                .setGroupDisabled(false)
+                .setCarrierId(0)
+                .setProfileClass(0)
+                .setType(0)
+                .setGroupOwner(null)
+                .setCarrierConfigAccessRules(null)
+                .setUiccApplicationsEnabled(true)
+                .setPortIndex(portIndex)
+                .build();
     }
 
     private UiccCardInfo createUiccCardInfo(boolean isEuicc, int cardId, int physicalSlotIndex,

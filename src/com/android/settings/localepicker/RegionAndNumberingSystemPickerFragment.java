@@ -28,7 +28,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
+import android.widget.LinearLayout;
 import android.widget.SearchView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -75,7 +77,7 @@ public class RegionAndNumberingSystemPickerFragment extends DashboardFragment im
     private static final String KEY_PREFERENCE_APP_LOCALE_SUGGESTED_LIST =
             "app_locale_suggested_list";
     private static final String KEY_TOP_INTRO_PREFERENCE = "top_intro_region";
-    private static final String KEY_PREFERENCE_SCREEN = "key_system_language_picker_page";
+    private static final String KEY_PREFERENCE_SCREEN = "key_region_numbering_system";
     private static final String EXTRA_EXPAND_SEARCH_VIEW = "expand_search_view";
     private static final String EXTRA_SEARCH_VIEW_QUERY = "search_view_query";
 
@@ -189,6 +191,20 @@ public class RegionAndNumberingSystemPickerFragment extends DashboardFragment im
             } else {
                 mSearchView.setQuery(null, false /* submit */);
             }
+
+            // Set zero margin and padding to align with the text horizontally in the preference
+            final TextView searchViewTextView = (TextView) mSearchView.findViewById(
+                    com.android.internal.R.id.search_src_text);
+            searchViewTextView.setPadding(0, searchViewTextView.getPaddingTop(), 0,
+                    searchViewTextView.getPaddingBottom());
+            searchViewTextView.setTextAppearance(R.style.TextAppearance_SearchBar);
+            final View editFrame = mSearchView.findViewById(
+                    com.android.internal.R.id.search_edit_frame);
+            final LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) editFrame
+                    .getLayoutParams();
+            params.setMarginStart(0);
+            params.setMarginEnd(0);
+            editFrame.setLayoutParams(params);
         }
     }
 
@@ -328,7 +344,7 @@ public class RegionAndNumberingSystemPickerFragment extends DashboardFragment im
 
     @Override
     protected int getPreferenceScreenResId() {
-        return R.xml.system_language_picker;
+        return R.xml.region_numbering_system_picker;
     }
 
     @Override

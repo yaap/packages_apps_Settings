@@ -46,8 +46,9 @@ import androidx.annotation.VisibleForTesting;
 import com.android.settings.R;
 import com.android.settings.SetupWizardUtils;
 import com.android.settings.Utils;
-import com.android.settings.connectivity.Flags;
+import com.android.settings.accessibility.shared.utils.SetupWizardUtilKt;
 import com.android.settings.overlay.FeatureFactory;
+import com.android.settings.wifi.WifiUtils;
 import com.android.settings.wifi.dpp.WifiDppUtils;
 import com.android.settingslib.core.lifecycle.ObservableActivity;
 import com.android.settingslib.widget.SettingsThemeHelper;
@@ -126,7 +127,7 @@ public class WifiDialogActivity extends ObservableActivity implements WifiDialog
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         mIntent = getIntent();
-        if (WizardManagerHelper.isSetupWizardIntent(mIntent)) {
+        if (WizardManagerHelper.isAnySetupWizard(mIntent)) {
             setTheme(SetupWizardUtils.getTransparentTheme(this, mIntent));
         } else {
             int themeId = SettingsThemeHelper.isExpressiveTheme(this)
@@ -141,7 +142,7 @@ public class WifiDialogActivity extends ObservableActivity implements WifiDialog
         }
 
         mIsWifiTrackerLib = !TextUtils.isEmpty(mIntent.getStringExtra(KEY_CHOSEN_WIFIENTRY_KEY));
-        if (Flags.wifiMultiuser()) {
+        if (WifiUtils.isWifiMultiuserEnabled()) {
             mUseWifiDialog2ForAddNetwork =
                 TextUtils.isEmpty(mIntent.getStringExtra(KEY_CHOSEN_WIFIENTRY_KEY))
                 && TextUtils.isEmpty(mIntent.getStringExtra(KEY_ACCESS_POINT_STATE));
@@ -188,12 +189,10 @@ public class WifiDialogActivity extends ObservableActivity implements WifiDialog
             createDialogWithSuwTheme();
         } else {
             if (mIsWifiTrackerLib || mUseWifiDialog2ForAddNetwork) {
-                final int mode = isAtLoginScreen()
-                        ? WifiConfigUiBase2.MODE_LOGIN_SCREEN : WifiConfigUiBase2.MODE_CONNECT;
                 mDialog2 = new WifiDialog2(this, this,
                         mNetworkDetailsTracker == null
                                 ? null : mNetworkDetailsTracker.getWifiEntry(),
-                                mode, 0 /* style */,
+                                WifiConfigUiBase2.MODE_CONNECT, 0 /* style */,
                         false /* hideSubmitButton */, false /* hideMeteredAndPrivacy */,
                         Utils.SYSTEMUI_PACKAGE_NAME.equals(getLaunchedFromPackage()));
             } else {
@@ -227,7 +226,9 @@ public class WifiDialogActivity extends ObservableActivity implements WifiDialog
         if (mIsWifiTrackerLib || mUseWifiDialog2ForAddNetwork) {
             mDialog2 = new WifiDialog2(this, this,
                     mNetworkDetailsTracker == null ? null : mNetworkDetailsTracker.getWifiEntry(),
-                    WifiConfigUiBase2.MODE_CONNECT, targetStyle);
+                    WifiConfigUiBase2.MODE_CONNECT, targetStyle, /*hideSubmitButton=*/ false ,
+                    /*hideMeteredAndPrivacy=*/ false, /*isSysUiCaller=*/ false,
+                    /*showFocusRingIndicator=*/ SetupWizardUtilKt.shouldShowFocusRingsInSuw(this));
         } else {
             mDialog = WifiDialog.createModal(this, this, mAccessPoint,
                     WifiConfigUiBase.MODE_CONNECT, targetStyle);
@@ -411,16 +412,6 @@ public class WifiDialogActivity extends ObservableActivity implements WifiDialog
             }
             finish();
         }
-    }
-
-    @VisibleForTesting
-    boolean isAtLoginScreen() {
-        if (!Flags.wifiMultiuser()) {
-            return false;
-        }
-        UserManager userManager = getSystemService(UserManager.class);
-        return userManager != null
-                && userManager.isHeadlessSystemUserMode() && userManager.isSystemUser();
     }
 
     @VisibleForTesting

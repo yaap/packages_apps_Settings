@@ -21,7 +21,6 @@ import android.content.Context
 import androidx.preference.Preference
 import com.android.internal.accessibility.common.NotificationConstants.EXTRA_SOURCE
 import com.android.internal.accessibility.common.NotificationConstants.SOURCE_START_SURVEY
-import com.android.server.accessibility.Flags.enableLowVisionHats
 import com.android.settings.R
 import com.android.settings.accessibility.SurveyManager
 import com.android.settings.accessibility.extensions.isInSetupWizard
@@ -30,6 +29,7 @@ import com.android.settingslib.metadata.PreferenceAvailabilityProvider
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceMetadata
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.preference.PreferenceBinding
 import com.android.settingslib.widget.ButtonPreference
 
@@ -51,6 +51,9 @@ abstract class BaseSurveyButtonPreference(val metricsCategory: Int = METRICS_CAT
     override val key: String
         get() = PREFERENCE_KEY
 
+    override val purpose: Int
+        get() = R.string.dark_ui_mode_survey_purpose
+
     override val title: Int
         get() = R.string.accessibility_send_survey_title
 
@@ -60,26 +63,21 @@ abstract class BaseSurveyButtonPreference(val metricsCategory: Int = METRICS_CAT
     override val indexable
         get() = false
 
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
+
     override fun onCreate(context: PreferenceLifecycleContext) {
         super.onCreate(context)
-        if (enableLowVisionHats()) {
-            surveyManager =
-                SurveyManager(
-                    context.lifecycleOwner,
-                    context.baseContext,
-                    surveyKey,
-                    metricsCategory,
-                )
-            (context.baseContext as? Activity)?.let { activity ->
-                val intent = activity.intent
-                if (intent?.getStringExtra(EXTRA_SOURCE) == SOURCE_START_SURVEY) {
-                    surveyManager?.startSurvey()
-                } else {
-                    surveyManager?.checkSurveyAvailable { available ->
-                        isSurveyButtonVisible = available
-                        context.notifyPreferenceChange(key)
-                        scheduleSurvey(context)
-                    }
+        surveyManager =
+            SurveyManager(context.lifecycleOwner, context.baseContext, surveyKey, metricsCategory)
+        (context.baseContext as? Activity)?.let { activity ->
+            val intent = activity.intent
+            if (intent?.getStringExtra(EXTRA_SOURCE) == SOURCE_START_SURVEY) {
+                surveyManager?.startSurvey()
+            } else {
+                surveyManager?.checkSurveyAvailable { available ->
+                    isSurveyButtonVisible = available
+                    context.notifyPreferenceChange(key)
+                    scheduleSurvey(context)
                 }
             }
         }
@@ -96,10 +94,7 @@ abstract class BaseSurveyButtonPreference(val metricsCategory: Int = METRICS_CAT
     }
 
     override fun isAvailable(context: Context): Boolean =
-        enableLowVisionHats() &&
-            !context.isInSetupWizard() &&
-            isSurveyButtonVisible &&
-            isSurveyConditionMet(context)
+        !context.isInSetupWizard() && isSurveyButtonVisible && isSurveyConditionMet(context)
 
     abstract fun isSurveyConditionMet(context: Context): Boolean
 

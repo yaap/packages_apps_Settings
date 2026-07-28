@@ -16,9 +16,6 @@
 
 package com.android.settings.gestures;
 
-import static android.view.WindowManagerPolicyConstants.NAV_BAR_MODE_2BUTTON_OVERLAY;
-import static android.view.WindowManagerPolicyConstants.NAV_BAR_MODE_3BUTTON_OVERLAY;
-
 import static com.google.common.truth.Truth.assertThat;
 
 import static org.mockito.Mockito.spy;
@@ -26,7 +23,9 @@ import static org.robolectric.Shadows.shadowOf;
 
 import android.content.Context;
 import android.content.pm.PackageInfo;
-import android.platform.test.flag.junit.SetFlagsRule;
+import android.platform.test.annotations.RequiresFlagsEnabled;
+import android.platform.test.flag.junit.CheckFlagsRule;
+import android.platform.test.flag.junit.DeviceFlagsValueProvider;
 
 import androidx.test.core.app.ApplicationProvider;
 
@@ -40,7 +39,7 @@ import org.robolectric.shadows.ShadowPackageManager;
 @RunWith(RobolectricTestRunner.class)
 public class ButtonNavigationSettingsFragmentTest {
     @Rule
-    public final SetFlagsRule mSetFlagsRule = new SetFlagsRule();
+    public final CheckFlagsRule mCheckFlagsRule = DeviceFlagsValueProvider.createCheckFlagsRule();
     private final Context mContext = ApplicationProvider.getApplicationContext();
     private ButtonNavigationSettingsFragment mFragment;
 
@@ -50,27 +49,10 @@ public class ButtonNavigationSettingsFragmentTest {
     }
 
     @Test
-    public void getNonIndexableKeys_twoAndThreeButtonNavigationNotAvailable_allKeysNonIndexable() {
-        assertThat(ButtonNavigationSettingsFragment.SEARCH_INDEX_DATA_PROVIDER.getNonIndexableKeys(
-                ApplicationProvider.getApplicationContext())).isNotEmpty();
-    }
-
-    @Test
-    public void getNonIndexableKeys_twoButtonNavigationAvailable_allKeysExceptAnimIndexable() {
-        addPackageToPackageManager(ApplicationProvider.getApplicationContext(),
-                NAV_BAR_MODE_2BUTTON_OVERLAY);
-        assertThat(ButtonNavigationSettingsFragment.SEARCH_INDEX_DATA_PROVIDER.getNonIndexableKeys(
-                ApplicationProvider.getApplicationContext())).containsExactly(
-                "gesture_power_menu_video");
-    }
-
-    @Test
-    public void getNonIndexableKeys_threeButtonNavigationAvailable_allKeysExceptAnimIndexable() {
-        addPackageToPackageManager(ApplicationProvider.getApplicationContext(),
-                NAV_BAR_MODE_3BUTTON_OVERLAY);
-        assertThat(ButtonNavigationSettingsFragment.SEARCH_INDEX_DATA_PROVIDER.getNonIndexableKeys(
-                ApplicationProvider.getApplicationContext())).containsExactly(
-                "gesture_power_menu_video");
+    @RequiresFlagsEnabled(com.android.settings.flags.Flags.FLAG_CATALYST_SETTINGS_SEARCH)
+    public void searchIndexer_getResources_isNull() {
+        assertThat(ButtonNavigationSettingsFragment.SEARCH_INDEX_DATA_PROVIDER
+                .getXmlResourcesToIndex(mContext, true)).isNull();
     }
 
     @Test

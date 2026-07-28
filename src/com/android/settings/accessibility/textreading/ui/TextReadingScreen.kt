@@ -27,15 +27,24 @@ import com.android.settings.accessibility.TextReadingPreferenceFragment.EntryPoi
 import com.android.settings.accessibility.TextReadingPreferenceFragmentForSetupWizard
 import com.android.settings.accessibility.shared.ui.FeedbackButtonPreference
 import com.android.settings.core.PreferenceScreenMixin
-import com.android.settings.flags.Flags
 import com.android.settings.utils.makeLaunchIntent
 import com.android.settingslib.metadata.PreferenceCategory
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ProvidePreferenceScreen
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.metadata.preferenceHierarchy
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 import kotlinx.coroutines.CoroutineScope
 
-abstract class BaseTextReadingScreen : PreferenceScreenMixin {
+/**
+ * Base screen for Text Reading options.
+ *
+ * This screen has multiple entry points (Display and touch, Accessibility, etc.). To prevent
+ * duplicate nodes in the global PreferenceMetadata graph, secondary entry points are flagged as
+ * [isUiOnly] true. This flag propagates to child preferences to exclude them from the graph where
+ * necessary.
+ */
+abstract class BaseTextReadingScreen(val isUiOnly: Boolean) : PreferenceScreenMixin {
     @EntryPoint abstract val entryPoint: Int
     override val title: Int
         get() = R.string.accessibility_text_reading_options_title
@@ -53,15 +62,12 @@ abstract class BaseTextReadingScreen : PreferenceScreenMixin {
     override val indexable
         get() = false
 
-    override fun isFlagEnabled(context: Context) = Flags.catalystTextReadingScreen()
-
     override fun fragmentClass(): Class<out Fragment>? = TextReadingPreferenceFragment::class.java
 
-    // LINT.IfChange(ui_hierarchy)
     override fun getPreferenceHierarchy(context: Context, coroutineScope: CoroutineScope) =
         preferenceHierarchy(context) {
-            val fontSizePreference = FontSizePreference(context, entryPoint)
-            val displaySizePreference = DisplaySizePreference(context, entryPoint)
+            val fontSizePreference = FontSizePreference(context, entryPoint, isUiOnly)
+            val displaySizePreference = DisplaySizePreference(context, entryPoint, isUiOnly)
             +TextReadingPreview(
                 displaySizeProvider = { displaySizePreference.displaySizePreview },
                 fontSizeProvider = { fontSizePreference.fontSizePreview },
@@ -69,28 +75,47 @@ abstract class BaseTextReadingScreen : PreferenceScreenMixin {
 
             +PreferenceCategory(
                 key = "display_text_size",
+                purpose = R.string.display_text_size_purpose,
                 title = R.string.category_title_display_text_size,
             ) +=
                 {
                     +fontSizePreference
                     +displaySizePreference
                 }
-            +PreferenceCategory(key = "text_style", title = R.string.category_title_text_style) += {
-                +BoldTextPreference(context, entryPoint)
-                +OutlineTextPreference(context, entryPoint)
-            }
+            +PreferenceCategory(
+                key = "text_style",
+                purpose = R.string.text_style_purpose,
+                title = R.string.category_title_text_style,
+            ) +=
+                {
+                    +BoldTextPreference(context, entryPoint, isUiOnly)
+                    +OutlineTextPreference(context, entryPoint, isUiOnly)
+                }
             +ResetPreference(entryPoint)
-            +FeedbackButtonPreference { FeedbackManager(context, metricsCategory) }
+            +FeedbackButtonPreference({ FeedbackManager(context, metricsCategory) })
         }
-    // LINT.ThenChange()
 }
 
+/**
+ * Screen for Text Reading options.
+ *
+ * This screen has multiple entry points (Display and touch, Accessibility, etc.). To prevent
+ * duplicate nodes in the global PreferenceMetadata graph, secondary entry points are flagged as
+ * [isUiOnly] true. This flag propagates to child preferences to exclude them from the graph where
+ * necessary.
+ */
 @ProvidePreferenceScreen(TextReadingScreen.KEY)
-open class TextReadingScreen : BaseTextReadingScreen() {
+open class TextReadingScreen : BaseTextReadingScreen(false) {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED)
+
     override val entryPoint: Int
         get() = EntryPoint.DISPLAY_SETTINGS
 
     override val key: String = KEY
+
+    // TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.text_reading_options_purpose
 
     override val indexable
         get() = true
@@ -108,8 +133,16 @@ open class TextReadingScreen : BaseTextReadingScreen() {
     }
 }
 
+/**
+ * Screen for Text Reading options.
+ *
+ * This screen has multiple entry points (Display and touch, Accessibility, etc.). To prevent
+ * duplicate nodes in the global PreferenceMetadata graph, secondary entry points are flagged as
+ * [isUiOnly] true. This flag propagates to child preferences to exclude them from the graph where
+ * necessary.
+ */
 @ProvidePreferenceScreen(TextReadingScreenOnAccessibility.KEY)
-open class TextReadingScreenOnAccessibility : BaseTextReadingScreen() {
+open class TextReadingScreenOnAccessibility : BaseTextReadingScreen(true) {
     override val entryPoint: Int
         get() = EntryPoint.ACCESSIBILITY_SETTINGS
 
@@ -117,6 +150,12 @@ open class TextReadingScreenOnAccessibility : BaseTextReadingScreen() {
         get() = R.string.menu_key_accessibility
 
     override val key: String = KEY
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
+
+    // TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.text_reading_options_in_a11y_purpose
 
     override val icon: Int
         get() = R.drawable.ic_adaptive_font_download
@@ -127,8 +166,16 @@ open class TextReadingScreenOnAccessibility : BaseTextReadingScreen() {
 }
 
 // TODO(b/407080818): Remove this catalyst screen once we decouple SUW and Settings
+/**
+ * Screen for Text Reading options.
+ *
+ * This screen has multiple entry points (Display and touch, Accessibility, etc.). To prevent
+ * duplicate nodes in the global PreferenceMetadata graph, secondary entry points are flagged as
+ * [isUiOnly] true. This flag propagates to child preferences to exclude them from the graph where
+ * necessary.
+ */
 @ProvidePreferenceScreen(TextReadingScreenInSuw.KEY)
-open class TextReadingScreenInSuw : BaseTextReadingScreen() {
+open class TextReadingScreenInSuw : BaseTextReadingScreen(true) {
     override val entryPoint: Int
         get() = EntryPoint.SUW_VISION_SETTINGS
 
@@ -136,6 +183,12 @@ open class TextReadingScreenInSuw : BaseTextReadingScreen() {
         get() = R.string.menu_key_accessibility
 
     override val key: String = KEY
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
+
+    // TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.text_reading_options_in_suw_purpose
 
     override val icon: Int
         get() = R.drawable.ic_adaptive_font_download
@@ -152,12 +205,26 @@ open class TextReadingScreenInSuw : BaseTextReadingScreen() {
 }
 
 // TODO(b/407080818): Remove this catalyst screen once we decouple SUW and Settings
+/**
+ * Screen for Text Reading options.
+ *
+ * This screen has multiple entry points (Display and touch, Accessibility, etc.). To prevent
+ * duplicate nodes in the global PreferenceMetadata graph, secondary entry points are flagged as
+ * [isUiOnly] true. This flag propagates to child preferences to exclude them from the graph where
+ * necessary.
+ */
 @ProvidePreferenceScreen(TextReadingScreenInAnythingElse.KEY)
-open class TextReadingScreenInAnythingElse : BaseTextReadingScreen() {
+open class TextReadingScreenInAnythingElse : BaseTextReadingScreen(true) {
     override val entryPoint: Int
         get() = EntryPoint.SUW_ANYTHING_ELSE
 
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
+
     override val key: String = KEY
+
+    // TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.text_reading_options_in_anything_else_purpose
 
     override val icon: Int
         get() = R.drawable.ic_font_download
@@ -176,12 +243,26 @@ open class TextReadingScreenInAnythingElse : BaseTextReadingScreen() {
     }
 }
 
+/**
+ * Screen for Text Reading options.
+ *
+ * This screen has multiple entry points (Display and touch, Accessibility, etc.). To prevent
+ * duplicate nodes in the global PreferenceMetadata graph, secondary entry points are flagged as
+ * [isUiOnly] true. This flag propagates to child preferences to exclude them from the graph where
+ * necessary.
+ */
 @ProvidePreferenceScreen(TextReadingScreenFromNotification.KEY)
-open class TextReadingScreenFromNotification : BaseTextReadingScreen() {
+open class TextReadingScreenFromNotification : BaseTextReadingScreen(true) {
     override val entryPoint: Int
         get() = EntryPoint.HIGH_CONTRAST_TEXT_NOTIFICATION
 
     override val key: String = KEY
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
+
+    // TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.text_reading_options_in_outline_text_notification_purpose
 
     companion object {
         const val KEY = "text_reading_options_in_outline_text_notification"

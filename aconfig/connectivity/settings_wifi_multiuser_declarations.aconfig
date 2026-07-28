@@ -3,7 +3,7 @@ container: "system_ext"
 
 flag {
   name: "wifi_multiuser"
-  namespace: "desktop_connectivity"
-  description: "Flag for WiFi Multiuser"
+  namespace: "android_settings"
+  description: "Deprecated, use com.android.settings.flags.FLAGS.enable_wifi_multiluser instead"
   bug: "402214828"
 }

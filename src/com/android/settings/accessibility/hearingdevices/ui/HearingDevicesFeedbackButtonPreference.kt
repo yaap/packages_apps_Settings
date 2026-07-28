@@ -16,6 +16,7 @@
 
 package com.android.settings.accessibility.hearingdevices.ui
 
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import android.app.settings.SettingsEnums
 import android.content.Context
 import com.android.settings.accessibility.FeedbackManager
@@ -23,6 +24,7 @@ import com.android.settings.accessibility.shared.ui.FeedbackButtonPreference
 import com.android.settingslib.bluetooth.hearingdevices.metrics.HearingDeviceStatsLogUtils
 import com.android.settingslib.bluetooth.hearingdevices.metrics.HearingDeviceStatsLogUtils.HistoryType
 import com.android.settingslib.metadata.PreferenceLifecycleContext
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.widget.ButtonPreference
 
 /**
@@ -33,6 +35,12 @@ import com.android.settingslib.widget.ButtonPreference
  */
 class HearingDevicesFeedbackButtonPreference(feedbackManagerProvider: () -> FeedbackManager) :
     FeedbackButtonPreference(feedbackManagerProvider) {
+
+    override val availabilityDescription = UI_ONLY_PREFERENCE
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
 
     /**
      * Sets up the button preference and its click listener.

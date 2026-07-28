@@ -29,9 +29,11 @@ import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.KeyedObserver
 import com.android.settingslib.datastore.SettingsSystemStore
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceMetadata
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.preference.PreferenceBinding
 import com.android.settingslib.widget.ButtonPreference
 import com.android.settingslib.widget.ButtonPreference.SIZE_EXTRA_LARGE
@@ -51,11 +53,16 @@ class FlashNotificationsPreviewPreference :
     override val key: String
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.flash_notifications_preview_purpose
+
     override val title: Int
         get() = R.string.flash_notifications_preview
 
     override val indexable
         get() = false
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
 
     override fun onCreate(context: PreferenceLifecycleContext) {
         super.onCreate(context)
@@ -80,6 +87,10 @@ class FlashNotificationsPreviewPreference :
             setButtonStyle(TYPE_FILLED, SIZE_EXTRA_LARGE)
             setOnClickListener(this@FlashNotificationsPreviewPreference)
         }
+
+    override val availabilityDescription = UI_ONLY_PREFERENCE
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context): Boolean {
         val currentState = FlashNotificationsUtil.getFlashNotificationsState(context)

@@ -35,6 +35,7 @@ import java.util.Set;
  * A controller handles displaying the triple tap shortcut option preference and
  * configuring the shortcut.
  */
+// LINT.IfChange
 public class TripleTapShortcutOptionController extends ShortcutOptionPreferenceController
         implements ExpandablePreference {
 
@@ -52,7 +53,7 @@ public class TripleTapShortcutOptionController extends ShortcutOptionPreferenceC
             shortcutOptionPreference.setTitle(
                     R.string.accessibility_shortcut_edit_screen_title_triple_tap);
             String summary = mContext.getString(
-                    R.string.accessibility_shortcut_edit_screen_summary_triple_tap, 3);
+                    R.string.accessibility_shortcut_edit_screen_summary_triple_tap);
 
             shortcutOptionPreference.setSummary(summary);
             shortcutOptionPreference.setIntroImageRawResId(
@@ -99,3 +100,4 @@ public class TripleTapShortcutOptionController extends ShortcutOptionPreferenceC
                 AccessibilityUtil.State.OFF) == AccessibilityUtil.State.ON;
     }
 }
+// LINT.ThenChange(ui/TripleTapShortcutPreference.kt)

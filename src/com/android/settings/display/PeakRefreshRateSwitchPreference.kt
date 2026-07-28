@@ -22,8 +22,6 @@ import android.provider.DeviceConfig
 import android.provider.Settings.System.PEAK_REFRESH_RATE
 import com.android.internal.display.RefreshRateSettingsUtils.DEFAULT_REFRESH_RATE
 import com.android.internal.display.RefreshRateSettingsUtils.findHighestRefreshRateAmongAllDisplays
-import com.android.internal.display.RefreshRateSettingsUtils.findHighestRefreshRateForDefaultDisplay
-import com.android.server.display.feature.flags.Flags
 import com.android.settings.R
 import com.android.settings.contract.KEY_SMOOTH_DISPLAY
 import com.android.settings.metrics.PreferenceActionMetricsProvider
@@ -32,6 +30,7 @@ import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.KeyValueStoreDelegate
 import com.android.settingslib.datastore.SettingsSystemStore
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceSummaryProvider
@@ -42,7 +41,11 @@ import kotlin.math.roundToInt
 
 // LINT.IfChange
 class PeakRefreshRateSwitchPreference :
-    SwitchPreference(KEY, R.string.peak_refresh_rate_title),
+    SwitchPreference(
+        key = KEY,
+        purpose = R.string.peak_refresh_rate_purpose,
+        title = R.string.peak_refresh_rate_title,
+    ),
     PreferenceActionMetricsProvider,
     PreferenceAvailabilityProvider,
     PreferenceSummaryProvider,
@@ -74,6 +77,11 @@ class PeakRefreshRateSwitchPreference :
 
     override val sensitivityLevel
         get() = SensitivityLevel.NO_SENSITIVITY
+
+    override val availabilityDescription =
+        "The device must support smooth display settings."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context) =
         context.resources.getBoolean(R.bool.config_show_smooth_display) &&
@@ -139,11 +147,7 @@ class PeakRefreshRateSwitchPreference :
                 }
             }
 
-        private fun Context.refreshRateIfON() =
-            when {
-                Flags.backUpSmoothDisplayAndForcePeakRefreshRate() -> Float.POSITIVE_INFINITY
-                else -> peakRefreshRate
-            }
+        private fun Context.refreshRateIfON() = Float.POSITIVE_INFINITY
     }
 
     companion object {
@@ -151,15 +155,7 @@ class PeakRefreshRateSwitchPreference :
         private const val INVALIDATE_REFRESH_RATE: Float = -1f
 
         private val Context.peakRefreshRate: Float
-            get() =
-                Math.round(
-                        when {
-                            Flags.backUpSmoothDisplayAndForcePeakRefreshRate() ->
-                                findHighestRefreshRateAmongAllDisplays(this)
-                            else -> findHighestRefreshRateForDefaultDisplay(this)
-                        }
-                    )
-                    .toFloat()
+            get() = Math.round(findHighestRefreshRateAmongAllDisplays(this)).toFloat()
 
         private val Context.defaultPeakRefreshRate: Float
             get() {

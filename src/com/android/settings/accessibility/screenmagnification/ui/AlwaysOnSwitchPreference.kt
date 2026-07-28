@@ -17,7 +17,6 @@
 package com.android.settings.accessibility.screenmagnification.ui
 
 import android.content.Context
-import android.provider.DeviceConfig
 import android.provider.Settings
 import com.android.internal.accessibility.AccessibilityShortcutController
 import com.android.internal.accessibility.common.ShortcutConstants
@@ -33,16 +32,21 @@ import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.KeyedObserver
 import com.android.settingslib.datastore.SettingsSecureStore
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceIndexableProvider
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceSummaryProvider
 import com.android.settingslib.metadata.ReadWritePermit
+import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.metadata.SwitchPreference
 
-// LINT.IfChange
 class AlwaysOnSwitchPreference :
-    SwitchPreference(KEY, R.string.accessibility_screen_magnification_always_on_title),
+    SwitchPreference(
+        KEY,
+        R.string.accessibility_magnification_always_on_enabled_purpose,
+        R.string.accessibility_screen_magnification_always_on_title,
+    ),
     PreferenceSummaryProvider,
     PreferenceAvailabilityProvider,
     PreferenceIndexableProvider,
@@ -51,7 +55,7 @@ class AlwaysOnSwitchPreference :
 
     private lateinit var lifecycleContext: PreferenceLifecycleContext
 
-    override fun storage(context: Context): KeyValueStore = SettingsSecureStore.get(context)
+    override fun storage(context: Context): KeyValueStore = context.dataStore
 
     override fun getReadPermissions(context: Context) = SettingsSecureStore.getReadPermissions()
 
@@ -85,6 +89,11 @@ class AlwaysOnSwitchPreference :
         storage(context).removeObserver(this)
     }
 
+    override val availabilityDescription =
+        "The device must not be during setup, must support window mangnification, and must support the 'always on' setting."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
+
     override fun isAvailable(context: Context): Boolean {
         return !context.isInSetupWizard() &&
             context.isWindowMagnificationSupported() &&
@@ -108,6 +117,10 @@ class AlwaysOnSwitchPreference :
         }
     }
 
+    override fun getEnabledDescription() = "Screen magnification must be set to full screen or both."
+
+    override fun getEnabledStability() = PreconditionStability.UNSTABLE
+
     override fun isEnabled(context: Context): Boolean {
         @MagnificationCapabilities.MagnificationMode
         val mode = MagnificationCapabilities.getCapabilities(context)
@@ -129,19 +142,22 @@ class AlwaysOnSwitchPreference :
     }
 
     private fun isAlwaysOnSupported(context: Context): Boolean {
-        val defaultValue =
-            context
-                .getResources()
-                .getBoolean(com.android.internal.R.bool.config_magnification_always_on_enabled)
-        return DeviceConfig.getBoolean(
-            DeviceConfig.NAMESPACE_WINDOW_MANAGER,
-            "AlwaysOnMagnifier__enable_always_on_magnifier",
-            defaultValue,
-        )
+        return context
+            .getResources()
+            .getBoolean(com.android.internal.R.bool.config_magnification_always_on_enabled)
     }
+
+    override val sensitivityLevel: Int
+        get() = SensitivityLevel.NO_SENSITIVITY
 
     companion object {
         const val KEY = Settings.Secure.ACCESSIBILITY_MAGNIFICATION_ALWAYS_ON_ENABLED
+        private val Context.dataStore: KeyValueStore
+            get() =
+                SettingsSecureStore.get(this).apply {
+                    // Enabled by default, see
+                    // MagnificationConstants.ALWAYS_ON_SETTINGS_PREFERENCE_DEFAULT_ENABLED
+                    setDefaultValue(KEY, true)
+                }
     }
 }
-// LINT.ThenChange(/src/com/android/settings/accessibility/screenmagnification/AlwaysOnPreferenceController.java)

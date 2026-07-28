@@ -21,10 +21,6 @@ import static com.android.settings.core.instrumentation.SettingsStatsLog.ACCESSI
 import android.content.Context;
 import android.provider.Settings;
 
-import androidx.preference.PreferenceScreen;
-import androidx.preference.TwoStatePreference;
-
-import com.android.graphics.hwui.flags.Flags;
 import com.android.settings.R;
 import com.android.settings.accessibility.TextReadingPreferenceFragment.EntryPoint;
 import com.android.settings.core.TogglePreferenceController;
@@ -34,9 +30,7 @@ import com.android.settings.core.instrumentation.SettingsStatsLog;
  * PreferenceController for displaying all text in high contrast style.
  */
 // LINT.IfChange
-public class HighTextContrastPreferenceController extends TogglePreferenceController implements
-        TextReadingResetController.ResetStateListener {
-    private TwoStatePreference mSwitchPreference;
+public class HighTextContrastPreferenceController extends TogglePreferenceController {
 
     @EntryPoint
     private int mEntryPoint;
@@ -64,19 +58,17 @@ public class HighTextContrastPreferenceController extends TogglePreferenceContro
                 isChecked ? 1 : 0,
                 AccessibilityStatsLogUtils.convertToEntryPoint(mEntryPoint));
 
-        if (Flags.highContrastTextSmallTextRect()) {
-            // Set PROMPT_UNNECESSARY when the user modifies the HighContrastText setting
-            // This is needed for the following scenario:
-            // On Android 16, create secondary user, ACTION_PRE_BOOT_COMPLETED won't be sent to
-            // the secondary user. The user enables HCT.
-            // When updating OS to Android 17, ACTION_PRE_BOOT_COMPLETED will be sent to the
-            // secondary user when switch to the secondary user.
-            // If the prompt status is not updated in Android 16, we would automatically disable
-            // HCT and show the HCT prompt, which is an undesired behavior.
-            Settings.Secure.putInt(mContext.getContentResolver(),
-                    Settings.Secure.ACCESSIBILITY_HCT_RECT_PROMPT_STATUS,
-                    HighContrastTextMigrationReceiver.PromptState.PROMPT_UNNECESSARY);
-        }
+        // Set PROMPT_UNNECESSARY when the user modifies the HighContrastText setting
+        // This is needed for the following scenario:
+        // On Android 16, create secondary user, ACTION_PRE_BOOT_COMPLETED won't be sent to
+        // the secondary user. The user enables HCT.
+        // When updating OS to Android 17, ACTION_PRE_BOOT_COMPLETED will be sent to the
+        // secondary user when switch to the secondary user.
+        // If the prompt status is not updated in Android 16, we would automatically disable
+        // HCT and show the HCT prompt, which is an undesired behavior.
+        Settings.Secure.putInt(mContext.getContentResolver(),
+                Settings.Secure.ACCESSIBILITY_HCT_RECT_PROMPT_STATUS,
+                HighContrastTextMigrationReceiver.PromptState.PROMPT_UNNECESSARY);
 
         return Settings.Secure.putInt(mContext.getContentResolver(),
                 Settings.Secure.ACCESSIBILITY_HIGH_TEXT_CONTRAST_ENABLED, (isChecked ? 1 : 0));
@@ -85,18 +77,6 @@ public class HighTextContrastPreferenceController extends TogglePreferenceContro
     @Override
     public int getSliceHighlightMenuRes() {
         return R.string.menu_key_accessibility;
-    }
-
-    @Override
-    public void displayPreference(PreferenceScreen screen) {
-        super.displayPreference(screen);
-        mSwitchPreference = screen.findPreference(getPreferenceKey());
-    }
-
-    @Override
-    public void resetState() {
-        setChecked(false);
-        updateState(mSwitchPreference);
     }
 
     /**

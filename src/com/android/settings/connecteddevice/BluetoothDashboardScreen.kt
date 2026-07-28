@@ -27,12 +27,20 @@ import com.android.settings.utils.makeLaunchIntent
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.preferenceHierarchy
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 import kotlinx.coroutines.CoroutineScope
 
+// LINT.IfChange
 @ProvidePreferenceScreen(BluetoothDashboardScreen.KEY)
 open class BluetoothDashboardScreen : PreferenceScreenMixin {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED)
+
     override val key: String
         get() = KEY
+
+    // TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.bluetooth_switchbar_screen_purpose
 
     override val title: Int
         get() = R.string.bluetooth_settings_title
@@ -58,9 +66,7 @@ open class BluetoothDashboardScreen : PreferenceScreenMixin {
         preferenceHierarchy(context) {
             val bluetoothDataStore = BluetoothPreference.createDataStore(context)
             +BluetoothPreference(bluetoothDataStore)
-            if (Flags.deeplinkConnectedDevices25q4()) {
-                +BluetoothDeviceRenamePreference(bluetoothDataStore)
-            }
+            +BluetoothDeviceRenamePreference(bluetoothDataStore)
             +BluetoothFooterPreference(bluetoothDataStore)
         }
 
@@ -68,3 +74,4 @@ open class BluetoothDashboardScreen : PreferenceScreenMixin {
         const val KEY = "bluetooth_switchbar_screen"
     }
 }
+// LINT.ThenChange(BluetoothDashboardScreenApi.kt, BluetoothDashboardFragment.java)

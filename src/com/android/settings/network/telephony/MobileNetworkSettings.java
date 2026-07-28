@@ -17,6 +17,7 @@
 package com.android.settings.network.telephony;
 
 import android.app.Activity;
+import android.app.NotificationManager;
 import android.app.settings.SettingsEnums;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -49,7 +50,6 @@ import com.android.settings.SettingsActivity;
 import com.android.settings.Utils;
 import com.android.settings.datausage.BillingCyclePreferenceController;
 import com.android.settings.datausage.DataUsageSummaryPreferenceController;
-import com.android.settings.flags.Flags;
 import com.android.settings.network.CarrierWifiTogglePreferenceController;
 import com.android.settings.network.MobileNetworkRepository;
 import com.android.settings.network.SubscriptionUtil;
@@ -60,8 +60,10 @@ import com.android.settings.network.telephony.gsm.OpenNetworkSelectPagePreferenc
 import com.android.settings.network.telephony.satellite.SatelliteSettingPreferenceController;
 import com.android.settings.network.telephony.wificalling.CrossSimCallingViewModel;
 import com.android.settings.search.BaseSearchIndexProvider;
+import com.android.settings.utils.SubIdBundleUtils;
 import com.android.settings.wifi.WifiPickerTrackerHelper;
 import com.android.settingslib.core.AbstractPreferenceController;
+import com.android.settingslib.metadata.ValidatedKeyParameters;
 import com.android.settingslib.mobile.dataservice.MobileNetworkInfoEntity;
 import com.android.settingslib.mobile.dataservice.SubscriptionInfoEntity;
 import com.android.settingslib.search.SearchIndexable;
@@ -72,6 +74,7 @@ import kotlin.Unit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -174,8 +177,11 @@ public class MobileNetworkSettings extends AbstractMobileNetworkSettings impleme
                 Log.d(LOG_TAG, "intent is null, can not get subId " + mSubId + " from intent.");
             }
         } else {
-            mSubId = getArguments().getInt(Settings.EXTRA_SUB_ID,
-                    MobileNetworkUtils.getSearchableSubscriptionId(context));
+            mSubId = SubIdBundleUtils.getSubId(
+                    getArguments(),
+                    Settings.EXTRA_SUB_ID,
+                    MobileNetworkUtils.getSearchableSubscriptionId(context)
+            );
             Log.d(LOG_TAG, "display subId from getArguments(): " + mSubId);
         }
         mMobileNetworkRepository = MobileNetworkRepository.getInstance(context);
@@ -221,7 +227,16 @@ public class MobileNetworkSettings extends AbstractMobileNetworkSettings impleme
         if (intent != null) {
             int updateSubscriptionIndex = intent.getIntExtra(Settings.EXTRA_SUB_ID,
                     SubscriptionManager.INVALID_SUBSCRIPTION_ID);
-
+            // If the user selects the 'Settings' action button from the 2G network protection
+            // notification, the user will land on the screen, and the below code will dismiss the
+            // notification.
+            int notificationId = intent.getIntExtra(
+                    NetworkChangeNotification.NETWORK_PROTECTION_2G_NOTIFICATION_ID_KEY, -1);
+            if (notificationId != -1) {
+                NotificationManager notificationManager =
+                        context.getSystemService(NotificationManager.class);
+                notificationManager.cancel(notificationId);
+            }
             if (updateSubscriptionIndex != SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
                 int oldSubId = mSubId;
                 mSubId = updateSubscriptionIndex;
@@ -246,24 +261,26 @@ public class MobileNetworkSettings extends AbstractMobileNetworkSettings impleme
 
         }
 
-        if (!isCatalystEnabled() || !Flags.deeplinkNetworkAndInternet25q4()) {
+        if (!isCatalystEnabled()) {
             use(MobileNetworkSwitchController.class).init(mSubId);
         }
         use(CarrierSettingsVersionPreferenceController.class).init(mSubId);
-        use(BillingCyclePreferenceController.class).init(mSubId);
+        if (!isCatalystEnabled()) {
+            use(BillingCyclePreferenceController.class).init(mSubId);
+        }
         use(MmsMessagePreferenceController.class).init(mSubId);
         // CrossSimCallingViewModel is responsible for maintaining the correct cross sim calling
         // settings (backup calling).
         new ViewModelProvider(this).get(CrossSimCallingViewModel.class);
         use(AutoDataSwitchPreferenceController.class).init(mSubId);
-        if (!isCatalystEnabled() || !Flags.deeplinkNetworkAndInternet25q4()) {
+        if (!isCatalystEnabled()) {
             use(DisabledSubscriptionController.class).init(mSubId);
         }
         use(DeleteSimProfilePreferenceController.class).init(mSubId);
         use(DisableSimFooterPreferenceController.class).init(mSubId);
         use(NrDisabledInDsdsFooterPreferenceController.class).init(mSubId);
 
-        if (!isCatalystEnabled() || !Flags.deeplinkNetworkAndInternet25q4()) {
+        if (!isCatalystEnabled()) {
             use(MobileNetworkSpnPreferenceController.class).init(this, mSubId);
             use(MobileNetworkPhoneNumberPreferenceController.class).init(mSubId);
             use(MobileNetworkImeiPreferenceController.class).init(this, mSubId);
@@ -294,14 +311,14 @@ public class MobileNetworkSettings extends AbstractMobileNetworkSettings impleme
 
         use(ApnPreferenceController.class).init(mSubId);
         use(CarrierPreferenceController.class).init(mSubId);
-        if (!isCatalystEnabled() || !Flags.deeplinkNetworkAndInternet25q4()) {
+        if (!isCatalystEnabled()) {
             use(DataUsagePreferenceController.class).init(mSubId);
             use(EnabledNetworkModePreferenceController.class)
                     .init(mSubId, getParentFragmentManager());
         }
         use(PreferredNetworkModePreferenceController.class).init(mSubId);
         use(DataServiceSetupPreferenceController.class).init(mSubId);
-        use(Enable2gPreferenceController.class).init(mSubId);
+        use(Enable2gPreferenceController.class).init(this, mSubId);
         use(CarrierWifiTogglePreferenceController.class).init(getLifecycle(), mSubId);
 
         final CallingPreferenceCategoryController callingPreferenceCategoryController =
@@ -396,7 +413,7 @@ public class MobileNetworkSettings extends AbstractMobileNetworkSettings impleme
         mMobileNetworkRepository.updateEntity();
         // TODO: remove log after fixing b/182326102
         Log.d(LOG_TAG, "onResume() subId=" + mSubId);
-
+        redrawPreferenceControllers();
         IntentFilter intentFilter = new IntentFilter();
         intentFilter.addAction(CarrierConfigManager.ACTION_CARRIER_CONFIG_CHANGED);
         getContext().registerReceiver(mBrocastReceiver, intentFilter, Context.RECEIVER_EXPORTED);
@@ -568,11 +585,26 @@ public class MobileNetworkSettings extends AbstractMobileNetworkSettings impleme
         return MobileNetworkScreen.KEY;
     }
 
+    @Deprecated(since = "This method will be removed once the catalyst framework stops passing the"
+            + " arguments as a bundle. Use getPreferenceScreenBindingKeyParameters instead.")
     @Override
     public @Nullable Bundle getPreferenceScreenBindingArgs(@NonNull Context context) {
         final Bundle bundle = new Bundle();
-        bundle.putInt(Settings.EXTRA_SUB_ID, getSubId());
+        SubIdBundleUtils.putSubId(bundle, Settings.EXTRA_SUB_ID, getSubId());
         return bundle;
+    }
+
+    @Override
+    @Nullable
+    public ValidatedKeyParameters getPreferenceScreenBindingKeyParameters(
+            @NonNull Context context
+    ) {
+        return MobileNetworkScreen.Companion.getParametersSchema().prepare(
+            Map.of(
+                Settings.EXTRA_SUB_ID,
+                String.valueOf(getSubId())
+            )
+        );
     }
 
     @VisibleForTesting
@@ -603,8 +635,11 @@ public class MobileNetworkSettings extends AbstractMobileNetworkSettings impleme
                         + " from intent.");
             }
         } else {
-            retSubId = getArguments().getInt(Settings.EXTRA_SUB_ID,
-                    MobileNetworkUtils.getSearchableSubscriptionId(getContext()));
+            retSubId = SubIdBundleUtils.getSubId(
+                    getArguments(),
+                    Settings.EXTRA_SUB_ID,
+                    MobileNetworkUtils.getSearchableSubscriptionId(getContext())
+            );
         }
         if (retSubId == SubscriptionManager.INVALID_SUBSCRIPTION_ID) {
             Log.d(LOG_TAG, "getSubId: Invalid subId, get the default subscription to show.");

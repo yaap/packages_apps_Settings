@@ -42,9 +42,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.android.internal.util.Preconditions;
 import com.android.settings.R;
-import com.android.settings.accessibility.BaseSupportFragment;
 import com.android.settings.accessibility.ToggleShortcutPreferenceController;
 import com.android.settings.activityembedding.ActivityEmbeddingUtils;
+import com.android.settings.dashboard.DashboardFragment;
 import com.android.settings.search.BaseSearchIndexProvider;
 import com.android.settingslib.search.SearchIndexable;
 import com.android.settingslib.utils.ThreadUtils;
@@ -53,7 +53,7 @@ import com.android.settingslib.widget.LayoutPreference;
 import java.util.List;
 
 @SearchIndexable
-public class MouseKeysMainPageFragment extends BaseSupportFragment
+public class MouseKeysMainPageFragment extends DashboardFragment
         implements InputManager.InputDeviceListener {
 
     private static final String TAG = "MouseKeysMainPageFragment";
@@ -210,6 +210,7 @@ public class MouseKeysMainPageFragment extends BaseSupportFragment
     private void configureImagesPreference() {
         final RecyclerView recyclerView = mMouseKeyImagesPreference.findViewById(
                 R.id.mouse_keys_image_recycler_list);
+        recyclerView.setFocusable(false);
         boolean isPortrait = getResources().getConfiguration().orientation
                 == Configuration.ORIENTATION_PORTRAIT;
         boolean isTwoPaneState = ActivityEmbeddingUtils.isAlreadyEmbedded(this.getActivity());
@@ -222,6 +223,7 @@ public class MouseKeysMainPageFragment extends BaseSupportFragment
             recyclerView.setPadding(0, 0, 0, 0);
             final RecyclerView numKeyboardRecyclerView = mMouseKeyImagesPreference
                     .findViewById(R.id.mouse_keys_numpad_image_recycler_list);
+            numKeyboardRecyclerView.setFocusable(false);
             numKeyboardRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), column));
             numKeyboardRecyclerView.setAdapter(
                     new MouseKeysNumKeyboardImageListAdapter(getActivity(), mCurrentInputDevice));

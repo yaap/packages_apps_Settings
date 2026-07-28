@@ -35,7 +35,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.platform.test.annotations.DisableFlags;
+import android.platform.test.annotations.EnableFlags;
+import android.platform.test.flag.junit.SetFlagsRule;
 import android.service.dreams.DreamService;
+import android.service.dreams.Flags;
 import android.widget.CompoundButton;
 
 import androidx.fragment.app.FragmentActivity;
@@ -50,6 +54,7 @@ import com.android.settingslib.dream.DreamBackend;
 import com.android.settingslib.dream.DreamBackend.WhenToDream;
 import com.android.settingslib.widget.MainSwitchPreference;
 
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentCaptor;
@@ -58,7 +63,9 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.robolectric.RobolectricTestRunner;
 import org.robolectric.android.controller.ActivityController;
+import org.junit.After;
 import org.robolectric.annotation.Config;
+import org.robolectric.util.ReflectionHelpers;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -119,6 +126,14 @@ public class DreamSettingsTest {
     private LowLightModePreferenceController mLowLightModePreferenceController;
     @Captor
     private ArgumentCaptor<DreamPickerController.Callback> mDreamPickerCallbackCaptor;
+
+    @Rule
+    public final SetFlagsRule mSetFlagsRule = new SetFlagsRule();
+
+    @After
+    public void tearDown() {
+        ReflectionHelpers.setStaticField(DreamBackend.class, "sInstance", null);
+    }
 
     @Test
     public void getSettingFromPrefKey() {
@@ -200,6 +215,7 @@ public class DreamSettingsTest {
     }
 
     @Test
+    @DisableFlags(Flags.FLAG_DREAMS_SWITCHER)
     public void complicationsToggle_showWhenDreamSupportsComplications() {
         MockitoAnnotations.initMocks(this);
 
@@ -219,6 +235,7 @@ public class DreamSettingsTest {
     }
 
     @Test
+    @DisableFlags(Flags.FLAG_DREAMS_SWITCHER)
     public void complicationsToggle_hideWhenDreamDoesNotSupportComplications() {
         MockitoAnnotations.initMocks(this);
 
@@ -238,6 +255,7 @@ public class DreamSettingsTest {
     }
 
     @Test
+    @DisableFlags(Flags.FLAG_DREAMS_SWITCHER)
     public void complicationsToggle_showWhenSwitchToDreamSupportsComplications() {
         MockitoAnnotations.initMocks(this);
 
@@ -265,6 +283,67 @@ public class DreamSettingsTest {
     }
 
     @Test
+    @EnableFlags(Flags.FLAG_DREAMS_SWITCHER)
+    public void complicationsToggle_multiSelect_showWhenAnyDreamSupportsComplications() {
+        MockitoAnnotations.initMocks(this);
+
+        final Context context = ApplicationProvider.getApplicationContext();
+
+        final DreamBackend mockBackend = mock(DreamBackend.class);
+        when(mockBackend.isDreamSwitcherEnabled()).thenReturn(true);
+        when(mockBackend.isEnabled()).thenReturn(true);
+        ReflectionHelpers.setStaticField(DreamBackend.class, "sInstance", mockBackend);
+
+        final DreamSettings dreamSettings = prepareDreamSettings(context);
+
+        // One dream supports complications, one does not
+        final DreamBackend.DreamInfo dream1 = new DreamBackend.DreamInfo();
+        dream1.supportsComplications = true;
+        final DreamBackend.DreamInfo dream2 = new DreamBackend.DreamInfo();
+        dream2.supportsComplications = false;
+
+        when(mDreamPickerController.getSelectedDreams())
+                .thenReturn(Arrays.asList(dream1, dream2));
+
+        dreamSettings.onAttach(context);
+        dreamSettings.onCreate(Bundle.EMPTY);
+
+        // Verify dream complications toggle is visible
+        verify(mComplicationsTogglePref).setVisible(true);
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_DREAMS_SWITCHER)
+    public void complicationsToggle_multiSelect_hideWhenNoDreamSupportsComplications() {
+        MockitoAnnotations.initMocks(this);
+
+        final Context context = ApplicationProvider.getApplicationContext();
+
+        final DreamBackend mockBackend = mock(DreamBackend.class);
+        when(mockBackend.isDreamSwitcherEnabled()).thenReturn(true);
+        when(mockBackend.isEnabled()).thenReturn(true);
+        ReflectionHelpers.setStaticField(DreamBackend.class, "sInstance", mockBackend);
+
+        final DreamSettings dreamSettings = prepareDreamSettings(context);
+
+        // Neither dream supports complications
+        final DreamBackend.DreamInfo dream1 = new DreamBackend.DreamInfo();
+        dream1.supportsComplications = false;
+        final DreamBackend.DreamInfo dream2 = new DreamBackend.DreamInfo();
+        dream2.supportsComplications = false;
+
+        when(mDreamPickerController.getSelectedDreams())
+                .thenReturn(Arrays.asList(dream1, dream2));
+
+        dreamSettings.onAttach(context);
+        dreamSettings.onCreate(Bundle.EMPTY);
+
+        // Verify dream complications toggle is hidden
+        verify(mComplicationsTogglePref).setVisible(false);
+    }
+
+    @Test
+    @DisableFlags(Flags.FLAG_DREAMS_SWITCHER)
     public void homeControlToggle_enableWhenDreamCategoryIsDefault() {
         MockitoAnnotations.initMocks(this);
 
@@ -284,6 +363,7 @@ public class DreamSettingsTest {
     }
 
     @Test
+    @DisableFlags(Flags.FLAG_DREAMS_SWITCHER)
     public void homePanelToggle_disableWhenDreamCategoryIsHomePanel() {
         MockitoAnnotations.initMocks(this);
 
@@ -303,6 +383,7 @@ public class DreamSettingsTest {
     }
 
     @Test
+    @DisableFlags(Flags.FLAG_DREAMS_SWITCHER)
     public void homePanelToggle_disableWhenSwitchingFromDefaultToHomePanel() {
         MockitoAnnotations.initMocks(this);
 
@@ -327,6 +408,7 @@ public class DreamSettingsTest {
     }
 
     @Test
+    @DisableFlags(Flags.FLAG_DREAMS_SWITCHER)
     public void homePanelToggle_showWhenSwitchingFromHomePanelToDefault() {
         MockitoAnnotations.initMocks(this);
 
@@ -349,6 +431,64 @@ public class DreamSettingsTest {
         activeDream.dreamCategory = DreamService.DREAM_CATEGORY_DEFAULT;
         mDreamPickerCallbackCaptor.getValue().onActiveDreamChanged();
         verify(mHomeControllerTogglePref).setEnabled(true);
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_DREAMS_SWITCHER)
+    public void homePanelToggle_multiSelect_enableWhenAnyDreamIsCompatible() {
+        MockitoAnnotations.initMocks(this);
+
+        final Context context = ApplicationProvider.getApplicationContext();
+
+        final DreamBackend mockBackend = mock(DreamBackend.class);
+        when(mockBackend.isDreamSwitcherEnabled()).thenReturn(true);
+        when(mockBackend.isEnabled()).thenReturn(true);
+        ReflectionHelpers.setStaticField(DreamBackend.class, "sInstance", mockBackend);
+
+        final DreamSettings dreamSettings = prepareDreamSettings(context);
+
+        // One compatible dream, one incompatible dream
+        final DreamBackend.DreamInfo compatibleDream = new DreamBackend.DreamInfo();
+        compatibleDream.dreamCategory = DreamService.DREAM_CATEGORY_DEFAULT;
+        final DreamBackend.DreamInfo incompatibleDream = new DreamBackend.DreamInfo();
+        incompatibleDream.dreamCategory = DreamService.DREAM_CATEGORY_HOME_PANEL;
+
+        when(mDreamPickerController.getSelectedDreams())
+                .thenReturn(Arrays.asList(compatibleDream, incompatibleDream));
+
+        dreamSettings.onAttach(context);
+        dreamSettings.onCreate(Bundle.EMPTY);
+
+        verify(mHomeControllerTogglePref).setEnabled(true);
+    }
+
+    @Test
+    @EnableFlags(Flags.FLAG_DREAMS_SWITCHER)
+    public void homePanelToggle_multiSelect_disableWhenNoDreamIsCompatible() {
+        MockitoAnnotations.initMocks(this);
+
+        final Context context = ApplicationProvider.getApplicationContext();
+
+        final DreamBackend mockBackend = mock(DreamBackend.class);
+        when(mockBackend.isDreamSwitcherEnabled()).thenReturn(true);
+        when(mockBackend.isEnabled()).thenReturn(true);
+        ReflectionHelpers.setStaticField(DreamBackend.class, "sInstance", mockBackend);
+
+        final DreamSettings dreamSettings = prepareDreamSettings(context);
+
+        // Only incompatible dreams
+        final DreamBackend.DreamInfo incompatibleDream1 = new DreamBackend.DreamInfo();
+        incompatibleDream1.dreamCategory = DreamService.DREAM_CATEGORY_HOME_PANEL;
+        final DreamBackend.DreamInfo incompatibleDream2 = new DreamBackend.DreamInfo();
+        incompatibleDream2.dreamCategory = DreamService.DREAM_CATEGORY_HOME_PANEL;
+
+        when(mDreamPickerController.getSelectedDreams())
+                .thenReturn(Arrays.asList(incompatibleDream1, incompatibleDream2));
+
+        dreamSettings.onAttach(context);
+        dreamSettings.onCreate(Bundle.EMPTY);
+
+        verify(mHomeControllerTogglePref).setEnabled(false);
     }
 
     @Test

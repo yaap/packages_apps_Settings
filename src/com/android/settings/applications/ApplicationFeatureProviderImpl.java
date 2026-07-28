@@ -39,7 +39,7 @@ import android.os.RemoteException;
 import android.os.SystemConfigManager;
 import android.os.UserManager;
 import android.service.euicc.EuiccService;
-import android.telecom.DefaultDialerManager;
+import android.telecom.TelecomManager;
 import android.text.TextUtils;
 import android.util.ArraySet;
 import android.util.Log;
@@ -48,6 +48,7 @@ import androidx.annotation.VisibleForTesting;
 
 import com.android.internal.telephony.SmsApplication;
 import com.android.settings.R;
+import com.android.settings.flags.Flags;
 import com.android.settings.webview.WebViewUpdateServiceWrapper;
 
 import java.util.ArrayList;
@@ -166,9 +167,16 @@ public class ApplicationFeatureProviderImpl implements ApplicationFeatureProvide
     public Set<String> getKeepEnabledPackages() {
         // Find current default phone/sms app. We should keep them enabled.
         final Set<String> keepEnabledPackages = new ArraySet<>();
-        final String defaultDialer = DefaultDialerManager.getDefaultDialerApplication(mContext);
+        final TelecomManager telecomManager = mContext.getSystemService(TelecomManager.class);
+        final String defaultDialer = telecomManager.getDefaultDialerPackage();
         if (!TextUtils.isEmpty(defaultDialer)) {
             keepEnabledPackages.add(defaultDialer);
+        }
+        if (Flags.keepSystemDialerEnabled()) {
+            final String systemDialer = telecomManager.getSystemDialerPackage();
+            if (!TextUtils.isEmpty(systemDialer)) {
+                keepEnabledPackages.add(systemDialer);
+            }
         }
         final ComponentName defaultSms = SmsApplication.getDefaultSmsApplication(
                 mContext, true /* updateIfNeeded */);

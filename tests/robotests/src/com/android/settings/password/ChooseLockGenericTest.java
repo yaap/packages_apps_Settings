@@ -49,14 +49,13 @@ import android.app.Application;
 import android.app.admin.DevicePolicyManager;
 import android.app.admin.PasswordMetrics;
 import android.app.admin.PasswordPolicy;
+import android.app.admin.flags.Flags;
 import android.content.Context;
 import android.content.Intent;
 import android.hardware.biometrics.BiometricManager;
-import android.hardware.biometrics.Flags;
 import android.hardware.face.FaceManager;
 import android.hardware.fingerprint.FingerprintManager;
 import android.os.Bundle;
-import android.platform.test.annotations.EnableFlags;
 import android.platform.test.flag.junit.SetFlagsRule;
 import android.provider.Settings.Global;
 import android.widget.TextView;
@@ -178,6 +177,21 @@ public class ChooseLockGenericTest {
 
         initActivity(null);
         assertThat(mActivity.isFinishing()).isFalse();
+    }
+
+    @Test
+    public void onCreate_isFactoryResetProtectionActive_shouldNotFinish() {
+        mSetFlagsRule.enableFlags(Flags.FLAG_USE_HARDENED_FRP_ACTIVE_CHECK);
+        Global.putInt(application.getContentResolver(), Global.DEVICE_PROVISIONED, 0);
+        // Set data block size to 0 to ensure that if the old logic was used, it would allow
+        // the activity to run (return true). Since we want to test the new logic which checks
+        // isFactoryResetProtectionActive(), we expect it to return false (finish activity) even
+        // if size is 0.
+        ShadowPersistentDataBlockManager.setDataBlockSize(0);
+        ShadowPersistentDataBlockManager.setIsFactoryResetProtectionActive(true);
+
+        initActivity(null);
+        assertThat(mActivity.isFinishing()).isTrue();
     }
 
     @Test
@@ -324,7 +338,6 @@ public class ChooseLockGenericTest {
     }
 
     @Test
-    @EnableFlags(Flags.FLAG_BP_FALLBACK_OPTIONS)
     public void onActivityResult_requestcode100_biometricError_shouldLaunchBiometricPrompt() {
         initActivity(null);
         mShadowBiometricManager.setCanAuthenticate(false);

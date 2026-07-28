@@ -34,10 +34,10 @@ import androidx.lifecycle.LifecycleOwner;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceScreen;
 
-import com.android.server.accessibility.Flags;
 import com.android.settings.R;
 import com.android.settings.core.BasePreferenceController;
 
+// LINT.IfChange
 /** Controller class that controls accessibility autoclick delay time settings. */
 public class ToggleAutoclickDelayBeforeClickController
         extends BasePreferenceController implements DefaultLifecycleObserver {
@@ -66,9 +66,7 @@ public class ToggleAutoclickDelayBeforeClickController
             @NonNull String preferenceKey) {
         super(context, preferenceKey);
 
-        if (Flags.enableAutoclickIndicator()) {
-            resetAutoclickDelayValueIfNecessary();
-        }
+        resetAutoclickDelayValueIfNecessary();
     }
 
     @Override
@@ -107,7 +105,7 @@ public class ToggleAutoclickDelayBeforeClickController
 
     @Override
     public int getAvailabilityStatus() {
-        return Flags.enableAutoclickIndicator() ? AVAILABLE : CONDITIONALLY_UNAVAILABLE;
+        return AVAILABLE;
     }
 
     @Override
@@ -136,3 +134,4 @@ public class ToggleAutoclickDelayBeforeClickController
         }
     }
 }
+// LINT.ThenChange(autoclick/ui/AutoclickDelayPreference.kt)

@@ -17,14 +17,18 @@
 package com.android.settings.inputmethod
 
 import android.app.ActivityManager
+import android.app.role.RoleManager
+import android.app.role.RoleManager.ROLE_NOTES
 import android.app.settings.SettingsEnums
 import android.content.Context
 import android.provider.Settings
 import android.provider.Settings.Secure.ACTION_CORNER_ACTION_HOME
 import android.provider.Settings.Secure.ACTION_CORNER_ACTION_LOCKSCREEN
 import android.provider.Settings.Secure.ACTION_CORNER_ACTION_NONE
+import android.provider.Settings.Secure.ACTION_CORNER_ACTION_NOTE
 import android.provider.Settings.Secure.ACTION_CORNER_ACTION_NOTIFICATIONS
 import android.provider.Settings.Secure.ACTION_CORNER_ACTION_OVERVIEW
+import android.provider.Settings.Secure.ACTION_CORNER_ACTION_PEEK
 import android.provider.Settings.Secure.ACTION_CORNER_ACTION_QUICK_SETTINGS
 import android.provider.Settings.Secure.ACTION_CORNER_BOTTOM_LEFT_ACTION
 import android.provider.Settings.Secure.ACTION_CORNER_BOTTOM_RIGHT_ACTION
@@ -40,6 +44,7 @@ import com.android.settings.inputmethod.InputPeripheralsSettingsUtils.isMouse
 import com.android.settings.inputmethod.InputPeripheralsSettingsUtils.isTouchpad
 import com.android.settings.overlay.FeatureFactory
 import com.android.settingslib.core.instrumentation.MetricsFeatureProvider
+import com.android.systemui.Flags
 
 /** The controller that handles the customization of each action corner. */
 class ActionCornerCustomizationController(context: Context, preferenceKey: String) :
@@ -50,6 +55,7 @@ class ActionCornerCustomizationController(context: Context, preferenceKey: Strin
 
     private val metricsFeatureProvider: MetricsFeatureProvider =
         FeatureFactory.featureFactory.metricsFeatureProvider
+    private val roleManager: RoleManager? = mContext.getSystemService(RoleManager::class.java)
 
     override fun getAvailabilityStatus(): Int {
         return if (actionCornerCustomization() && (isTouchpad() || isMouse())) AVAILABLE
@@ -62,12 +68,31 @@ class ActionCornerCustomizationController(context: Context, preferenceKey: Strin
         val cornerName = mContext.getString(corner.nameId)
         listPreference.dialogTitle =
             mContext.getString(R.string.action_corner_action_dialog_title, cornerName)
+        listPreference.entries = entries
         listPreference.entryValues = entryValues
     }
 
     override fun updateState(preference: Preference?) {
         updateListPreference()
     }
+
+    private val entries: Array<CharSequence>
+        get() {
+            val titles =
+                mContext.resources
+                    .getStringArray(R.array.action_corner_action_titles)
+                    .toMutableList()
+            if (com.android.window.flags.Flags.enableHomeScreenPeeking()) {
+                titles.add(mContext.getString(R.string.action_corner_action_peek_title))
+            }
+            if (
+                Flags.enableNoteInActionCorner() &&
+                    roleManager?.isRoleAvailable(RoleManager.ROLE_NOTES) == true
+            ) {
+                titles.add(mContext.getString(R.string.action_corner_action_note_title))
+            }
+            return titles.toTypedArray()
+        }
 
     private fun updateListPreference() {
         listPreference.value = getCurrentAction()
@@ -100,7 +125,22 @@ class ActionCornerCustomizationController(context: Context, preferenceKey: Strin
         return true
     }
 
-    companion object {
+    private val entryValues: Array<CharSequence>
+        get() {
+            val values = BASE_ENTRY_VALUES.toMutableList()
+            if (com.android.window.flags.Flags.enableHomeScreenPeeking()) {
+                values.add(ACTION_CORNER_ACTION_PEEK.toString())
+            }
+            if (
+                Flags.enableNoteInActionCorner() &&
+                    roleManager?.isRoleAvailable(RoleManager.ROLE_NOTES) == true
+            ) {
+                values.add(ACTION_CORNER_ACTION_NOTE.toString())
+            }
+            return values.toTypedArray()
+        }
+
+    private companion object {
         val prefKeyToCorner =
             mapOf(
                 "action_corner_bottom_left" to Corner.BOTTOM_LEFT,
@@ -108,8 +148,7 @@ class ActionCornerCustomizationController(context: Context, preferenceKey: Strin
                 "action_corner_top_left" to Corner.TOP_LEFT,
                 "action_corner_top_right" to Corner.TOP_RIGHT,
             )
-
-        val entryValues =
+        val BASE_ENTRY_VALUES =
             arrayOf<CharSequence>(
                 ACTION_CORNER_ACTION_NONE.toString(),
                 ACTION_CORNER_ACTION_HOME.toString(),

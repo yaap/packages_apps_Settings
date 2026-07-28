@@ -30,7 +30,10 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceScreen
 import com.android.settings.R
 import com.android.settings.Utils
+import com.android.settings.deviceinfo.PhoneNumberUtil
+import com.android.settings.deviceinfo.imei.ImeiData
 import com.android.settings.deviceinfo.imei.ImeiInfoDialogFragment
+import com.android.settings.deviceinfo.imei.getImeiList
 import com.android.settings.flags.Flags
 import com.android.settings.network.SubscriptionInfoListViewModel
 import com.android.settingslib.spa.framework.util.collectLatestWithLifecycle
@@ -40,7 +43,11 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 // LINT.IfChange
-/** Preference controller for "IMEI" */
+/**
+ * Preference controller for "IMEI"
+ *
+ * @Deprecated Will be removed, and using {@link MobileNetworkImeiPreference} instead.
+ */
 class MobileNetworkImeiPreferenceController(context: Context, key: String) :
     TelephonyBasePreferenceController(context, key) {
 
@@ -51,13 +58,21 @@ class MobileNetworkImeiPreferenceController(context: Context, key: String) :
     private var simSlot = -1
     private var imei = String()
     private var title = String()
+    private var imeiList: List<ImeiData> = listOf<ImeiData>()
 
     fun init(fragment: Fragment, subId: Int) {
+        init(fragment, subId, mContext.getImeiList)
+    }
+
+    fun init(fragment: Fragment, subId: Int, imeiList: List<ImeiData> = mContext.getImeiList) {
         this.fragment = fragment
         lazyViewModel = fragment.viewModels()
         mSubId = subId
-        mTelephonyManager = mContext.getSystemService(TelephonyManager::class.java)
-            ?.createForSubscriptionId(mSubId)!!
+        mTelephonyManager =
+            mContext
+                .getSystemService(TelephonyManager::class.java)
+                ?.createForSubscriptionId(mSubId)!!
+        this.imeiList = imeiList
     }
 
     override fun getAvailabilityStatus(subId: Int): Int = when {
@@ -100,9 +115,9 @@ class MobileNetworkImeiPreferenceController(context: Context, key: String) :
     @VisibleForTesting
     suspend fun refreshData(subscription:SubscriptionInfo){
         withContext(Dispatchers.Default) {
-            title = getTitle()
-            imei = getImei()
             simSlot = subscription.simSlotIndex
+            imei = getImei()
+            title = getTitle()
         }
         refreshUi()
     }
@@ -127,8 +142,12 @@ class MobileNetworkImeiPreferenceController(context: Context, key: String) :
     }
 
     private fun getTitleForGsmPhone(): String {
-        return mContext.getString(
-            if (isPrimaryImei()) R.string.imei_primary else R.string.status_imei)
+        val indexing = imeiList.map { it.imei }.indexOf(imei)
+        return when {
+            indexing != -1 && imeiList.size >= 2 ->
+                mContext.getString(R.string.imei_multi_sim, indexing + 1)
+            else -> mContext.getString(R.string.status_imei)
+        }
     }
 
     private fun getTitleForCdmaPhone(): String {

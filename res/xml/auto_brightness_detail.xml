@@ -19,6 +19,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:settings="http://schemas.android.com/apk/res-auto"
     xmlns:app="http://schemas.android.com/apk/res/com.android.settings"
+    android:key="auto_brightness_entry"
     android:title="@string/auto_brightness_title">
 
     <com.android.settingslib.widget.IllustrationPreference

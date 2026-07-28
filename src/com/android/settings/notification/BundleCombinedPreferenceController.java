@@ -23,17 +23,18 @@ import android.content.Context;
 import android.os.UserHandle;
 import android.os.UserManager;
 import android.provider.Settings;
-import android.service.notification.Adjustment;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import androidx.preference.CheckBoxPreference;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceCategory;
 import androidx.preference.TwoStatePreference;
 
 import com.android.settings.Utils;
 import com.android.settings.core.BasePreferenceController;
+import com.android.settingslib.widget.SelectorWithWidgetPreference;
 
 import java.util.List;
 import java.util.Set;
@@ -47,13 +48,12 @@ public class BundleCombinedPreferenceController extends BasePreferenceController
     static final String WORK_PREF_KEY = "work_profile_pref";
     static final String TYPE_CATEGORY_KEY = "enabled_classification_types";
     static final String EXCLUDED_APPS_CATEGORY_KEY = "notification_bundle_excluded_apps_list";
-    static final String PROMO_KEY = "promotions";
-    static final String NEWS_KEY = "news";
-    static final String SOCIAL_KEY = "social";
-    static final String RECS_KEY = "recs";
     static final String ALWAYS_EXPAND_KEY = "always_expand_pref";
-
-    static final List<String> ALL_PREF_TYPES = List.of(PROMO_KEY, NEWS_KEY, SOCIAL_KEY, RECS_KEY);
+    static final String AUTO_EXPAND_KEY = "auto_expand_pref";
+    static final String NEVER_EXPAND_KEY = "never_expand_pref";
+    static final int AUTO_EXPAND_VALUE = 0;
+    static final int NEVER_EXPAND_VALUE = -1;
+    static final int ALWAYS_EXPAND_VALUE = 1;
 
     @VisibleForTesting
     static final int ON = 1;
@@ -65,7 +65,9 @@ public class BundleCombinedPreferenceController extends BasePreferenceController
 
     private @Nullable TwoStatePreference mGlobalPref;
     private @Nullable TwoStatePreference mWorkPref;
-    private @Nullable TwoStatePreference mAlwaysExpandPref;
+    private @Nullable SelectorWithWidgetPreference mExpandAlwaysPref;
+    private @Nullable SelectorWithWidgetPreference mExpandAutoPref;
+    private @Nullable SelectorWithWidgetPreference mExpandNeverPref;
     private @Nullable PreferenceCategory mTypesPrefCategory;
     private @Nullable PreferenceCategory mExcludedAppsPrefCategory;
 
@@ -94,7 +96,7 @@ public class BundleCombinedPreferenceController extends BasePreferenceController
     @Override
     @AvailabilityStatus
     public int getAvailabilityStatus() {
-        if (Flags.notificationClassificationUi() && mBackend.isNotificationBundlingSupported()) {
+        if (mBackend.isNotificationBundlingSupported()) {
             return AVAILABLE;
         }
         return CONDITIONALLY_UNAVAILABLE;
@@ -116,18 +118,36 @@ public class BundleCombinedPreferenceController extends BasePreferenceController
             mWorkPref.setOnPreferenceChangeListener(mWorkPrefListener);
         }
 
-        mAlwaysExpandPref = category.findPreference(ALWAYS_EXPAND_KEY);
-        if (mAlwaysExpandPref != null) {
-            mAlwaysExpandPref.setOnPreferenceChangeListener(mAlwaysExpandPrefListener);
+        mExpandAlwaysPref = category.findPreference(ALWAYS_EXPAND_KEY);
+        if (mExpandAlwaysPref != null) {
+            mExpandAlwaysPref.setOnClickListener(mExpansionListener);
+        }
+        mExpandAutoPref = category.findPreference(AUTO_EXPAND_KEY);
+        if (mExpandAutoPref != null) {
+            mExpandAutoPref.setOnClickListener(mExpansionListener);
+        }
+        mExpandNeverPref = category.findPreference(NEVER_EXPAND_KEY);
+        if (mExpandNeverPref != null) {
+            mExpandNeverPref.setOnClickListener(mExpansionListener);
         }
 
         mTypesPrefCategory = category.findPreference(TYPE_CATEGORY_KEY);
         if (mTypesPrefCategory != null) {
-            for (String key : ALL_PREF_TYPES) {
-                TwoStatePreference typePref = mTypesPrefCategory.findPreference(key);
-                if (typePref != null) {
-                    typePref.setOnPreferenceChangeListener(getListenerForType(key));
+            List<NotificationBackend.ClassificationType> classificationTypes =
+                    mBackend.getClassificationTypes(mContext);
+            for (NotificationBackend.ClassificationType type : classificationTypes) {
+                String prefKey = String.valueOf(type.typeId);
+                TwoStatePreference typePref =
+                        mTypesPrefCategory.findPreference(prefKey);
+                if (typePref == null) {
+                    typePref = new CheckBoxPreference(mContext);
+                    typePref.setKey(prefKey);
+                    typePref.setTitle(type.typeName);
+                    typePref.setSummary(type.typeDesc);
+                    mTypesPrefCategory.addPreference(typePref);
                 }
+                typePref.setOnPreferenceChangeListener(getListenerForType());
+                typePref.setChecked(type.enabled);
             }
         }
 
@@ -162,13 +182,6 @@ public class BundleCombinedPreferenceController extends BasePreferenceController
         // if global switch is off hide the whole category
         if (mTypesPrefCategory != null) {
             mTypesPrefCategory.setVisible(isBundlingEnabled);
-            if (isBundlingEnabled) {
-                // checkboxes for individual types should only be active if the global switch is on
-                for (String key : ALL_PREF_TYPES) {
-                    TwoStatePreference typePref = mTypesPrefCategory.findPreference(key);
-                    typePref.setChecked(allowedTypes.contains(getBundleTypeForKey(key)));
-                }
-            }
         }
 
         // if global switch is off hide the whole category
@@ -176,11 +189,28 @@ public class BundleCombinedPreferenceController extends BasePreferenceController
             mExcludedAppsPrefCategory.setVisible(isBundlingEnabled);
         }
 
-        if (mAlwaysExpandPref != null) {
-            mAlwaysExpandPref.setVisible(isBundlingEnabled);
+        if (mExpandNeverPref != null) {
+            mExpandNeverPref.setVisible(isBundlingEnabled);
             if (isBundlingEnabled) {
-                mAlwaysExpandPref.setChecked(Settings.Secure.getInt(mContext.getContentResolver(),
-                        NOTIFICATION_BUNDLES_ALWAYS_EXPAND, OFF) == ON);
+                mExpandNeverPref.setChecked(Settings.Secure.getInt(mContext.getContentResolver(),
+                        NOTIFICATION_BUNDLES_ALWAYS_EXPAND, AUTO_EXPAND_VALUE)
+                        == NEVER_EXPAND_VALUE);
+            }
+        }
+        if (mExpandAutoPref != null) {
+            mExpandAutoPref.setVisible(isBundlingEnabled);
+            if (isBundlingEnabled) {
+                mExpandAutoPref.setChecked(Settings.Secure.getInt(mContext.getContentResolver(),
+                        NOTIFICATION_BUNDLES_ALWAYS_EXPAND, AUTO_EXPAND_VALUE)
+                        == AUTO_EXPAND_VALUE);
+            }
+        }
+        if (mExpandAlwaysPref != null) {
+            mExpandAlwaysPref.setVisible(isBundlingEnabled);
+            if (isBundlingEnabled) {
+                mExpandAlwaysPref.setChecked(Settings.Secure.getInt(mContext.getContentResolver(),
+                        NOTIFICATION_BUNDLES_ALWAYS_EXPAND, AUTO_EXPAND_VALUE)
+                        == ALWAYS_EXPAND_VALUE);
             }
         }
     }
@@ -201,21 +231,44 @@ public class BundleCombinedPreferenceController extends BasePreferenceController
         return true;
     };
 
-    private Preference.OnPreferenceChangeListener mAlwaysExpandPrefListener = (p, val) -> {
-        boolean checked = (boolean) val;
-        Settings.Secure.putInt(mContext.getContentResolver(),
-                NOTIFICATION_BUNDLES_ALWAYS_EXPAND,
-                checked ? ON : OFF);
-        return true;
-    };
+    private SelectorWithWidgetPreference.OnClickListener mExpansionListener =
+            new SelectorWithWidgetPreference.OnClickListener() {
+                @Override
+                public void onRadioButtonClicked(SelectorWithWidgetPreference preference) {
+                    if (ALWAYS_EXPAND_KEY.equals(preference.getKey())) {
+                        mExpandAutoPref.setChecked(false);
+                        mExpandNeverPref.setChecked(false);
+                        mExpandAlwaysPref.setChecked(true);
 
-    // Returns a preference listener for the given pref key that:
+                        Settings.Secure.putInt(mContext.getContentResolver(),
+                                NOTIFICATION_BUNDLES_ALWAYS_EXPAND,
+                                ALWAYS_EXPAND_VALUE);
+                    } else if (AUTO_EXPAND_KEY.equals(preference.getKey())) {
+                        mExpandAlwaysPref.setChecked(false);
+                        mExpandNeverPref.setChecked(false);
+                        mExpandAutoPref.setChecked(true);
+
+                        Settings.Secure.putInt(mContext.getContentResolver(),
+                                NOTIFICATION_BUNDLES_ALWAYS_EXPAND,
+                                AUTO_EXPAND_VALUE);
+                    } else if (NEVER_EXPAND_KEY.equals(preference.getKey())) {
+                        mExpandAlwaysPref.setChecked(false);
+                        mExpandAutoPref.setChecked(false);
+                        mExpandNeverPref.setChecked(true);
+                        Settings.Secure.putInt(mContext.getContentResolver(),
+                                NOTIFICATION_BUNDLES_ALWAYS_EXPAND,
+                                NEVER_EXPAND_VALUE);
+                    }
+                }
+            };
+
+    // Returns a preference listener for a type pref that:
     //   * sets the backend state for whether that type is enabled
     //   * if it is disabled, trigger a new update sync global switch if needed
-    private Preference.OnPreferenceChangeListener getListenerForType(String prefKey) {
+    private Preference.OnPreferenceChangeListener getListenerForType() {
         return (p, val) -> {
             boolean checked = (boolean) val;
-            mBackend.setBundleTypeState(getBundleTypeForKey(prefKey), checked);
+            mBackend.setBundleTypeState(Integer.parseInt(p.getKey()), checked);
             if (!checked) {
                 // goes from checked to un-checked; update state in case this was the last enabled
                 // individual category
@@ -224,18 +277,4 @@ public class BundleCombinedPreferenceController extends BasePreferenceController
             return true;
         };
     }
-
-    static @Adjustment.Types int getBundleTypeForKey(String preferenceKey) {
-        if (PROMO_KEY.equals(preferenceKey)) {
-            return Adjustment.TYPE_PROMOTION;
-        } else if (NEWS_KEY.equals(preferenceKey)) {
-            return Adjustment.TYPE_NEWS;
-        } else if (SOCIAL_KEY.equals(preferenceKey)) {
-            return Adjustment.TYPE_SOCIAL_MEDIA;
-        } else if (RECS_KEY.equals(preferenceKey)) {
-            return Adjustment.TYPE_CONTENT_RECOMMENDATION;
-        }
-        return Adjustment.TYPE_OTHER;
-    }
-
 }

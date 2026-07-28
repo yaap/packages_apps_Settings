@@ -26,22 +26,32 @@ import com.android.internal.R as InternalR
 import com.android.settings.R
 import com.android.settings.Settings.NavigationModeSettingsActivity
 import com.android.settings.core.PreferenceScreenMixin
-import com.android.settings.flags.Flags
 import com.android.settings.utils.makeLaunchIntent
+import com.android.settingslib.datastore.KeyValueStore
+import com.android.settingslib.metadata.METADATA_IN_UI
+import com.android.settingslib.metadata.PersistentPreference
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
 import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.preferenceHierarchy
 import kotlinx.coroutines.CoroutineScope
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 
 // LINT.IfChange
 @ProvidePreferenceScreen(SystemNavigationGestureScreen.KEY)
 class SystemNavigationGestureScreen :
     PreferenceScreenMixin, PreferenceAvailabilityProvider, PreferenceSummaryProvider {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED)
+
 
     override val key: String
         get() = KEY
+
+    // TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.gesture_system_navigation_input_summary_purpose
 
     override val title: Int
         get() = R.string.system_navigation_title
@@ -51,17 +61,20 @@ class SystemNavigationGestureScreen :
 
     override fun getMetricsCategory() = SettingsEnums.SETTINGS_GESTURE_SWIPE_UP
 
-    override fun isFlagEnabled(context: Context) = Flags.deeplinkSystem25q4()
-
     override fun fragmentClass() = SystemNavigationGestureSettings::class.java
 
     override fun getPreferenceHierarchy(context: Context, coroutineScope: CoroutineScope) =
-        preferenceHierarchy(context) {}
+        preferenceHierarchy(context) { +SystemNavigationGestureScreenPreference(this@SystemNavigationGestureScreen) }
 
     override fun hasCompleteHierarchy() = false
 
     override val keywords: Int
         get() = R.string.keywords_system_navigation
+
+    override val availabilityDescription =
+        "The device must support the swipe up gesture."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context) = context.isGestureAvailable()
 
@@ -101,6 +114,37 @@ class SystemNavigationGestureScreen :
 
     fun Context.is2ButtonNavigationEnabled(): Boolean =
         NAV_BAR_MODE_2BUTTON == resources.getInteger(InternalR.integer.config_navBarInteractionMode)
+
+    class SystemNavigationGestureScreenPreference(
+        private val screenMetadata : SystemNavigationGestureScreen
+    ) : PreferenceMetadata, PreferenceSummaryProvider, PreferenceAvailabilityProvider, PersistentPreference<String> {
+        override val key : String
+            get() = "gesture_system_navigation_input_summary_preference"
+
+        override val purpose : Int
+            get() = screenMetadata.purpose
+
+        override val supportsWrite: Boolean
+            get() = false
+
+        override val valueType = String::class.javaObjectType
+
+        override fun storage(context: Context): KeyValueStore = createSummaryStorage(context, key)
+
+        override fun tags(context: Context) = arrayOf(METADATA_IN_UI)
+
+        override val indexable = false
+
+        override fun isEnabled(context: Context) : Boolean = screenMetadata.isEnabled(context)
+
+        override fun getSummary(context: Context) : CharSequence? = screenMetadata.getSummary(context)
+
+        override val availabilityDescription = screenMetadata.availabilityDescription
+
+        override fun getAvailabilityStability() = screenMetadata.getAvailabilityStability()
+
+        override fun isAvailable(context: Context) : Boolean = screenMetadata.isAvailable(context)
+    }
 
     companion object {
         const val KEY = "gesture_system_navigation_input_summary"

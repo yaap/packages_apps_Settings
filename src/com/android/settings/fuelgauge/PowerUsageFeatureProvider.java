@@ -25,10 +25,14 @@ import android.util.SparseIntArray;
 
 import androidx.annotation.NonNull;
 
+import com.android.settings.core.InstrumentedPreferenceFragment;
+import com.android.settings.fuelgauge.batteryusage.BatteryAdvanceInfoController;
+import com.android.settings.fuelgauge.batteryusage.BatteryAdvanceInfoDialog;
 import com.android.settings.fuelgauge.batteryusage.BatteryDiffData;
 import com.android.settings.fuelgauge.batteryusage.BatteryEvent;
 import com.android.settings.fuelgauge.batteryusage.DetectRequestSourceType;
 import com.android.settings.fuelgauge.batteryusage.PowerAnomalyEventList;
+import com.android.settingslib.core.lifecycle.Lifecycle;
 import com.android.settingslib.fuelgauge.Estimate;
 
 import java.util.List;
@@ -53,13 +57,27 @@ public interface PowerUsageFeatureProvider {
     /** Check whether to log the optimization mode of app entry in period job */
     boolean isAppOptimizationModeLogged();
 
-    /**
-     * Returns a threshold (in milliseconds) for the minimal screen on time in battery usage list
-     */
-    double getBatteryUsageListScreenOnTimeThresholdInMs();
+    /** Returns a threshold (milliseconds) for the minimal screen on time in battery usage list */
+    double getBatteryUsageListScreenOnTimeThresholdMs();
 
-    /** Returns a threshold (mA) for the minimal comsume power in battery usage list */
+    /** Returns a threshold (mA) for the minimal consume power in battery usage list */
     double getBatteryUsageListConsumePowerThreshold();
+
+    /**
+     * Returns a threshold (milliseconds) for the unexpected reset error detected in the app battery
+     * usage time.
+     */
+    long getBatteryUsageResetErrorTimeThresholdMs();
+
+    /**
+     * Returns a threshold (mA) for the unexpected app battery usage consumed power reset.
+     */
+    double getBatteryUsageResetErrorPowerThreshold();
+
+    /**
+     * Returns a threshold (mA) for the unexpected app battery usage consumed power reset.
+     */
+    double getBatteryUsageOverCalcPowerDrainThreshold();
 
     /** Returns an allowlist of app names combined into the system-apps item */
     List<String> getSystemAppsAllowlist();
@@ -112,6 +130,15 @@ public interface PowerUsageFeatureProvider {
      * @return A string containing the estimate and a label indicating it is a normal estimate
      */
     String getOldEstimateDebugString(String timeRemaining);
+
+    /** Returns the battery advance info dialog */
+    @Nullable
+    BatteryAdvanceInfoDialog getBatteryAdvanceInfoDialog();
+
+    /** Returns the battery advance info controller */
+    @Nullable
+    BatteryAdvanceInfoController getBatteryAdvanceInfoController(
+            Context context, Lifecycle lifecycle, InstrumentedPreferenceFragment fragment);
 
     /** Checks whether smart battery feature is supported in this device */
     boolean isSmartBatterySupported();
@@ -172,8 +199,11 @@ public interface PowerUsageFeatureProvider {
     /** Whether the device is under the battery defender mode */
     boolean isBatteryDefend(BatteryInfo info);
 
-    /** Whether the battery usage reattribute is eabled or not. */
+    /** Whether the battery usage reattribute is enabled or not. */
     boolean isBatteryUsageReattributeEnabled();
+
+    /** Whether the battery advance info is enabled or not. */
+    boolean isBatteryAdvanceInfoEnabled();
 
     /** Collect and process battery reattribute data if needed. */
     boolean processBatteryReattributeData(

@@ -22,7 +22,9 @@ import androidx.core.net.toUri
 import com.android.settings.R
 import com.android.settings.accessibility.extensions.isInSetupWizard
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceMetadata
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 
 /**
  * Preference that launches the app info page for a given package name.
@@ -33,12 +35,15 @@ import com.android.settingslib.metadata.PreferenceMetadata
  */
 class LaunchAppInfoPreference(
     override val key: String,
+    override val purpose: Int,
     override val title: Int = R.string.application_info_label,
     private val packageName: String,
 ) : PreferenceMetadata, PreferenceAvailabilityProvider {
 
     override val indexable
         get() = false
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
 
     override fun intent(context: Context): Intent? {
         return if (context.packageManager.isPackageAvailable(packageName)) {
@@ -49,6 +54,10 @@ class LaunchAppInfoPreference(
             null
         }
     }
+
+    override val availabilityDescription = UI_ONLY_PREFERENCE
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context): Boolean {
         return !context.isInSetupWizard() && intent(context) != null

@@ -23,18 +23,23 @@ import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.graphics.drawable.TransitionDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.DrawableRes;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.core.content.ContextCompat;
+import androidx.core.view.AccessibilityDelegateCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 import androidx.preference.Preference;
 import androidx.preference.PreferenceGroup;
 import androidx.preference.PreferenceScreen;
@@ -45,6 +50,7 @@ import androidx.recyclerview.widget.RecyclerView.ViewHolder;
 import com.android.settings.R;
 import com.android.settings.SettingsPreferenceFragment;
 import com.android.settings.accessibility.AccessibilityUtil;
+import com.android.settingslib.widget.Expandable;
 import com.android.settingslib.widget.SettingsPreferenceGroupAdapter;
 import com.android.settingslib.widget.SettingsThemeHelper;
 
@@ -56,14 +62,15 @@ public class HighlightablePreferenceGroupAdapter extends SettingsPreferenceGroup
     @VisibleForTesting static final long DELAY_COLLAPSE_DURATION_MILLIS = 300L;
     @VisibleForTesting static final long DELAY_HIGHLIGHT_DURATION_MILLIS = 600L;
     @VisibleForTesting static final long DELAY_HIGHLIGHT_DURATION_MILLIS_A11Y = 300L;
-    private static final long HIGHLIGHT_DURATION = 15000L;
+    @VisibleForTesting static final long HIGHLIGHT_DURATION = 15000L;
     private static final int HIGHLIGHT_FADE_OUT_DURATION = 500;
     private static final int HIGHLIGHT_FADE_IN_DURATION = 200;
 
     @VisibleForTesting @DrawableRes final int mHighlightBackgroundRes;
-    @VisibleForTesting boolean mFadeInAnimated;
+    @VisibleForTesting boolean mHighlightVisible;
 
     private final Context mContext;
+    private final PreferenceGroup mRootGroup;
     private final @DrawableRes int mNormalBackgroundRes;
     private final @Nullable String mHighlightKey;
     private boolean mHighlightRequested;
@@ -105,6 +112,23 @@ public class HighlightablePreferenceGroupAdapter extends SettingsPreferenceGroup
             @Nullable String key,
             boolean highlightRequested) {
         super(preferenceGroup);
+        mRootGroup = preferenceGroup;
+        mHighlightKey = key;
+        mHighlightRequested = highlightRequested;
+        mContext = preferenceGroup.getContext();
+        final TypedValue outValue = new TypedValue();
+        mNormalBackgroundRes = R.drawable.preference_background;
+        mHighlightBackgroundRes = R.drawable.preference_background_highlighted;
+    }
+
+    public HighlightablePreferenceGroupAdapter(
+            @NonNull PreferenceGroup preferenceGroup,
+            @Nullable String key,
+            boolean highlightRequested,
+            java.util.Map<String, com.android.settingslib.widget.FooterData> footerDataMap) {
+        super(preferenceGroup, footerDataMap);
+
+        mRootGroup = preferenceGroup;
         mHighlightKey = key;
         mHighlightRequested = highlightRequested;
         mContext = preferenceGroup.getContext();
@@ -127,9 +151,19 @@ public class HighlightablePreferenceGroupAdapter extends SettingsPreferenceGroup
                 && position == mHighlightPosition
                 && (mHighlightKey != null && TextUtils.equals(mHighlightKey, preference.getKey()))
                 && v.isShown()) {
-            // This position should be highlighted. If it's highlighted before - skip animation.
-            v.requestAccessibilityFocus();
-            addHighlightBackground(holder, !mFadeInAnimated, position);
+            // set initial accessibility focus
+            TextView title = (TextView) holder.findViewById(android.R.id.title);
+            if (title != null) {
+                ViewCompat.setAccessibilityDelegate(title, new AccessibilityDelegateCompat() {
+                        @Override
+                        public void onInitializeAccessibilityNodeInfo(
+                                View host, AccessibilityNodeInfoCompat info) {
+                            super.onInitializeAccessibilityNodeInfo(host, info);
+                            info.setRequestInitialAccessibilityFocus(true);
+                        }
+                    });
+            }
+            addHighlightBackground(holder, !mHighlightVisible, position);
         } else if (Boolean.TRUE.equals(v.getTag(R.id.preference_highlighted))) {
             // View with highlight is reused for a view that should not have highlight
             removeHighlightBackground(holder, false /* animate */, position);
@@ -144,6 +178,9 @@ public class HighlightablePreferenceGroupAdapter extends SettingsPreferenceGroup
         if (mHighlightRequested || recyclerView == null || TextUtils.isEmpty(mHighlightKey)) {
             return;
         }
+
+        expandGroupIfNecessary(mRootGroup, mHighlightKey);
+
         final int position = getPreferenceAdapterPosition(mHighlightKey);
         if (position < 0) {
             return;
@@ -227,9 +264,48 @@ public class HighlightablePreferenceGroupAdapter extends SettingsPreferenceGroup
         v.postDelayed(
                 () -> {
                     mHighlightPosition = RecyclerView.NO_POSITION;
+                    mHighlightVisible = false;
                     removeHighlightBackground(holder, true /* animate */, position);
                 },
                 HIGHLIGHT_DURATION);
+    }
+
+    /**
+     * Recursively traverses the preference tree to find the target highlight key.
+     * If the key is found inside an expandable preference group, it programmatically
+     * expands the group to ensure the target preference is visible before highlighting.
+     *
+     * @param group The current preference group being inspected.
+     * @param targetKey The preference key requested to be highlighted.
+     * @return True if the target key was found within this group or its children, false otherwise.
+     */
+    private boolean expandGroupIfNecessary(PreferenceGroup group, String targetKey) {
+        if (group == null || TextUtils.isEmpty(targetKey)) {
+            return false;
+        }
+
+        for (int i = 0; i < group.getPreferenceCount(); i++) {
+            Preference pref = group.getPreference(i);
+
+            // Target preference found directly
+            if (TextUtils.equals(pref.getKey(), targetKey)) {
+                return true;
+            }
+
+            // If it's a nested group, search recursively
+            if (pref instanceof PreferenceGroup) {
+                if (expandGroupIfNecessary((PreferenceGroup) pref, targetKey)) {
+
+                    // Target is inside this group. Expand it if it supports programmed expansion.
+                    if (pref instanceof Expandable) {
+                        ((Expandable) pref).setExpanded(true);
+                        Log.d(TAG, "Automatically expanded group for target key: " + targetKey);
+                    }
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     private void addHighlightBackground(
@@ -262,10 +338,11 @@ public class HighlightablePreferenceGroupAdapter extends SettingsPreferenceGroup
             requestRemoveHighlightDelayed(holder, position);
             return;
         }
-        mFadeInAnimated = true;
+        mHighlightVisible = true;
 
         TransitionDrawable transitionDrawable = new TransitionDrawable(
                 new Drawable[]{backgroundFromDrawable, backgroundToDrawable});
+        transitionDrawable.setPaddingMode(LayerDrawable.PADDING_MODE_STACK);
         v.setBackground(transitionDrawable);
 
         final ValueAnimator fadeInLoop =
@@ -302,7 +379,6 @@ public class HighlightablePreferenceGroupAdapter extends SettingsPreferenceGroup
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
 
-                mFadeInAnimated = false;
                 if (v.getTag(R.id.active_background_animator) == fadeInLoop) {
                     v.setTag(R.id.active_background_animator, null);
                 }
@@ -312,6 +388,7 @@ public class HighlightablePreferenceGroupAdapter extends SettingsPreferenceGroup
                 if (Boolean.TRUE.equals(v.getTag(R.id.preference_highlighted))) {
                     requestRemoveHighlightDelayed(holder, position);
                 } else {
+                    mHighlightVisible = false;
                     holder.setIsRecyclable(true);
                 }
             }
@@ -319,7 +396,6 @@ public class HighlightablePreferenceGroupAdapter extends SettingsPreferenceGroup
             @Override
             public void onAnimationCancel(Animator animation) {
                 super.onAnimationCancel(animation);
-                mFadeInAnimated = false;
 
                 if (v.getTag(R.id.active_background_animator) == fadeInLoop) {
                     v.setTag(R.id.active_background_animator, null);
@@ -330,6 +406,7 @@ public class HighlightablePreferenceGroupAdapter extends SettingsPreferenceGroup
                     requestRemoveHighlightDelayed(holder, position);
                 } else {
                     v.setBackgroundResource(backgroundFrom);
+                    mHighlightVisible = false;
                     holder.setIsRecyclable(true);
                 }
             }

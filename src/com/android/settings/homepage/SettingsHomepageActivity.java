@@ -62,6 +62,7 @@ import androidx.window.embedding.SplitInfo;
 import androidx.window.embedding.SplitRule;
 import androidx.window.java.embedding.SplitControllerCallbackAdapter;
 
+import com.android.settings.PccAwareUidComparator;
 import com.android.settings.R;
 import com.android.settings.Settings;
 import com.android.settings.SettingsActivity;
@@ -229,16 +230,19 @@ public class SettingsHomepageActivity extends FragmentActivity implements
             }
         }
 
+        final boolean isEmbeddedDeepLink = shouldLaunchDeepLinkIntentToRight();
         final boolean isDeepLinkStartedFromSearch = getIntent().getBooleanExtra(
                 EXTRA_IS_DEEPLINK_HOME_STARTED_FROM_SEARCH, false /* defaultValue */);
         if (!isTaskRoot && !isDeepLinkStartedFromSearch) {
-            if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_NEW_TASK) != 0) {
+            if ((getIntent().getFlags() & Intent.FLAG_ACTIVITY_NEW_TASK) != 0
+                    && !isEmbeddedDeepLink) {
                 Log.i(TAG, "Activity has been started, finishing");
             } else {
-                Log.i(TAG, "Homepage should be started with FLAG_ACTIVITY_NEW_TASK, restarting");
+                Log.i(TAG, "Homepage is not started as the task root, restarting");
                 Intent intent = new Intent(getIntent())
                         .setPackage(getPackageName())
                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                | Intent.FLAG_ACTIVITY_CLEAR_TASK
                                 | Intent.FLAG_ACTIVITY_FORWARD_RESULT)
                         .putExtra(EXTRA_USER_HANDLE, getUser())
                         .putExtra(EXTRA_INITIAL_REFERRER, getCurrentReferrer());
@@ -283,8 +287,8 @@ public class SettingsHomepageActivity extends FragmentActivity implements
             return fragment;
         }, R.id.main_content);
 
-        // Launch the intent from deep link for large screen devices.
-        if (shouldLaunchDeepLinkIntentToRight()) {
+        // Launch the intent of the embedded deep link
+        if (isEmbeddedDeepLink) {
             launchDeepLinkIntentToRight();
         }
 
@@ -339,7 +343,7 @@ public class SettingsHomepageActivity extends FragmentActivity implements
         if (isFinishing()) {
             return;
         }
-        // Launch the intent from deep link for large screen devices.
+        // Launch the intent of the embedded deep link.
         if (shouldLaunchDeepLinkIntentToRight()) {
             launchDeepLinkIntentToRight();
         }
@@ -482,7 +486,8 @@ public class SettingsHomepageActivity extends FragmentActivity implements
         return showFragment;
     }
 
-    private boolean shouldLaunchDeepLinkIntentToRight() {
+    @VisibleForTesting
+    boolean shouldLaunchDeepLinkIntentToRight() {
         if (!ActivityEmbeddingUtils.isSettingsSplitEnabled(this)
                 || !FeatureFlagUtils.isEnabled(this,
                         FeatureFlagUtils.SETTINGS_SUPPORT_LARGE_SCREEN)) {
@@ -641,7 +646,7 @@ public class SettingsHomepageActivity extends FragmentActivity implements
 
         // When activityInfo.exported is false, Activity still can be launched if applications have
         // the same user ID.
-        if (UserHandle.isSameApp(callerUid, targetUid)) {
+        if (PccAwareUidComparator.isSameApp(this, callerUid, targetUid)) {
             return true;
         }
 
@@ -713,25 +718,21 @@ public class SettingsHomepageActivity extends FragmentActivity implements
     }
 
     private void reloadHighlightMenuKey() {
+        if (mMainFragment == null) {
+            return;
+        }
         mMainFragment.getArguments().putString(SettingsActivity.EXTRA_FRAGMENT_ARG_KEY,
                 getHighlightMenuKey());
         mMainFragment.reloadHighlightMenuKey();
     }
 
     private void initHomepageContainer() {
-        final View view = findViewById(R.id.homepage_container);
-        // Prevent inner RecyclerView gets focus and invokes scrolling.
-        view.setFocusableInTouchMode(true);
-        view.requestFocus();
-
-        if (Flags.extendedScreenshotsExcludeNestedScrollables()) {
-            // Force scroll capture to select the NestedScrollView, instead of the non-scrollable
-            // RecyclerView which is contained inside it with no height constraint.
-            final View scrollableContainer = findViewById(R.id.main_content_scrollable_container);
-            if (scrollableContainer != null) {
-                scrollableContainer.setScrollCaptureHint(
-                        View.SCROLL_CAPTURE_HINT_EXCLUDE_DESCENDANTS);
-            }
+        // Force scroll capture to select the NestedScrollView, instead of the non-scrollable
+        // RecyclerView which is contained inside it with no height constraint.
+        final View scrollableContainer = findViewById(R.id.main_content_scrollable_container);
+        if (scrollableContainer != null) {
+            scrollableContainer.setScrollCaptureHint(
+                    View.SCROLL_CAPTURE_HINT_EXCLUDE_DESCENDANTS);
         }
     }
 
@@ -776,7 +777,12 @@ public class SettingsHomepageActivity extends FragmentActivity implements
 
         @Override
         public void accept(List<SplitInfo> splitInfoList) {
-            if (!splitInfoList.isEmpty() && !mIsSplitUpdatedUI && !mActivity.isFinishing()
+            if (splitInfoList.isEmpty()) {
+                TopLevelSettings fragment = mActivity.mMainFragment;
+                if (fragment != null) {
+                    fragment.setDefaultHighlightIfNeeded();
+                }
+            } else if (!mIsSplitUpdatedUI && !mActivity.isFinishing()
                     && ActivityEmbeddingUtils.isAlreadyEmbedded(mActivity)) {
                 mIsSplitUpdatedUI = true;
                 mActivity.updateHomepageUI();

@@ -67,12 +67,14 @@ android_robolectric_test {
         "androidx.test.core",
         "androidx.test.espresso.core",
         "androidx.test.ext.junit",
+        "androidx.test.ext.truth",
         "androidx.test.rules",
         "androidx.test.runner",
         "com_android_server_accessibility_flags_lib",
         "flag-junit",
         "flag-junit-base",
         "kotlin-test",
+        "kotlin-reflect",
         "mockito-robolectric-prebuilt", // mockito deps order matters!
         "mockito-kotlin2",
         "notification_flags_lib",
@@ -81,12 +83,17 @@ android_robolectric_test {
         "android.app.flags-aconfig-java",
         "com_android_systemui_flags_lib",
         "device_policy_aconfig_flags_lib",
+        "androidx.test.espresso.intents",
+        "androidx.compose.ui_ui-test-junit4",
+        "androidx.compose.ui_ui-test-manifest",
+        "androidx.compose.runtime_runtime",
     ],
 
     libs: [
         "android.test.mock.impl",
         "framework-virtualization.stubs.system",
         "ims-common",
+        "telephony-common",
     ],
 
     associates: [

@@ -36,20 +36,30 @@ flag {
 }
 
 flag {
-  name: "msdl_feedback"
+  name: "remove_protection_layout"
   namespace: "biometrics_integration"
-  description: "This flag controls whether MSDL haptic feedback is delivered in Settings, especially for the bouncer pattern"
-  bug: "406774575"
+  description: "This flag controls whether remove protection layout in biometrics settings"
+  bug: "440023111"
   metadata {
       purpose: PURPOSE_BUGFIX
   }
 }
 
 flag {
-  name: "remove_protection_layout"
+  name: "enable_face_enroll_education_dynamic_colors"
   namespace: "biometrics_integration"
-  description: "This flag controls whether remove protection layout in biometrics settings"
-  bug: "440023111"
+  description: "This flag controls whether Swatchie dynamic colors should be applied to Face Enroll education animation"
+  bug: "462073623"
+  metadata {
+      purpose: PURPOSE_BUGFIX
+  }
+}
+
+flag {
+  name: "show_face_enroll_intro_timeout_dialog"
+  namespace: "biometrics_integration"
+  description: "This flag controls whether to show an error dialog when it takes too long to be ready during Face Enroll Introduction"
+  bug: "447278355"
   metadata {
       purpose: PURPOSE_BUGFIX
   }

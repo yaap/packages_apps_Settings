@@ -19,6 +19,7 @@ package com.android.settings.accessibility.extradim.ui
 import android.content.Context
 import com.android.settings.R
 import com.android.settingslib.metadata.PreferenceMetadata
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.preference.PreferenceBinding
 import com.android.settingslib.widget.IllustrationPreference
 
@@ -26,8 +27,13 @@ class ExtraDimIllustrationPreference : PreferenceMetadata, PreferenceBinding {
     override val key: String
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.reduce_bright_colors_preference_animated_image_purpose
+
     override val indexable
         get() = false
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
 
     override fun createWidget(context: Context) =
         IllustrationPreference(context).apply {

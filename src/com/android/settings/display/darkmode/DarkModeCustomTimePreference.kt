@@ -22,14 +22,21 @@ import android.content.Context
 import android.provider.Settings
 import androidx.preference.Preference
 import com.android.settings.R
+import com.android.settings.accessibility.Flags
+import com.android.settings.accessibility.extensions.isPowerSaveMode
 import com.android.settingslib.datastore.HandlerExecutor
+import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.KeyedObserver
 import com.android.settingslib.datastore.SettingsSecureStore
+import com.android.settingslib.metadata.PersistentPreference
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
+import com.android.settingslib.metadata.SensitivityLevel
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.preference.PreferenceBinding
 import java.time.LocalTime
 
@@ -48,6 +55,10 @@ sealed class DarkModeCustomTimePreference(protected val uiModeManager: UiModeMan
 
     override val indexable
         get() = false
+
+    override fun isEnabled(context: Context): Boolean =
+        if (Flags.allowToEnterDarkThemeSettingsWhenBatterySaver()) !context.isPowerSaveMode()
+        else true
 
     override fun bind(preference: Preference, metadata: PreferenceMetadata) {
         super.bind(preference, metadata)
@@ -86,6 +97,10 @@ sealed class DarkModeCustomTimePreference(protected val uiModeManager: UiModeMan
         }
     }
 
+    override val availabilityDescription = "The device must be configured for scheduled dark mode."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
+
     override fun isAvailable(context: Context) =
         uiModeManager.nightMode == UiModeManager.MODE_NIGHT_CUSTOM &&
             uiModeManager.nightModeCustomType == UiModeManager.MODE_NIGHT_CUSTOM_TYPE_SCHEDULE
@@ -98,11 +113,14 @@ sealed class DarkModeCustomTimePreference(protected val uiModeManager: UiModeMan
 }
 
 /** The "Start Time" preference. */
-class StartTimePreference(uiModeManager: UiModeManager) :
+class StartTimePreference(uiModeManager: UiModeManager, val isUiOnly: Boolean) :
     DarkModeCustomTimePreference(uiModeManager) {
 
     override val key
         get() = KEY
+
+    override val purpose: Int
+        get() = R.string.dark_theme_start_time_purpose
 
     override val title
         get() = R.string.night_display_start_time_title
@@ -120,9 +138,16 @@ class StartTimePreference(uiModeManager: UiModeManager) :
         return true
     }
 
+    override fun tags(context: Context): Array<String> {
+        return arrayOf(UI_ONLY_PREFERENCE)
+    }
+
     override fun updateCustomTime(time: LocalTime) {
         uiModeManager.customNightModeStart = time
     }
+
+    override val sensitivityLevel
+        get() = SensitivityLevel.NO_SENSITIVITY
 
     companion object {
         const val KEY = "dark_theme_start_time"
@@ -130,11 +155,14 @@ class StartTimePreference(uiModeManager: UiModeManager) :
 }
 
 /** The "End Time" preference. */
-class EndTimePreference(uiModeManager: UiModeManager) :
+class EndTimePreference(uiModeManager: UiModeManager, val isUiOnly: Boolean) :
     DarkModeCustomTimePreference(uiModeManager) {
 
     override val key
         get() = KEY
+
+    override val purpose: Int
+        get() = R.string.dark_theme_end_time_purpose
 
     override val title
         get() = R.string.night_display_end_time_title
@@ -152,12 +180,19 @@ class EndTimePreference(uiModeManager: UiModeManager) :
         return true
     }
 
+    override fun tags(context: Context): Array<String> {
+        return arrayOf(UI_ONLY_PREFERENCE)
+    }
+
     override fun updateCustomTime(time: LocalTime) {
         uiModeManager.customNightModeEnd = time
     }
+
+    override val sensitivityLevel
+        get() = SensitivityLevel.NO_SENSITIVITY
 
     companion object {
         const val KEY = "dark_theme_end_time"
     }
 }
-// LINT.ThenChange(DarkModeCustomPreferenceController.java)
+// LINT.ThenChange(DarkModeCustomPreferenceController.java, DarkModeApiFirstScreen.kt)

@@ -42,12 +42,16 @@
 
     <dimen name="ring_progress_bar_thickness">4dp</dimen>
 
-    <dimen name="notification_importance_toggle_marginTop">28dp</dimen>
+    <dimen name="notification_importance_menu_margin">16dp</dimen>
     <dimen name="notification_importance_button_separation">8dp</dimen>
     <dimen name="notification_importance_drawable_padding">16dp</dimen>
     <dimen name="notification_importance_description_text">14sp</dimen>
-    <dimen name="notification_importance_button_text">16sp</dimen>
-    <dimen name="notification_importance_button_padding">14dp</dimen>
+
+    <!-- Padding for importance selection buttons in notification settings -->
+    <dimen name="notification_2025_importance_button_padding_vertical">12dp</dimen>
+    <dimen name="notification_2025_importance_button_padding_horizontal">16dp</dimen>
+
+    <dimen name="bubble_preference_button_padding">14dp</dimen>
 
     <dimen name="conversation_icon_size">32dp</dimen>
 
@@ -66,6 +70,7 @@
 
     <!-- Dashboard image tile size -->
     <dimen name="dashboard_tile_image_size">40dp</dimen>
+    <dimen name="dashboard_padding_bottom">16dp</dimen>
 
     <!-- Dashboard foreground image size -->
     <dimen name="dashboard_tile_foreground_image_size">24dp</dimen>
@@ -111,6 +116,7 @@
 
     <!-- WiFi Preferences -->
     <dimen name="wifi_detail_page_header_image_size">32dp</dimen>
+    <dimen name="wifi_end_icon_min_width">48dp</dimen>
 
     <!-- Internet Preferences -->
     <dimen name="airplane_mode_message_margin_vertical">24dp</dimen>
@@ -260,6 +266,17 @@
         @dimen/text_reading_preview_layout_padding_horizontal_min</dimen>
     <dimen name="text_reading_preview_background_padding_horizontal_min_suw">
         @dimen/text_reading_preview_background_padding_horizontal_min</dimen>
+
+    <!-- Slider -->
+    <dimen name="sud_slider_track_height">16dp</dimen>
+    <dimen name="sud_slider_track_inside_corner_size">2dp</dimen>
+    <dimen name="sud_slider_track_stop_indicator_size">4dp</dimen>
+    <dimen name="sud_slider_thumb_width">4dp</dimen>
+    <dimen name="sud_slider_thumb_height">44dp</dimen>
+    <dimen name="sud_slider_thumb_elevation">0dp</dimen>
+    <dimen name="sud_slider_thumb_stroke_width">0dp</dimen>
+    <dimen name="sud_slider_thumb_track_gap_size">6dp</dimen>
+    <dimen name="sud_slider_tick_radius">2dp</dimen>
 
     <!-- Accessibility Settings -->
     <dimen name="accessibility_layout_margin_start_end">16dp</dimen>
@@ -450,6 +467,9 @@
     <dimen name="dream_item_icon_padding_new">8dp</dimen>
     <dimen name="dream_item_title_margin_horizontal">8dp</dimen>
     <dimen name="dream_preference_card_padding">16dp</dimen>
+    <dimen name="dream_preference_card_fixed_space_around">8dp</dimen>
+    <dimen name="dream_preference_card_space_compensation">-8dp</dimen>
+    <dimen name="dream_settings_padding_bottom">14dp</dimen>
     <dimen name="dream_preview_placeholder_width">52dp</dimen>
     <dimen name="dream_item_customize_button_margin_bottom">16dp</dimen>
     <dimen name="dream_preview_button_frame_size">48dp</dimen>
@@ -545,6 +565,10 @@
     <dimen name="display_block_padding">5dp</dimen>
     <dimen name="display_block_highlight_width">2dp</dimen>
     <dimen name="display_block_corner_radius">10dp</dimen>
+    <dimen name="display_block_arrow_size">24dp</dimen>
+    <dimen name="display_block_arrow_tappable_area_size">48dp</dimen>
+    <dimen name="display_block_to_pane_margin">32dp</dimen>
+    <dimen name="topology_hint_text_view_height">48dp</dimen>
 
     <!-- HDR brightness setting -->
     <dimen name="hdr_brightness_preview_corner_radius">12dp</dimen>
@@ -552,6 +576,22 @@
     <!-- VPN -->
     <dimen name="vpn_dialog_max_height">600dp</dimen>
     <dimen name="vpn_dialog_margin_bottom">132dp</dimen>
+
+    <!-- Safety Center -->
+    <dimen name="sc_spacing_xxsmall">4dp</dimen>
+    <dimen name="sc_spacing_xsmall">8dp</dimen>
+    <dimen name="sc_spacing_small">12dp</dimen>
+    <dimen name="sc_spacing_large">16dp</dimen>
+    <dimen name="sc_spacing_xxlarge">20dp</dimen>
+    <dimen name="sc_spacing_xxxlarge">24dp</dimen>
+
+    <dimen name="sc_list_margin">@dimen/sc_spacing_large</dimen>
+
+    <dimen name="sc_card_corner_radius_large">28dp</dimen>
+
+    <dimen name="sc_line_height_medium">20sp</dimen>
+
+    <dimen name="sc_qs_max_width">492dp</dimen>
 
     <!-- Bluetooth battery indicator -->
     <dimen name="bluetooth_battery_indicator_stroke_width">6dp</dimen>

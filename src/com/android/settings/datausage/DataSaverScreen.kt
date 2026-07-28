@@ -29,6 +29,7 @@ import com.android.settings.utils.makeLaunchIntent
 import com.android.settingslib.datastore.HandlerExecutor
 import com.android.settingslib.datastore.KeyedObserver
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceIndexableProvider
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
@@ -37,6 +38,7 @@ import com.android.settingslib.metadata.PreferenceSummaryProvider
 import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.preferenceHierarchy
 import kotlinx.coroutines.CoroutineScope
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 
 @ProvidePreferenceScreen(DataSaverScreen.KEY)
 open class DataSaverScreen(context: Context) :
@@ -45,12 +47,17 @@ open class DataSaverScreen(context: Context) :
     PreferenceSummaryProvider,
     PreferenceIndexableProvider,
     PreferenceLifecycleProvider {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED)
 
     private val dataSaverStore = DataSaverMainSwitchPreference.createDataStore(context)
     private lateinit var keyedObserver: KeyedObserver<String>
 
     override val key
         get() = KEY
+
+    //TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.restrict_background_parent_entry_purpose
 
     override val title
         get() = R.string.data_saver_title
@@ -68,6 +75,11 @@ open class DataSaverScreen(context: Context) :
                 context.getString(R.string.data_saver_on)
             else -> context.getString(R.string.data_saver_off)
         }
+
+    override val availabilityDescription =
+        "The device must support the data saver setting."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context) =
         context.resources.getBoolean(R.bool.config_show_data_saver)

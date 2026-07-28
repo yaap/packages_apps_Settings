@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copyright (C) 2026 The Android Open Source Project
+
+     Licensed under the Apache License, Version 2.0 (the "License");
+     you may not use this file except in compliance with the License.
+     You may obtain a copy of the License at
+
+          http://www.apache.org/licenses/LICENSE-2.0
+
+     Unless required by applicable law or agreed to in writing, software
+     distributed under the License is distributed on an "AS IS" BASIS,
+     WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+     See the License for the specific language governing permissions and
+     limitations under the License.
+-->
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:settings="http://schemas.android.com/apk/res-auto"
+    android:title="@string/automatic_sim_lock_protection">
+
+    <PreferenceCategory
+        android:key="radiobutton_group"
+        android:title="@string/choose_sim_pin_protection_mode">
+        <com.android.settingslib.widget.SelectorWithWidgetPreference
+            android:key="sim_protection_mode_manual_key"
+            android:title="@string/sim_pin_protection_mode_manual"
+            settings:controller="com.android.settings.security.ManualSimProtectionModePreferenceController"
+            />
+        <com.android.settingslib.widget.SelectorWithWidgetPreference
+            android:key="sim_protection_mode_automatic_key"
+            android:title="@string/sim_pin_protection_mode_automatic"
+            settings:controller="com.android.settings.security.AutomaticSimProtectionModePreferenceController"
+            />
+    </PreferenceCategory>
+
+    <Preference
+        android:key="show_platform_managed_sim_pin_key"
+        android:title="@string/sim_display_platform_managed_pin_title"
+        settings:controller="com.android.settings.security.ShowAutoManagedSimPinController"
+        />
+
+    <Preference
+        android:key="change_manually_managed_sim_pin"
+        android:title="@string/sim_pin_change"
+        settings:controller="com.android.settings.security.ChangeSimPinPreferenceController"
+        />
+</PreferenceScreen>

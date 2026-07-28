@@ -26,7 +26,9 @@ import com.android.settings.metrics.PreferenceActionMetricsProvider
 import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.KeyValueStoreDelegate
 import com.android.settingslib.datastore.SettingsSystemStore
+import com.android.settingslib.metadata.MUSTPASS_SET
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.ReadWritePermit
 import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.metadata.SwitchPreference
@@ -38,7 +40,11 @@ import kotlinx.coroutines.launch
 
 // LINT.IfChange
 class TouchSoundPreference(context: Context) :
-    SwitchPreference(KEY, R.string.touch_sounds_title),
+    SwitchPreference(
+        KEY,
+        purpose = R.string.sound_effects_enabled_purpose,
+        R.string.touch_sounds_title,
+    ),
     SwitchPreferenceBinding,
     PreferenceActionMetricsProvider,
     PreferenceAvailabilityProvider {
@@ -48,7 +54,11 @@ class TouchSoundPreference(context: Context) :
     override val preferenceActionMetrics: Int
         get() = ACTION_TOUCH_SOUND
 
-    override fun tags(context: Context) = arrayOf(KEY_TOUCH_SOUNDS)
+    override fun tags(context: Context) = arrayOf(KEY_TOUCH_SOUNDS, MUSTPASS_SET)
+
+    override val availabilityDescription = "The device must support configuring touch sounds."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context) =
         context.resources.getBoolean(R.bool.config_show_touch_sounds)

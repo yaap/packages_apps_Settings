@@ -19,6 +19,7 @@ package com.android.settings.accessibility.colorinversion.ui
 import android.content.Context
 import com.android.settings.R
 import com.android.settingslib.metadata.PreferenceMetadata
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.preference.PreferenceBinding
 import com.android.settingslib.widget.TopIntroPreference
 
@@ -26,11 +27,16 @@ class IntroPreference : PreferenceMetadata, PreferenceBinding {
     override val key: String
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.toggle_inversion_preference_top_intro_purpose
+
     override val title: Int
         get() = R.string.accessibility_display_inversion_preference_intro_text
 
     override val indexable
         get() = false
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
 
     override fun createWidget(context: Context) = TopIntroPreference(context)
 

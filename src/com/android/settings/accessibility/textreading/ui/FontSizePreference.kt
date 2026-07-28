@@ -31,16 +31,19 @@ import com.android.settings.accessibility.shared.utils.DebounceConfigurationChan
 import com.android.settings.accessibility.shared.utils.DebounceConfigurationChangeCommitController.Companion.CHANGE_BY_BUTTON_DELAY
 import com.android.settings.accessibility.shared.utils.DebounceConfigurationChangeCommitController.Companion.CHANGE_BY_SLIDER_DELAY
 import com.android.settings.accessibility.shared.utils.DebounceConfigurationChangeCommitController.Companion.MIN_COMMIT_DELAY
+import com.android.settings.accessibility.shared.utils.shouldShowFocusRingsInSuw
 import com.android.settings.accessibility.textreading.data.FontSizeDataStore
 import com.android.settingslib.R as SettingsLibR
 import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.Permissions
 import com.android.settingslib.metadata.IntRangeValuePreference
+import com.android.settingslib.metadata.MUSTPASS_SET
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ReadWritePermit
 import com.android.settingslib.metadata.SensitivityLevel
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.widget.SliderPreference
 import com.android.settingslib.widget.SliderPreferenceBinding
 import com.google.android.material.slider.Slider
@@ -50,8 +53,11 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-internal class FontSizePreference(context: Context, @EntryPoint private val entryPoint: Int) :
-    IntRangeValuePreference, SliderPreferenceBinding, PreferenceLifecycleProvider {
+internal class FontSizePreference(
+    context: Context,
+    @EntryPoint private val entryPoint: Int,
+    val isUiOnly: Boolean,
+) : IntRangeValuePreference, SliderPreferenceBinding, PreferenceLifecycleProvider {
     private val fontSizeDataStore by lazy {
         FontSizeDataStore(context = context, entryPoint = entryPoint)
     }
@@ -75,6 +81,13 @@ internal class FontSizePreference(context: Context, @EntryPoint private val entr
         DebounceConfigurationChangeCommitController(minCommitDelay = MIN_COMMIT_DELAY)
     }
 
+    override fun tags(context: Context): Array<String> {
+        if (isUiOnly) {
+            return arrayOf(UI_ONLY_PREFERENCE)
+        }
+        return arrayOf(MUSTPASS_SET)
+    }
+
     override fun getReadPermissions(context: Context) = Permissions.EMPTY
 
     override fun getWritePermissions(context: Context) =
@@ -94,11 +107,16 @@ internal class FontSizePreference(context: Context, @EntryPoint private val entr
         return ReadWritePermit.ALLOW
     }
 
+    override val supportsWrite = true
+
     override val sensitivityLevel
         get() = SensitivityLevel.NO_SENSITIVITY
 
     override val key: String
         get() = KEY
+
+    override val purpose: Int
+        get() = R.string.font_size_purpose
 
     override val title: Int
         get() = R.string.title_font_size
@@ -144,6 +162,11 @@ internal class FontSizePreference(context: Context, @EntryPoint private val entr
             value = _fontSizePreview.value.currentIndex
             setSliderStateDescription(fontSizesLabel[value])
             isPersistent = false
+            // This change makes the row that contains the "Font size" slider unable to be focused,
+            // but allows the slider and its buttons to be focusable.
+            if (shouldShowFocusRingsInSuw(context)) {
+                isSelectable = false
+            }
         }
     }
 

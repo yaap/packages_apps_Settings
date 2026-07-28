@@ -305,16 +305,6 @@
     <item msgid="3756073389408535680">"पृष्ठभूमि में चलाएं"</item>
     <item msgid="2114661179947426734">"सुलभता सुविधाओं के लिए आवाज़"</item>
   </string-array>
-  <string-array name="long_press_timeout_selector_titles">
-    <item msgid="6926391290986427331">"कम"</item>
-    <item msgid="5118829513010894576">"मध्यम"</item>
-    <item msgid="6740026006576843477">"ज़्यादा"</item>
-  </string-array>
-  <string-array name="long_press_timeout_selector_list_titles">
-    <item msgid="8908021508913038488">"थोड़े समय के लिए"</item>
-    <item msgid="7397961711906421599">"कुछ समय के लिए"</item>
-    <item msgid="4079132024502041928">"ज़्यादा समय के लिए"</item>
-  </string-array>
   <string-array name="ethernet_ip_settings">
     <item msgid="7618681915649929019">"डीएचसीपी"</item>
     <item msgid="4425163520864432692">"स्टैटिक"</item>
@@ -358,14 +348,6 @@
     <item msgid="1119043472912497241">"काले पर पीला"</item>
     <item msgid="2836895041823327816">"नीले पर पीला"</item>
     <item msgid="747238414788976867">"पसंद के मुताबिक"</item>
-  </string-array>
-  <string-array name="accessibility_button_location_selector_titles">
-    <item msgid="6485511780196327736">"दूसरे ऐप्लिकेशन के ऊपर फ़्लोट करता हुआ"</item>
-    <item msgid="3605616699204153590">"नेविगेशन बार में"</item>
-  </string-array>
-  <string-array name="accessibility_button_size_selector_titles">
-    <item msgid="7482952318152486459">"छोटा"</item>
-    <item msgid="1666628329913333563">"बड़ा"</item>
   </string-array>
   <string-array name="vpn_proxy_settings">
     <item msgid="7165538292837266997">"कोई नहीं"</item>
@@ -416,7 +398,7 @@
     <item msgid="2047166446768045816">"असीमित डेटा वाले नेटवर्क के तौर पर मानें"</item>
   </string-array>
   <string-array name="wifi_privacy_entries">
-    <item msgid="91222619458919148">"रैंडम तौर पर चुने गए एमएसी का इस्तेमाल करें"</item>
+    <item msgid="91222619458919148">"रैंडम तरीके से चुने गए मैक पते का इस्तेमाल करें"</item>
     <item msgid="741680937828608749">"डिवाइस एमएसी का इस्तेमाल करें"</item>
   </string-array>
   <string-array name="wifi_dhcp_entries">

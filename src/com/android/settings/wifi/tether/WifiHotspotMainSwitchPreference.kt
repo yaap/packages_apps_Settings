@@ -23,8 +23,15 @@ import com.android.settings.R
 import com.android.settings.overlay.FeatureFactory.Companion.featureFactory
 import com.android.settings.widget.MainSwitchBarMetadata
 import com.android.settings.wifi.utils.wifiApState
-import com.android.settingslib.datastore.*
-import com.android.settingslib.metadata.*
+import com.android.settingslib.datastore.AbstractKeyedDataObservable
+import com.android.settingslib.datastore.HandlerExecutor
+import com.android.settingslib.datastore.KeyValueStore
+import com.android.settingslib.datastore.KeyedObserver
+import com.android.settingslib.datastore.Permissions
+import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
+import com.android.settingslib.metadata.ReadWritePermit
+import com.android.settingslib.metadata.SensitivityLevel
 
 class WifiHotspotMainSwitchPreference(private val wifiHotspotStore: KeyValueStore) :
     MainSwitchBarMetadata, PreferenceAvailabilityProvider {
@@ -32,15 +39,22 @@ class WifiHotspotMainSwitchPreference(private val wifiHotspotStore: KeyValueStor
     override val key
         get() = KEY
 
+    override val purpose
+        get() = R.string.use_wifi_hotspot_purpose
+
     override val title
         get() = R.string.use_wifi_hotsopt_main_switch_title
 
     override val disableWidgetOnCheckedChanged: Boolean
         get() = false
 
+    override val availabilityDescription = "Wifi hotspot must be enabled."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
+
     override fun isAvailable(context: Context) =
         context.wifiApState == WIFI_AP_STATE_ENABLED ||
-                !(featureFactory.wifiFeatureProvider.wifiHotspotRepository?.isRestarting ?: false)
+            !(featureFactory.wifiFeatureProvider.wifiHotspotRepository?.isRestarting ?: false)
 
     override fun storage(context: Context): KeyValueStore = UseWifiHotspotStore(wifiHotspotStore)
 
@@ -56,8 +70,10 @@ class WifiHotspotMainSwitchPreference(private val wifiHotspotStore: KeyValueStor
     override fun getWritePermit(context: Context, callingPid: Int, callingUid: Int) =
         ReadWritePermit.ALLOW
 
+    override val supportsWrite = true
+
     override val sensitivityLevel
-        get() = SensitivityLevel.HIGH_SENSITIVITY
+        get() = SensitivityLevel.MUST_PROVIDE_UNDO
 
     @Suppress("UNCHECKED_CAST")
     private class UseWifiHotspotStore(private val wifiHotspotStore: KeyValueStore) :

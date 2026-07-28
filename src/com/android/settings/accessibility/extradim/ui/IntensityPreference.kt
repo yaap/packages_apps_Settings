@@ -28,6 +28,7 @@ import com.android.settingslib.metadata.IntRangeValuePreference
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.ReadWritePermit
+import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.widget.SliderPreference
 import com.android.settingslib.widget.SliderPreferenceBinding
 
@@ -37,6 +38,9 @@ class IntensityPreference(
 ) : IntRangeValuePreference, SliderPreferenceBinding, PreferenceLifecycleProvider {
     override val key: String
         get() = KEY
+
+    override val purpose: Int
+        get() = R.string.reduce_bright_colors_level_purpose
 
     override val title: Int
         get() = R.string.reduce_bright_colors_intensity_preference_title
@@ -55,6 +59,8 @@ class IntensityPreference(
     override fun getMinValue(context: Context): Int = IntensityDataStore.MIN_VALUE
 
     override fun getMaxValue(context: Context): Int = IntensityDataStore.MAX_VALUE
+
+    override fun getUnitOfMeasurement() = "%"
 
     override fun isEnabled(context: Context): Boolean = extraDimStorage.getBoolean(KEY) == true
 
@@ -76,6 +82,7 @@ class IntensityPreference(
         callingUid: Int,
     ): @ReadWritePermit Int? = ReadWritePermit.ALLOW
 
+    override val supportsWrite = true
     override fun onCreate(context: PreferenceLifecycleContext) {
         if (settingsKeyedObserver == null) {
             settingsKeyedObserver = KeyedObserver { _, _ ->
@@ -91,6 +98,9 @@ class IntensityPreference(
         settingsKeyedObserver?.let { observer -> extraDimStorage.removeObserver(observer) }
         settingsKeyedObserver = null
     }
+
+    override val sensitivityLevel: Int
+        get() = SensitivityLevel.NO_SENSITIVITY
 
     companion object {
         private const val KEY = IntensityDataStore.SETTING_KEY

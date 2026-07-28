@@ -28,11 +28,13 @@ import androidx.annotation.Nullable;
 
 import com.android.internal.widget.LockPatternUtils;
 import com.android.internal.widget.LockscreenCredential;
+import com.android.internal.widget.VerifyCredentialResponse;
 
 import org.robolectric.annotation.Implementation;
 import org.robolectric.annotation.Implements;
 import org.robolectric.annotation.Resetter;
 
+import java.time.Duration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -51,6 +53,7 @@ public class ShadowLockPatternUtils {
     private static Map<Integer, Boolean> sUserToBiometricAllowedMap = new HashMap<>();
     private static Map<Integer, Boolean> sUserToLockPatternEnabledMap = new HashMap<>();
     private static Map<Integer, Integer> sKeyguardStoredPasswordQualityMap = new HashMap<>();
+    private static Map<Integer, Duration> sUserToLockoutEndTimeMap = new HashMap<>();
 
     private static boolean sIsUserOwnsFrpCredential;
 
@@ -68,6 +71,7 @@ public class ShadowLockPatternUtils {
         sDeviceEncryptionEnabled = false;
         sIsUserOwnsFrpCredential = false;
         sKeyguardStoredPasswordQualityMap.clear();
+        sUserToLockoutEndTimeMap.clear();
     }
 
     @Implementation
@@ -189,11 +193,10 @@ public class ShadowLockPatternUtils {
     }
 
     @Implementation
-    public boolean checkCredential(
+    public VerifyCredentialResponse checkCredential(
             @NonNull LockscreenCredential credential, int userId,
-            @Nullable LockPatternUtils.CheckCredentialProgressCallback progressCallback)
-            throws LockPatternUtils.RequestThrottledException {
-        return true;
+            @Nullable LockPatternUtils.CheckCredentialProgressCallback progressCallback) {
+        return VerifyCredentialResponse.OK;
     }
 
     public static void setRequiredPasswordComplexity(int userHandle, int complexity) {
@@ -243,5 +246,15 @@ public class ShadowLockPatternUtils {
 
     public static void setKeyguardStoredPasswordQuality(int quality) {
         sKeyguardStoredPasswordQualityMap.put(UserHandle.myUserId(), quality);
+    }
+
+    /**
+     * Gets the lockout end time for a given user.
+     *
+     * @return the time since boot of the lockout end time.
+     */
+    @Implementation
+    public Duration getLockoutEndTime(int userId) {
+        return Duration.ZERO;
     }
 }

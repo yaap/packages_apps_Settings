@@ -23,13 +23,14 @@ import androidx.preference.Preference
 import com.android.settings.R
 import com.android.settings.core.PreferenceScreenMixin
 import com.android.settings.deviceinfo.HardwareInfoPreferenceController.getDeviceModel
-import com.android.settings.flags.Flags
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceSummaryProvider
 import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.preferenceHierarchy
 import com.android.settingslib.preference.PreferenceBinding
 import kotlinx.coroutines.CoroutineScope
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 
 // LINT.IfChange
 @ProvidePreferenceScreen(HardwareInfoScreen.KEY)
@@ -38,8 +39,13 @@ open class HardwareInfoScreen :
     PreferenceBinding,
     PreferenceAvailabilityProvider,
     PreferenceSummaryProvider {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED)
+
     override val key: String
         get() = KEY
+
+    override val purpose: Int
+        get() = R.string.device_model_purpose
 
     override val title: Int
         get() = R.string.model_info
@@ -52,11 +58,14 @@ open class HardwareInfoScreen :
 
     override fun getMetricsCategory() = SettingsEnums.DIALOG_SETTINGS_HARDWARE_INFO
 
-    override fun isFlagEnabled(context: Context) = Flags.catalystDeviceModel()
-
     override fun hasCompleteHierarchy() = false
 
     override fun fragmentClass(): Class<out Fragment>? = HardwareInfoFragment::class.java
+
+    override val availabilityDescription =
+        "The device must support showing the device model."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context) =
         context.resources.getBoolean(R.bool.config_show_device_model)

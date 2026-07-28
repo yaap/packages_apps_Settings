@@ -27,12 +27,17 @@ import android.text.TextUtils;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import androidx.fragment.app.Fragment;
 import androidx.preference.ListPreference;
 import androidx.preference.Preference;
 
 import com.android.settings.R;
 import com.android.settings.core.PreferenceControllerMixin;
 import com.android.settingslib.development.DeveloperOptionsPreferenceController;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 
 /**
@@ -43,13 +48,15 @@ public class BluetoothLeAudioModePreferenceController
         implements Preference.OnPreferenceChangeListener, PreferenceControllerMixin {
 
     private static final String PREFERENCE_KEY = "bluetooth_leaudio_mode";
+    private static final String BROADCAST_MODE_VALUE = "broadcast";
 
     static final String LE_AUDIO_DYNAMIC_SWITCHER_MODE_PROPERTY =
             "persist.bluetooth.leaudio_dynamic_switcher.mode";
 
-    @Nullable private final DevelopmentSettingsDashboardFragment mFragment;
+    @Nullable private final Fragment mFragment;
 
-    private final String[] mListValues;
+    @VisibleForTesting
+    final String[] mListValues;
     private final String[] mListSummaries;
     @VisibleForTesting
     @Nullable String mNewMode;
@@ -59,13 +66,26 @@ public class BluetoothLeAudioModePreferenceController
     boolean mChanged = false;
 
     public BluetoothLeAudioModePreferenceController(@NonNull Context context,
-            @Nullable DevelopmentSettingsDashboardFragment fragment) {
+            @Nullable Fragment fragment) {
         super(context);
         mFragment = fragment;
         mBluetoothAdapter = context.getSystemService(BluetoothManager.class).getAdapter();
 
-        mListValues = context.getResources().getStringArray(R.array.bluetooth_leaudio_mode_values);
-        mListSummaries = context.getResources().getStringArray(R.array.bluetooth_leaudio_mode);
+        List<String> listValues = new ArrayList<>(Arrays.asList(
+                mContext.getResources().getStringArray(R.array.bluetooth_leaudio_mode_values)));
+        List<String> listSummaries = new ArrayList<>(Arrays.asList(
+                mContext.getResources().getStringArray(R.array.bluetooth_leaudio_mode)));
+
+        if (!BluetoothProperties.isProfileBapBroadcastSourceEnabled().orElse(false)) {
+            int broadcastIndex = listValues.indexOf(BROADCAST_MODE_VALUE);
+            if (broadcastIndex >= 0) {
+                listValues.remove(broadcastIndex);
+                listSummaries.remove(broadcastIndex);
+            }
+        }
+
+        mListValues = listValues.toArray(new String[0]);
+        mListSummaries = listSummaries.toArray(new String[0]);
     }
 
     @Override
@@ -75,7 +95,7 @@ public class BluetoothLeAudioModePreferenceController
 
     @Override
     public boolean isAvailable() {
-        return BluetoothProperties.isProfileBapBroadcastSourceEnabled().orElse(false);
+        return BluetoothProperties.isProfileBapUnicastClientEnabled().orElse(false);
     }
 
     @Override
@@ -99,7 +119,7 @@ public class BluetoothLeAudioModePreferenceController
         String currentValue;
         if (mBluetoothAdapter.isLeAudioBroadcastSourceSupported()
                 == BluetoothStatusCodes.FEATURE_SUPPORTED) {
-            currentValue = "broadcast";
+            currentValue = BROADCAST_MODE_VALUE;
         } else if (mBluetoothAdapter.isLeAudioSupported()
                 == BluetoothStatusCodes.FEATURE_SUPPORTED) {
             currentValue = "unicast";
@@ -116,6 +136,8 @@ public class BluetoothLeAudioModePreferenceController
         }
 
         final ListPreference listPreference = (ListPreference) preference;
+        listPreference.setEntries(mListSummaries);
+        listPreference.setEntryValues(mListValues);
         listPreference.setValue(mListValues[index]);
         listPreference.setSummary(mListSummaries[index]);
 

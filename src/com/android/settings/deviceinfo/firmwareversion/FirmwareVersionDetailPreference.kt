@@ -29,12 +29,16 @@ import com.android.settings.Utils
 import com.android.settings.contract.TAG_DEVICE_STATE_PREFERENCE
 import com.android.settingslib.RestrictedLockUtils
 import com.android.settingslib.RestrictedLockUtilsInternal
+import com.android.settingslib.datastore.KeyValueStore
+import com.android.settingslib.metadata.PersistentPreference
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
+import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.preference.PreferenceBinding
 
 // LINT.IfChange
 class FirmwareVersionDetailPreference :
+    PersistentPreference<String>,
     PreferenceMetadata,
     PreferenceSummaryProvider,
     PreferenceBinding,
@@ -44,6 +48,9 @@ class FirmwareVersionDetailPreference :
 
     override val key: String
         get() = "os_firmware_version"
+
+    override val purpose: Int
+        get() = R.string.os_firmware_version_purpose
 
     override val title: Int
         get() = R.string.firmware_version
@@ -57,6 +64,12 @@ class FirmwareVersionDetailPreference :
         Intent(Intent.ACTION_MAIN)
             .setClassName("android", PlatLogoActivity::class.java.name)
             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+
+    override val supportsWrite = false
+
+    override val valueType = String::class.javaObjectType
+
+    override fun storage(context: Context): KeyValueStore = createSummaryStorage(context, key)
 
     override fun getSummary(context: Context): CharSequence? =
         Build.VERSION.RELEASE_OR_PREVIEW_DISPLAY
@@ -99,6 +112,9 @@ class FirmwareVersionDetailPreference :
         }
         return true
     }
+
+    override val sensitivityLevel
+        get() = SensitivityLevel.NO_SENSITIVITY
 
     companion object {
         const val DELAY_TIMER_MILLIS = 500L

@@ -38,8 +38,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.android.internal.annotations.VisibleForTesting;
+import com.android.settings.accessibility.a11yservice.A11yServicePreferenceFragment;
 import com.android.settings.accessibility.data.AccessibilityRepositoryProvider;
-import com.android.settings.accessibility.detail.a11yservice.A11yServicePreferenceFragment;
 import com.android.settings.accessibility.screenmagnification.ui.MagnificationPreferenceFragment;
 import com.android.settings.core.InstrumentedFragment;
 import com.android.settings.core.SubSettingLauncher;
@@ -187,7 +187,7 @@ public class AccessibilityDetailsSettingsFragment extends InstrumentedFragment {
         }
 
         return !RestrictedLockUtilsInternal.isEnhancedConfirmationRestricted(getContext(),
-                packageName, AppOpsManager.OPSTR_BIND_ACCESSIBILITY_SERVICE);
+                AppOpsManager.OPSTR_BIND_ACCESSIBILITY_SERVICE, packageName);
     }
 
     private Bundle buildArguments(AccessibilityServiceInfo info) {

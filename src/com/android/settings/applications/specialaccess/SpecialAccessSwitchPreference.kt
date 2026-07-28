@@ -18,21 +18,31 @@ package com.android.settings.applications.specialaccess
 
 import android.content.Context
 import androidx.preference.Preference
+import com.android.settings.R
 import com.android.settings.widget.FilterTouchesSwitchPreference
 import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.metadata.BooleanValuePreference
+import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.preference.BooleanValuePreferenceBinding
 
 internal class SpecialAccessSwitchPreference(
     override val title: Int,
     private val dataStore: KeyValueStore,
     private val onPreferenceChangeListener: Preference.OnPreferenceChangeListener,
+    private val keyPrefix: String,
 ) : BooleanValuePreference, BooleanValuePreferenceBinding {
 
     override val key
-        get() = KEY
+        get() = "${keyPrefix}_$KEY"
+
+    override val purpose: Int
+        get() = R.string.access_switch_purpose
+
+    override val sensitivityLevel = SensitivityLevel.DO_NOT_EXPOSE
 
     override fun storage(context: Context) = dataStore
+
+    override val supportsWrite = true
 
     override fun createWidget(context: Context) =
         FilterTouchesSwitchPreference(context).also {

@@ -92,6 +92,12 @@ public class AdvancedConnectedDeviceDashboardFragment extends DashboardFragment 
         return buildControllers(context, getSettingsLifecycle());
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        forceUpdatePreferences();
+    }
+
     private static List<AbstractPreferenceController> buildControllers(Context context,
             Lifecycle lifecycle) {
         final List<AbstractPreferenceController> controllers = new ArrayList<>();
@@ -127,4 +133,5 @@ public class AdvancedConnectedDeviceDashboardFragment extends DashboardFragment 
                 }
             };
 }
-// LINT.ThenChange(AdvancedConnectedDeviceScreen.kt)
+// LINT.ThenChange(AdvancedConnectedDeviceScreen.kt,
+// AdvancedConnectedDeviceApiScreen.kt)

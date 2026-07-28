@@ -49,6 +49,7 @@ import android.view.View;
 import android.view.View.AccessibilityDelegate;
 import android.view.ViewGroup;
 import android.view.accessibility.AccessibilityEvent;
+import android.view.accessibility.AccessibilityNodeInfo;
 import android.view.inputmethod.EditorInfo;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -59,11 +60,11 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Spinner;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
+import androidx.core.view.accessibility.AccessibilityNodeInfoCompat;
 
 import com.android.net.module.util.NetUtils;
 import com.android.net.module.util.ProxyUtils;
@@ -73,6 +74,8 @@ import com.android.settings.Utils;
 import com.android.settings.network.SubscriptionUtil;
 import com.android.settings.utils.AndroidKeystoreAliasLoader;
 import com.android.settings.widget.EnhancedSettingsSpinnerAdapter;
+import com.android.settings.widget.FocusIndicatorDrawable;
+import com.android.settings.wifi.WifiUtils;
 import com.android.settings.wifi.details2.WifiPrivacyPreferenceController;
 import com.android.settings.wifi.details2.WifiPrivacyPreferenceController2;
 import com.android.settings.wifi.dpp.WifiDppUtils;
@@ -84,6 +87,9 @@ import com.android.wifi.flags.Flags;
 import com.android.wifitrackerlib.WifiEntry;
 import com.android.wifitrackerlib.WifiEntry.ConnectedInfo;
 
+import com.google.android.material.materialswitch.MaterialSwitch;
+import com.google.android.material.textfield.TextInputLayout;
+
 import java.net.Inet4Address;
 import java.net.InetAddress;
 import java.util.ArrayList;
@@ -92,6 +98,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 /**
@@ -204,9 +211,10 @@ public class WifiConfigController2 implements TextWatcher,
     private TextView mDns1View;
     private TextView mDns2View;
 
-    private LinearLayout mSharedNetworkLoginScreenWarning;
-    private Switch mSharedSwitch;
-    private Switch mEditConfigurationSwitch;
+    private LinearLayout mSharedToggleField;
+    private MaterialSwitch mSharedSwitch;
+    private LinearLayout mEditConfigurationField;
+    private MaterialSwitch mEditConfigurationSwitch;
     private Spinner mProxySettingsSpinner;
     @Nullable
     private Spinner mMeteredSettingsSpinner;
@@ -220,7 +228,7 @@ public class WifiConfigController2 implements TextWatcher,
     private TextView mProxyPortView;
     private TextView mProxyExclusionListView;
     private TextView mProxyPacView;
-    private CheckBox mSharedCheckBox;
+    private TextInputLayout mPasswordInputLayout;
 
     private IpAssignment mIpAssignment = IpAssignment.UNASSIGNED;
     private ProxySettings mProxySettings = ProxySettings.UNASSIGNED;
@@ -233,6 +241,7 @@ public class WifiConfigController2 implements TextWatcher,
     private final WifiManager mWifiManager;
     private final AndroidKeystoreAliasLoader mAndroidKeystoreAliasLoader;
     private final boolean mIsMultiUser;
+    private final boolean mShowFocusRingIndicator;
     private boolean mIsNetworkEditable = true;
 
     private TextInputValidator mValidator = new TextInputValidator();
@@ -250,27 +259,31 @@ public class WifiConfigController2 implements TextWatcher,
 
     private WifiConfigAdvancedLayout mWifiConfigAdvancedLayout;
 
+    private FocusIndicatorDrawable.Builder mRectangleFocusRingBuilder;
+    private FocusIndicatorDrawable.Builder mRoundedRectangleFocusRingBuilder;
+
     public WifiConfigController2(WifiConfigUiBase2 parent, View view, WifiEntry wifiEntry,
             int mode) {
-        this(parent, view, wifiEntry, mode, false);
+        this(parent, view, wifiEntry, mode, false, false);
     }
 
     public WifiConfigController2(WifiConfigUiBase2 parent, View view, WifiEntry wifiEntry,
-            int mode, boolean hideMeteredAndPrivacy) {
-        this(parent, view, wifiEntry, mode, hideMeteredAndPrivacy,
+            int mode, boolean hideMeteredAndPrivacy, boolean showFocusRingIndicator) {
+        this(parent, view, wifiEntry, mode, hideMeteredAndPrivacy, showFocusRingIndicator,
                 parent.getContext().getSystemService(WifiManager.class),
                 new AndroidKeystoreAliasLoader(KeyProperties.NAMESPACE_WIFI));
     }
 
     @VisibleForTesting
     public WifiConfigController2(WifiConfigUiBase2 parent, View view, WifiEntry wifiEntry,
-            int mode, boolean hideMeteredAndPrivacy, WifiManager wifiManager,
-            AndroidKeystoreAliasLoader androidKeystoreAliasLoader) {
+            int mode, boolean hideMeteredAndPrivacy, boolean showFocusRingIndicator,
+            WifiManager wifiManager, AndroidKeystoreAliasLoader androidKeystoreAliasLoader) {
         mConfigUi = parent;
         mView = view;
         mWifiEntry = wifiEntry;
         mMode = mode;
         mHideMeteredAndPrivacy = hideMeteredAndPrivacy;
+        mShowFocusRingIndicator = showFocusRingIndicator;
         mContext = mConfigUi.getContext();
         mWifiManager = wifiManager;
         mAndroidKeystoreAliasLoader = androidKeystoreAliasLoader;
@@ -282,12 +295,24 @@ public class WifiConfigController2 implements TextWatcher,
     }
 
     private void initWifiConfigController2(WifiEntry wifiEntry) {
-        mWifiConfigAdvancedLayout = new WifiConfigAdvancedLayout(mView);
+        mWifiConfigAdvancedLayout = new WifiConfigAdvancedLayout(mView, mShowFocusRingIndicator);
         mWifiEntrySecurity = (wifiEntry == null) ? WifiEntry.SECURITY_NONE :
                 wifiEntry.getSecurity();
         mIsTrustOnFirstUseSupported = mWifiManager.isTrustOnFirstUseSupported();
 
         final Resources res = mContext.getResources();
+        if (mShowFocusRingIndicator) {
+            mRectangleFocusRingBuilder =
+                    new FocusIndicatorDrawable.Builder(mContext)
+                        .withCornerRadius(2)
+                        .withHorizontalPaddingAdjustment(-6)
+                        .withVerticalPaddingAdjustment(-6);
+            mRoundedRectangleFocusRingBuilder =
+                    new FocusIndicatorDrawable.Builder(mContext)
+                        .withCornerRadius(999)
+                        .withHorizontalPaddingAdjustment(-2)
+                        .withVerticalPaddingAdjustment(-2);
+        }
 
         mLevels = res.getStringArray(R.array.wifi_signal);
         if (!Utils.isMobileDataCapable(mContext) || !mContext.getResources().getBoolean(
@@ -317,6 +342,8 @@ public class WifiConfigController2 implements TextWatcher,
         mSsidInputGroup = new TextInputGroup(mView, R.id.ssid_layout, R.id.ssid,
                 R.string.wifi_ssid_hint);
         mPasswordInput = new WifiPasswordInput(mView, mWifiEntrySecurity);
+        mPasswordInput.getLayout().setTextInputAccessibilityDelegate(
+                new PasswordTextInputLayoutAccessibilityDelegate(mPasswordInput.getLayout()));
         mValidator.addTextInput(mSsidInputGroup);
         mValidator.addTextInput(mPasswordInput);
 
@@ -327,7 +354,6 @@ public class WifiConfigController2 implements TextWatcher,
         mProxySettingsSpinner = (Spinner) mView.findViewById(R.id.proxy_settings);
         mProxySettingsSpinner.setAdapter(getSpinnerAdapter(R.array.wifi_proxy_settings));
         mProxySettingsSpinner.setOnItemSelectedListener(this);
-        mSharedCheckBox = (CheckBox) mView.findViewById(R.id.shared);
         if (!mHideMeteredAndPrivacy) {
             mMeteredSettingsSpinner = mView.findViewById(R.id.metered_settings);
             mMeteredSettingsSpinner.setAdapter(getSpinnerAdapter(R.array.wifi_metered_entries));
@@ -351,30 +377,46 @@ public class WifiConfigController2 implements TextWatcher,
                         ? View.GONE
                         : View.VISIBLE);
         mSecurityInPosition = new Integer[WifiEntry.NUM_SECURITY_TYPES];
-        mSharedSwitch = (Switch) mView.findViewById(R.id.share_wifi_network);
+
+        mSharedToggleField = (LinearLayout) mView.findViewById(R.id.sharing_toggle_fields);
+        mSharedSwitch = (MaterialSwitch) mView.findViewById(R.id.share_wifi_network);
+        mEditConfigurationField = (LinearLayout) mView.findViewById(
+                R.id.edit_wifi_network_configuration_fields);
         mEditConfigurationSwitch =
-            (Switch) mView.findViewById(R.id.edit_wifi_network_configuration);
-        mSharedNetworkLoginScreenWarning =
-            (LinearLayout) mView.findViewById(R.id.shared_network_login_screen_warning);
+            (MaterialSwitch) mView.findViewById(R.id.edit_wifi_network_configuration);
 
-        if (com.android.settings.connectivity.Flags.wifiMultiuser()) {
-            mView.findViewById(R.id.sharing_toggle_fields)
-                    .setVisibility(mIsMultiUser ? View.VISIBLE : View.GONE);
-            mView.findViewById(R.id.edit_wifi_network_configuration_fields)
-                    .setVisibility(mIsMultiUser ? View.VISIBLE : View.GONE);
+        if (WifiUtils.isWifiMultiuserEnabled()) {
+            mSharedToggleField.setVisibility(mIsMultiUser ? View.VISIBLE : View.GONE);
+            mEditConfigurationField.setVisibility(mIsMultiUser ? View.VISIBLE : View.GONE);
+            if (mShowFocusRingIndicator) {
+                mSharedToggleField.setForeground(mRectangleFocusRingBuilder.build());
+                mEditConfigurationField.setForeground(mRectangleFocusRingBuilder.build());
+            }
 
-            boolean sharedDefault =
+            boolean sharedDefault = WifiUtils.isGuestUser(mContext)
+                    ? false :
                     mContext.getResources().getBoolean(R.bool.config_share_network_by_default);
-            boolean editConfigDefault =
+            boolean editConfigDefault = WifiUtils.isGuestUser(mContext)
+                    ? false :
                     mContext.getResources()
                         .getBoolean(R.bool.config_allow_edit_network_configuration_by_default);
 
             mSharedSwitch.setChecked(sharedDefault);
-            mSharedSwitch.setEnabled(mIsNetworkEditable);
-            mEditConfigurationSwitch.setEnabled(sharedDefault && mIsNetworkEditable);
+            boolean canModifyShareSettings =
+                    WifiUtils.isSharedFieldEditable(mWifiEntry, mContext);
+            updateNetworkFieldState(R.id.sharing_toggle_fields, mSharedSwitch,
+                    canModifyShareSettings);
             mEditConfigurationSwitch.setChecked(editConfigDefault);
+            updateNetworkFieldState(R.id.edit_wifi_network_configuration_fields,
+                    mEditConfigurationSwitch, sharedDefault && canModifyShareSettings);
 
             mSharedSwitch.setOnCheckedChangeListener(this);
+
+            setAccessibilityDelegateForNetworkFields();
+
+            if (mMode == WifiConfigUiBase2.MODE_MODIFY) {
+                setSharedNetworkFieldsInvisible();
+            }
         }
 
         if (mWifiEntry == null) { // new network
@@ -395,6 +437,12 @@ public class WifiConfigController2 implements TextWatcher,
                         ? HIDDEN_NETWORK
                         : NOT_HIDDEN_NETWORK);
 
+                if (mSharedSwitch != null) {
+                    mSharedSwitch.setChecked(config.shared);
+                }
+                if (mEditConfigurationSwitch != null) {
+                    mEditConfigurationSwitch.setChecked(config.isAllowedToUpdateByOtherUsers());
+                }
                 if (mPrivacySettingsSpinner != null) {
                     final int prefMacValue = WifiPrivacyPreferenceController2
                             .translateWifiEntryPrivacyToPrefValue(mWifiEntry.getPrivacy());
@@ -422,8 +470,6 @@ public class WifiConfigController2 implements TextWatcher,
                     mIpSettingsSpinner.setSelection(DHCP);
                 }
                 mIpSettingsSpinner.setEnabled(mIsNetworkEditable);
-
-                mSharedCheckBox.setEnabled(config.shared);
 
                 ProxySettings proxySettings = config.getIpConfiguration().getProxySettings();
                 if (proxySettings == ProxySettings.STATIC) {
@@ -457,12 +503,6 @@ public class WifiConfigController2 implements TextWatcher,
                 mConfigUi.setSubmitButton(res.getString(R.string.wifi_save));
             } else if (mMode == WifiConfigUiBase2.MODE_CONNECT) {
                 mConfigUi.setSubmitButton(res.getString(R.string.wifi_connect));
-            } else if (mMode == WifiConfigUiBase2.MODE_LOGIN_SCREEN) {
-                mConfigUi.setSubmitButton(res.getString(R.string.wifi_connect));
-                mSharedNetworkLoginScreenWarning.setVisibility(View.VISIBLE);
-                mView.findViewById(R.id.sharing_toggle_fields).setVisibility(View.GONE);
-                mView.findViewById(R.id.edit_wifi_network_configuration_fields)
-                        .setVisibility(View.GONE);
             } else {
                 final String signalLevel = getSignalString();
 
@@ -514,11 +554,34 @@ public class WifiConfigController2 implements TextWatcher,
 
             mSsidScanButton.setVisibility(View.GONE);
         }
-        mSharedCheckBox.setVisibility(View.GONE);
 
         mConfigUi.setCancelButton(res.getString(R.string.wifi_cancel));
         if (mConfigUi.getSubmitButton() != null) {
             enableSubmitIfAppropriate();
+        }
+
+        if (mShowFocusRingIndicator) {
+            mPasswordInputLayout = mView.findViewById(R.id.password_input_layout);
+            if (mPasswordInputLayout != null) {
+                mPasswordInputLayout.findViewById(
+                        com.google.android.material.R.id.text_input_end_icon)
+                            .setForeground(
+                                new FocusIndicatorDrawable.Builder(mContext)
+                                    .withCornerRadius(999)
+                                    .build());
+            }
+            mSsidScanButton.setForeground(mRectangleFocusRingBuilder.build());
+            mHiddenSettingsSpinner.setForeground(mRoundedRectangleFocusRingBuilder.build());
+            mIpSettingsSpinner.setForeground(mRoundedRectangleFocusRingBuilder.build());
+            if (mMeteredSettingsSpinner != null) {
+                mMeteredSettingsSpinner.setForeground(mRoundedRectangleFocusRingBuilder.build());
+            }
+            if (mPrivacySettingsSpinner != null) {
+                mPrivacySettingsSpinner.setForeground(mRoundedRectangleFocusRingBuilder.build());
+            }
+            if (mDhcpSettingsSpinner != null) {
+                mDhcpSettingsSpinner.setForeground(mRoundedRectangleFocusRingBuilder.build());
+            }
         }
 
         // After done view show and hide, request focus
@@ -639,9 +702,6 @@ public class WifiConfigController2 implements TextWatcher,
             config.SSID = "\"" + mSsidInputGroup.getText() + "\"";
             // If the user adds a network manually, assume that it is hidden.
             config.hiddenSSID = mHiddenSettingsSpinner.getSelectedItemPosition() == HIDDEN_NETWORK;
-            if (com.android.settings.connectivity.Flags.wifiMultiuser()) {
-                config.shared = mSharedSwitch.isChecked();
-            }
         } else if (mWifiEntry.isSaved()) {
             config = new WifiConfiguration(mWifiEntry.getWifiConfiguration());
         } else {
@@ -649,13 +709,13 @@ public class WifiConfigController2 implements TextWatcher,
             config.SSID = "\"" + mWifiEntry.getTitle() + "\"";
         }
 
-        if (mMode == WifiConfigUiBase2.MODE_LOGIN_SCREEN) {
-            config.shared = true;
-            // TODO: set allowEditConfig once the API is ready.
-        }
-
-        if (!com.android.settings.connectivity.Flags.wifiMultiuser()) {
-            config.shared = mSharedCheckBox.isChecked();
+        if (WifiUtils.isWifiMultiuserEnabled()) {
+            config.shared = mSharedSwitch.isChecked();
+            if (!config.shared) {
+                config.setAllowedToUpdateByOtherUsers(false);
+            } else {
+                config.setAllowedToUpdateByOtherUsers(mEditConfigurationSwitch.isChecked());
+            }
         }
 
         switch (mWifiEntrySecurity) {
@@ -1096,6 +1156,20 @@ public class WifiConfigController2 implements TextWatcher,
             mEapIdentityView = (TextView) mView.findViewById(R.id.identity);
             mEapAnonymousView = (TextView) mView.findViewById(R.id.anonymous);
 
+            if (mShowFocusRingIndicator) {
+                mEapMethodSpinner.setForeground(mRoundedRectangleFocusRingBuilder.build());
+                mPhase2Spinner.setForeground(mRoundedRectangleFocusRingBuilder.build());
+                mEapCaCertSpinner.setForeground(mRoundedRectangleFocusRingBuilder.build());
+                mEapOcspSpinner.setForeground(mRoundedRectangleFocusRingBuilder.build());
+                mEapUserCertSpinner.setForeground(mRoundedRectangleFocusRingBuilder.build());
+                if (mEapSimSpinner != null) {
+                    mEapSimSpinner.setForeground(mRoundedRectangleFocusRingBuilder.build());
+                }
+                if (mEapMinTlsVerSpinner != null) {
+                    mEapMinTlsVerSpinner.setForeground(mRoundedRectangleFocusRingBuilder.build());
+                }
+            }
+
             setAccessibilityDelegateForSecuritySpinners();
         }
 
@@ -1260,6 +1334,109 @@ public class WifiConfigController2 implements TextWatcher,
         mEapMinTlsVerSpinner.setAccessibilityDelegate(selectedEventBlocker);
         mEapOcspSpinner.setAccessibilityDelegate(selectedEventBlocker);
         mEapUserCertSpinner.setAccessibilityDelegate(selectedEventBlocker);
+    }
+
+    @VisibleForTesting
+    static class PasswordTextInputLayoutAccessibilityDelegate
+            extends TextInputLayout.AccessibilityDelegate {
+        PasswordTextInputLayoutAccessibilityDelegate(TextInputLayout layout) {
+            super(layout);
+        }
+
+        @Override
+        public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfoCompat info) {
+            super.onInitializeAccessibilityNodeInfo(host, info);
+
+            final String passwordText = host.getContext().getString(R.string.wifi_password);
+            final CharSequence currentText = info.getText();
+
+            if (currentText != null && currentText.toString().toLowerCase(Locale.getDefault())
+                    .startsWith(passwordText.toLowerCase(Locale.getDefault()))) {
+                // If the text starts with "password", remove it.
+                // This prevents TalkBack from saying "Password [Role] Password [Hint]".
+                String newText = currentText.toString().substring(passwordText.length()).trim();
+                info.setText(TextUtils.isEmpty(newText) ? null : newText);
+            }
+        }
+    }
+
+    @VisibleForTesting
+    class SwitchRowAccessibilityDelegate extends View.AccessibilityDelegate {
+        private final MaterialSwitch mSwitch;
+        private final String mTitle;
+        private final String mSummary;
+
+        SwitchRowAccessibilityDelegate(MaterialSwitch switchView, String title, String summary) {
+            mSwitch = switchView;
+            mTitle = title;
+            mSummary = summary;
+        }
+
+        @Override
+        public void onInitializeAccessibilityNodeInfo(View host, AccessibilityNodeInfo info) {
+            super.onInitializeAccessibilityNodeInfo(host, info);
+            // Force the "Switch" role.
+            info.setClassName(android.widget.Switch.class.getName());
+
+            if (mSwitch != null) {
+                info.setContentDescription(TextUtils.concat(mTitle, ". ", mSummary));
+                String stateText = mSwitch.isChecked()
+                        ? mContext.getString(R.string.switch_on_text)
+                        : mContext.getString(R.string.switch_off_text);
+                info.setStateDescription(stateText);
+            }
+        }
+    }
+
+    @VisibleForTesting
+    void updateNetworkFieldState(int containerId, MaterialSwitch switchView, boolean enabled) {
+        // Handle the actual switch widget.
+        if (switchView != null) {
+            switchView.setEnabled(enabled);
+        }
+
+        // Handle the container view and hide it from TalkBack if disabled.
+        View container = mView.findViewById(containerId);
+        if (container != null) {
+            container.setEnabled(enabled);
+        }
+    }
+
+    @VisibleForTesting
+    void setupNetworkField(int viewId, MaterialSwitch switchView, String title, String summary) {
+        View view = mView.findViewById(viewId);
+
+        if (view != null && switchView != null) {
+            view.setAccessibilityDelegate(
+                    new SwitchRowAccessibilityDelegate(switchView, title, summary));
+
+            view.setOnClickListener(v -> {
+                switchView.toggle();
+                boolean newState = switchView.isChecked();
+
+                String stateText = newState
+                        ? mContext.getString(R.string.switch_on_text)
+                        : mContext.getString(R.string.switch_off_text);
+                v.setStateDescription(stateText);
+            });
+        }
+    }
+
+    @VisibleForTesting
+    void setAccessibilityDelegateForNetworkFields() {
+        setupNetworkField(
+                R.id.sharing_toggle_fields,
+                mSharedSwitch,
+                mContext.getString(R.string.wifi_share_preference_title),
+                mContext.getString(R.string.wifi_share_preference_summary)
+        );
+
+        setupNetworkField(
+                R.id.edit_wifi_network_configuration_fields,
+                mEditConfigurationSwitch,
+                mContext.getString(R.string.wifi_allow_edit_configuration_title),
+                mContext.getString(R.string.wifi_allow_edit_configuration_summary)
+        );
     }
 
     /**
@@ -1448,6 +1625,11 @@ public class WifiConfigController2 implements TextWatcher,
         mView.findViewById(R.id.eap).setVisibility(View.GONE);
     }
 
+    private void setSharedNetworkFieldsInvisible() {
+        mSharedToggleField.setVisibility(View.GONE);
+        mEditConfigurationField.setVisibility(View.GONE);
+    }
+
     private void showIpConfigFields() {
         WifiConfiguration config = null;
 
@@ -1512,6 +1694,10 @@ public class WifiConfigController2 implements TextWatcher,
         mView.findViewById(R.id.proxy_settings_fields).setVisibility(View.VISIBLE);
         if (mWifiEntry != null && mWifiEntry.isSaved()) {
             config = mWifiEntry.getWifiConfiguration();
+        }
+
+        if (mShowFocusRingIndicator) {
+            mProxySettingsSpinner.setForeground(mRoundedRectangleFocusRingBuilder.build());
         }
 
         if (mProxySettingsSpinner.getSelectedItemPosition() == PROXY_STATIC) {
@@ -1764,7 +1950,8 @@ public class WifiConfigController2 implements TextWatcher,
                 ((EditText) mPasswordView).setSelection(pos);
             }
         } else if (view.getId() == R.id.share_wifi_network) {
-            mEditConfigurationSwitch.setEnabled(isChecked);
+            updateNetworkFieldState(R.id.edit_wifi_network_configuration_fields,
+                    mEditConfigurationSwitch, isChecked);
             if (!isChecked) {
                 mEditConfigurationSwitch.setChecked(false);
             }
@@ -1849,9 +2036,13 @@ public class WifiConfigController2 implements TextWatcher,
         mSsidInputGroup.addTextChangedListener(this);
         mSecuritySpinner = ((Spinner) mView.findViewById(R.id.security));
         mSecuritySpinner.setOnItemSelectedListener(this);
+        if (mShowFocusRingIndicator) {
+            mSecuritySpinner.setForeground(mRoundedRectangleFocusRingBuilder.build());
+        }
 
         EnhancedSettingsSpinnerAdapter<String> spinnerAdapter =
-                new EnhancedSettingsSpinnerAdapter<>(mContext, new String[0]);
+                new EnhancedSettingsSpinnerAdapter<>(
+                        mContext, new String[0], mShowFocusRingIndicator);
         mSecuritySpinner.setAdapter(spinnerAdapter);
         int idx = 0;
 
@@ -1938,7 +2129,8 @@ public class WifiConfigController2 implements TextWatcher,
     EnhancedSettingsSpinnerAdapter<CharSequence> getSpinnerAdapter(
             String[] contentStringArray) {
         EnhancedSettingsSpinnerAdapter<CharSequence> spinnerAdapter =
-                new EnhancedSettingsSpinnerAdapter<>(mContext, contentStringArray);
+                new EnhancedSettingsSpinnerAdapter<>(
+                        mContext, contentStringArray, mShowFocusRingIndicator);
         return spinnerAdapter;
     }
 
@@ -1966,7 +2158,8 @@ public class WifiConfigController2 implements TextWatcher,
 
         // Return a new EnhancedSettingsSpinnerAdapter with the new TalkBack array.
         EnhancedSettingsSpinnerAdapter<CharSequence> spinnerAdapter =
-                new EnhancedSettingsSpinnerAdapter<>(mContext, accessibilityArray);
+                new EnhancedSettingsSpinnerAdapter<>(
+                        mContext, accessibilityArray, mShowFocusRingIndicator);
         return spinnerAdapter;
     }
 

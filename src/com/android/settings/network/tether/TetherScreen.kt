@@ -31,21 +31,29 @@ import com.android.settings.wifi.tether.WifiHotspotScreen
 import com.android.settingslib.TetherUtil
 import com.android.settingslib.Utils
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceTitleProvider
 import com.android.settingslib.metadata.ProvidePreferenceScreen
 import com.android.settingslib.metadata.preferenceHierarchy
 import kotlinx.coroutines.CoroutineScope
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_MOBILE_DATA
 
+// LINT.IfChange
 @ProvidePreferenceScreen(TetherScreen.KEY)
 open class TetherScreen :
     PreferenceScreenMixin,
     PreferenceTitleProvider,
     PreferenceAvailabilityProvider,
     PreferenceRestrictionMixin {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_MOBILE_DATA)
+
 
     override val key: String
         get() = KEY
+
+    override val purpose: Int
+        get() = R.string.tether_settings_purpose
 
     override val icon: Int
         get() = R.drawable.ic_wifi_tethering
@@ -60,6 +68,10 @@ open class TetherScreen :
             val tetheringManager = context.getSystemService(TetheringManager::class.java)!!
             context.getText(Utils.getTetheringLabel(tetheringManager))
         }
+
+    override val availabilityDescription = "The device must support tethering."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context) = TetherUtil.isTetherAvailable(context)
 
@@ -85,10 +97,11 @@ open class TetherScreen :
     override fun getPreferenceHierarchy(context: Context, coroutineScope: CoroutineScope) =
         preferenceHierarchy(context) {
             if (Flags.catalystTetherSettings()) +WifiHotspotScreen.KEY
-            if (Flags.catalystTetherSettings26q1()) +BluetoothTetherSwitchPreference()
+            if (Flags.catalystTetherSettings26q1()) +BluetoothTetherSwitchPreference(coroutineScope)
         }
 
     companion object {
         const val KEY = "tether_settings"
     }
 }
+// LINT.ThenChange(TetherSettings.java, TetherApiScreen.kt)

@@ -18,50 +18,80 @@ package com.android.settings.datetime;
 
 import static com.android.settings.core.BasePreferenceController.DISABLED_DEPENDENT_SETTING;
 
+import static android.os.UserManager.DISALLOW_CONFIG_DATE_TIME;
 import static com.google.common.truth.Truth.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertFalse;
 
 import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.never;
 
+import android.app.admin.DevicePolicyIdentifiers;
+import android.app.admin.DevicePolicyManager;
+import android.app.admin.DevicePolicyResourcesManager;
+import android.app.admin.DpcAuthority;
+import android.app.admin.PolicyEnforcementInfo;
+import android.app.admin.flags.Flags;
+import android.app.admin.EnforcingAdmin;
 import android.app.time.Capabilities;
 import android.app.time.TimeCapabilities;
 import android.app.time.TimeCapabilitiesAndConfig;
 import android.app.time.TimeConfiguration;
+import android.app.admin.PolicyIdentifier;
 import android.app.time.TimeManager;
 import android.content.Context;
 import android.os.UserHandle;
-
+import android.platform.test.annotations.DisableFlags;
+import android.platform.test.annotations.EnableFlags;
+import com.android.settings.testutils.DevicePolicyUtils;
+import com.google.testing.junit.testparameterinjector.TestParameters;
+import java.util.List;
+import android.platform.test.flag.junit.SetFlagsRule;
 import androidx.preference.Preference;
 
 import com.android.settings.R;
+import com.android.settingslib.RestrictedSwitchPreference;
+import com.android.settingslib.RestrictedPreferenceHelper;
 
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.robolectric.RobolectricTestRunner;
+import org.robolectric.RobolectricTestParameterInjector;
 import org.robolectric.RuntimeEnvironment;
 
-@RunWith(RobolectricTestRunner.class)
+@RunWith(RobolectricTestParameterInjector.class)
 public class AutoTimePreferenceControllerTest {
 
     @Mock
     private UpdateTimeAndDateCallback mCallback;
     private Context mContext;
     private AutoTimePreferenceController mController;
-    private Preference mPreference;
+    private RestrictedSwitchPreference mPreference;
     @Mock
     private TimeManager mTimeManager;
+    @Mock
+    private DevicePolicyManager mDpm;
+    @Mock
+    private DevicePolicyResourcesManager mResources;
+    @Mock
+    private RestrictedPreferenceHelper mHelper;
+
+    @Rule public final SetFlagsRule mSetFlagsRule = new SetFlagsRule();
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
         mContext = spy(RuntimeEnvironment.application);
-        mPreference = new Preference(mContext);
+        mPreference = spy(new RestrictedSwitchPreference(mContext));
         when(mContext.getSystemService(TimeManager.class)).thenReturn(mTimeManager);
+        when(mContext.getSystemService(DevicePolicyManager.class)).thenReturn(mDpm);
+        when(mDpm.getResources()).thenReturn(mResources);
 
         mController = new AutoTimePreferenceController(mContext, "test_key");
         mController.setDateAndTimeCallback(mCallback);
@@ -161,6 +191,86 @@ public class AutoTimePreferenceControllerTest {
                 mContext.getString(R.string.date_time_auto_summary));
     }
 
+    @Test
+    @TestParameters("{autoTimePolicyValue: " + PolicyIdentifier.AUTO_TIME_DISABLED +"}")
+    @TestParameters("{autoTimePolicyValue: " + PolicyIdentifier.AUTO_TIME_ENABLED +"}")
+    @EnableFlags(Flags.FLAG_POLICY_STREAMLINING_AUTO_TIME)
+    public void updateState_autoTimePolicyForcedValues_shouldDisableSetting(
+            int autoTimePolicyValue) {
+        TimeCapabilitiesAndConfig capabilitiesAndConfig = createCapabilitiesAndConfig(
+                /* autoSupported= */true, /* autoEnabled= */true);
+        when(mTimeManager.getTimeCapabilitiesAndConfig()).thenReturn(capabilitiesAndConfig);
+        when(mDpm.getResolvedDeviceWidePolicy(
+                PolicyIdentifier.AUTO_TIME)).thenReturn(autoTimePolicyValue);
+        EnforcingAdmin admin = setupEnforcingAdminForPolicy();
+
+        mController.updateState(mPreference);
+
+        assertTrue(mPreference.isDisabledByAdmin());
+    }
+
+    @Test
+    @TestParameters("{autoTimePolicyValue: " + PolicyIdentifier.AUTO_TIME_DISABLED +"}")
+    @TestParameters("{autoTimePolicyValue: " + PolicyIdentifier.AUTO_TIME_ENABLED +"}")
+    @DisableFlags(Flags.FLAG_POLICY_STREAMLINING_AUTO_TIME)
+    public void updateState_autoTimePolicyForcedValues_shouldNotDisableSetting_flagDisabled(
+            int autoTimePolicyValue) {
+        TimeCapabilitiesAndConfig capabilitiesAndConfig = createCapabilitiesAndConfig(
+                /* autoSupported= */true, /* autoEnabled= */true);
+        when(mTimeManager.getTimeCapabilitiesAndConfig()).thenReturn(capabilitiesAndConfig);
+        when(mDpm.getResolvedDeviceWidePolicy(
+                PolicyIdentifier.AUTO_TIME)).thenReturn(autoTimePolicyValue);
+        EnforcingAdmin admin = setupEnforcingAdminForPolicy();
+
+        mController.updateState(mPreference);
+
+        assertFalse(mPreference.isDisabledByAdmin());
+    }
+
+    @Test
+    @TestParameters("{autoTimePolicyValue: " + PolicyIdentifier.AUTO_TIME_USER_CHOICE +"}")
+    @TestParameters("{autoTimePolicyValue: " + PolicyIdentifier.AUTO_TIME_DISABLED_UNENFORCED +"}")
+    @TestParameters("{autoTimePolicyValue: " + PolicyIdentifier.AUTO_TIME_ENABLED_UNENFORCED +"}")
+    @EnableFlags(Flags.FLAG_POLICY_STREAMLINING_AUTO_TIME)
+    public void updateState_autoTimeUnenforced_settingDisabled_userRestrictionChecked(
+            int autoTimePolicyValue) {
+        TimeCapabilitiesAndConfig capabilitiesAndConfig = createCapabilitiesAndConfig(
+                /* autoSupported= */true, /* autoEnabled= */true);
+        when(mTimeManager.getTimeCapabilitiesAndConfig()).thenReturn(capabilitiesAndConfig);
+        when(mPreference.getRestrictedPreferenceHelper()).thenReturn(mHelper);
+        when(mDpm.getResolvedDeviceWidePolicy(
+                PolicyIdentifier.AUTO_TIME)).thenReturn(autoTimePolicyValue);
+        setupEnforcingAdminForPolicy();
+
+        mController.updateState(mPreference);
+
+        verify(mHelper).setDisabledByEnforcingAdmin((EnforcingAdmin) null);
+        verify(mHelper).checkRestrictionAndSetDisabled(
+                DISALLOW_CONFIG_DATE_TIME, UserHandle.myUserId());
+    }
+
+    @Test
+    @TestParameters("{autoTimePolicyValue: " + PolicyIdentifier.AUTO_TIME_USER_CHOICE +"}")
+    @TestParameters("{autoTimePolicyValue: " + PolicyIdentifier.AUTO_TIME_DISABLED_UNENFORCED +"}")
+    @TestParameters("{autoTimePolicyValue: " + PolicyIdentifier.AUTO_TIME_ENABLED_UNENFORCED +"}")
+    @DisableFlags(Flags.FLAG_POLICY_STREAMLINING_AUTO_TIME)
+    public void updateState_autoTimeUnenforced_settingDisabled_userRestrictionSkipped_flagDisabled(
+            int autoTimePolicyValue) {
+        TimeCapabilitiesAndConfig capabilitiesAndConfig = createCapabilitiesAndConfig(
+                /* autoSupported= */true, /* autoEnabled= */true);
+        when(mTimeManager.getTimeCapabilitiesAndConfig()).thenReturn(capabilitiesAndConfig);
+        when(mPreference.getRestrictedPreferenceHelper()).thenReturn(mHelper);
+        when(mDpm.getResolvedDeviceWidePolicy(
+                PolicyIdentifier.AUTO_TIME)).thenReturn(autoTimePolicyValue);
+        setupEnforcingAdminForPolicy();
+
+        mController.updateState(mPreference);
+
+        verify(mHelper, never()).setDisabledByEnforcingAdmin((EnforcingAdmin) null);
+        verify(mHelper, never()).checkRestrictionAndSetDisabled(
+                DISALLOW_CONFIG_DATE_TIME, UserHandle.myUserId());
+    }
+
     private static TimeCapabilitiesAndConfig createCapabilitiesAndConfig(boolean autoSupported,
             boolean autoEnabled) {
         int configureAutoDetectionEnabledCapability =
@@ -174,5 +284,13 @@ public class AutoTimePreferenceControllerTest {
                 .setAutoDetectionEnabled(autoEnabled)
                 .build();
         return new TimeCapabilitiesAndConfig(capabilities, config);
+    }
+
+    private EnforcingAdmin setupEnforcingAdminForPolicy() {
+        EnforcingAdmin admin = DevicePolicyUtils.DPC_ADMIN;
+        when(mDpm.getEnforcingAdminsForPolicy(
+                DevicePolicyIdentifiers.AUTO_TIME_POLICY,
+                UserHandle.myUserId())).thenReturn(new PolicyEnforcementInfo(List.of(admin)));
+        return admin;
     }
 }

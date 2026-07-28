@@ -23,6 +23,10 @@ import static android.hardware.devicestate.DeviceState.PROPERTY_FOLDABLE_DISPLAY
 import static android.hardware.devicestate.DeviceState.PROPERTY_FOLDABLE_DISPLAY_CONFIGURATION_OUTER_PRIMARY;
 
 import static com.android.internal.hidden_from_bootclasspath.android.hardware.devicestate.feature.flags.Flags.FLAG_DEVICE_STATE_PROPERTY_MIGRATION;
+import static com.android.settings.flags.Flags.FLAG_DISABLE_KEYBOARD_SETTINGS_IN_DEMO_MODE;
+import static com.android.settings.flags.Flags.FLAG_HIDE_DREAM_SETTING_IN_DEMO_MODE;
+import static com.android.settings.flags.Flags.FLAG_HIDE_MODES_SETTING_IN_DEMO_MODE;
+import static com.android.settings.flags.Flags.FLAG_HIDE_SUPERVISION_SETTING_IN_DEMO_MODE;
 import static com.android.settings.Utils.SETTINGS_PACKAGE_NAME;
 import static com.android.settings.password.ConfirmDeviceCredentialActivity.BIOMETRIC_PROMPT_AUTHENTICATORS;
 import static com.android.settings.password.ConfirmDeviceCredentialActivity.BIOMETRIC_PROMPT_HIDE_BACKGROUND;
@@ -80,6 +84,7 @@ import android.os.storage.VolumeInfo;
 import android.platform.test.annotations.DisableFlags;
 import android.platform.test.annotations.EnableFlags;
 import android.platform.test.flag.junit.SetFlagsRule;
+import android.provider.Settings;
 import android.util.IconDrawableFactory;
 import android.widget.EditText;
 import android.widget.ScrollView;
@@ -93,6 +98,7 @@ import com.android.internal.widget.LockPatternUtils;
 import com.android.settings.password.ChooseLockSettingsHelper;
 import com.android.settings.password.ConfirmDeviceCredentialActivity;
 import com.android.settings.testutils.shadow.ShadowLockPatternUtils;
+import com.android.settingslib.datastore.SettingsGlobalStore;
 
 import org.junit.After;
 import org.junit.Before;
@@ -374,6 +380,222 @@ public class UtilsTest {
         when(mockUserManager.isUserForeground()).thenReturn(false);
 
         assertThat(Utils.canCurrentUserDream(mockContext)).isFalse();
+    }
+
+    @Test
+    @EnableFlags(FLAG_DISABLE_KEYBOARD_SETTINGS_IN_DEMO_MODE)
+    public void
+            shouldDisableKeyboardSettingsInDemoMode_inDemoMode_configDisableInDemo_returnTrue() {
+        verifyshouldDisableKeyboardSettingsInDemoMode(
+                /* isDemoMode= */ 1, /* configDisableInDemo= */ true, /* expectedResult= */ true);
+    }
+
+    @Test
+    @EnableFlags(FLAG_DISABLE_KEYBOARD_SETTINGS_IN_DEMO_MODE)
+    public void shouldDisableKeyboardSettingsInDemoMode_notConfigDisableInDemo_returnFalse() {
+        verifyshouldDisableKeyboardSettingsInDemoMode(
+                /* isDemoMode= */ 1, /* configDisableInDemo= */ false, /* expectedResult= */ false);
+        verifyshouldDisableKeyboardSettingsInDemoMode(
+                /* isDemoMode= */ 0, /* configDisableInDemo= */ false, /* expectedResult= */ false);
+    }
+
+    @Test
+    @EnableFlags(FLAG_DISABLE_KEYBOARD_SETTINGS_IN_DEMO_MODE)
+    public void shouldDisableKeyboardSettingsInDemoMode_notInDemoMode_returnFalse() {
+        verifyshouldDisableKeyboardSettingsInDemoMode(
+                /* isDemoMode= */ 0, /* configDisableInDemo= */ true, /* expectedResult= */ false);
+        verifyshouldDisableKeyboardSettingsInDemoMode(
+                /* isDemoMode= */ 0, /* configDisableInDemo= */ false, /* expectedResult= */ false);
+    }
+
+    @Test
+    @DisableFlags(FLAG_DISABLE_KEYBOARD_SETTINGS_IN_DEMO_MODE)
+    public void shouldDisableKeyboardSettingsInDemoMode_disableFlag_returnFalse() {
+        verifyshouldDisableKeyboardSettingsInDemoMode(
+                /* isDemoMode= */ 1, /* configDisableInDemo= */ true, /* expectedResult= */ false);
+        verifyshouldDisableKeyboardSettingsInDemoMode(
+                /* isDemoMode= */ 1, /* configDisableInDemo= */ false, /* expectedResult= */ false);
+    }
+
+    @Test
+    @EnableFlags(FLAG_DISABLE_KEYBOARD_SETTINGS_IN_DEMO_MODE)
+    public void shouldDisableKeyboardSettingsInDemoMode_unexpectedException_returnFalse() {
+        Resources mockResources = mock(Resources.class);
+        when(mContext.getResources()).thenReturn(mockResources);
+        when(mockResources.getBoolean(R.bool.config_disable_keyboard_settings_in_demo_mode))
+                .thenReturn(true);
+        when(mContext.getContentResolver()).thenThrow(
+                new NullPointerException("Test: null pointer"));
+        assertThat(Utils.shouldDisableKeyboardSettingsInDemoMode(mContext)).isFalse();
+    }
+
+    @Test
+    @EnableFlags(FLAG_HIDE_DREAM_SETTING_IN_DEMO_MODE)
+    public void areDreamsAvailableToCurrentUser_hideSettingInDemoMode_returnFalse() {
+        Resources mockResources = mock(Resources.class);
+        when(mContext.getResources()).thenReturn(mockResources);
+        when(mockResources.getBoolean(R.bool.config_hide_dream_setting_in_demo_mode))
+                .thenReturn(true);
+
+        // Mock demo mode:
+        Settings.Global.putInt(mContext.getContentResolver(),
+                Settings.Global.DEVICE_DEMO_MODE, 1);
+
+        assertThat(Utils.areDreamsAvailableToCurrentUser(mContext)).isFalse();
+
+        // Clean up to default value:
+        Settings.Global.putInt(mContext.getContentResolver(),
+                Settings.Global.DEVICE_DEMO_MODE, 0);
+    }
+
+    @Test
+    @DisableFlags(FLAG_HIDE_DREAM_SETTING_IN_DEMO_MODE)
+    public void shouldHideDreamsInDemoMode_disableFlag_returnFalse() {
+        Resources mockResources = mock(Resources.class);
+        when(mContext.getResources()).thenReturn(mockResources);
+        when(mockResources.getBoolean(R.bool.config_hide_dream_setting_in_demo_mode))
+                .thenReturn(true);
+
+        // Mock demo mode:
+        Settings.Global.putInt(mContext.getContentResolver(),
+                Settings.Global.DEVICE_DEMO_MODE, 1);
+
+        assertThat(Utils.shouldHideDreamsInDemoMode(mContext)).isFalse();
+
+        // Clean up to default value:
+        Settings.Global.putInt(mContext.getContentResolver(),
+                Settings.Global.DEVICE_DEMO_MODE, 0);
+    }
+
+    @Test
+    @EnableFlags(FLAG_HIDE_DREAM_SETTING_IN_DEMO_MODE)
+    public void shouldHideDreamsInDemoMode_notDemoMode_returnFalse() {
+        Resources mockResources = mock(Resources.class);
+        when(mContext.getResources()).thenReturn(mockResources);
+        when(mockResources.getBoolean(R.bool.config_hide_dream_setting_in_demo_mode))
+                .thenReturn(true);
+        assertThat(UserManager.isDeviceInDemoMode(mContext)).isFalse();
+
+        assertThat(Utils.shouldHideDreamsInDemoMode(mContext)).isFalse();
+    }
+
+    @Test
+    @EnableFlags(FLAG_HIDE_DREAM_SETTING_IN_DEMO_MODE)
+    public void areDreamsAvailableToCurrentUser_notHideSettingInDemoMode_returnTrue() {
+        assertThat(mContext.getResources()
+                .getBoolean(R.bool.config_hide_dream_setting_in_demo_mode)).isFalse();
+
+        // Mock demo mode:
+        Settings.Global.putInt(mContext.getContentResolver(),
+                Settings.Global.DEVICE_DEMO_MODE, 1);
+
+        assertThat(Utils.areDreamsAvailableToCurrentUser(mContext)).isTrue();
+
+        // Clean up to default value:
+        Settings.Global.putInt(mContext.getContentResolver(),
+                Settings.Global.DEVICE_DEMO_MODE, 0);
+    }
+
+    @Test
+    @EnableFlags(FLAG_HIDE_DREAM_SETTING_IN_DEMO_MODE)
+    public void shouldHideDreamsInDemoMode_unExpectedException_returnFalse() {
+        Resources mockResources = mock(Resources.class);
+        when(mContext.getResources()).thenReturn(mockResources);
+        when(mockResources.getBoolean(R.bool.config_hide_dream_setting_in_demo_mode))
+                .thenReturn(true);
+        when(mContext.getContentResolver()).thenThrow(
+            new NullPointerException("Test: null pointer"));
+        assertThat(Utils.shouldHideDreamsInDemoMode(mContext)).isFalse();
+    }
+
+    @Test
+    @EnableFlags(FLAG_HIDE_MODES_SETTING_IN_DEMO_MODE)
+    public void shouldHideModesInDemoMode_inDemoMode_configHideInDemo_returnTrue() {
+        verifyshouldHideModesInDemoMode(
+                1 /*isDemoMode*/, true /*configHideInDemo*/, true /*expectedResult*/);
+    }
+
+    @Test
+    @EnableFlags(FLAG_HIDE_MODES_SETTING_IN_DEMO_MODE)
+    public void shouldHideModesInDemoMode_notConfigHideInDemo_returnFalse() {
+        verifyshouldHideModesInDemoMode(
+                1 /*isDemoMode*/, false /*configHideInDemo*/, false /*expectedResult*/);
+        verifyshouldHideModesInDemoMode(
+                0 /*isDemoMode*/, false /*configHideInDemo*/, false /*expectedResult*/);
+    }
+
+    @Test
+    @EnableFlags(FLAG_HIDE_MODES_SETTING_IN_DEMO_MODE)
+    public void shouldHideModesInDemoMode_notInDemoMode_returnFalse() {
+        verifyshouldHideModesInDemoMode(
+                0 /*isDemoMode*/, true /*configHideInDemo*/, false /*expectedResult*/);
+        verifyshouldHideModesInDemoMode(
+                0 /*isDemoMode*/, false /*configHideInDemo*/, false /*expectedResult*/);
+    }
+
+    @Test
+    @DisableFlags(FLAG_HIDE_MODES_SETTING_IN_DEMO_MODE)
+    public void shouldHideModesInDemoMode_disableFlag_returnFalse() {
+        verifyshouldHideModesInDemoMode(
+                1 /*isDemoMode*/, true /*configHideInDemo*/, false /*expectedResult*/);
+        verifyshouldHideModesInDemoMode(
+                1 /*isDemoMode*/, false /*configHideInDemo*/, false /*expectedResult*/);
+    }
+
+    @Test
+    @EnableFlags(FLAG_HIDE_MODES_SETTING_IN_DEMO_MODE)
+    public void shouldHideModesInDemoMode_unexpectedException_returnFalse() {
+        Resources mockResources = mock(Resources.class);
+        when(mContext.getResources()).thenReturn(mockResources);
+        when(mockResources.getBoolean(R.bool.config_hide_modes_setting_in_demo_mode))
+                .thenReturn(true);
+        when(mContext.getContentResolver()).thenThrow(
+            new NullPointerException("Test: null pointer"));
+        assertThat(Utils.shouldHideDreamsInDemoMode(mContext)).isFalse();
+    }
+
+    @Test
+    @EnableFlags(FLAG_HIDE_SUPERVISION_SETTING_IN_DEMO_MODE)
+    public void shouldHideSupervisionInDemoMode_inDemoMode_configHideInDemo_returnTrue() {
+        verifyshouldHideSupervisionInDemoMode(
+                1 /*isDemoMode*/, true /*configHideInDemo*/, true /*expectedResult*/);
+    }
+
+    @Test
+    @EnableFlags(FLAG_HIDE_SUPERVISION_SETTING_IN_DEMO_MODE)
+    public void shouldHideSupervisionInDemoMode_notConfigHideInDemo_returnFalse() {
+        verifyshouldHideSupervisionInDemoMode(
+                1 /*isDemoMode*/, false /*configHideInDemo*/, false /*expectedResult*/);
+        verifyshouldHideSupervisionInDemoMode(
+                0 /*isDemoMode*/, false /*configHideInDemo*/, false /*expectedResult*/);
+    }
+
+    @Test
+    @EnableFlags(FLAG_HIDE_SUPERVISION_SETTING_IN_DEMO_MODE)
+    public void shouldHideSupervisionInDemoMode_notInDemoMode_returnFalse() {
+        verifyshouldHideSupervisionInDemoMode(
+                0 /*isDemoMode*/, true /*configHideInDemo*/, false /*expectedResult*/);
+        verifyshouldHideSupervisionInDemoMode(
+                0 /*isDemoMode*/, false /*configHideInDemo*/, false /*expectedResult*/);
+    }
+
+    @Test
+    @DisableFlags(FLAG_HIDE_SUPERVISION_SETTING_IN_DEMO_MODE)
+    public void shouldHideSupervisionInDemoMode_disableFlag_returnFalse() {
+        verifyshouldHideSupervisionInDemoMode(
+                1 /*isDemoMode*/, true /*configHideInDemo*/, false /*expectedResult*/);
+    }
+
+    @Test
+    @EnableFlags(FLAG_HIDE_SUPERVISION_SETTING_IN_DEMO_MODE)
+    public void shouldHideSupervisionInDemoMode_unexpectedException_returnFalse() {
+        Resources mockResources = mock(Resources.class);
+        when(mContext.getResources()).thenReturn(mockResources);
+        when(mockResources.getBoolean(R.bool.config_hide_supervision_setting_in_demo_mode))
+                .thenReturn(true);
+        when(mContext.getContentResolver()).thenThrow(
+            new NullPointerException("Test: null pointer"));
+        assertThat(Utils.shouldHideDreamsInDemoMode(mContext)).isFalse();
     }
 
     @Test
@@ -750,9 +972,116 @@ public class UtilsTest {
         assertThat(Utils.isPrivateProfile(mockUserId, mockContext)).isTrue();
     }
 
+    @Test
+    public void enforceSameOwner_sameUser_returnsUserId() {
+        final int currentUserId = 0;
+        final int profileUserId = 10;
+        ShadowBinder.setCallingUid(UserHandle.getUid(currentUserId, 12345));
+        when(mContext.getSystemService(UserManager.class)).thenReturn(mMockUserManager);
+        when(mMockUserManager.getProfileIdsWithDisabled(currentUserId))
+                .thenReturn(new int[]{currentUserId, profileUserId});
+
+        assertThat(Utils.enforceSameOwner(mContext, currentUserId)).isEqualTo(currentUserId);
+    }
+
+    @Test
+    public void enforceSameOwner_profileOfCurrentUser_returnsUserId() {
+        final int currentUserId = 0;
+        final int profileUserId = 10;
+        ShadowBinder.setCallingUid(UserHandle.getUid(currentUserId, 12345));
+        when(mContext.getSystemService(UserManager.class)).thenReturn(mMockUserManager);
+        when(mMockUserManager.getProfileIdsWithDisabled(currentUserId))
+                .thenReturn(new int[]{currentUserId, profileUserId});
+
+        assertThat(Utils.enforceSameOwner(mContext, profileUserId)).isEqualTo(profileUserId);
+    }
+
+    @Test
+    public void enforceSameOwner_supervisingProfile_returnsUserId() {
+        final int currentUserId = 0;
+        final int profileUserId = 10;
+        final int supervisingUserId = 12;
+        ShadowBinder.setCallingUid(UserHandle.getUid(currentUserId, 12345));
+        when(mContext.getSystemService(UserManager.class)).thenReturn(mMockUserManager);
+        when(mMockUserManager.getProfileIdsWithDisabled(currentUserId))
+                .thenReturn(new int[]{currentUserId, profileUserId});
+        UserInfo supervisingUserInfo = new UserInfo(supervisingUserId, "supervising", 0);
+        supervisingUserInfo.userType = UserManager.USER_TYPE_PROFILE_SUPERVISING;
+        when(mMockUserManager.getUsers()).thenReturn(List.of(supervisingUserInfo));
+
+        assertThat(Utils.enforceSameOwner(mContext, supervisingUserId))
+                .isEqualTo(supervisingUserId);
+    }
+
+    @Test
+    public void enforceSameOwner_unrelatedUser_throwsSecurityException() {
+        final int currentUserId = 0;
+        final int profileUserId = 10;
+        final int unrelatedUserId = 15;
+        ShadowBinder.setCallingUid(UserHandle.getUid(currentUserId, 12345));
+        when(mContext.getSystemService(UserManager.class)).thenReturn(mMockUserManager);
+        when(mMockUserManager.getProfileIdsWithDisabled(currentUserId))
+                .thenReturn(new int[]{currentUserId, profileUserId});
+        UserInfo unrelatedUserInfo = new UserInfo(unrelatedUserId, "unrelated", 0);
+        // Make sure supervising user is not in the list of users.
+        when(mMockUserManager.getUsers()).thenReturn(List.of(unrelatedUserInfo));
+
+        assertThrows(SecurityException.class,
+                () -> Utils.enforceSameOwner(mContext, unrelatedUserId));
+    }
+
     private void setUpForConfirmCredentialString(boolean isEffectiveUserManagedProfile) {
         when(mContext.getSystemService(Context.USER_SERVICE)).thenReturn(mMockUserManager);
         when(mMockUserManager.getCredentialOwnerProfile(USER_ID)).thenReturn(USER_ID);
         when(mMockUserManager.isManagedProfile(USER_ID)).thenReturn(isEffectiveUserManagedProfile);
+    }
+
+    private void verifyshouldDisableKeyboardSettingsInDemoMode(
+            int isDemoMode, boolean configDisableInDemo, boolean expectedResult) {
+        Resources mockResources = mock(Resources.class);
+        when(mContext.getResources()).thenReturn(mockResources);
+        when(mockResources.getBoolean(R.bool.config_disable_keyboard_settings_in_demo_mode))
+                .thenReturn(configDisableInDemo);
+
+        // Mock demo mode:
+        SettingsGlobalStore.get(mContext).setInt(Settings.Global.DEVICE_DEMO_MODE, isDemoMode);
+
+        assertThat(Utils.shouldDisableKeyboardSettingsInDemoMode(mContext))
+                .isEqualTo(expectedResult);
+
+        // Clean up to the default value.
+        SettingsGlobalStore.get(mContext).setInt(Settings.Global.DEVICE_DEMO_MODE, 0);
+    }
+
+    private void verifyshouldHideModesInDemoMode(
+            int isDemoMode, boolean configHideInDemo, boolean expectedResult) {
+        Resources mockResources = mock(Resources.class);
+        when(mContext.getResources()).thenReturn(mockResources);
+        when(mockResources.getBoolean(R.bool.config_hide_modes_setting_in_demo_mode))
+                .thenReturn(configHideInDemo);
+
+        // Mock demo mode:
+        SettingsGlobalStore.get(mContext).setInt(Settings.Global.DEVICE_DEMO_MODE, isDemoMode);
+
+        assertThat(Utils.shouldHideModesInDemoMode(mContext)).isEqualTo(expectedResult);
+
+        // Clean up to the default value.
+        SettingsGlobalStore.get(mContext).setInt(Settings.Global.DEVICE_DEMO_MODE, 0);
+    }
+
+    private void verifyshouldHideSupervisionInDemoMode(
+            int isDemoMode, boolean configHideInDemo, boolean expectedResult) {
+        Resources mockResources = mock(Resources.class);
+        when(mContext.getResources()).thenReturn(mockResources);
+        when(mockResources.getBoolean(R.bool.config_hide_supervision_setting_in_demo_mode))
+                .thenReturn(configHideInDemo);
+
+        // Mock demo mode:
+        SettingsGlobalStore.get(mContext).setInt(Settings.Global.DEVICE_DEMO_MODE, isDemoMode);
+
+        assertThat(Utils.shouldHideSupervisionInDemoMode(mContext)).isEqualTo(expectedResult);
+
+        // Clean up to default value:
+        SettingsGlobalStore.get(mContext).setInt(Settings.Global.DEVICE_DEMO_MODE, 0);
     }
 }

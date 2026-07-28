@@ -35,10 +35,12 @@ import com.android.settings.core.SubSettingLauncher
 import com.android.settings.restriction.PreferenceRestrictionMixin
 import com.android.settingslib.RestrictedPreference
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.preference.PreferenceBinding
 
 class AddDevicePreference(context: Context) :
@@ -63,6 +65,9 @@ class AddDevicePreference(context: Context) :
     override val key: String
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.hearing_device_add_bt_devices_purpose
+
     override val icon: Int
         get() = R.drawable.ic_add_24dp
 
@@ -76,6 +81,8 @@ class AddDevicePreference(context: Context) :
         get() = true
 
     override fun isEnabled(context: Context) = super<PreferenceRestrictionMixin>.isEnabled(context)
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
 
     override fun intent(context: Context): Intent =
         SubSettingLauncher(context)
@@ -113,6 +120,10 @@ class AddDevicePreference(context: Context) :
             ""
         }
     }
+
+    override val availabilityDescription = UI_ONLY_PREFERENCE
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
 
     override fun isAvailable(context: Context): Boolean =
         context.packageManager.hasSystemFeature(PackageManager.FEATURE_BLUETOOTH)

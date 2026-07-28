@@ -34,10 +34,12 @@ import com.android.settingslib.datastore.and
 import com.android.settingslib.metadata.ReadWritePermit
 import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.metadata.SwitchPreference
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 
 class WifiScorerTogglePreference() :
     SwitchPreference(
         KEY,
+        R.string.adaptive_connectivity_wifi_enabled_purpose,
         R.string.adaptive_connectivity_wifi_switch_title,
         R.string.adaptive_connectivity_wifi_switch_summary,
     ),
@@ -49,7 +51,10 @@ class WifiScorerTogglePreference() :
     override val key: String
         get() = KEY
 
-    override fun tags(context: Context) = arrayOf(KEY_ADAPTIVE_WIFI_SCORER)
+    override val purpose: Int
+        get() = R.string.adaptive_connectivity_wifi_enabled_purpose
+
+    override fun tags(context: Context) = arrayOf(KEY_ADAPTIVE_WIFI_SCORER, UI_ONLY_PREFERENCE)
 
     override fun storage(context: Context): KeyValueStore = WifiScorerToggleStorage(context)
 
@@ -70,7 +75,7 @@ class WifiScorerTogglePreference() :
     ) = ReadWritePermit.ALLOW
 
     override val sensitivityLevel
-        get() = SensitivityLevel.NO_SENSITIVITY
+        get() = SensitivityLevel.REQUIRES_CONFIRMATION
 
     @Suppress("UNCHECKED_CAST")
     private class WifiScorerToggleStorage(

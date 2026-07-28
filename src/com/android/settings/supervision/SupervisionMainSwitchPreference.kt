@@ -19,6 +19,7 @@ import android.app.Activity
 import android.app.settings.SettingsEnums.ACTION_SUPERVISION_MAIN_TOGGLE_OFF
 import android.app.settings.SettingsEnums.ACTION_SUPERVISION_MAIN_TOGGLE_ON
 import android.app.supervision.SupervisionManager
+import android.app.supervision.flags.Flags
 import android.content.Context
 import android.content.Intent
 import android.os.UserHandle
@@ -29,7 +30,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.preference.Preference
 import com.android.settings.R
 import com.android.settings.overlay.FeatureFactory
+import com.android.settings.supervision.credentialmanagement.SupervisionPinManagementScreen
 import com.android.settings.supervision.ipc.PreferenceData
+import com.android.settings.supervision.shared.isSupervisingCredentialSet
+import com.android.settings.supervision.shared.supervisingUserHandle
 import com.android.settingslib.HelpUtils
 import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.NoOpKeyedObservable
@@ -69,11 +73,14 @@ class SupervisionMainSwitchPreference(
     override val key
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.device_supervision_switch_purpose
+
     override val title
-        get() = R.string.device_supervision_switch_title
+        get() = R.string.device_supervision_features_title
 
     override fun getSummary(context: Context): CharSequence? =
-        if (!context.isSupervisingCredentialSet) {
+        if (!context.isSupervisingCredentialSet()) {
             context.getString(R.string.device_supervision_switch_no_pin_summary)
         } else {
             null
@@ -87,8 +94,10 @@ class SupervisionMainSwitchPreference(
     override fun getWritePermit(context: Context, callingPid: Int, callingUid: Int) =
         ReadWritePermit.DISALLOW
 
+    override val supportsWrite = false
+
     override val sensitivityLevel: Int
-        get() = SensitivityLevel.HIGH_SENSITIVITY
+        get() = SensitivityLevel.DEEP_LINK_ONLY
 
     override fun onCreate(context: PreferenceLifecycleContext) {
         lifeCycleContext = context
@@ -104,7 +113,12 @@ class SupervisionMainSwitchPreference(
         val preferenceKeys =
             buildList<String> {
                 mainSwitchPreference?.parent?.forEachRecursively {
-                    if (it.parent?.key == SupervisionDashboardScreen.SUPERVISION_DYNAMIC_GROUP_1) {
+                    if (
+                        it.parent?.key == SupervisionDashboardScreen.SUPERVISION_DYNAMIC_GROUP_1 ||
+                            (Flags.enableSupervisionSettingsUiUpdates() &&
+                                it.parent?.key ==
+                                    SupervisionDashboardScreen.SUPERVISION_DYNAMIC_GROUP_2)
+                    ) {
                         add(it.key)
                     }
                 }
@@ -184,7 +198,8 @@ class SupervisionMainSwitchPreference(
         if (newValue) {
             val userManager = preference.context.getSystemService(UserManager::class.java)
             if (userManager != null) {
-                val supervisingProfileHandle: UserHandle? = preference.context.supervisingUserHandle
+                val supervisingProfileHandle: UserHandle? =
+                    preference.context.supervisingUserHandle()
                 val nonSupervisingProfiles =
                     userManager.userProfiles.filter { it != supervisingProfileHandle }
 
@@ -204,7 +219,7 @@ class SupervisionMainSwitchPreference(
 
         // If supervision is being toggled but either the supervising profile hasn't been
         // created or the credentials aren't set, launch SetupSupervisionActivity.
-        if (!preference.context.isSupervisingCredentialSet) {
+        if (!preference.context.isSupervisingCredentialSet()) {
             pendingNewValue = newValue
             val intent = Intent(lifeCycleContext, SetupSupervisionActivity::class.java)
             lifeCycleContext.startActivityForResult(intent, REQUEST_CODE_SET_UP_SUPERVISION, null)
@@ -228,6 +243,11 @@ class SupervisionMainSwitchPreference(
         preference: Preference?,
         isChecked: Boolean,
     ) {
+        if (Flags.enableSupervisionSettingsUiUpdates()) {
+            // Preferences should not be disabled in the new UI.
+            return
+        }
+
         preference?.parent?.forEachRecursively {
             if (it.parent?.key == SupervisionDashboardScreen.SUPERVISION_DYNAMIC_GROUP_1) {
                 it.isEnabled = isChecked
@@ -237,7 +257,11 @@ class SupervisionMainSwitchPreference(
 
     private fun updateDependentPreferenceSummary(preference: Preference?) {
         preference?.parent?.forEachRecursively {
-            if (it.parent?.key == SupervisionDashboardScreen.SUPERVISION_DYNAMIC_GROUP_1) {
+            if (
+                it.parent?.key == SupervisionDashboardScreen.SUPERVISION_DYNAMIC_GROUP_1 ||
+                    (Flags.enableSupervisionSettingsUiUpdates() &&
+                        it.parent?.key == SupervisionDashboardScreen.SUPERVISION_DYNAMIC_GROUP_2)
+            ) {
                 val newSummary = preferenceDataMap?.get(it.key)?.summary
                 if (newSummary != null) {
                     it.summary = newSummary

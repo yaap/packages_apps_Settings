@@ -15,6 +15,8 @@
  */
 package com.android.settings;
 
+import static android.provider.Settings.ACTION_AIRPLANE_MODE_SETTINGS;
+import static android.provider.Settings.ACTION_PRIVACY_CONTROLS;
 import static android.provider.Settings.ACTION_PRIVACY_SETTINGS;
 import static android.provider.Settings.EXTRA_AUTOMATIC_ZEN_RULE_ID;
 import static android.service.notification.ZenModeConfig.MANUAL_RULE_ID;
@@ -22,6 +24,7 @@ import static android.service.notification.ZenModeConfig.MANUAL_RULE_ID;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.os.Bundle;
+import android.safetycenter.SafetyCenterManager;
 import android.telephony.SubscriptionManager;
 import android.telephony.ims.ImsRcsManager;
 import android.text.TextUtils;
@@ -35,11 +38,18 @@ import com.android.settings.accessibility.VibrationIntensityScreen;
 import com.android.settings.accessibility.VibrationIntensitySettingsFragment;
 import com.android.settings.accessibility.VibrationScreen;
 import com.android.settings.accessibility.VibrationSettings;
+import com.android.settings.accounts.ManageAccountsDashboardFragment;
+import com.android.settings.accounts.ManageAccountsScreen;
 import com.android.settings.applications.AppStorageSettings;
 import com.android.settings.applications.specialaccess.SpecialAccessSettings;
 import com.android.settings.applications.specialaccess.SpecialAccessSettingsScreen;
+import com.android.settings.backup.AccountsAndBackupDashboardFragment;
+import com.android.settings.backup.AccountsAndBackupScreen;
 import com.android.settings.biometrics.face.FaceSettings;
 import com.android.settings.communal.CommunalPreferenceController;
+import com.android.settings.core.SubSettingLauncher;
+import com.android.settings.datausage.BillingCycleScreen;
+import com.android.settings.datausage.BillingCycleSettings;
 import com.android.settings.deviceinfo.firmwareversion.FirmwareVersionScreen;
 import com.android.settings.display.ColorModePreferenceFragment;
 import com.android.settings.display.ColorModeScreen;
@@ -48,18 +58,26 @@ import com.android.settings.emergency.EmergencyDashboardScreen;
 import com.android.settings.enterprise.EnterprisePrivacySettings;
 import com.android.settings.network.AdaptiveConnectivityScreen;
 import com.android.settings.network.AdaptiveConnectivitySettings;
+import com.android.settings.network.AirplaneModeSettingsScreen;
+import com.android.settings.network.AirplaneModeUtilKt;
 import com.android.settings.network.MobileNetworkIntentConverter;
 import com.android.settings.overlay.FeatureFactory;
 import com.android.settings.safetycenter.SafetyCenterManagerWrapper;
 import com.android.settings.safetycenter.SafetyCenterUtils;
+import com.android.settings.safetycenter.ui.PrivacyControlsFragment;
+import com.android.settings.safetycenter.ui.SafetyCenterSessionUtils;
+import com.android.settings.safetycenter.ui.SafetyCenterSubpageRegistry;
 import com.android.settings.security.SecuritySettingsFeatureProvider;
 import com.android.settings.spa.app.catalyst.AppInfoStorageScreen;
 import com.android.settings.system.ResetDashboardFragment;
 import com.android.settings.system.ResetDashboardScreen;
 import com.android.settings.system.ShadePanelsPreferenceController;
 import com.android.settings.wifi.WifiUtils;
+import com.android.settingslib.core.instrumentation.Instrumentable;
 
 import com.google.android.setupdesign.util.ThemeHelper;
+
+import java.util.Objects;
 
 /**
  * Top-level Settings activity
@@ -115,17 +133,16 @@ public class Settings extends SettingsActivity {
     public static class PhysicalKeyboardLayoutPickerActivity extends SettingsActivity {
         /* empty */
     }
+    public static class GameControllerActivity extends SettingsActivity { /* empty */ }
     public static class InputMethodAndSubtypeEnablerActivity extends SettingsActivity { /* empty */ }
     public static class SpellCheckersSettingsActivity extends SettingsActivity { /* empty */ }
     /** Activity for the language settings. */
     public static class LocalePickerActivity extends SettingsActivity { /* empty */ }
-    public static class LanguageSettingsActivity extends SettingsActivity { /* empty */ }
     public static class LanguageAndRegionSettingsActivity extends SettingsActivity { /* empty */ }
     public static class SystemLanguageSettingsActivity extends SettingsActivity { /* empty */ }
     public static class AppLanguageSettingsActivity extends SettingsActivity { /* empty */ }
     /** Activity for the regional preferences settings. */
     public static class RegionSettingsActivity extends SettingsActivity { /* empty */ }
-    public static class RegionalPreferencesActivity extends SettingsActivity { /* empty */ }
     public static class TemperatureUnitSettingsActivity extends SettingsActivity { /* empty */ }
     public static class FirstDayOfWeekSettingsActivity extends SettingsActivity { /* empty */ }
     public static class MeasurementSystemSettingsActivity extends SettingsActivity { /* empty */ }
@@ -136,8 +153,10 @@ public class Settings extends SettingsActivity {
     /** Activity for the notifications and quick settings panels settings. */
     public static class ShadeSettingsActivity extends SettingsActivity {
         @Override
-        public void onCreate(Bundle savedInstanceState) {
-            super.onCreate(savedInstanceState);
+        public void onResume() {
+            super.onResume();
+            // Re-check availability, because a configuration change (e.g. switching screens)
+            // could've changed it.
             if (!ShadePanelsPreferenceController.isDualShadeAvailable(this)) {
                 finish();
             }
@@ -248,7 +267,7 @@ public class Settings extends SettingsActivity {
     }
     /** Activity for the Advanced security settings. */
     public static class SecurityAdvancedSettings extends SettingsActivity {
-        private static final String TAG = "SecurityAdvancedActivity";
+        private static final String TAG = "SecurityAdvancedSettings";
         @Override
         protected void onCreate(Bundle savedState) {
             super.onCreate(savedState);
@@ -345,6 +364,11 @@ public class Settings extends SettingsActivity {
     public static class DeviceAdminSettingsActivity extends SettingsActivity { /* empty */ }
     public static class DataUsageSummaryActivity extends SettingsActivity { /* empty */ }
     public static class MobileDataUsageListActivity extends SettingsActivity { /* empty */ }
+    public static class BillingCycleActivity extends CatalystSettingsActivity {
+        public BillingCycleActivity() {
+            super(BillingCycleScreen.KEY, BillingCycleSettings.class);
+        }
+    }
     public static class ConfigureWifiSettingsActivity extends SettingsActivity { /* empty */ }
     public static class SavedAccessPointsSettingsActivity extends SettingsActivity { /* empty */ }
     public static class TextToSpeechSettingsActivity extends SettingsActivity { /* empty */ }
@@ -460,7 +484,7 @@ public class Settings extends SettingsActivity {
     public static class ManagedProfileSettingsActivity extends SettingsActivity { /* empty */ }
     public static class DeletionHelperActivity extends SettingsActivity { /* empty */ }
 
-    /** Actviity to manage apps with {@link android.Manifest.permission#SCHEDULE_EXACT_ALARM} */
+    /** Activity to manage apps with {@link android.Manifest.permission#SCHEDULE_EXACT_ALARM} */
     public static class AlarmsAndRemindersActivity extends SettingsActivity {/* empty */ }
     /** App specific version of {@link AlarmsAndRemindersActivity} */
     public static class AlarmsAndRemindersAppActivity extends SettingsActivity {/* empty */ }
@@ -565,7 +589,7 @@ public class Settings extends SettingsActivity {
         }
     }
 
-    /** Actviity to manage apps with {@link android.Manifest.permission#RUN_USER_INITIATED_JOBS} */
+    /** Activity to manage apps with {@link android.Manifest.permission#RUN_USER_INITIATED_JOBS} */
     public static class LongBackgroundTasksActivity extends SettingsActivity { /* empty */ }
     /** App specific version of {@link LongBackgroundTasksActivity} */
     public static class LongBackgroundTasksAppActivity extends SettingsActivity { /* empty */ }
@@ -576,13 +600,44 @@ public class Settings extends SettingsActivity {
     public static class BugReportHandlerPickerActivity extends SettingsActivity { /* empty */ }
 
     // Top level categories for new IA
-    public static class NetworkDashboardActivity extends SettingsActivity {}
+    public static class NetworkDashboardActivity extends SettingsActivity {
+        private static final String TAG = "NetworkDashboardActivity";
+        @Override
+        protected void onCreate(Bundle savedState) {
+            super.onCreate(savedState);
+            if (isFinishing()) {
+                // Don't trampoline if already exiting this activity.
+                return;
+            }
+
+            if (TextUtils.equals(ACTION_AIRPLANE_MODE_SETTINGS, getIntent().getAction())
+                    && AirplaneModeUtilKt.isAirplaneModeEligible(this)
+                    && AirplaneModeUtilKt.hasPairedWatchForAirplaneModeSync(this)) {
+                try {
+                    startActivity(new Intent(this, AirplaneModeSettingsActivity.class));
+                    finish();
+                } catch (ActivityNotFoundException e) {
+                    Log.e(TAG, "Unable to open Airplane Settings", e);
+                }
+            }
+        }
+    }
     public static class ConnectedDeviceDashboardActivity extends SettingsActivity {}
     public static class PreviouslyConnectedDeviceDashboardActivity extends SettingsActivity {}
     public static class PowerUsageSummaryActivity extends SettingsActivity { /* empty */ }
     public static class PowerUsageAdvancedActivity extends SettingsActivity { /* empty */ }
     public static class StorageDashboardActivity extends SettingsActivity {}
     public static class AccountDashboardActivity extends SettingsActivity {}
+    public static class AccountsAndBackupDashboardActivity extends CatalystSettingsActivity {
+        public AccountsAndBackupDashboardActivity() {
+            super(AccountsAndBackupScreen.KEY, AccountsAndBackupDashboardFragment.class);
+        }
+    }
+    public static class ManageAccountsDashboardActivity extends CatalystSettingsActivity {
+        public ManageAccountsDashboardActivity() {
+            super(ManageAccountsScreen.KEY, ManageAccountsDashboardFragment.class);
+        }
+    }
     public static class EmergencyDashboardActivity extends CatalystSettingsActivity {
         public EmergencyDashboardActivity() {
             super(EmergencyDashboardScreen.KEY, EmergencyDashboardFragment.class);
@@ -655,7 +710,117 @@ public class Settings extends SettingsActivity {
             super(ColorModeScreen.KEY, ColorModePreferenceFragment.class);
         }
     }
-    public static class SafetyCenterActivity extends SettingsActivity { }
+
+    public static class SafetyCenterActivity extends SettingsActivity {
+
+        private static final String TAG = "SafetyCenterActivity";
+        long mSessionId = SafetyCenterSessionUtils.INSTANCE.generateValidSessionId();
+
+        @Override
+        protected void onCreate(Bundle savedState) {
+            super.onCreate(savedState);
+            handleIntent();
+        }
+
+        @Override
+        protected void onNewIntent(Intent intent) {
+            super.onNewIntent(intent);
+            setIntent(intent);
+            handleIntent();
+        }
+
+        @Override
+        public Intent getIntent() {
+            Intent intent = super.getIntent();
+            if (intent != null && !intent.hasExtra(SafetyCenterSessionUtils.EXTRA_SESSION_ID)) {
+                intent.putExtra(SafetyCenterSessionUtils.EXTRA_SESSION_ID, mSessionId);
+                Log.d(TAG, "Added sessionId to Activity's Intent: " + mSessionId);
+            }
+            return intent;
+        }
+
+        private void handleIntent() {
+            if (getIntent() == null) {
+                return;
+            }
+
+            handlePrivacyControlsRedirection();
+            handleSubpageRedirection();
+        }
+
+        private void handlePrivacyControlsRedirection() {
+            String intentAction = getIntent().getAction();
+            if (Objects.equals(intentAction, ACTION_PRIVACY_CONTROLS)) {
+                Log.d(TAG, "Redirecting to Privacy controls subpage");
+                new SubSettingLauncher(this)
+                        .setDestination(PrivacyControlsFragment.class.getName())
+                        .setArguments(SafetyCenterSessionUtils.INSTANCE
+                                .createSessionArgs(mSessionId))
+                        .setSourceMetricsCategory(Instrumentable.METRICS_CATEGORY_UNKNOWN)
+                        .launch();
+
+                finish();
+            }
+        }
+
+        private void handleSubpageRedirection() {
+            String intentAction = getIntent().getAction();
+            if (!Objects.equals(intentAction, Intent.ACTION_SAFETY_CENTER)) {
+                return;
+            }
+
+            String subpageId =
+                    getIntent().getStringExtra(SafetyCenterManager.EXTRA_SAFETY_SOURCES_GROUP_ID);
+            if (subpageId == null) {
+                return;
+            }
+
+            String fragmentClassName =
+                    SafetyCenterSubpageRegistry.INSTANCE.getSubpageFragmentClassNameFor(
+                            this, subpageId);
+            if (fragmentClassName == null) {
+                return;
+            }
+
+            Log.d(TAG, "Redirecting to a subpage based on EXTRA_SAFETY_SOURCES_GROUP_ID");
+            new SubSettingLauncher(this)
+                    .setDestination(fragmentClassName)
+                    .setArguments(SafetyCenterSessionUtils.INSTANCE.createSessionArgs(mSessionId))
+                    .setSourceMetricsCategory(Instrumentable.METRICS_CATEGORY_UNKNOWN)
+                    .launch();
+
+            finish();
+        }
+    }
+
+    /** Activity for Network & Internet -> Airplane Mode. */
+    public static class AirplaneModeSettingsActivity extends CatalystSettingsActivity {
+        public AirplaneModeSettingsActivity() {
+            super(AirplaneModeSettingsScreen.KEY);
+        }
+
+        private static final String TAG = "AirplaneModeSettingsActivity";
+
+        @Override
+        protected void onCreate(Bundle savedState) {
+            super.onCreate(savedState);
+            if (isFinishing()) {
+                // Don't trampoline if already exiting this activity.
+                return;
+            }
+
+            // If there is no paired watch, open the Network settings instead where there is a
+            // toggle for Airplane mode.
+            if (!AirplaneModeUtilKt.hasPairedWatchForAirplaneModeSync(this)) {
+                try {
+                    startActivity(new Intent(this, NetworkDashboardActivity.class));
+                    finish();
+                } catch (ActivityNotFoundException e) {
+                    Log.e(TAG, "Unable to open Airplane Settings", e);
+                }
+            }
+        }
+    }
 
     public static class WirelessDebuggingActivity extends SettingsActivity { /* empty */ }
 

@@ -18,51 +18,58 @@ package com.android.settings.network.telephony
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.telephony.SubscriptionManager
 import android.telephony.SubscriptionManager.INVALID_SIM_SLOT_INDEX
 import android.util.Log
 import androidx.preference.Preference
 import com.android.settings.R
-import com.android.settings.Utils
 import com.android.settings.deviceinfo.imei.ImeiInfoDialogFragment
-import com.android.settings.flags.Flags
 import com.android.settings.network.SubscriptionUtil
-import com.android.settings.wifi.utils.isAdminUser
-import com.android.settings.wifi.utils.telephonyManager
+import com.android.settingslib.datastore.KeyValueStore
+import com.android.settingslib.metadata.PersistentPreference
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.PreferenceSummaryProvider
 import com.android.settingslib.metadata.PreferenceTitleProvider
+import com.android.settingslib.metadata.SensitivityLevel
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.preference.PreferenceBinding
+import kotlinx.coroutines.launch
 
 // LINT.IfChange
 @SuppressLint("MissingPermission")
-class MobileNetworkImeiPreference(private val context: Context, private val subId: Int) :
+class MobileNetworkImeiPreference(private val data: MobileNetworkData) :
+    PersistentPreference<String>,
     PreferenceMetadata,
     PreferenceBinding,
     PreferenceLifecycleProvider,
+    PreferenceTitleProvider,
     PreferenceSummaryProvider,
     PreferenceTitleProvider,
     PreferenceAvailabilityProvider {
 
-    private val isAvailable =
-        context.isAdminUser == true &&
-            (Utils.isMobileDataCapable(context) || Utils.isVoiceCapable(context)) &&
-            (Flags.isDualSimOnboardingEnabled() && SubscriptionManager.isValidSubscriptionId(subId))
-    private var imei: String? = if (isAvailable) context.telephonyManager(subId)?.imei else ""
-    private val formattedTitle: String = context.getFormattedTitle()
-
     override val key: String
         get() = KEY
 
-    override fun getTitle(context: Context): CharSequence? = formattedTitle
+    override val purpose: Int
+        get() = R.string.network_mode_imei_info_purpose
+
+    override val supportsWrite = false
+
+    override val valueType = String::class.javaObjectType
+
+    override fun storage(context: Context): KeyValueStore = createSummaryStorage(context, key)
 
     override fun getSummary(context: Context): CharSequence? =
         context.getString(R.string.device_info_protected_single_press)
 
-    override fun isAvailable(context: Context) = isAvailable
+    override val availabilityDescription =
+        "The user must be an admin user, and the device must have mobile data or voice capability, and the subscription ID must be valid."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
+
+    override fun isAvailable(context: Context) = data.imeiInfoDataFlow.value.isAvailable
 
     override fun bind(preference: Preference, metadata: PreferenceMetadata) {
         super.bind(preference, metadata)
@@ -70,25 +77,39 @@ class MobileNetworkImeiPreference(private val context: Context, private val subI
     }
 
     override fun onCreate(context: PreferenceLifecycleContext) {
+        data.coroutineScope?.launch {
+            data.imeiInfoDataFlow.collect {
+                context.notifyPreferenceChange(KEY)
+                Log.d(TAG, "imeiDataFlow collect")
+            }
+        }
         context.requirePreference<Preference>(key).onPreferenceClickListener =
             Preference.OnPreferenceClickListener {
+                val title = getTitle(context) ?: ""
                 getSlotIndex()
                     .takeIf { it != INVALID_SIM_SLOT_INDEX }
                     ?.run {
                         ImeiInfoDialogFragment.show(
                             context.childFragmentManager,
                             this,
-                            formattedTitle,
+                            title.toString(),
                         )
                     }
                 return@OnPreferenceClickListener true
             }
     }
 
+    override fun onStart(context: PreferenceLifecycleContext) {
+        super.onStart(context)
+        data.registerActiveSubscriptionChanged()
+    }
+
+    override fun getTitle(context: Context): CharSequence? = data.imeiInfoDataFlow.value.title
+
     private fun getSlotIndex(): Int {
         val subscription =
-            SubscriptionUtil.getActiveSubscriptions(context.subscriptionManager).firstOrNull {
-                it.subscriptionId == subId
+            SubscriptionUtil.getActiveSubscriptions(data.context.subscriptionManager).firstOrNull {
+                it.subscriptionId == data.subId
             }
         return if (subscription != null) {
             Log.d(TAG, "getSlotIndex(), simSlotIndex=${subscription.simSlotIndex}")
@@ -99,20 +120,12 @@ class MobileNetworkImeiPreference(private val context: Context, private val subI
         }
     }
 
-    private fun Context.getFormattedTitle(): String =
-        try {
-            val titleId =
-                if (imei == telephonyManager?.primaryImei) R.string.imei_primary
-                else R.string.status_imei
-            getString(titleId)
-        } catch (exception: Exception) {
-            Log.e(TAG, "PrimaryImei not available.", exception)
-            getString(R.string.status_imei)
-        }
+    override val sensitivityLevel
+        get() = SensitivityLevel.DO_NOT_EXPOSE
 
     companion object {
         private const val TAG = "MobileNetworkImeiPreference"
         const val KEY = "network_mode_imei_info"
     }
 }
-// LINT.ThenChange(MobileNetworkImeiPreferenceController.java)
+// LINT.ThenChange(MobileNetworkImeiPreferenceController.kt)

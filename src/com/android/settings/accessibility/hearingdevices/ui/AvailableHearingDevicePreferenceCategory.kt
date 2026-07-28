@@ -16,6 +16,7 @@
 
 package com.android.settings.accessibility.hearingdevices.ui
 
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import android.bluetooth.BluetoothProfile
 import android.content.Context
 import androidx.fragment.app.FragmentManager
@@ -28,17 +29,25 @@ import com.android.settingslib.bluetooth.BluetoothCallback
 import com.android.settingslib.bluetooth.CachedBluetoothDevice
 import com.android.settingslib.bluetooth.LocalBluetoothManager
 import com.android.settingslib.metadata.PreferenceLifecycleContext
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 
 class AvailableHearingDevicePreferenceCategory(
     context: Context,
     val metricsCategory: Int,
     key: String = "available_hearing_devices",
+    purpose: Int = R.string.available_hearing_devices_purpose,
     title: Int = R.string.accessibility_hearing_device_connected_title,
-) : HearingDevicePreferenceCategory(key, title), BluetoothCallback {
+) : HearingDevicePreferenceCategory(key, purpose, title), BluetoothCallback {
     private val localBluetoothManager: LocalBluetoothManager? by lazy {
         Utils.getLocalBluetoothManager(context)
     }
     private var fragmentManager: FragmentManager? = null
+
+    override val availabilityDescription = UI_ONLY_PREFERENCE
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
+
+    override fun tags(context: Context) = arrayOf(UI_ONLY_PREFERENCE)
 
     override fun createDeviceUpdater(context: Context): BluetoothDeviceUpdater? =
         AvailableHearingDeviceUpdater(context, this, metricsCategory)

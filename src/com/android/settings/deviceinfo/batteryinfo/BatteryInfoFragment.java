@@ -28,6 +28,7 @@ import com.android.settingslib.search.SearchIndexable;
 import com.android.settingslib.widget.FooterPreference;
 
 /** A fragment that shows battery hardware information. */
+// LINT.IfChange
 @SearchIndexable
 public class BatteryInfoFragment extends DashboardFragment {
 
@@ -74,3 +75,4 @@ public class BatteryInfoFragment extends DashboardFragment {
                 }
             };
 }
+// LINT.ThenChange(BatteryInfoApiScreen.kt)

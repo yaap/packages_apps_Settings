@@ -305,16 +305,6 @@
     <item msgid="3756073389408535680">"Извршувај во заднина"</item>
     <item msgid="2114661179947426734">"Јачина на звук на пристапноста"</item>
   </string-array>
-  <string-array name="long_press_timeout_selector_titles">
-    <item msgid="6926391290986427331">"Кратко"</item>
-    <item msgid="5118829513010894576">"Средно"</item>
-    <item msgid="6740026006576843477">"Долго"</item>
-  </string-array>
-  <string-array name="long_press_timeout_selector_list_titles">
-    <item msgid="8908021508913038488">"Кратко"</item>
-    <item msgid="7397961711906421599">"Средно"</item>
-    <item msgid="4079132024502041928">"Долго"</item>
-  </string-array>
   <string-array name="ethernet_ip_settings">
     <item msgid="7618681915649929019">"DHCP"</item>
     <item msgid="4425163520864432692">"Статично"</item>
@@ -331,11 +321,11 @@
     <item msgid="5012882784126308133">"Мали големи букви"</item>
   </string-array>
   <string-array name="captioning_font_size_selector_titles">
-    <item msgid="923916134548435468">"Многу мали"</item>
-    <item msgid="5738147437573674872">"Мали"</item>
-    <item msgid="4691660235626027304">"Средни"</item>
-    <item msgid="824386705928670045">"Големи"</item>
-    <item msgid="2790561781512874585">"Многу големи"</item>
+    <item msgid="923916134548435468">"Многу мало"</item>
+    <item msgid="5738147437573674872">"Мало"</item>
+    <item msgid="4691660235626027304">"Средно"</item>
+    <item msgid="824386705928670045">"Големо"</item>
+    <item msgid="2790561781512874585">"Многу големо"</item>
   </string-array>
   <string-array name="captioning_edge_type_selector_titles">
     <item msgid="70686029249840227">"Стандардно"</item>
@@ -358,14 +348,6 @@
     <item msgid="1119043472912497241">"Жолти на црно"</item>
     <item msgid="2836895041823327816">"Жолти на сино"</item>
     <item msgid="747238414788976867">"Приспособени"</item>
-  </string-array>
-  <string-array name="accessibility_button_location_selector_titles">
-    <item msgid="6485511780196327736">"Лебди над други апликации"</item>
-    <item msgid="3605616699204153590">"Лента за навигација"</item>
-  </string-array>
-  <string-array name="accessibility_button_size_selector_titles">
-    <item msgid="7482952318152486459">"Мало"</item>
-    <item msgid="1666628329913333563">"Големо"</item>
   </string-array>
   <string-array name="vpn_proxy_settings">
     <item msgid="7165538292837266997">"Нема"</item>

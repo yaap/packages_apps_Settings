@@ -27,6 +27,8 @@ import com.android.settings.flags.Flags
 import com.android.settings.fuelgauge.BatteryHeaderPreference
 import com.android.settings.utils.makeLaunchIntent
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_BATTERY
 import com.android.settingslib.metadata.PreferenceIconProvider
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ProvidePreferenceScreen
@@ -38,8 +40,13 @@ import kotlinx.coroutines.CoroutineScope
 @ProvidePreferenceScreen(PowerUsageSummaryScreen.KEY)
 open class PowerUsageSummaryScreen :
     PreferenceScreenMixin, PreferenceAvailabilityProvider, PreferenceIconProvider {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_BATTERY)
+
     override val key: String
         get() = KEY
+
+    override val purpose: Int
+        get() = R.string.power_usage_summary_screen_purpose
 
     override val title: Int
         get() = R.string.power_usage_summary_title
@@ -61,6 +68,11 @@ open class PowerUsageSummaryScreen :
     override fun getLaunchIntent(context: Context, metadata: PreferenceMetadata?) =
         makeLaunchIntent(context, PowerUsageSummaryActivity::class.java, metadata?.key)
 
+    override val availabilityDescription =
+        "The device must support showing the top level battery category in settings."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
+
     override fun isAvailable(context: Context) =
         context.resources.getBoolean(R.bool.config_show_top_level_battery)
 
@@ -73,15 +85,21 @@ open class PowerUsageSummaryScreen :
     override fun getPreferenceHierarchy(context: Context, coroutineScope: CoroutineScope) =
         preferenceHierarchy(context) {
             +BatteryHeaderPreference()
-            if (Flags.deeplinkBattery25q4()) {
-                +UntitledPreferenceCategoryMetadata("power_usage_summary_category") += {
+            +UntitledPreferenceCategoryMetadata(
+                key = "power_usage_summary_category",
+                purpose = R.string.power_usage_summary_category_purpose,
+            ) +=
+                {
                     +PowerUsageAdvancedScreen.KEY
                 }
-            }
-            +UntitledPreferenceCategoryMetadata("percentage_category") += {
-                +BatteryTextOnlySwitchPreference()
-                +BatteryPercentageSwitchPreference()
-            }
+            +UntitledPreferenceCategoryMetadata(
+                key = "percentage_category",
+                purpose = R.string.percentage_category_purpose,
+            ) +=
+                {
+                    +BatteryTextOnlySwitchPreference()
+                    +BatteryPercentageSwitchPreference()
+                }
         }
 
     companion object {

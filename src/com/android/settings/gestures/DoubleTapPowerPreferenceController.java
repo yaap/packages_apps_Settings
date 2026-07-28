@@ -148,4 +148,4 @@ public class DoubleTapPowerPreferenceController extends BasePreferenceController
         return mContext.getText(com.android.settings.R.string.gesture_setting_off);
     }
 }
-// LINT.ThenChange(DoubleTapPowerScreen.kt)
+// LINT.ThenChange(DoubleTapPowerScreen.kt, DoubleTapPowerApiFirstScreen.kt)

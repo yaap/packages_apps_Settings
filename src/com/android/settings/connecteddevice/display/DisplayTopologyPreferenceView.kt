@@ -16,18 +16,22 @@
 
 package com.android.settings.connecteddevice.display
 
+import android.content.Context
 import android.view.LayoutInflater
-import android.widget.FrameLayout
 import com.android.settings.R
 
 /** View representation to manage display topology arrangement */
-open class DisplayTopologyPreferenceView(val injector: ConnectedDisplayInjector) :
-    FrameLayout(injector.context!!) {
+open class DisplayTopologyPreferenceView(
+    uiContext: Context,
+    val injector: ConnectedDisplayInjector,
+    private val initialSelectedDisplayId: Int? = injector.displayTopology?.primaryDisplayId,
+) : FocusAwareFrameLayout(uiContext) {
 
-    private val controller = DisplayTopologyPreferenceController(context, injector)
+    private val controller =
+        DisplayTopologyPreferenceController(uiContext, injector.context, injector)
 
     init {
-        LayoutInflater.from(context)
+        LayoutInflater.from(uiContext)
             .inflate(R.layout.display_topology_preference, this, /* attachToRoot= */ true)
     }
 
@@ -40,7 +44,7 @@ open class DisplayTopologyPreferenceView(val injector: ConnectedDisplayInjector)
             findViewById(R.id.topology_hint),
         )
         controller.attach()
-        injector.displayTopology?.primaryDisplayId?.let { controller.selectDisplay(it) }
+        initialSelectedDisplayId?.let { controller.selectDisplay(it) }
     }
 
     override fun onDetachedFromWindow() {

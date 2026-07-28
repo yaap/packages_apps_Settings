@@ -25,6 +25,7 @@ import com.android.settings.contract.TAG_DEVICE_STATE_SCREEN
 import com.android.settings.flags.Flags
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ProvidePreferenceScreen
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 
 /**
  * Catalyst screen to display the list of special apps with "Full-screen notifications" permission.
@@ -33,16 +34,20 @@ import com.android.settingslib.metadata.ProvidePreferenceScreen
  */
 @ProvidePreferenceScreen(FullScreenNotificationsAppListScreen.KEY)
 open class FullScreenNotificationsAppListScreen : SpecialAccessAppListScreen() {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED, TAG_DEVICE_STATE_SCREEN)
 
     override val key: String
         get() = KEY
+
+    //TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.special_access_full_screen_notifications_app_list_purpose
 
     override val title: Int
         get() = R.string.full_screen_intent_title
 
     override fun getMetricsCategory() = SettingsEnums.PAGE_UNKNOWN // TODO: correct page id
 
-    override fun tags(context: Context) = arrayOf(TAG_DEVICE_STATE_SCREEN)
 
     override fun isFlagEnabled(context: Context) = Flags.deeplinkApps25q4()
 
@@ -56,8 +61,15 @@ open class FullScreenNotificationsAppListScreen : SpecialAccessAppListScreen() {
     override val appDetailScreenKey: String
         get() = FullScreenNotificationsAppDetailScreen.KEY
 
+    @Deprecated(
+        message =
+            "This method will be removed once the catalyst framework stops passing the arguments as a bundle. Use appDetailKeyParameters instead."
+    )
     override fun appDetailParameters(context: Context, hierarchyType: Boolean) =
         FullScreenNotificationsAppDetailScreen.parameters(context, hierarchyType)
+
+    override fun appDetailKeyParameters(context: Context, hierarchyType: Boolean) =
+        FullScreenNotificationsAppDetailScreen.keyParameters(context, hierarchyType)
 
     companion object {
         const val KEY = "special_access_full_screen_notifications_app_list"

@@ -21,7 +21,7 @@ import static android.content.pm.LauncherApps.ShortcutQuery.FLAG_MATCH_CACHED;
 import static android.content.pm.LauncherApps.ShortcutQuery.FLAG_MATCH_DYNAMIC;
 import static android.content.pm.LauncherApps.ShortcutQuery.FLAG_MATCH_PINNED_BY_ANY_LAUNCHER;
 
-import android.annotation.FlaggedApi;
+import android.annotation.Nullable;
 import android.annotation.UserIdInt;
 import android.app.Flags;
 import android.app.INotificationManager;
@@ -49,6 +49,7 @@ import android.os.ServiceManager;
 import android.os.UserHandle;
 import android.service.notification.Adjustment;
 import android.service.notification.ConversationChannelWrapper;
+import android.service.notification.DynamicBundle;
 import android.service.notification.NotificationListenerFilter;
 import android.text.format.DateUtils;
 import android.util.IconDrawableFactory;
@@ -103,9 +104,7 @@ public class NotificationBackend {
         row.blockedChannelCount = getBlockedChannelCount(row.pkg, row.uid);
         row.channelCount = getChannelCount(row.pkg, row.uid);
         recordAggregatedUsageEvents(context, row);
-        if (Flags.uiRichOngoing()) {
-            row.canBePromoted = canBePromoted(row.pkg, row.uid);
-        }
+        row.canBePromoted = canBePromoted(row.pkg, row.uid);
         return row;
     }
 
@@ -373,7 +372,6 @@ public class NotificationBackend {
     /**
      * Returns a set of all apps that have any notification channels (not including deleted ones).
      */
-    @FlaggedApi(Flags.FLAG_NM_BINDER_PERF_GET_APPS_WITH_CHANNELS)
     public @NonNull Set<String> getPackagesWithAnyChannels(int userId) {
         try {
             List<String> packages = sINM.getPackagesWithAnyChannels(userId);
@@ -789,10 +787,6 @@ public class NotificationBackend {
      */
     public void setCanBePromoted(String pkg, int uid, boolean allowed) {
         // We shouldn't get here with the flag off, but just in case, do nothing.
-        if (!Flags.uiRichOngoing()) {
-            Log.wtf(TAG, "tried to setCanBePromoted without flag on");
-            return;
-        }
         try {
             sINM.setCanBePromoted(pkg, uid, allowed, /* fromUser= */ true);
         } catch (Exception e) {
@@ -827,9 +821,74 @@ public class NotificationBackend {
         }
     }
 
+    public boolean showSummarizationSettings() {
+        boolean nasSupported = isNotificationSummarizationSupported();
+        return nasSupported || Flags.nmSummarizationAll();
+    }
+
+    private @NonNull List<DynamicBundle> getDynamicBundles(@UserIdInt int userId) {
+        try {
+            return sINM.getDynamicBundles(null, UserHandle.of(userId));
+        } catch (Exception e) {
+            Log.w(TAG, "Error calling NoMan", e);
+        }
+        return new ArrayList<>();
+    }
+
+    public List<ClassificationType> getClassificationTypes(Context context) {
+        Set<Integer> allowedTypes = getAllowedBundleTypes();
+        List<ClassificationType> types = new ArrayList<>();
+        types.add(new ClassificationType(Adjustment.TYPE_PROMOTION,
+                context.getString(
+                        com.android.internal.R.string.promotional_notification_channel_label),
+                context.getString(R.string.notification_bundle_promotions_summary),
+                allowedTypes.contains(Adjustment.TYPE_PROMOTION)));
+        types.add(new ClassificationType(Adjustment.TYPE_NEWS,
+                context.getString(
+                        com.android.internal.R.string.news_notification_channel_label),
+                context.getString(R.string.notification_bundle_news_summary),
+                allowedTypes.contains(Adjustment.TYPE_NEWS)));
+        types.add(new ClassificationType(Adjustment.TYPE_SOCIAL_MEDIA,
+                context.getString(
+                        com.android.internal.R.string.social_notification_channel_label),
+                context.getString(R.string.notification_bundle_social_summary),
+                allowedTypes.contains(Adjustment.TYPE_SOCIAL_MEDIA)));
+        types.add(new ClassificationType(Adjustment.TYPE_CONTENT_RECOMMENDATION,
+                context.getString(
+                        com.android.internal.R.string.recs_notification_channel_label),
+                context.getString(R.string.notification_bundle_recs_summary),
+                allowedTypes.contains(Adjustment.TYPE_CONTENT_RECOMMENDATION)));
+
+        if (android.app.Flags.nmContextualDisplay()) {
+            List<DynamicBundle> dynamicBundles = getDynamicBundles(context.getUserId());
+            for (DynamicBundle db : dynamicBundles) {
+                types.add(new ClassificationType(db.getDynamicBundleType(),
+                        db.getBundleName(),
+                        null,
+                        allowedTypes.contains(db.getDynamicBundleType())));
+            }
+        }
+
+        return types;
+    }
+
     @VisibleForTesting
     void setNm(INotificationManager inm) {
         sINM = inm;
+    }
+
+    public static class ClassificationType {
+        final int typeId;
+        final String typeName;
+        final @Nullable String typeDesc;
+        final boolean enabled;
+        ClassificationType(int typeId, String typeName, @Nullable String typeDesc,
+                boolean enabled) {
+            this.typeId = typeId;
+            this.typeName = typeName;
+            this.typeDesc = typeDesc;
+            this.enabled = enabled;
+        }
     }
 
     /**

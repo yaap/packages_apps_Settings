@@ -24,6 +24,7 @@ import com.android.settings.flags.Flags
 import com.android.settingslib.R
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ProvidePreferenceScreen
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_UNCATEGORIZED
 
 /**
  * Catalyst screen to display the list of special apps with "Alarms & reminders" permission.
@@ -32,9 +33,14 @@ import com.android.settingslib.metadata.ProvidePreferenceScreen
  */
 @ProvidePreferenceScreen(AlarmsAndRemindersAppListScreen.KEY)
 open class AlarmsAndRemindersAppListScreen : SpecialAccessAppListScreen() {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_UNCATEGORIZED)
 
     override val key: String
         get() = KEY
+
+    //TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.special_access_alarms_and_reminders_app_list_purpose
 
     override val title: Int
         get() = R.string.alarms_and_reminders_title
@@ -49,8 +55,15 @@ open class AlarmsAndRemindersAppListScreen : SpecialAccessAppListScreen() {
     override val appDetailScreenKey: String
         get() = AlarmsAndRemindersAppDetailScreen.KEY
 
+    @Deprecated(
+        message =
+            "This method will be removed once the catalyst framework stops passing the arguments as a bundle. Use appDetailKeyParameters instead."
+    )
     override fun appDetailParameters(context: Context, hierarchyType: Boolean) =
         AlarmsAndRemindersAppDetailScreen.parameters(context, hierarchyType)
+
+    override fun appDetailKeyParameters(context: Context, hierarchyType: Boolean) =
+        AlarmsAndRemindersAppDetailScreen.keyParameters(context, hierarchyType)
 
     companion object {
         const val KEY = "special_access_alarms_and_reminders_app_list"

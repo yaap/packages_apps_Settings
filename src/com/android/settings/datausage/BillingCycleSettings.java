@@ -21,11 +21,13 @@ import android.app.Dialog;
 import android.app.settings.SettingsEnums;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.net.NetworkPolicy;
 import android.net.NetworkTemplate;
 import android.os.Bundle;
 import android.provider.Settings;
+import android.telephony.SubscriptionManager;
 import android.text.method.NumberKeyListener;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -36,6 +38,8 @@ import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.VisibleForTesting;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
@@ -49,8 +53,11 @@ import com.android.settings.datausage.lib.DataUsageFormatter;
 import com.android.settings.datausage.lib.NetworkTemplates;
 import com.android.settings.network.telephony.MobileNetworkUtils;
 import com.android.settings.search.BaseSearchIndexProvider;
+import com.android.settings.utils.SubIdBundleUtils;
 import com.android.settings.widget.EnhancedSettingsSpinnerAdapter;
 import com.android.settingslib.NetworkPolicyEditor;
+import com.android.settingslib.metadata.CatalystFlagProviderFactory;
+import com.android.settingslib.metadata.ValidatedKeyParameters;
 import com.android.settingslib.net.DataUsageController;
 import com.android.settingslib.search.SearchIndexable;
 
@@ -59,6 +66,7 @@ import java.text.ParseException;
 import java.util.Optional;
 import java.util.TimeZone;
 
+// LINT.IfChange
 @SearchIndexable
 public class BillingCycleSettings extends DataUsageBaseFragment implements
         Preference.OnPreferenceChangeListener, DataUsageEditController {
@@ -142,7 +150,7 @@ public class BillingCycleSettings extends DataUsageBaseFragment implements
 
         if (mNetworkTemplate == null) {
             Optional<NetworkTemplate> mobileNetworkTemplateFromSim =
-                    DataUsageUtils.getMobileNetworkTemplateFromSubId(context, getIntent());
+                    DataUsageUtils.getMobileNetworkTemplateFromSubId(context, getLocalIntent());
             if (mobileNetworkTemplateFromSim.isPresent()) {
                 mNetworkTemplate = mobileNetworkTemplateFromSim.get();
             }
@@ -304,6 +312,57 @@ public class BillingCycleSettings extends DataUsageBaseFragment implements
     @Override
     public void updateDataUsage() {
         updatePrefs();
+    }
+
+    @Override
+    public @Nullable String getPreferenceScreenBindingKey(@NonNull Context context) {
+        return BillingCycleScreen.KEY;
+    }
+
+    private @Nullable Intent getLocalIntent() {
+        if (getIntent() == null) {
+            Log.e(TAG, "getLocalIntent: getIntent() is null");
+            return null;
+        }
+        if (getIntent().hasExtra(Settings.EXTRA_SUB_ID)) return getIntent();
+
+        Integer subId = getSubIdFromBindingArgs();
+        if (subId == null) {
+            Log.e(TAG, "getLocalIntent: has no PreferenceScreenBindingArgs data");
+            return null;
+        }
+
+        Log.d(TAG, "getLocalIntent: subId is " + subId);
+        final Intent localIntent = (Intent) getIntent().clone();
+        localIntent.putExtra(Settings.EXTRA_SUB_ID, subId);
+        return localIntent;
+    }
+
+    private @Nullable Integer getSubIdFromBindingArgs() {
+        if (CatalystFlagProviderFactory.INSTANCE.catalystUseKeyParameters()) {
+            final ValidatedKeyParameters parameters =
+                    getPreferenceScreenBindingKeyParameters(requireContext());
+            if (parameters == null) {
+                return null;
+            }
+
+            try {
+                return Integer.parseInt(parameters.get(Settings.EXTRA_SUB_ID));
+            } catch (NumberFormatException e) {
+                return SubscriptionManager.INVALID_SUBSCRIPTION_ID;
+            }
+        } else {
+            final Bundle args = getPreferenceScreenBindingArgs(requireContext());
+            if (args == null) {
+                return null;
+            }
+
+            return SubIdBundleUtils.getSubId(
+                    args,
+                    Settings.EXTRA_SUB_ID,
+                    SubscriptionManager.INVALID_SUBSCRIPTION_ID
+            );
+        }
     }
 
     /**
@@ -610,3 +669,4 @@ public class BillingCycleSettings extends DataUsageBaseFragment implements
             };
 
 }
+// LINT.ThenChange(BillingCycleScreen.kt)

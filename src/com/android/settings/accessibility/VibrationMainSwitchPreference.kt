@@ -37,7 +37,7 @@ import com.android.settingslib.widget.MainSwitchPreferenceBinding
 
 /** Accessibility settings for vibration. */
 // LINT.IfChange
-class VibrationMainSwitchPreference(override val key: String) :
+class VibrationMainSwitchPreference(override val key: String, override val purpose: Int) :
     BooleanValuePreference,
     MainSwitchPreferenceBinding,
     PreferenceActionMetricsProvider,
@@ -66,6 +66,7 @@ class VibrationMainSwitchPreference(override val key: String) :
     override fun getWritePermit(context: Context, callingPid: Int, callingUid: Int) =
         ReadWritePermit.ALLOW
 
+    override val supportsWrite = true
     override val sensitivityLevel: Int
         get() = SensitivityLevel.NO_SENSITIVITY
 

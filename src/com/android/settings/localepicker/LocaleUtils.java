@@ -25,9 +25,13 @@ import android.app.PendingIntent;
 import android.app.settings.SettingsEnums;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.pm.ResolveInfo;
 import android.os.LocaleList;
 import android.os.SystemClock;
+import android.os.UserHandle;
+import android.os.UserManager;
 import android.text.TextUtils;
 import android.util.Log;
 
@@ -39,10 +43,12 @@ import com.android.internal.app.LocaleHelper;
 import com.android.internal.app.LocalePicker;
 import com.android.internal.app.LocaleStore;
 import com.android.settings.R;
+import com.android.settings.applications.AppLocaleUtil;
 import com.android.settings.overlay.FeatureFactory;
 import com.android.settingslib.core.instrumentation.MetricsFeatureProvider;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
@@ -282,6 +288,20 @@ public class LocaleUtils {
         return result;
     }
 
+    public static int getFirstTranslatedLocalePosition(
+            List<LocaleStore.LocaleInfo> localeInfoList) {
+        // If no system language in the list than we should count its position as 0
+        // For example:
+        // 1) Cantonese, Fulah -> return 0
+        // 2) Fulah, English (US) -> return 2
+        for (int i = 0; i < localeInfoList.size(); i++) {
+            if (localeInfoList.get(i).isTranslated()) {
+                return i + 1;
+            }
+        }
+        return 0;
+    }
+
     public static LocaleStore.LocaleInfo mayAppendUnicodeTags(
             LocaleStore.LocaleInfo localeInfo, String recordTags) {
         if (TextUtils.isEmpty(recordTags) || TextUtils.equals("und", recordTags)) {
@@ -296,5 +316,43 @@ public class LocaleUtils {
         LocaleStore.LocaleInfo newLocaleInfo = LocaleStore.fromLocale(builder.build());
         newLocaleInfo.setTranslated(localeInfo.isTranslated());
         return newLocaleInfo;
+    }
+
+    public static boolean isTermsOfAddressAvailable(Context context) {
+        // If language is not available for system language, or if ToA does not apply to
+        // system language, we will hide it.
+        final Locale defaultLocale = Locale.getDefault();
+        LocaleStore.LocaleInfo localeInfo = LocaleStore.getLocaleInfo(defaultLocale);
+        final List<String> supportedLanguageList = Arrays.asList(
+                context.getResources().getStringArray(
+                        R.array.terms_of_address_supported_languages));
+        final List<String> notSupportedLocaleList = Arrays.asList(
+                context.getResources().getStringArray(
+                        R.array.terms_of_address_unsupported_locales));
+
+        final Locale locale = localeInfo.getLocale().stripExtensions();
+        final String language = locale.getLanguage();
+        final String localeTag = locale.toLanguageTag();
+
+        // Supported locales:
+        // 1. All French is supported.
+        // 2. QA language en-XA (LTR pseudo locale), ar_XB (RTL pseudo locale).
+        return (supportedLanguageList.contains(language)
+                && !notSupportedLocaleList.contains(localeTag))
+                || LocaleList.isPseudoLocale(locale);
+    }
+
+    public static boolean canDisplayLocaleUi(Context context, String packageName) {
+        try {
+            PackageManager packageManager = context.getPackageManager();
+            return AppLocaleUtil.canDisplayLocaleUi(context,
+                    packageManager.getApplicationInfo(packageName, 0),
+                    packageManager.queryIntentActivities(AppLocaleUtil.LAUNCHER_ENTRY_INTENT,
+                            PackageManager.GET_META_DATA));
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(TAG, "Unable to find info for package: " + packageName);
+        }
+
+        return false;
     }
 }

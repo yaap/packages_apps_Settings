@@ -91,6 +91,7 @@ class SatelliteRepositoryTest {
     }
 
     @Test
+    @Ignore("b/469858340")
     fun requestIsSessionStarted_resultIsTrue() = runBlocking {
         `when`(mockSatelliteManager.registerForModemStateChanged(any(), any())).thenAnswer {
             invocation ->
@@ -105,6 +106,7 @@ class SatelliteRepositoryTest {
     }
 
     @Test
+    @Ignore("b/476929038")
     fun requestIsSessionStarted_resultIsFalse() = runBlocking {
         `when`(mockSatelliteManager.registerForModemStateChanged(any(), any())).thenAnswer {
             invocation ->

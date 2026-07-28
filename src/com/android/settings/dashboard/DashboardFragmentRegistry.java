@@ -24,6 +24,7 @@ import com.android.settings.accounts.AccountDashboardFragment;
 import com.android.settings.accounts.AccountDetailDashboardFragment;
 import com.android.settings.applications.AppDashboardFragment;
 import com.android.settings.applications.specialaccess.SpecialAccessSettings;
+import com.android.settings.backup.AccountsAndBackupDashboardFragment;
 import com.android.settings.communal.CommunalDashboardFragment;
 import com.android.settings.connecteddevice.AdvancedConnectedDeviceDashboardFragment;
 import com.android.settings.connecteddevice.ConnectedDeviceDashboardFragment;
@@ -43,7 +44,12 @@ import com.android.settings.notification.ConfigureNotificationSettings;
 import com.android.settings.notification.SoundSettings;
 import com.android.settings.privacy.PrivacyDashboardFragment;
 import com.android.settings.safetycenter.MoreSecurityPrivacyFragment;
+import com.android.settings.safetycenter.ui.AccountSecuritySubpageFragment;
+import com.android.settings.safetycenter.ui.AppSecuritySubpageFragment;
+import com.android.settings.safetycenter.ui.DeviceFindersSubpageFragment;
+import com.android.settings.safetycenter.ui.DeviceUnlockSubpageFragment;
 import com.android.settings.safetycenter.ui.PrivacyControlsFragment;
+import com.android.settings.safetycenter.ui.SystemAndUpdatesSubpageFragment;
 import com.android.settings.security.LockscreenDashboardFragment;
 import com.android.settings.security.SecurityAdvancedSettings;
 import com.android.settings.security.SecuritySettings;
@@ -101,6 +107,8 @@ public class DashboardFragmentRegistry {
                 CategoryKey.CATEGORY_ACCOUNT_DETAIL);
         PARENT_TO_CATEGORY_KEY_MAP.put(AccountDashboardFragment.class.getName(),
                 CategoryKey.CATEGORY_ACCOUNT);
+        PARENT_TO_CATEGORY_KEY_MAP.put(AccountsAndBackupDashboardFragment.class.getName(),
+                CategoryKey.CATEGORY_ACCOUNTS_AND_BACKUP);
         PARENT_TO_CATEGORY_KEY_MAP.put(
                 SystemDashboardFragment.class.getName(), CategoryKey.CATEGORY_SYSTEM);
         // TODO(b/242680328) Tie new category key to LanguageSettings and KeyboardSettings page
@@ -138,6 +146,16 @@ public class DashboardFragmentRegistry {
                 CategoryKey.CATEGORY_MEDIA_CONTROLS_SETTINGS);
         PARENT_TO_CATEGORY_KEY_MAP.put(PrivacyControlsFragment.class.getName(),
                 CategoryKey.CATEGORY_PRIVACY_CONTROLS);
+        PARENT_TO_CATEGORY_KEY_MAP.put(AppSecuritySubpageFragment.class.getName(),
+                CategoryKey.CATEGORY_SC_APP_SECURITY);
+        PARENT_TO_CATEGORY_KEY_MAP.put(DeviceUnlockSubpageFragment.class.getName(),
+                CategoryKey.CATEGORY_SC_DEVICE_UNLOCK);
+        PARENT_TO_CATEGORY_KEY_MAP.put(AccountSecuritySubpageFragment.class.getName(),
+                CategoryKey.CATEGORY_SC_ACCOUNT_SECURITY);
+        PARENT_TO_CATEGORY_KEY_MAP.put(DeviceFindersSubpageFragment.class.getName(),
+                CategoryKey.CATEGORY_SC_DEVICE_FINDERS);
+        PARENT_TO_CATEGORY_KEY_MAP.put(SystemAndUpdatesSubpageFragment.class.getName(),
+                CategoryKey.CATEGORY_SC_SYSTEM_AND_UPDATES);
 
         CATEGORY_KEY_TO_PARENT_MAP = new ArrayMap<>(PARENT_TO_CATEGORY_KEY_MAP.size());
 

@@ -30,11 +30,15 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.android.internal.util.ArrayUtils;
+import com.android.settings.core.InstrumentedPreferenceFragment;
+import com.android.settings.fuelgauge.batteryusage.BatteryAdvanceInfoController;
+import com.android.settings.fuelgauge.batteryusage.BatteryAdvanceInfoDialog;
 import com.android.settings.fuelgauge.batteryusage.BatteryDiffData;
 import com.android.settings.fuelgauge.batteryusage.BatteryEvent;
 import com.android.settings.fuelgauge.batteryusage.DataProcessor;
 import com.android.settings.fuelgauge.batteryusage.DetectRequestSourceType;
 import com.android.settings.fuelgauge.batteryusage.PowerAnomalyEventList;
+import com.android.settingslib.core.lifecycle.Lifecycle;
 import com.android.settingslib.fuelgauge.Estimate;
 
 import java.util.ArrayList;
@@ -110,13 +114,28 @@ public class PowerUsageFeatureProviderImpl implements PowerUsageFeatureProvider 
     }
 
     @Override
-    public double getBatteryUsageListScreenOnTimeThresholdInMs() {
+    public double getBatteryUsageListScreenOnTimeThresholdMs() {
         return 0;
     }
 
     @Override
     public double getBatteryUsageListConsumePowerThreshold() {
         return 0;
+    }
+
+    @Override
+    public long getBatteryUsageResetErrorTimeThresholdMs() {
+        return Long.MAX_VALUE;
+    }
+
+    @Override
+    public double getBatteryUsageResetErrorPowerThreshold() {
+        return Double.MAX_VALUE;
+    }
+
+    @Override
+    public double getBatteryUsageOverCalcPowerDrainThreshold() {
+        return Double.MAX_VALUE;
     }
 
     @Override
@@ -166,6 +185,21 @@ public class PowerUsageFeatureProviderImpl implements PowerUsageFeatureProvider 
 
     @Override
     public String getOldEstimateDebugString(String timeRemaining) {
+        return null;
+    }
+
+    @Override
+    @Nullable
+    public BatteryAdvanceInfoDialog getBatteryAdvanceInfoDialog() {
+        return null;
+    }
+
+    @Override
+    @Nullable
+    public BatteryAdvanceInfoController getBatteryAdvanceInfoController(
+            Context context,
+            Lifecycle lifecycle,
+            InstrumentedPreferenceFragment fragment) {
         return null;
     }
 
@@ -269,6 +303,11 @@ public class PowerUsageFeatureProviderImpl implements PowerUsageFeatureProvider 
 
     @Override
     public boolean isBatteryUsageReattributeEnabled() {
+        return false;
+    }
+
+    @Override
+    public boolean isBatteryAdvanceInfoEnabled() {
         return false;
     }
 

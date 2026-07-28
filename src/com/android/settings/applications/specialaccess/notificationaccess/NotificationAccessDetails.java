@@ -53,8 +53,6 @@ import com.android.settings.bluetooth.Utils;
 import com.android.settings.core.SubSettingLauncher;
 import com.android.settings.dashboard.DashboardFragment;
 import com.android.settings.notification.NotificationBackend;
-import com.android.settingslib.RestrictedLockUtils;
-import com.android.settingslib.RestrictedLockUtilsInternal;
 
 import java.util.List;
 import java.util.Objects;
@@ -69,8 +67,6 @@ public class NotificationAccessDetails extends DashboardFragment {
     protected PackageInfo mPackageInfo;
     protected int mUserId;
     protected String mPackageName;
-    protected RestrictedLockUtils.EnforcedAdmin mAppsControlDisallowedAdmin;
-    protected boolean mAppsControlDisallowedBySystem;
     private boolean mIsNls;
     private PackageManager mPm;
 
@@ -89,7 +85,11 @@ public class NotificationAccessDetails extends DashboardFragment {
             }
         }
         mPm = getPackageManager();
-        retrieveAppEntry();
+        if (!retrieveAppEntry()) {
+            finish();
+            return;
+        }
+
         loadNotificationListenerService();
         NotificationBackend backend = new NotificationBackend();
         int listenerTargetSdk = Build.VERSION_CODES.S;
@@ -171,13 +171,10 @@ public class NotificationAccessDetails extends DashboardFragment {
     @Override
     public void onResume() {
         super.onResume();
-        mAppsControlDisallowedAdmin = RestrictedLockUtilsInternal.checkIfRestrictionEnforced(
-                getActivity(), UserManager.DISALLOW_APPS_CONTROL, mUserId);
-        mAppsControlDisallowedBySystem = RestrictedLockUtilsInternal.hasBaseUserRestriction(
-                getActivity(), UserManager.DISALLOW_APPS_CONTROL, mUserId);
 
         if (!refreshUi()) {
             finish();
+            return;
         }
         Preference apps = getPreferenceScreen().findPreference(
                 use(BridgedAppsLinkPreferenceController.class).getPreferenceKey());
@@ -201,7 +198,7 @@ public class NotificationAccessDetails extends DashboardFragment {
         }
     }
 
-    protected void retrieveAppEntry() {
+    private boolean retrieveAppEntry() {
         final Bundle args = getArguments();
         mPackageName = (args != null) ? args.getString(ARG_PACKAGE_NAME) : null;
         Intent intent = (args == null) ?
@@ -216,7 +213,7 @@ public class NotificationAccessDetails extends DashboardFragment {
                 mUserId = ((UserHandle) intent.getParcelableExtra(
                         Intent.EXTRA_USER_HANDLE)).getIdentifier();
             } else {
-                finish();
+                return false;
             }
         } else {
             mUserId = UserHandle.myUserId();
@@ -228,8 +225,10 @@ public class NotificationAccessDetails extends DashboardFragment {
                             PackageManager.GET_SIGNING_CERTIFICATES |
                             PackageManager.GET_PERMISSIONS, mUserId);
         } catch (PackageManager.NameNotFoundException e) {
-            // oh well
+            return false;
         }
+
+        return true;
     }
 
     private boolean hasInteractAcrossUsersPermission() {

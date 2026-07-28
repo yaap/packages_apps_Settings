@@ -16,8 +16,8 @@
 
 package com.android.settings.connecteddevice.display
 
+import android.content.Context
 import android.widget.FrameLayout
-import android.widget.TextView
 import androidx.annotation.VisibleForTesting
 import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
@@ -28,10 +28,11 @@ import com.android.settingslib.widget.GroupSectionDividerMixin
  * DisplayTopologyPreference allows the user to change the display topology when there is one or
  * more extended display attached.
  */
-class DisplayTopologyPreference(val injector: ConnectedDisplayInjector) :
-    Preference(injector.context!!), GroupSectionDividerMixin {
+class DisplayTopologyPreference(uiContext: Context, val injector: ConnectedDisplayInjector) :
+    Preference(uiContext), GroupSectionDividerMixin {
 
-    @VisibleForTesting val controller = DisplayTopologyPreferenceController(context, injector)
+    @VisibleForTesting
+    val controller = DisplayTopologyPreferenceController(uiContext, injector.context, injector)
 
     init {
         layoutResource = R.layout.display_topology_preference
@@ -49,7 +50,7 @@ class DisplayTopologyPreference(val injector: ConnectedDisplayInjector) :
 
         val paneHolder = holder.itemView as FrameLayout
         val paneContent = holder.findViewById(R.id.display_topology_pane_content) as FrameLayout
-        val topologyHint = holder.findViewById(R.id.topology_hint) as TextView
+        val topologyHint = holder.findViewById(R.id.topology_hint) as TopologyHintTextView
         controller.bindViews(paneHolder, paneContent, topologyHint)
     }
 

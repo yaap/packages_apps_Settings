@@ -74,7 +74,7 @@
     <item msgid="8357401480964012245">"I lidhur"</item>
     <item msgid="66312817817365647">"I ftuar"</item>
     <item msgid="4463567967438038210">"I pasuksesshëm"</item>
-    <item msgid="6556827947082659801">"I gatshëm"</item>
+    <item msgid="6556827947082659801">"I disponueshëm"</item>
     <item msgid="6096962300722555553">"Jashtë rrezes"</item>
   </string-array>
   <string-array name="bt_stack_log_level_entries">
@@ -305,16 +305,6 @@
     <item msgid="3756073389408535680">"Ekzekuto në sfond"</item>
     <item msgid="2114661179947426734">"Volumi i qasshmërisë"</item>
   </string-array>
-  <string-array name="long_press_timeout_selector_titles">
-    <item msgid="6926391290986427331">"E shkurtër"</item>
-    <item msgid="5118829513010894576">"Mesatare"</item>
-    <item msgid="6740026006576843477">"E gjatë"</item>
-  </string-array>
-  <string-array name="long_press_timeout_selector_list_titles">
-    <item msgid="8908021508913038488">"E shkurtër"</item>
-    <item msgid="7397961711906421599">"Mesatare"</item>
-    <item msgid="4079132024502041928">"E gjatë"</item>
-  </string-array>
   <string-array name="ethernet_ip_settings">
     <item msgid="7618681915649929019">"DHCP"</item>
     <item msgid="4425163520864432692">"Statike"</item>
@@ -358,14 +348,6 @@
     <item msgid="1119043472912497241">"E verdhë mbi të zezë"</item>
     <item msgid="2836895041823327816">"E verdhë mbi të kaltër"</item>
     <item msgid="747238414788976867">"Të personalizuara"</item>
-  </string-array>
-  <string-array name="accessibility_button_location_selector_titles">
-    <item msgid="6485511780196327736">"Pluskon mbi aplikacionet e tjera"</item>
-    <item msgid="3605616699204153590">"Shiriti i navigimit"</item>
-  </string-array>
-  <string-array name="accessibility_button_size_selector_titles">
-    <item msgid="7482952318152486459">"I vogël"</item>
-    <item msgid="1666628329913333563">"I madh"</item>
   </string-array>
   <string-array name="vpn_proxy_settings">
     <item msgid="7165538292837266997">"Asnjë"</item>

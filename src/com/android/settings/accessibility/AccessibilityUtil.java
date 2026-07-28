@@ -25,14 +25,16 @@ import static com.android.internal.accessibility.AccessibilityShortcutController
 import static com.android.internal.accessibility.AccessibilityShortcutController.MAGNIFICATION_CONTROLLER_NAME;
 import static com.android.internal.accessibility.common.ShortcutConstants.UserShortcutType.GESTURE;
 import static com.android.internal.accessibility.common.ShortcutConstants.UserShortcutType.HARDWARE;
+import static com.android.internal.accessibility.common.ShortcutConstants.UserShortcutType.KEY_GESTURE;
 import static com.android.internal.accessibility.common.ShortcutConstants.UserShortcutType.QUICK_SETTINGS;
 import static com.android.internal.accessibility.common.ShortcutConstants.UserShortcutType.SOFTWARE;
+import static com.android.internal.accessibility.common.ShortcutConstants.UserShortcutType.TOP_ROW_KEY;
 import static com.android.internal.accessibility.common.ShortcutConstants.UserShortcutType.TRIPLETAP;
-import static com.android.internal.accessibility.common.ShortcutConstants.UserShortcutType.TWOFINGER_DOUBLETAP;
 
 import android.accessibilityservice.AccessibilityServiceInfo;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Resources;
 import android.graphics.Insets;
 import android.graphics.Rect;
@@ -52,7 +54,9 @@ import androidx.annotation.StringRes;
 
 import com.android.internal.accessibility.common.ShortcutConstants.UserShortcutType;
 import com.android.internal.accessibility.util.ShortcutUtils;
+import com.android.server.accessibility.Flags;
 import com.android.settings.R;
+import com.android.settings.inputmethod.InputPeripheralsSettingsUtils;
 import com.android.settings.utils.LocaleUtils;
 
 import java.lang.annotation.Retention;
@@ -66,15 +70,16 @@ public final class AccessibilityUtil {
     private static final String TAG = AccessibilityUtil.class.getSimpleName();
 
     // LINT.IfChange(shortcut_type_ui_order)
-    static final int[] SHORTCUTS_ORDER_IN_UI = {
+    public static final int[] SHORTCUTS_ORDER_IN_UI = {
+            KEY_GESTURE,
             QUICK_SETTINGS,
             SOFTWARE, // FAB displays before gesture. Navbar displays without gesture.
             GESTURE,
             HARDWARE,
-            TWOFINGER_DOUBLETAP,
-            TRIPLETAP
+            TOP_ROW_KEY,
+            TRIPLETAP,
     };
-    // LINT.ThenChange(/res/xml/accessibility_edit_shortcuts.xml:shortcut_type_ui_order)
+    // LINT.ThenChange(/src/com/android/settings/accessibility/shortcuts/ui/EditShortcutsScreen.kt:shortcut_type_ui_order)
 
     private AccessibilityUtil(){}
 
@@ -131,8 +136,8 @@ public final class AccessibilityUtil {
     public static CharSequence getSummary(
             Context context, String settingsSecureKey, @StringRes int enabledString,
             @StringRes int disabledString) {
-        boolean enabled = Settings.Secure.getInt(context.getContentResolver(),
-                settingsSecureKey, State.OFF) == State.ON;
+        boolean enabled = Settings.Secure.getIntForUser(context.getContentResolver(),
+                settingsSecureKey, State.OFF, context.getUserId()) == State.ON;
         return context.getResources().getText(enabled ? enabledString : disabledString);
     }
 
@@ -157,15 +162,32 @@ public final class AccessibilityUtil {
 
     /** Determines if a gesture navigation bar is being used. */
     public static boolean isGestureNavigateEnabled(Context context) {
-        return Settings.Secure.getInt(context.getContentResolver(),
-                Settings.Secure.NAVIGATION_MODE, -1)
+        return Settings.Secure.getIntForUser(context.getContentResolver(),
+                Settings.Secure.NAVIGATION_MODE, -1, context.getUserId())
                 == NAV_BAR_MODE_GESTURAL;
+    }
+
+    /**
+     * Determines if the accessibility button location can be configured.
+     */
+    public static boolean isAccessibilityButtonLocationConfigurable(Context context) {
+        // 3-button navigation always allows configuring the button location.
+        if (!isGestureNavigateEnabled(context)) {
+            return true;
+        }
+
+        // Conditions to force floating menu mode:
+        // 1. Flag is off (original behavior): Always use floating menu in gestural nav.
+        // 2. Flag is on: Only use floating menu if nav bar can move (i.e. not persistent).
+        final boolean navBarCanMove = context.getResources().getBoolean(
+                com.android.internal.R.bool.config_navBarCanMove);
+        return android.view.accessibility.Flags.allowA11yButtonOnLargeScreen() && !navBarCanMove;
     }
 
     /** Determines if a accessibility floating menu is being used. */
     public static boolean isFloatingMenuEnabled(Context context) {
-        return Settings.Secure.getInt(context.getContentResolver(),
-                Settings.Secure.ACCESSIBILITY_BUTTON_MODE, /* def= */ -1)
+        return Settings.Secure.getIntForUser(context.getContentResolver(),
+                Settings.Secure.ACCESSIBILITY_BUTTON_MODE, /* def= */ -1, context.getUserId())
                 == ACCESSIBILITY_BUTTON_MODE_FLOATING_MENU;
     }
 
@@ -173,6 +195,16 @@ public final class AccessibilityUtil {
     public static boolean isTouchExploreEnabled(Context context) {
         final AccessibilityManager am = context.getSystemService(AccessibilityManager.class);
         return am.isTouchExplorationEnabled();
+    }
+
+    /** Determines if a touch shortcut should be made available. */
+    public static boolean isTouchShortcutAvailable(Context context) {
+        final boolean isTouchEnabled = context.getPackageManager()
+                .hasSystemFeature(PackageManager.FEATURE_TOUCHSCREEN)
+                || context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_FAKETOUCH);
+
+        return isTouchEnabled
+                || !com.android.settings.accessibility.Flags.desktopMagnificationSettingsPolish();
     }
 
     /**
@@ -216,6 +248,9 @@ public final class AccessibilityUtil {
         }
         int shortcutTypes = UserShortcutType.DEFAULT;
         for (int shortcutType : AccessibilityUtil.SHORTCUTS_ORDER_IN_UI) {
+            if (shortcutType == KEY_GESTURE && !isKeyboardShortcutSettingAvailable()) {
+                continue;
+            }
             if (ShortcutUtils.isShortcutContained(
                     context, shortcutType, componentNameString)) {
                 shortcutTypes |= shortcutType;
@@ -282,17 +317,6 @@ public final class AccessibilityUtil {
     }
 
     /**
-     * Bypasses the timeout restriction if volume key shortcut assigned.
-     *
-     * @param context the current context.
-     */
-    public static void skipVolumeShortcutDialogTimeoutRestriction(Context context) {
-        Settings.Secure.putInt(context.getContentResolver(),
-                Settings.Secure.SKIP_ACCESSIBILITY_SHORTCUT_DIALOG_TIMEOUT_RESTRICTION, /*
-                    true */ 1);
-    }
-
-    /**
      * Assembles a localized string describing the provided shortcut types.
      */
     @NonNull
@@ -300,10 +324,8 @@ public final class AccessibilityUtil {
         final List<CharSequence> list = new ArrayList<>();
 
         for (int shortcutType : AccessibilityUtil.SHORTCUTS_ORDER_IN_UI) {
-            if (!com.android.server.accessibility.Flags
-                    .enableMagnificationMultipleFingerMultipleTapGesture()
-                    && (shortcutType & TWOFINGER_DOUBLETAP) == TWOFINGER_DOUBLETAP) {
-                continue;
+            if (!isKeyboardShortcutSettingAvailable()) {
+                shortcutTypes = removeTypeFromShortcutTypes(shortcutTypes, KEY_GESTURE);
             }
 
             if ((shortcutTypes & shortcutType) == shortcutType) {
@@ -316,10 +338,10 @@ public final class AccessibilityUtil {
                             R.string.accessibility_shortcut_edit_summary_software_gesture);
                     case HARDWARE -> context.getText(
                             R.string.accessibility_shortcut_hardware_keyword);
-                    case TWOFINGER_DOUBLETAP -> context.getString(
-                            R.string.accessibility_shortcut_two_finger_double_tap_keyword, 2);
                     case TRIPLETAP -> context.getText(
                             R.string.accessibility_shortcut_triple_tap_keyword);
+                    case KEY_GESTURE -> context.getText(
+                            R.string.accessibility_shortcut_keyboard_keyword);
                     default -> "";
                 });
             }
@@ -334,5 +356,23 @@ public final class AccessibilityUtil {
         list.sort(CharSequence::compare);
         return CaseMap.toTitle().wholeString().noLowercase().apply(Locale.getDefault(), /* iter= */
                 null, LocaleUtils.getConcatenatedString(list));
+    }
+
+    /**
+     * @return true if the keyboard shortcut setting is available for use, false otherwise.
+     */
+    public static boolean isKeyboardShortcutSettingAvailable() {
+        return Flags.enableKeyGestureShortcutSettings()
+                && InputPeripheralsSettingsUtils.isHardKeyboard();
+    }
+
+    /**
+     * Removes a specific shortcut type from a bitmask of shortcut types.
+     * @param shortcutTypes int containing bitmask of shortcut types.
+     * @param typeToRemove int shortcut type to remove.
+     * @return updated bitmask of shortcutTypes without the typeToRemove shortcut type.
+     */
+    public static int removeTypeFromShortcutTypes(int shortcutTypes, int typeToRemove) {
+        return shortcutTypes & ~typeToRemove;
     }
 }

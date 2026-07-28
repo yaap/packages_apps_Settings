@@ -36,6 +36,7 @@ import com.android.settingslib.datastore.Permissions
 import com.android.settingslib.datastore.and
 import com.android.settingslib.metadata.IntRangeValuePreference
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceIconProvider
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ReadWritePermit
@@ -53,6 +54,9 @@ class AlarmVolumePreference(private val audioHelper: AudioHelper) :
     override val key: String
         get() = KEY
 
+    override val purpose: Int
+        get() = R.string.alarm_volume_purpose
+
     override val title: Int
         get() = R.string.alarm_volume_option_title
 
@@ -67,8 +71,16 @@ class AlarmVolumePreference(private val audioHelper: AudioHelper) :
             else -> AndroidR.drawable.ic_audio_alarm
         }
 
+    override val availabilityDescription = "The device must support configuring alarm volume in Settings and must not be a single volume device."
+
+    override fun getAvailabilityStability() = PreconditionStability.STABLE_UNTIL_APK_UPDATE
+
     override fun isAvailable(context: Context) =
         context.resources.getBoolean(R.bool.config_show_alarm_volume) && !audioHelper.isSingleVolume
+
+    override fun getEnabledDescription(): String = "This setting must not be restricted by a device administrator."
+
+    override fun getEnabledStability() = PreconditionStability.UNSTABLE
 
     override fun isEnabled(context: Context) = super<PreferenceRestrictionMixin>.isEnabled(context)
 
@@ -103,6 +115,8 @@ class AlarmVolumePreference(private val audioHelper: AudioHelper) :
 
     override fun getWritePermit(context: Context, value: Int?, myUid: Int, callingUid: Int) =
         ReadWritePermit.ALLOW
+
+    override val supportsWrite = true
 
     override val sensitivityLevel
         get() = SensitivityLevel.NO_SENSITIVITY

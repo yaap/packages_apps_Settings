@@ -69,6 +69,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
 
+// LINT.IfChange
 public class AppStorageSettings extends AppInfoWithHeader
         implements OnClickListener, Callbacks, DialogInterface.OnClickListener,
         LoaderManager.LoaderCallbacks<AppStorageStats> {
@@ -193,9 +194,20 @@ public class AppStorageSettings extends AppInfoWithHeader
 
     @VisibleForTesting
     void handleClearCacheClick() {
-        if (mAppsControlDisallowedAdmin != null && !mAppsControlDisallowedBySystem) {
-            RestrictedLockUtils.sendShowAdminSupportDetailsIntent(
-                    getActivity(), mAppsControlDisallowedAdmin);
+        boolean isDisallowedByAdmin;
+        if (android.app.admin.flags.Flags.policyTransparencyRefactorEnabled()) {
+            isDisallowedByAdmin = mAppsControlEnforcingAdmin != null;
+        } else {
+            isDisallowedByAdmin = mAppsControlDisallowedAdmin != null;
+        }
+        if (isDisallowedByAdmin && !mAppsControlDisallowedBySystem) {
+            if (android.app.admin.flags.Flags.policyTransparencyRefactorEnabled()) {
+                RestrictedLockUtils.sendShowAdminSupportDetailsIntent(getActivity(),
+                        mAppsControlEnforcingAdmin, /* restriction = */ null);
+            } else {
+                RestrictedLockUtils.sendShowAdminSupportDetailsIntent(getActivity(),
+                        mAppsControlDisallowedAdmin);
+            }
             return;
         } else if (mClearCacheObserver == null) { // Lazy initialization of observer
             mClearCacheObserver = new ClearCacheObserver();
@@ -207,9 +219,20 @@ public class AppStorageSettings extends AppInfoWithHeader
 
     @VisibleForTesting
     void handleClearDataClick() {
-        if (mAppsControlDisallowedAdmin != null && !mAppsControlDisallowedBySystem) {
-            RestrictedLockUtils.sendShowAdminSupportDetailsIntent(
-                    getActivity(), mAppsControlDisallowedAdmin);
+        boolean isDisallowedByAdmin;
+        if (android.app.admin.flags.Flags.policyTransparencyRefactorEnabled()) {
+            isDisallowedByAdmin = mAppsControlEnforcingAdmin != null;
+        } else {
+            isDisallowedByAdmin = mAppsControlDisallowedAdmin != null;
+        }
+        if (isDisallowedByAdmin && !mAppsControlDisallowedBySystem) {
+            if (android.app.admin.flags.Flags.policyTransparencyRefactorEnabled()) {
+                RestrictedLockUtils.sendShowAdminSupportDetailsIntent(getActivity(),
+                        mAppsControlEnforcingAdmin, /* restriction = */ null);
+            } else {
+                RestrictedLockUtils.sendShowAdminSupportDetailsIntent(getActivity(),
+                        mAppsControlDisallowedAdmin);
+            }
         } else if (mAppEntry.info.manageSpaceActivityName != null) {
             if (!Utils.isMonkeyRunning()) {
                 Intent intent = new Intent(Intent.ACTION_DEFAULT);
@@ -227,9 +250,20 @@ public class AppStorageSettings extends AppInfoWithHeader
         if (v == mChangeStorageButton && mDialogBuilder != null && !isMoveInProgress()) {
             mDialogBuilder.show();
         } else if (v == mClearUriButton) {
-            if (mAppsControlDisallowedAdmin != null && !mAppsControlDisallowedBySystem) {
-                RestrictedLockUtils.sendShowAdminSupportDetailsIntent(
-                        getActivity(), mAppsControlDisallowedAdmin);
+            boolean isDisallowedByAdmin;
+            if (android.app.admin.flags.Flags.policyTransparencyRefactorEnabled()) {
+                isDisallowedByAdmin = mAppsControlEnforcingAdmin != null;
+            } else {
+                isDisallowedByAdmin = mAppsControlDisallowedAdmin != null;
+            }
+            if (isDisallowedByAdmin && !mAppsControlDisallowedBySystem) {
+                if (android.app.admin.flags.Flags.policyTransparencyRefactorEnabled()) {
+                    RestrictedLockUtils.sendShowAdminSupportDetailsIntent(getActivity(),
+                            mAppsControlEnforcingAdmin, /* restriction = */ null);
+                } else {
+                    RestrictedLockUtils.sendShowAdminSupportDetailsIntent(getActivity(),
+                            mAppsControlDisallowedAdmin);
+                }
             } else {
                 clearUriPermissions();
             }
@@ -316,7 +350,7 @@ public class AppStorageSettings extends AppInfoWithHeader
                     .setButton1OnClickListener(v -> handleClearDataClick());
         }
 
-        if (mAppsControlDisallowedBySystem || AppUtils.isMainlineModule(mPm, mPackageName)) {
+        if (mAppsControlDisallowedBySystem || AppUtils.isLimitedAppInfoPackage(mPm, mPackageName)) {
             mButtonsPref.setButton1Enabled(false);
         }
     }
@@ -583,7 +617,7 @@ public class AppStorageSettings extends AppInfoWithHeader
                         .setButton2OnClickListener(v -> handleClearCacheClick());
             }
         }
-        if (mAppsControlDisallowedBySystem || AppUtils.isMainlineModule(mPm, mPackageName)) {
+        if (mAppsControlDisallowedBySystem || AppUtils.isLimitedAppInfoPackage(mPm, mPackageName)) {
             mButtonsPref.setButton1Enabled(false).setButton2Enabled(false);
         }
     }
@@ -629,3 +663,4 @@ public class AppStorageSettings extends AppInfoWithHeader
         }
     }
 }
+// LINT.ThenChange(AppStorageSettingsScreenApi.kt, AppInfoStorageScreen.kt)

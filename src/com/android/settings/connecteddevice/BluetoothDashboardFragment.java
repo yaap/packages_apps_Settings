@@ -37,7 +37,6 @@ import com.android.settings.bluetooth.AlwaysDiscoverable;
 import com.android.settings.bluetooth.BluetoothDeviceRenamePreferenceController;
 import com.android.settings.bluetooth.BluetoothSwitchPreferenceController;
 import com.android.settings.dashboard.DashboardFragment;
-import com.android.settings.flags.Flags;
 import com.android.settings.password.PasswordUtils;
 import com.android.settings.search.BaseSearchIndexProvider;
 import com.android.settings.widget.MainSwitchBarController;
@@ -50,6 +49,7 @@ import com.android.settingslib.widget.FooterPreference;
  * Dedicated screen for allowing the user to toggle bluetooth which displays relevant information to
  * the user based on related settings such as bluetooth scanning.
  */
+// LINT.IfChange
 @SearchIndexable(forTarget = SearchIndexable.ALL & ~SearchIndexable.ARC)
 public class BluetoothDashboardFragment extends DashboardFragment {
 
@@ -94,7 +94,7 @@ public class BluetoothDashboardFragment extends DashboardFragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        if (isCatalystEnabled() && Flags.deeplinkConnectedDevices25q4()) {
+        if (isCatalystEnabled()) {
             return;
         }
         use(BluetoothDeviceRenamePreferenceController.class).setFragment(this);
@@ -189,3 +189,4 @@ public class BluetoothDashboardFragment extends DashboardFragment {
         }
     }
 }
+// LINT.ThenChange(BluetoothDashboardScreen.kt, BluetoothDashboardScreenApi.kt)

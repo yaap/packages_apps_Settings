@@ -38,15 +38,23 @@ import com.android.settingslib.deviceinfo.StorageManagerVolumeProvider
 import com.android.settingslib.metadata.PreferenceHierarchyGenerator
 import com.android.settingslib.metadata.PreferenceMetadata
 import com.android.settingslib.metadata.ProvidePreferenceScreen
+import com.android.settingslib.metadata.UI_ONLY_PREFERENCE
 import com.android.settingslib.metadata.preferenceHierarchy
 import kotlinx.coroutines.CoroutineScope
+import com.android.settingslib.metadata.preferencesapi.PreferencesApiScreen.Companion.APP_FUNCTION_STORAGE
 
 @ProvidePreferenceScreen(StoragePreferenceScreen.KEY)
 open class StoragePreferenceScreen(private val context: Context) :
     PreferenceScreenMixin, PreferenceHierarchyGenerator<Int> {
+    override fun tags(context: Context) = arrayOf(APP_FUNCTION_STORAGE)
+
 
     override val key: String
         get() = KEY
+
+    //TODO(b/462618020) Catalyst-purpose: replace default purpose with 2 line description
+    override val purpose: Int
+        get() = R.string.storage_dashboard_fragment_purpose
 
     override val title: Int
         get() = R.string.storage_settings
@@ -84,7 +92,14 @@ open class StoragePreferenceScreen(private val context: Context) :
                     R.string.storage_usage_summary,
                     cache.totalUsedSize,
                 )
-            +StoragePreference(KEY_SUMMARY_USED, 0, { null }, { usedSummary }, { usedSummary })
+            +StoragePreference(
+                KEY_SUMMARY_USED,
+                R.string.storage_summary_used_purpose,
+                0,
+                { null },
+                { usedSummary },
+                { usedSummary },
+            )
 
             // Storage Total
             val totalSummary =
@@ -93,11 +108,19 @@ open class StoragePreferenceScreen(private val context: Context) :
                     R.string.storage_total_summary,
                     cache.totalSize,
                 )
-            +StoragePreference(KEY_SUMMARY_TOTAL, 0, { null }, { totalSummary }, { totalSummary })
+            +StoragePreference(
+                KEY_SUMMARY_TOTAL,
+                R.string.storage_summary_total_purpose,
+                0,
+                { null },
+                { totalSummary },
+                { totalSummary },
+            )
 
             // Free up space
             +StoragePreference(
                 KEY_FREE_UP_SPACE,
+                R.string.free_up_space_purpose,
                 R.string.storage_free_up_space_title,
                 { c ->
                     Intent(StorageManager.ACTION_MANAGE_STORAGE).apply {
@@ -105,11 +128,13 @@ open class StoragePreferenceScreen(private val context: Context) :
                     }
                 },
                 { c -> c.getString(R.string.storage_free_up_space_summary) },
+                tags = listOf(UI_ONLY_PREFERENCE)
             )
 
             // Apps
             +StoragePreference(
                 KEY_PREF_APPS,
+                R.string.pref_apps_purpose,
                 R.string.storage_apps,
                 { c ->
                     Intent("android.intent.action.MANAGE_PACKAGE_STORAGE").setPackage(c.packageName)
@@ -120,6 +145,7 @@ open class StoragePreferenceScreen(private val context: Context) :
             // Trash
             +StoragePreference(
                 KEY_PREF_TRASH,
+                R.string.pref_trash_purpose,
                 R.string.storage_trash,
                 { c ->
                     val intent = Intent("android.settings.VIEW_TRASH")
@@ -137,6 +163,7 @@ open class StoragePreferenceScreen(private val context: Context) :
             // Images
             +StoragePreference(
                 KEY_PREF_IMAGES,
+                R.string.pref_images_purpose,
                 R.string.storage_images,
                 { c ->
                     Intent(Intent.ACTION_VIEW).apply {
@@ -149,6 +176,7 @@ open class StoragePreferenceScreen(private val context: Context) :
             // Games
             +StoragePreference(
                 KEY_PREF_GAMES,
+                R.string.pref_games_purpose,
                 R.string.storage_games,
                 {
                     // TODO no intent for games storage exposed
@@ -160,6 +188,7 @@ open class StoragePreferenceScreen(private val context: Context) :
             // Documents
             +StoragePreference(
                 KEY_PREF_DOCUMENTS,
+                R.string.pref_documents_purpose,
                 R.string.storage_documents,
                 { c ->
                     Intent(Intent.ACTION_VIEW).apply {
@@ -172,6 +201,7 @@ open class StoragePreferenceScreen(private val context: Context) :
             // Other
             +StoragePreference(
                 KEY_PREF_OTHER,
+                R.string.pref_other_purpose,
                 R.string.storage_other,
                 { c ->
                     Intent(Intent.ACTION_VIEW).apply {
@@ -184,6 +214,7 @@ open class StoragePreferenceScreen(private val context: Context) :
             // Audio
             +StoragePreference(
                 KEY_PREF_AUDIO,
+                R.string.pref_audio_purpose,
                 R.string.storage_audio,
                 { c ->
                     Intent(Intent.ACTION_VIEW).apply {
@@ -196,6 +227,7 @@ open class StoragePreferenceScreen(private val context: Context) :
             // Video
             +StoragePreference(
                 KEY_PREF_VIDEOS,
+                R.string.pref_videos_purpose,
                 R.string.storage_videos,
                 { c ->
                     Intent(Intent.ACTION_VIEW).apply {
@@ -208,6 +240,7 @@ open class StoragePreferenceScreen(private val context: Context) :
             // System - OS
             +StoragePreference(
                 KEY_PREF_SYSTEM,
+                R.string.pref_system_purpose,
                 0,
                 { null },
                 { StorageUtils.getStorageSizeLabel(context, cache.systemSize) },
@@ -219,6 +252,7 @@ open class StoragePreferenceScreen(private val context: Context) :
             // System - Temp
             +StoragePreference(
                 KEY_PREF_TEMP,
+                R.string.temporary_files_purpose,
                 R.string.storage_temporary_files,
                 { null },
                 { StorageUtils.getStorageSizeLabel(context, cache.temporaryFilesSize) },

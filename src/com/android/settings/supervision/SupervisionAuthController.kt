@@ -28,6 +28,7 @@ import android.os.Handler
 import android.os.Looper
 import android.os.SystemClock
 import androidx.annotation.VisibleForTesting
+import com.android.settings.supervision.shared.systemSupervisionPackageName
 
 /**
  * Manages a supervision authentication session.
@@ -117,6 +118,20 @@ class SupervisionAuthController private constructor(private val appContext: Cont
         }
     }
 
+    /** Whether there is a task running a supervision activity. */
+    private fun isSupervisionActivityRunning(): Boolean {
+        val appTasks = activityManager.appTasks ?: emptyList()
+        for (task in appTasks) {
+            if (
+                task.taskInfo?.isRunning == true &&
+                    isSupervisionActivity(task.taskInfo?.topActivity)
+            ) {
+                return true
+            }
+        }
+        return false
+    }
+
     /**
      * Whether the task with a currently active auth session is focused and running a supervision
      * activity.
@@ -124,11 +139,11 @@ class SupervisionAuthController private constructor(private val appContext: Cont
     private fun isSupervisionActivityFocused(): Boolean {
         if (currentTaskId == null) return false
         val appTasks = activityManager.appTasks ?: emptyList()
-        val task = appTasks.find { it.taskInfo.taskId == currentTaskId }
+        val task = appTasks.find { it.taskInfo?.taskId == currentTaskId }
         if (task == null) return false
-        return task.taskInfo.isRunning &&
-            task.taskInfo.isFocused &&
-            isSupervisionActivity(task.taskInfo.topActivity)
+        return task.taskInfo?.isRunning == true &&
+            task.taskInfo?.isFocused == true &&
+            isSupervisionActivity(task.taskInfo?.topActivity)
     }
 
     private fun isSupervisionActivity(component: ComponentName?): Boolean {

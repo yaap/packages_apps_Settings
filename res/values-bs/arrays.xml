@@ -103,11 +103,11 @@
     <item msgid="4853360663119482646">"Reproduciraj na zvučniku telefona"</item>
   </string-array>
   <string-array name="wifi_signal">
-    <item msgid="199360311367724149">"Slaba"</item>
-    <item msgid="2470925506985305429">"Slaba"</item>
-    <item msgid="8545211062334016668">"Zadovoljavajuća"</item>
-    <item msgid="7468449584777730187">"Dobra"</item>
-    <item msgid="202124107702016530">"Odlična"</item>
+    <item msgid="199360311367724149">"Slabo"</item>
+    <item msgid="2470925506985305429">"Slabo"</item>
+    <item msgid="8545211062334016668">"Zadovoljavajuće"</item>
+    <item msgid="7468449584777730187">"Dobro"</item>
+    <item msgid="202124107702016530">"Odlično"</item>
   </string-array>
   <string-array name="wifi_peap_phase2_entries">
     <item msgid="8082624033981656770">"MSCHAPv2"</item>
@@ -305,16 +305,6 @@
     <item msgid="3756073389408535680">"Radi u pozadini"</item>
     <item msgid="2114661179947426734">"Jačina zvuka za pristupačnost"</item>
   </string-array>
-  <string-array name="long_press_timeout_selector_titles">
-    <item msgid="6926391290986427331">"Kratko"</item>
-    <item msgid="5118829513010894576">"Srednje"</item>
-    <item msgid="6740026006576843477">"Dugo"</item>
-  </string-array>
-  <string-array name="long_press_timeout_selector_list_titles">
-    <item msgid="8908021508913038488">"Kratko"</item>
-    <item msgid="7397961711906421599">"Srednje"</item>
-    <item msgid="4079132024502041928">"Dugo"</item>
-  </string-array>
   <string-array name="ethernet_ip_settings">
     <item msgid="7618681915649929019">"DHCP"</item>
     <item msgid="4425163520864432692">"Statično"</item>
@@ -358,14 +348,6 @@
     <item msgid="1119043472912497241">"Žuto na crnom"</item>
     <item msgid="2836895041823327816">"Žuto na plavom"</item>
     <item msgid="747238414788976867">"Prilagođeno"</item>
-  </string-array>
-  <string-array name="accessibility_button_location_selector_titles">
-    <item msgid="6485511780196327736">"Plutanje preko drugih aplikacija"</item>
-    <item msgid="3605616699204153590">"Navigaciona traka"</item>
-  </string-array>
-  <string-array name="accessibility_button_size_selector_titles">
-    <item msgid="7482952318152486459">"Malo"</item>
-    <item msgid="1666628329913333563">"Veliko"</item>
   </string-array>
   <string-array name="vpn_proxy_settings">
     <item msgid="7165538292837266997">"Ništa"</item>
@@ -411,7 +393,7 @@
     <item msgid="9080166583718385565">"0"</item>
   </string-array>
   <string-array name="wifi_metered_entries">
-    <item msgid="3237321077949659241">"Automatski otkrij"</item>
+    <item msgid="3237321077949659241">"Automatsko otkrivanje"</item>
     <item msgid="3779092145391320375">"Tretiraj kao vezu s naplatom"</item>
     <item msgid="2047166446768045816">"Tretiraj kao vezu bez naplate"</item>
   </string-array>

@@ -21,11 +21,13 @@ import static android.app.time.Capabilities.CAPABILITY_NOT_APPLICABLE;
 import static android.app.time.Capabilities.CAPABILITY_NOT_SUPPORTED;
 import static android.app.time.Capabilities.CAPABILITY_POSSESSED;
 
+import android.app.admin.flags.Flags;
 import android.app.time.TimeCapabilities;
 import android.app.time.TimeCapabilitiesAndConfig;
 import android.app.time.TimeConfiguration;
 import android.app.time.TimeManager;
 import android.content.Context;
+import android.os.UserManager;
 import android.util.Log;
 
 import androidx.preference.Preference;
@@ -86,6 +88,9 @@ public class AutoTimePreferenceController extends TogglePreferenceController {
     public void updateState(Preference preference) {
         super.updateState(preference);
         refreshSummary(preference);
+        if (Flags.policyStreamliningAutoTime()) {
+            DateTimePolicyHelper.checkAutoTimePolicyAndSetDisabled(mContext, preference);
+        }
     }
 
     @Override

@@ -15,7 +15,6 @@
  */
 package com.android.settings.connecteddevice;
 
-import static com.android.settings.connecteddevice.display.ExternalDisplaySettingsConfiguration.isExternalDisplaySettingsPageEnabled;
 import static com.android.settingslib.Utils.isAudioModeOngoingCall;
 
 import android.content.Context;
@@ -43,6 +42,7 @@ import com.android.settings.connecteddevice.usb.ConnectedUsbDeviceUpdater;
 import com.android.settings.core.BasePreferenceController;
 import com.android.settings.core.PreferenceControllerMixin;
 import com.android.settings.dashboard.DashboardFragment;
+import com.android.settings.utils.DesktopSettingsUtils;
 import com.android.settings.flags.FeatureFlags;
 import com.android.settings.flags.FeatureFlagsImpl;
 import com.android.settings.overlay.DockUpdaterFeatureProvider;
@@ -195,11 +195,11 @@ public class ConnectedDeviceGroupController extends BasePreferenceController
 
     @Override
     public int getAvailabilityStatus() {
-        return (hasExternalDisplayFeature()
-                || hasBluetoothFeature()
+        return (hasBluetoothFeature()
                 || hasUsbFeature()
                 || hasUsiStylusFeature()
-                || mConnectedDockUpdater != null)
+                || mConnectedDockUpdater != null
+                || mExternalDisplayUpdater != null)
                 ? AVAILABLE_UNSEARCHABLE
                 : UNSUPPORTED_ON_DEVICE;
     }
@@ -266,9 +266,11 @@ public class ConnectedDeviceGroupController extends BasePreferenceController
                 FeatureFactory.getFeatureFactory().getDockUpdaterFeatureProvider();
         final DockUpdater connectedDockUpdater =
                 dockUpdaterFeatureProvider.getConnectedDockUpdater(context, this);
-        init(hasExternalDisplayFeature()
-                        ? new ExternalDisplayUpdater(this, fragment.getMetricsCategory())
-                        : null,
+        final ExternalDisplayUpdater externalDisplayUpdater =
+                DesktopSettingsUtils.shouldShowTopLevelDeviceCategory(context)
+                        ? null
+                        : new ExternalDisplayUpdater(this, fragment.getMetricsCategory());
+        init(externalDisplayUpdater,
                 hasBluetoothFeature()
                         ? new ConnectedBluetoothDeviceUpdater(context, this,
                         fragment.getMetricsCategory())
@@ -280,19 +282,6 @@ public class ConnectedDeviceGroupController extends BasePreferenceController
                 hasUsiStylusFeature()
                         ? new StylusDeviceUpdater(context, fragment, this)
                         : null);
-    }
-
-    /**
-     * @return trunk stable feature flags.
-     */
-    @VisibleForTesting
-    @NonNull
-    public FeatureFlags getFeatureFlags() {
-        return mFeatureFlags;
-    }
-
-    private boolean hasExternalDisplayFeature() {
-        return isExternalDisplaySettingsPageEnabled(getFeatureFlags());
     }
 
     private boolean hasBluetoothFeature() {

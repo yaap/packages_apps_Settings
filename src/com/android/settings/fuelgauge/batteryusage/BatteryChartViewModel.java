@@ -25,7 +25,7 @@ import java.util.Locale;
 import java.util.Objects;
 
 /** The view model of {@code BatteryChartView} */
-class BatteryChartViewModel {
+public class BatteryChartViewModel {
     private static final String TAG = "BatteryChartViewModel";
 
     public static final int SELECTED_INDEX_ALL = -1;
@@ -133,6 +133,16 @@ class BatteryChartViewModel {
 
     public int selectedIndex() {
         return mSelectedIndex;
+    }
+
+    /**
+    * Returns the index of the last slot.
+    *
+    * <p> The size() here is the size of timestamps. A battery slot is the interval between two
+    * adjacent timestamps. Therefore, the size of slots is size()-1, and the last index is size()-2.
+    */
+    public int getLastSlotIndex() {
+        return size() - 2;
     }
 
     public void setSelectedIndex(int index) {

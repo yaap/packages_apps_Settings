@@ -229,6 +229,28 @@ public class ImeiInfoPreferenceControllerTest {
     }
 
     @Test
+    public void displayPreference_multiSimGsm_differentImei_shouldSetMultiSimGsmTitleAndImei() {
+        setupPhoneCount(2, PHONE_TYPE_GSM, PHONE_TYPE_GSM);
+
+        final String imei = "IMEI";
+        final String imei2 = "IMEI2";
+        when(mTelephonyManager.getImei(0)).thenReturn(imei);
+        when(mTelephonyManager.getImei(1)).thenReturn(imei2);
+        when(mTelephonyManager.getPrimaryImei()).thenReturn(imei);
+
+        mController.displayPreference(mScreen);
+        mController.updateState(mPreference);
+        mSecondController.displayPreference(mScreen);
+        mSecondController.updateState(mSecondSimPreference);
+
+        verify(mPreference).setTitle(mContext.getString(R.string.imei_multi_sim, 1 /* sim slot */));
+        verify(mSecondSimPreference).setTitle(
+                mContext.getString(R.string.imei_multi_sim, 2 /* sim slot */));
+        verify(mPreference).setSummary(imei);
+        verify(mSecondSimPreference).setSummary(imei2);
+    }
+
+    @Test
     public void handlePreferenceTreeClick_shouldStartDialogFragment() {
         setupPhoneCount(1, PHONE_TYPE_GSM, PHONE_TYPE_NONE);
 

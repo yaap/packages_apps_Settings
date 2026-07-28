@@ -130,6 +130,7 @@ import com.android.internal.widget.LockPatternUtils;
 import com.android.settings.dashboard.profileselector.ProfileFragmentBridge;
 import com.android.settings.dashboard.profileselector.ProfileSelectFragment;
 import com.android.settings.dashboard.profileselector.ProfileSelectFragment.ProfileType;
+import com.android.settings.flags.Flags;
 import com.android.settings.password.ChooseLockSettingsHelper;
 import com.android.settings.password.ConfirmDeviceCredentialActivity;
 import com.android.settingslib.widget.ActionBarShadowController;
@@ -620,10 +621,8 @@ public final class Utils extends com.android.settingslib.Utils {
         // The supervising profile is a parentless profile which is considered a valid profile
         // for all full users.
         final boolean isSupervisingProfile =
-                android.multiuser.Flags.allowSupervisingProfile()
-                        && um.getUserInfo(otherUser.getIdentifier())
-                                .userType
-                                .equals(UserManager.USER_TYPE_PROFILE_SUPERVISING);
+                um.getUserInfo(otherUser.getIdentifier())
+                        .userType.equals(UserManager.USER_TYPE_PROFILE_SUPERVISING);
         return (UserHandle.myUserId() == otherUser.getIdentifier())
                 || um.getUserProfiles().contains(otherUser)
                 || isSupervisingProfile;
@@ -804,14 +803,12 @@ public final class Utils extends com.android.settingslib.Utils {
         if (ArrayUtils.contains(profileIds, userId)) {
             return userId;
         }
-        if (android.multiuser.Flags.allowSupervisingProfile()) {
-            for (UserInfo info : um.getUsers()) {
-                // The supervising profile is a parentless profile, and is therefore considered a
-                // valid profile for any full user.
-                if (info.id == userId
-                        && info.userType.equals(UserManager.USER_TYPE_PROFILE_SUPERVISING)) {
-                    return userId;
-                }
+        for (UserInfo info : um.getUsers()) {
+            // The supervising profile is a parentless profile, and is therefore considered a
+            // valid profile for any full user.
+            if (info.id == userId
+                    && info.userType.equals(UserManager.USER_TYPE_PROFILE_SUPERVISING)) {
+                return userId;
             }
         }
         throw new SecurityException("Given user id " + userId + " does not belong to user "
@@ -1357,8 +1354,8 @@ public final class Utils extends com.android.settingslib.Utils {
      *
      * <p> Checks if any user has the property {@link UserProperties#SHOW_IN_SETTINGS_SEPARATE} set.
      */
-    public static boolean isNewTabNeeded(Activity activity) {
-        UserManager userManager = activity.getSystemService(UserManager.class);
+    public static boolean isNewTabNeeded(Context context) {
+        UserManager userManager = context.getSystemService(UserManager.class);
         List<UserHandle> profiles = userManager.getUserProfiles();
         for (UserHandle userHandle : profiles) {
             UserProperties userProperties = userManager.getUserProperties(userHandle);
@@ -1463,6 +1460,9 @@ public final class Utils extends com.android.settingslib.Utils {
      * Returns if dreams are available to the current user.
      */
     public static boolean areDreamsAvailableToCurrentUser(Context context) {
+        if (shouldHideDreamsInDemoMode(context)) {
+            return false;
+        }
         final boolean dreamsSupported = context.getResources().getBoolean(
                 com.android.internal.R.bool.config_dreamsSupported);
         final boolean dreamsOnlyEnabledForDockUser = context.getResources().getBoolean(
@@ -1521,9 +1521,6 @@ public final class Utils extends com.android.settingslib.Utils {
      * Returns true if the userId is the supervising profile, false otherwise.
      */
     public static boolean isSupervisingProfile(int userId, @NonNull Context context) {
-        if (!android.multiuser.Flags.allowSupervisingProfile()) {
-            return false;
-        }
         final UserManager userManager = context.getSystemService(UserManager.class);
         UserInfo userInfo = userManager.getUserInfo(userId);
         return !Objects.isNull(userInfo)
@@ -1695,6 +1692,77 @@ public final class Utils extends com.android.settingslib.Utils {
                 activity.getResources(), getEffectiveUserId(userManager, userId),
                 hideBackground, null /* data */), requestCode);
     }
+
+    /**
+     * Returns true if the device is in demo mode and should disable keyboard settings.
+     */
+    public static boolean shouldDisableKeyboardSettingsInDemoMode(Context context) {
+        if (context == null) {
+            Log.e(TAG, "Context is null.");
+            return false;
+        }
+        try {
+            return Flags.disableKeyboardSettingsInDemoMode()
+                && UserManager.isDeviceInDemoMode(context)
+                && context.getResources().getBoolean(
+                    R.bool.config_disable_keyboard_settings_in_demo_mode);
+        } catch (Exception e) {
+            // Some tests may not setup context content resolver. Should not happen on real device.
+            Log.e(TAG, "Error getting demo mode status.");
+            return false;
+        }
+    }
+
+    /**
+     * Returns true if the device is in demo mode and should hide Modes settings.
+     */
+    public static boolean shouldHideModesInDemoMode(Context context) {
+        if (context == null) {
+            Log.e(TAG, "Context is null.");
+            return false;
+        }
+        try {
+            return Flags.hideModesSettingInDemoMode() && UserManager.isDeviceInDemoMode(context)
+                && context.getResources().getBoolean(
+                    R.bool.config_hide_modes_setting_in_demo_mode);
+        } catch (Exception e) {
+            // Some tests may not setup context content resolver. Should not happen on real device.
+            Log.w(TAG, "Error getting demo mode status.");
+            return false;
+        }
+    }
+
+    /**
+     * Returns true if the device is in demo mode and should hide dream settings.
+     */
+    public static boolean shouldHideDreamsInDemoMode(Context context) {
+        try {
+            return Flags.hideDreamSettingInDemoMode() && UserManager.isDeviceInDemoMode(context)
+                && context.getResources().getBoolean(
+                    R.bool.config_hide_dream_setting_in_demo_mode);
+        } catch (Exception e) {
+            // Some tests may not setup context content resolver. Should not happen on real device.
+            Log.e(TAG, "Error getting demo mode status.", e);
+            return false;
+        }
+    }
+
+    /**
+     * Returns true if the device is in demo mode and should hide supervision settings.
+     */
+    public static boolean shouldHideSupervisionInDemoMode(Context context) {
+        try {
+            return  Flags.hideSupervisionSettingInDemoMode()
+                && UserManager.isDeviceInDemoMode(context)
+                && context.getResources().getBoolean(
+                    R.bool.config_hide_supervision_setting_in_demo_mode);
+        } catch (Exception e) {
+            // Some tests may not setup context content resolver. Should not happen on real device.
+            Log.e(TAG, "Error getting demo mode status.", e);
+            return false;
+        }
+    }
+
 
     private static int getEffectiveUserId(UserManager userManager, int userId) {
         if (userManager != null) {

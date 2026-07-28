@@ -19,22 +19,38 @@ import android.content.Context
 import android.os.VibrationAttributes
 import android.provider.Settings.System.HAPTIC_FEEDBACK_INTENSITY
 import com.android.settings.R
+import com.android.settingslib.metadata.ReadWritePermit
+import com.android.settingslib.metadata.SensitivityLevel
 
 /** Accessibility settings for touch haptic feedback, as a switch toggle */
 // LINT.IfChange
 class TouchVibrationIntensitySwitchPreference(
     context: Context,
     key: String,
+    purpose: Int,
     mainSwitchPreferenceKey: String,
 ) :
     VibrationIntensitySwitchPreference(
         context = context,
         key = key,
+        purpose = purpose,
         settingsProviderKey = HAPTIC_FEEDBACK_INTENSITY,
         mainSwitchPreferenceKey = mainSwitchPreferenceKey,
         vibrationUsage = VibrationAttributes.USAGE_TOUCH,
         title = R.string.accessibility_touch_vibration_title,
     ) {
+    override val sensitivityLevel: Int
+        get() = SensitivityLevel.NO_SENSITIVITY
+
+    override fun getWritePermit(
+        context: Context,
+        value: Boolean?,
+        callingPid: Int,
+        callingUid: Int,
+    ) = ReadWritePermit.ALLOW
+
+    override val supportsWrite = true
+
     override val keywords: Int
         get() = R.string.keywords_touch_vibration
 }
