@@ -79,6 +79,7 @@
     <string name="ambient_display_always_on_key_purpose" translatable="false">Whether to keep the display on to show info like time and date when the device is idle</string>
     <string name="ambient_display_always_on_screen_purpose" translatable="false">Allows users to enable and customize the Always-on display, which shows time, date, and other information even when the screen is off.</string>
     <string name="ambient_display_illustration_purpose" translatable="false">ambient_display_illustration</string>
+    <string name="always_on_display_schedule_purpose" translatable="false">Allows the user to configure when the always-on display automatically turns on</string>
     <string name="doze_always_on_inactivity_detection_purpose" translatable="false">Whether to turn off the always-on display automatically when no user activity is detected to save power</string>
     <string name="doze_always_on_wallpaper_enabled_purpose" translatable="false">Whether the lock screen wallpaper should be shown when the always-on display is active</string>
     <string name="app_data_usage_screen_purpose" translatable="false">Provides a detailed breakdown of mobile data and Wi-Fi consumption for a specific app, and allows users to manage background data permissions and data saver exceptions.</string>
@@ -91,6 +92,7 @@
     <string name="auto_brightness_entry_purpose" translatable="false">Allows users to enable or disable Adaptive brightness, which automatically adjusts the screen brightness based on environment and activities.</string>
     <string name="auto_brightness_purpose" translatable="false">Whether or not Adaptive brightness is enabled</string>
     <string name="battery_saver_purpose" translatable="false">Whether or not Battery Saver is enabled</string>
+    <string name="battery_text_only_purpose" translatable="false">Whether to show the battery level as text only instead of the battery icon</string>
     <string name="battery_usage_summary_purpose" translatable="false">Provides a detailed summary of battery consumption since the last full charge, including a usage chart, total screen time, and a breakdown of consumption by apps or system services.</string>
     <string name="screen_time_since_last_full_charge_purpose" translatable="false">Total seconds any app has been active on screen since the last full charge</string>
     <string name="battery_usage_screen_time_package_purpose" translatable="false">Seconds the app has been used on screen since the last full charge</string>

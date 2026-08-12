@@ -46,7 +46,6 @@ class MobileNetworkImeiPreference(private val data: MobileNetworkData) :
     PreferenceLifecycleProvider,
     PreferenceTitleProvider,
     PreferenceSummaryProvider,
-    PreferenceTitleProvider,
     PreferenceAvailabilityProvider {
 
     override val key: String

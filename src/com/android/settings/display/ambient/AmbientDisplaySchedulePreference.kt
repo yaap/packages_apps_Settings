@@ -29,6 +29,7 @@ import com.android.internal.util.yaap.AutoSettingConsts.MODE_MIXED_SUNRISE
 import com.android.settings.R
 import com.android.settings.display.AODSchedule
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.PreferenceLifecycleContext
 import com.android.settingslib.metadata.PreferenceLifecycleProvider
 import com.android.settingslib.metadata.PreferenceMetadata
@@ -54,6 +55,14 @@ class AmbientDisplaySchedulePreference(
 
     override val key: String
         get() = "always_on_display_schedule"
+
+    override val purpose: Int
+        get() = R.string.always_on_display_schedule_purpose
+
+    override val availabilityDescription =
+        "The device must support always-on display for the current user."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
 
     override fun isAvailable(context: Context): Boolean =
         config.alwaysOnAvailableForUser(UserHandle.myUserId())

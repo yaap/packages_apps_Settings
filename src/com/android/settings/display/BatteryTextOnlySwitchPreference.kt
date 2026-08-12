@@ -23,19 +23,29 @@ import com.android.settingslib.datastore.KeyValueStore
 import com.android.settingslib.datastore.KeyValueStoreDelegate
 import com.android.settingslib.datastore.SettingsSystemStore
 import com.android.settingslib.metadata.PreferenceAvailabilityProvider
+import com.android.settingslib.metadata.preferencesapi.preconditions.PreconditionStability
 import com.android.settingslib.metadata.ReadWritePermit
 import com.android.settingslib.metadata.SensitivityLevel
 import com.android.settingslib.metadata.SwitchPreference
 
 // LINT.IfChange
 class BatteryTextOnlySwitchPreference :
-    SwitchPreference(KEY, R.string.battery_text_only_title, R.string.battery_text_only_summary),
+    SwitchPreference(
+        KEY,
+        R.string.battery_text_only_purpose,
+        R.string.battery_text_only_title,
+        R.string.battery_text_only_summary,
+    ),
     PreferenceAvailabilityProvider {
 
     override fun storage(context: Context): KeyValueStore =
         BatteryTextOnlyStorage(SettingsSystemStore.get(context))
 
     override fun isAvailable(context: Context): Boolean = Utils.isBatteryPresent(context)
+
+    override val availabilityDescription = "The device must have a battery present."
+
+    override fun getAvailabilityStability() = PreconditionStability.UNSTABLE
 
     override fun getReadPermissions(context: Context) = SettingsSystemStore.getReadPermissions()
 

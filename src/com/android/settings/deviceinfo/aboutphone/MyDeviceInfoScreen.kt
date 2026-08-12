@@ -27,6 +27,7 @@ import com.android.settings.Settings.MyDeviceInfoActivity
 import com.android.settings.core.PreferenceScreenMixin
 import com.android.settings.deviceinfo.hardwareinfo.HardwareInfoScreen
 import com.android.settings.deviceinfo.imei.ImeiPreference
+import com.android.settings.deviceinfo.imei.getImeiList
 import com.android.settings.deviceinfo.simstatus.SimEidPreference
 import com.android.settings.flags.Flags
 import com.android.settings.utils.makeLaunchIntent
@@ -94,8 +95,9 @@ open class MyDeviceInfoScreen :
                         +SimEidPreference(context) order 31
                     }
                     val activeModemCount = context.activeModemCount
+                    val imeiList = context.getImeiList
                     for (i in 0 until activeModemCount) {
-                        +ImeiPreference(context, i, activeModemCount) order (i + 33)
+                        +ImeiPreference(context, i, activeModemCount, imeiList) order (i + 33)
                     }
                 }
         }

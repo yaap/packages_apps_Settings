@@ -21,6 +21,7 @@ import android.os.UserManager
 import android.telephony.TelephonyManager
 import androidx.test.core.app.ApplicationProvider
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.android.settings.R
 import com.google.common.truth.Truth.assertThat
 import org.junit.Before
 import org.junit.Test
@@ -57,8 +58,10 @@ class ImeiPreferenceTest {
             on { isDeviceVoiceCapable } doReturn true
             on { getImei(0) } doReturn IMEI_1
             on { getImei(1) } doReturn IMEI_2
+            on { primaryImei } doReturn IMEI_1
+            on { activeModemCount } doReturn MULTI_SLOT
         }
-        preference = ImeiPreference(context, 0, 1)
+        preference = ImeiPreference(context, 0, 1, imeiList_oneImei)
     }
 
     @Test
@@ -66,17 +69,26 @@ class ImeiPreferenceTest {
         preference = ImeiPreference(context, 0, 2, listOf<ImeiData>())
     }
 
-        preference = ImeiPreference(context, 0, 2)
+    @Test
+    fun initUi_oneImei_doNotCrash() {
+        preference = ImeiPreference(context, 0, 2, imeiList_oneImei)
+    }
+
+    @Test
+    fun initUi_twoImei_doNotCrash() {
+        preference = ImeiPreference(context, 0, 2, imeiList)
     }
 
     @Test
     fun getKey_slotIndex0_returnImeiWithIndex() {
+        preference = ImeiPreference(context, 0, 2, imeiList)
+
         assertThat(preference.key).isEqualTo(ImeiPreference.KEY_PREFIX + "1")
     }
 
     @Test
     fun getKey_slotIndex1_returnImeiWithIndex() {
-        preference = ImeiPreference(context, 1, 2);
+        preference = ImeiPreference(context, 1, 2, imeiList)
 
         assertThat(preference.key).isEqualTo(ImeiPreference.KEY_PREFIX + "2")
     }
@@ -90,7 +102,7 @@ class ImeiPreferenceTest {
     fun isAvailable_isNotAdminUser_returnFalse() {
         mockUserManager.stub { on { isAdminUser } doReturn false }
 
-        preference = ImeiPreference(context, 0, 1)
+        preference = ImeiPreference(context, 0, 1, imeiList_oneImei)
 
         assertThat(preference.isAvailable(context)).isFalse()
     }
@@ -102,49 +114,15 @@ class ImeiPreferenceTest {
             on { isDeviceVoiceCapable } doReturn false
         }
 
-        preference = ImeiPreference(context, 0, 1)
+        preference = ImeiPreference(context, 0, 1, imeiList_oneImei)
 
         assertThat(preference.isAvailable(context)).isFalse()
     }
 
     @Test
-    fun getSummary_oneImei_index0_returnImei1() {
-        assertThat(preference.getSummary(context).toString()).isEqualTo(IMEI_1)
-    }
-
-    @Test
-    fun getSummary_twoImei_index0_returnImei1() {
-        preference = ImeiPreference(context, 0, 2, imeiList)
-
-        assertThat(preference.getSummary(context).toString()).isEqualTo(IMEI_1)
-    }
-
-    @Test
-    fun getSummary_twoImei_index1_returnImei2() {
-        preference = ImeiPreference(context, 1, 2, imeiList)
-
-        assertThat(preference.getSummary(context).toString()).isEqualTo(IMEI_2)
-    }
-
-    @Test
-    fun getSummary_index0_bothSlotsAreSameImei_returnImei1() {
-        preference = ImeiPreference(context, 0, 2, imeiList_sameImei)
-
-        assertThat(preference.getSummary(context).toString()).isEqualTo(IMEI_1)
-    }
-
-    @Test
-    fun getSummary_index1_bothSlotsAreSameImei_returnImei1() {
-        preference = ImeiPreference(context, 1, 2, imeiList_sameImei)
-
-        assertThat(preference.getSummary(context).toString()).isEqualTo(IMEI_1)
-    }
-
-    @Test
-    fun getSummary_index2_indexNotInList_returnEmptyString() {
-        preference = ImeiPreference(context, 2, 2, imeiList)
-
-        assertThat(preference.getSummary(context)).isEqualTo("")
+    fun getSummary_doNotLeakImei() {
+        assertThat(preference.getSummary(context).toString())
+            .isEqualTo(context.getString(R.string.device_info_protected_single_press))
     }
 
     @Test
@@ -201,10 +179,11 @@ class ImeiPreferenceTest {
     }
 
     companion object {
+        const val SINGLE_SLOT = 1
+        const val MULTI_SLOT = 2
         const val IMEI_1 = "111111111111115"
         const val IMEI_2 = "222222222222225"
         val imeiList = listOf(ImeiData(IMEI_1, 0), ImeiData(IMEI_2, 1))
-        val imeiList_sameImei = listOf(ImeiData(IMEI_1, 0), ImeiData(IMEI_1, 1))
         val imeiList_oneImei = listOf(ImeiData(IMEI_1, 0))
     }
 }

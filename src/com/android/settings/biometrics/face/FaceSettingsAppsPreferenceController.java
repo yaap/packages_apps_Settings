@@ -67,17 +67,6 @@ public class FaceSettingsAppsPreferenceController extends
                 }
             }
         }
-
-        // For OTA case: if FACE_APP_ENABLED is not set and BIOMETRIC_APP_ENABLED is set, set the
-        // default value of the former to that of the latter.
-        final int defValue = Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                FACE_APP_ENABLED, NOT_SET, getUserId());
-        final int oldDefValue = Settings.Secure.getIntForUser(mContext.getContentResolver(),
-                BIOMETRIC_APP_ENABLED, NOT_SET, getUserId());
-        if (defValue == NOT_SET && oldDefValue != NOT_SET) {
-            Settings.Secure.putIntForUser(mContext.getContentResolver(),
-                    FACE_APP_ENABLED, oldDefValue, getUserId());
-        }
     }
 
     @Override

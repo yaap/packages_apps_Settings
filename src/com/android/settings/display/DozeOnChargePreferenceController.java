@@ -79,6 +79,11 @@ public class DozeOnChargePreferenceController extends TogglePreferenceController
                         : R.string.doze_on_charge_summary);
     }
 
+    @Override
+    public int getSliceHighlightMenuRes() {
+        return R.string.menu_key_display;
+    }
+
     public DozeOnChargePreferenceController setConfig(
             AmbientDisplayConfiguration config) {
         mConfig = config;

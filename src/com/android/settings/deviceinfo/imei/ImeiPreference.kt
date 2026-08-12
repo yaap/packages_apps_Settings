@@ -21,7 +21,6 @@ import android.util.Log
 import androidx.preference.Preference
 import com.android.settings.R
 import com.android.settings.Utils
-import com.android.settings.deviceinfo.PhoneNumberUtil
 import com.android.settings.wifi.utils.activeModemCount
 import com.android.settings.wifi.utils.isAdminUser
 import com.android.settings.wifi.utils.telephonyManager
@@ -44,7 +43,7 @@ data class ImeiData(val imei: String, val slotId: Int)
 /** Preference to show IMEI information for single and multi modem devices. */
 class ImeiPreference(
     context: Context,
-    private val slotIndex: Int,
+    private val index: Int,
     private val activeModemCount: Int,
     private val imeiList: List<ImeiData> = listOf(),
 ) :
@@ -57,11 +56,10 @@ class ImeiPreference(
     PreferenceSummaryProvider,
     PreferenceAvailabilityProvider {
 
-    private val imei: String? = context.getImei()
     private val formattedTitle: String = context.getFormattedTitle()
 
     override val key: String
-        get() = KEY_PREFIX + "${slotIndex + 1}"
+        get() = KEY_PREFIX + "${index + 1}"
 
     override val purpose: Int
         get() = R.string.imei_info_purpose
@@ -100,11 +98,6 @@ class ImeiPreference(
             }
     }
 
-    private fun Context.getImei(): String? = telephonyManager?.getImei(slotIndex) ?: run {
-        Log.e(TAG, "Failed to get IMEI for slot $slotIndex")
-        null
-    }
-
     private fun Context.getFormattedTitle(): String =
         if (activeModemCount <= 1) {
             getString(R.string.status_imei)
@@ -112,20 +105,11 @@ class ImeiPreference(
             getString(R.string.imei_multi_sim, index + 1)
         }
 
-    private fun getFormattedSummary(): CharSequence {
-        return when {
-            imeiList.isEmpty() || index >= imeiList.size -> String()
-            else -> {
-                PhoneNumberUtil.expandByTts(imeiList[index].imei)
-            }
-        }
-    }
-
     override val sensitivityLevel
         get() = SensitivityLevel.DO_NOT_EXPOSE
 
     companion object {
-        private const val TAG = "ImeiPreference"
+        const val TAG = "ImeiPreference"
         const val KEY_PREFIX = "imei_info"
     }
 }
