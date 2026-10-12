@@ -130,6 +130,7 @@ public class GamingModeController extends AbstractPreferenceController
             mColorMode.setEntryValues(entryValuesArr);
 
             value = Settings.System.getInt(resolver, GAMING_MODE_COLOR_KEY, -1);
+            value = Math.min(mColorMode.getEntries().length - 1, value);
             mColorMode.setValue(String.valueOf(value));
             mColorMode.setSummary(value == -1
                     ? mContext.getString(R.string.gaming_mode_ringer_disabled)
@@ -164,12 +165,14 @@ public class GamingModeController extends AbstractPreferenceController
         } else if (preference == mRingerMode) {
             int value = Integer.parseInt((String) newValue);
             int index = mRingerMode.findIndexOfValue((String) newValue);
+            index = Math.min(mRingerMode.getEntries().length - 1, index);
             mRingerMode.setSummary(mRingerMode.getEntries()[index]);
             Settings.System.putInt(resolver, GAMING_MODE_RINGER_KEY, value);
             return true;
         } else if (preference == mColorMode) {
             int value = Integer.parseInt((String) newValue);
             int index = mColorMode.findIndexOfValue((String) newValue);
+            index = Math.min(mColorMode.getEntries().length - 1, index);
             mColorMode.setSummary(mColorMode.getEntries()[index]);
             Settings.System.putInt(resolver, GAMING_MODE_COLOR_KEY, value);
             return true;
