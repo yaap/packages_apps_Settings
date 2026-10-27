@@ -48,11 +48,14 @@ public class GamingModeController extends AbstractPreferenceController
     public static final String GAMING_MODE_SMOOTH_DISPLAY_KEY = "gaming_mode_smooth_display";
     public static final String GAMING_MODE_TOUCH_SENSITIVITY_KEY = "gaming_mode_touch_sensitivity";
     public static final String GAMING_MODE_HIGH_TOUCH_RATE_KEY = "gaming_mode_high_touch_rate";
+    public static final String GAMING_MODE_EDGE_GRIP_SUPPRESSION_KEY =
+            "gaming_mode_edge_grip_suppression";
     public static final String GAMING_MODE_LTPO_FEATURES_KEY = "gaming_mode_ltpo_features";
     public static final String GAMING_MODE_COLOR_KEY = "gaming_mode_color_mode";
 
     private CustomSeekBarPreference mMediaVolume;
     private CustomSeekBarPreference mBrightnessLevel;
+    private CustomSeekBarPreference mEdgeGripSuppression;
     private SystemSettingListPreference mRingerMode;
     private SystemSettingListPreference mColorMode;
 
@@ -75,6 +78,11 @@ public class GamingModeController extends AbstractPreferenceController
         mBrightnessLevel.setValue(value);
         mBrightnessLevel.setOnPreferenceChangeListener(this);
 
+        mEdgeGripSuppression = screen.findPreference(GAMING_MODE_EDGE_GRIP_SUPPRESSION_KEY);
+        value = Settings.System.getInt(resolver, GAMING_MODE_EDGE_GRIP_SUPPRESSION_KEY, 3);
+        value = Math.max(0, Math.min(5, value));
+        mEdgeGripSuppression.setValue(value);
+
         mRingerMode = screen.findPreference(GAMING_MODE_RINGER_KEY);
         value = Settings.System.getInt(resolver, GAMING_MODE_RINGER_KEY, 0);
         mRingerMode.setValue(Integer.toString(value));
@@ -88,6 +96,11 @@ public class GamingModeController extends AbstractPreferenceController
 
         if (!isHighTouchRateAvailable(mContext)) {
             Preference pref = screen.findPreference(GAMING_MODE_HIGH_TOUCH_RATE_KEY);
+            pref.setVisible(false);
+        }
+
+        if (!isEdgeGripSuppressionAvailable(mContext)) {
+            Preference pref = screen.findPreference(GAMING_MODE_EDGE_GRIP_SUPPRESSION_KEY);
             pref.setVisible(false);
         }
 
@@ -186,6 +199,10 @@ public class GamingModeController extends AbstractPreferenceController
 
     public static boolean isHighTouchRateAvailable(Context context) {
 	    return context.getResources().getBoolean(R.bool.config_supportHighTouchRate);
+    }
+
+    public static boolean isEdgeGripSuppressionAvailable(Context context) {
+        return context.getResources().getBoolean(R.bool.config_supportEdgeGripSuppression);
     }
 
     public static boolean isLtpoFeaturesAvailable(Context context) {

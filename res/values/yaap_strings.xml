@@ -782,6 +782,10 @@
     <string name="touch_rate_title">Increase touch polling rate</string>
     <string name="touch_rate_summary">Improves touch response by utilizing a higher polling rate</string>
 
+    <!-- Edge grip suppression -->
+    <string name="edge_grip_suppression_title">Edge grip suppression width</string>
+    <string name="edge_grip_suppression_summary">0 disables edge grip suppression; 1-5 adjusts the curved-edge width</string>
+
     <!-- Ltpo features -->
     <string name="ltpo_features_title">Enable LTPO features</string>
     <string name="ltpo_features_summary">Enables device-specific adaptive idle and frame rate features for improving efficiency</string>

@@ -167,6 +167,15 @@
             android:summary="@string/gaming_mode_touch_rate_summary"
             android:defaultValue="false" />
 
+        <com.yasp.settings.preferences.SystemSettingSeekBarPreference
+            android:key="gaming_mode_edge_grip_suppression"
+            android:title="@string/edge_grip_suppression_title"
+            android:summary="@string/edge_grip_suppression_summary"
+            android:max="5"
+            settings:min="0"
+            settings:interval="1"
+            settings:defaultValue="3" />
+
         <com.yasp.settings.preferences.SystemSettingSwitchPreference
             android:key="gaming_mode_ltpo_features"
             android:title="@string/gaming_mode_ltpo_features_title"

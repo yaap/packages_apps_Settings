@@ -31,6 +31,9 @@
     <!-- Show high touch polling rate option -->
     <bool name="config_supportHighTouchRate" translatable="false">false</bool>
 
+    <!-- Show edge grip suppression width option -->
+    <bool name="config_supportEdgeGripSuppression" translatable="false">false</bool>
+
     <!-- Show LTPO features option -->
     <bool name="config_supportLtpoFeatures" translatable="false">false</bool>
 

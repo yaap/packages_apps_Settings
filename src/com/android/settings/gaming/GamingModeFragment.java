@@ -79,6 +79,9 @@ public class GamingModeFragment extends DashboardFragment {
                     if (!GamingModeController.isHighTouchRateAvailable(context)) {
                         keys.add(GamingModeController.GAMING_MODE_HIGH_TOUCH_RATE_KEY);
                     }
+                    if (!GamingModeController.isEdgeGripSuppressionAvailable(context)) {
+                        keys.add(GamingModeController.GAMING_MODE_EDGE_GRIP_SUPPRESSION_KEY);
+                    }
                     if (!GamingModeController.isLtpoFeaturesAvailable(context)) {
                         keys.add(GamingModeController.GAMING_MODE_LTPO_FEATURES_KEY);
                     }

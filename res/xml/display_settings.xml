@@ -226,6 +226,17 @@
             android:summary="@string/touch_rate_summary"
             settings:controller="com.android.settings.display.TouchRatePreferenceController" />
 
+        <com.yasp.settings.preferences.CustomSeekBarPreference
+            android:key="edge_grip_suppression"
+            android:title="@string/edge_grip_suppression_title"
+            android:summary="@string/edge_grip_suppression_summary"
+            android:max="5"
+            android:persistent="false"
+            settings:min="0"
+            settings:interval="1"
+            settings:defaultValue="3"
+            settings:controller="com.android.settings.display.EdgeGripSuppressionPreferenceController" />
+
         <SwitchPreferenceCompat
             android:key="show_operator_name"
             android:title="@string/show_operator_name_title"
