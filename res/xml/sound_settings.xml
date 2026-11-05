@@ -111,20 +111,20 @@
             android:key="volume_panel_on_left"
             android:title="@string/volume_panel_on_left_title"
             android:summary="@string/volume_panel_on_left_summary"
-            android:order="-135" />
+            android:order="-125" />
 
         <SwitchPreferenceCompat
             android:key="volume_panel_on_left_land"
             android:title="@string/volume_panel_on_left_land_title"
             android:summary="@string/volume_panel_on_left_land_summary"
-            android:order="-134" />
+            android:order="-124" />
 
         <!-- Volume dialog timeout -->
         <com.yasp.settings.preferences.CustomSeekBarPreference
             android:key="volume_dialog_dismiss_timeout"
             android:title="@string/volume_dialog_timeout_title"
             android:summary="@string/volume_dialog_timeout_summary"
-            android:order="-130"
+            android:order="-120"
             android:max="7"
             android:min="1"
             android:defaultValue="3"
@@ -136,7 +136,7 @@
             android:title="@string/volume_steps_title"
             android:summary="@string/volume_steps_summary"
             android:fragment="com.android.settings.sound.VolumeSteps"
-            android:order="-120"/>
+            android:order="-110"/>
     </com.android.settingslib.widget.UntitledPreferenceCategory>
 
     <!-- Vibrations and haptics category -->
